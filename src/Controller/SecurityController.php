@@ -60,7 +60,7 @@ class SecurityController extends Controller
             $em->flush();
             // ... do any other work - like sending them an email, etc
             // maybe set a "flash" success message for the user
-            return $this->redirectToRoute('private');
+            return $this->redirectToRoute('main_private');
         }
         return $this->render(
             'security/register.html.twig',

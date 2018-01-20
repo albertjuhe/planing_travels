@@ -1,4 +1,2 @@
-login_check:
-    path: /login_check
 logout:
-    path: /logout
+    path: /{_locale}/logout

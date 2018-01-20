@@ -34,11 +34,11 @@ security:
             provider: db_users
             form_login:
               login_path: private_login
-              check_path: /login_check
-              default_target_path: /private
+              check_path: private_login
+              default_target_path: main_private
             logout:
-               path: /logout
-               target: /
+               path: logout
+               target: homepage
             # activate different ways to authenticate
 
             # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
