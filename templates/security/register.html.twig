@@ -8,13 +8,7 @@
     {% block content %}
         <div class="container marketing">
             <div class="row">
-                {% if errors %}
-                    <ul>
-                        {% for error in errors %}
-                            <li>{{ error.messageTemplate|trans(error.messageParameters, 'validators') }}</li>
-                        {% endfor %}
-                    </ul>
-                {% endif %}
+
                 <div class="col-lg-4">
                     {{ form_start(form) }}
                     {{ form_row(form.firstName) }}
