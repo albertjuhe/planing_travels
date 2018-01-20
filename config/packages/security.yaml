@@ -1,0 +1,54 @@
+security:
+
+    encoders:
+        Symfony\Component\Security\Core\User\User: plaintext
+        App\Entity\User:
+             algorithm: bcrypt
+
+
+    # https://symfony.com/doc/current/security.html#b-configuring-how-users-are-loaded
+    providers:
+        in_memory:
+            memory:
+              users:
+                 ajuhe:
+                    password: albert
+                    roles: 'ROLE_ADMIN'
+        db_users:
+            entity: { class: App\Entity\User, property: username }
+
+    firewalls:
+        # disables authentication for assets and the profiler, adapt it according to your needs
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        admin:
+           pattern: ^/admin
+           http_basic: ~
+           provider: in_memory
+           logout:
+              path: /admin/logout
+              target: /
+        main:
+            anonymous: ~
+            provider: db_users
+            form_login:
+              login_path: private_login
+              check_path: /login_check
+              default_target_path: /private
+            logout:
+               path: /logout
+               target: /
+            # activate different ways to authenticate
+
+            # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
+            #http_basic: ~
+
+            # https://symfony.com/doc/current/security/form_login_setup.html
+            #form_login: ~
+
+    access_control:
+        # require ROLE_ADMIN for /admin*
+        - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/private, roles: ROLE_USER }
+        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }

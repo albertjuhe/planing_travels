@@ -1,0 +1,72 @@
+#map { height: 550px;width:100%}
+.address-point{
+    font-size:13px;
+}
+.title-point{
+    font-size:11px;
+    font-height:bold;
+}
+.point-view {
+    border: solid 1px #eeeeee;
+    margin-bottom:6px;
+    margin:5px;
+    padding:5px;
+    cursor: move;
+    display:block;
+}
+.sortable-placeholder {
+    border: 1px dashed #CCC;
+    background: none;
+    height: 50px;
+    width: 80%;
+    padding:10px;
+
+}
+
+#map-canvas {
+    width:90%;
+    height:500px
+}
+
+/* Fix Bootstrap .modal compatibility with jQuery UI Autocomplete,
+see http://stackoverflow.com/questions/10957781/google-maps-autocomplete-result-in-bootstrap-modal-dialog */
+.ui-autocomplete {
+    z-index: 1051 !important;
+}
+
+.pac-container {
+    z-index: 1051 !important;
+}
+
+.bar {
+    height: 18px;
+    background: green;
+}
+
+#location_media {
+    display:none;
+}
+
+#drop_zone {
+    border: 2px dashed #0087F7;
+    border-radius: 5px;
+    background: white;
+    min-height: 100px;
+    margin:15px;
+}
+
+.travelimg {
+    max-width: 250px;
+    margin:5px;
+}
+
+.autocomplete-suggestions { border: 1px solid #999; background: #FFF; overflow: auto; }
+.autocomplete-suggestion { padding: 2px 5px; white-space: nowrap; overflow: hidden; }
+.autocomplete-selected { background: #F0F0F0; }
+.autocomplete-suggestions strong { font-weight: normal; color: #3399FF; }
+.autocomplete-group { padding: 2px 5px; }
+.autocomplete-group strong { display: block; border-bottom: 1px solid #000; }
+
+.fos_comment_comment_show .fos_comment_comment_show {
+    margin-left: 50px;
+}
