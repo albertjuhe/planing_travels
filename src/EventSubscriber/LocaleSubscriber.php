@@ -39,7 +39,7 @@ class LocaleSubscriber implements EventSubscriberInterface
 
     public static function getSubscribedEvents()
     {
-        //Definig that we execute a onKernelRequest Every time a request are called
+
         return array(
             // must be registered after the default Locale listener
             KernelEvents::REQUEST => array(array('onKernelRequest', 15)),

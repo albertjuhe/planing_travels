@@ -14,11 +14,12 @@
                 <h1>Plan your trip in a seconds</h1>
                 <h2>Create your trip collaborative, sharing trips</h2>
                 <img class="featurette-image img-responsive" data-src="holder.js/500x350/auto" alt="Generic placeholder image">
-                <div>
-                    <a href="{{ path('private_login') }}"><button type="button" class="btn btn-success navbar-btn">Sign in</button></a>
-                    <a href="{{ path('private_register') }}"><button type="button" class="btn btn-success navbar-btn">Register</button></a>
-                </div>
-
+                {% if not(app.user) %}
+                    <div>
+                        <a href="{{ path('private_login') }}"><button type="button" class="btn btn-success navbar-btn">Sign in</button></a>
+                        <a href="{{ path('private_register') }}"><button type="button" class="btn btn-success navbar-btn">Register</button></a>
+                    </div>
+                {%  endif  %}
             </div><!-- /.col-lg-4 -->
             <div class="col-lg-4">
                 <h1>Sign up</h1>
