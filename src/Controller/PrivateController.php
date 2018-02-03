@@ -20,6 +20,10 @@ class PrivateController extends Controller
      * @return Response
      */
     public function index() {
-        return $this->render('private/index.html.twig', array());
+        $user = $this->getUser();
+        $em = $this->getDoctrine()->getManager();
+        $travels = $em->getRepository('App:Travel')->findByUser($user);
+
+        return $this->render('private/index.html.twig', array('travels' =>$travels));
     }
 }

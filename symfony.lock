@@ -1,4 +1,7 @@
 {
+    "behat/transliterator": {
+        "version": "v1.2.0"
+    },
     "doctrine/annotations": {
         "version": "1.0",
         "recipe": {
@@ -56,6 +59,9 @@
     "doctrine/orm": {
         "version": "v2.6.0"
     },
+    "gedmo/doctrine-extensions": {
+        "version": "v2.4.33"
+    },
     "jdorn/sql-formatter": {
         "version": "v1.2.17"
     },
@@ -76,6 +82,12 @@
             "version": "2.0",
             "ref": "fe60ce509ef04a3f40da96e3979bc8d9b13b2372"
         }
+    },
+    "knplabs/knp-markdown-bundle": {
+        "version": "1.7.0"
+    },
+    "michelf/php-markdown": {
+        "version": "1.8.0"
     },
     "ocramius/package-versions": {
         "version": "1.2.0"

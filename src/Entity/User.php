@@ -80,6 +80,26 @@ class User implements UserInterface, \Serializable
      * @Assert\NotBlank()
      */
     private $lastName;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Location", mappedBy="user", cascade={"persist"})
+     */
+    private $location;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Travel", mappedBy="user", cascade={"persist"})
+     */
+    private $travel;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="Travel", inversedBy="sharedusers")
+     * @ORM\JoinTable(name="travels_shared",
+     * joinColumns={@ORM\JoinColumn(name="travel_id", referencedColumnName="id", nullable=false)},
+     * inverseJoinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)}
+     * )
+     */
+    private $travelsshared;
+
     public function __construct()
     {
         $this->isActive = true;
@@ -88,6 +108,9 @@ class User implements UserInterface, \Serializable
         $this->locale = 'en';
         // may not be needed, see section on salt below
         // $this->salt = md5(uniqid('', true));
+        $this->travel = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->location = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->travelsshared = new \Doctrine\Common\Collections\ArrayCollection();
     }
     /**
      * @Assert\IsTrue(message = "Password must be diferent than Firstname and Username", groups={"Strict"})
@@ -347,5 +370,110 @@ class User implements UserInterface, \Serializable
     public function getLastName()
     {
         return $this->lastName;
+    }
+
+
+    /**
+     * Add travel
+     *
+     * @param Travel $travel
+     * @return User
+     */
+    public function addTravel(Travel $travel)
+    {
+        $this->travel[] = $travel;
+
+        return $this;
+    }
+
+
+    /**
+     * Get travel
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTravel()
+    {
+        return $this->travel;
+    }
+
+
+    /**
+     * Remove travel
+     *
+     * @param \App\Entity\Travel $travel
+     */
+    public function removeTravel(Travel $travel)
+    {
+        $this->travel->removeElement($travel);
+    }
+
+    /**
+     * Add travelsshared
+     *
+     * @param \App\Entity\Travel $travelsshared
+     * @return User
+     */
+    public function addTravelsshared(Travel $travelsshared)
+    {
+        $this->travelsshared[] = $travelsshared;
+
+        return $this;
+    }
+
+    /**
+     * Remove travelsshared
+     *
+     * @param \App\Entity\Travel $travelsshared
+     */
+    public function removeTravelsshared(Travel $travelsshared)
+    {
+        $this->travelsshared->removeElement($travelsshared);
+    }
+
+    /**
+     * Get travelsshared
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTravelsshared()
+    {
+        return $this->travelsshared;
+    }
+
+
+    /**
+     * Add Location
+     *
+     * @param Location $location
+     * @return User
+     */
+    public function addLocation(Travel $location)
+    {
+        $this->location[] = $location;
+
+        return $this;
+    }
+
+
+    /**
+     * Get Location
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getLocation()
+    {
+        return $this->location;
+    }
+
+
+    /**
+     * Remove Location
+     *
+     * @param \App\Entity\Location $location
+     */
+    public function removeLocation(Location $location)
+    {
+        $this->location->removeElement($location);
     }
 }
