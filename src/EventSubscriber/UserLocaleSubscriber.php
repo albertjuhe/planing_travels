@@ -5,10 +5,6 @@
  * Date: 20/01/2018
  * Time: 21:40
  */
-
-namespace App\EventSubscriber;
-
-
 namespace App\EventSubscriber;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;

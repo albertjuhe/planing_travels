@@ -59,11 +59,35 @@
     "jdorn/sql-formatter": {
         "version": "v1.2.17"
     },
+    "jms/metadata": {
+        "version": "1.6.0"
+    },
+    "jms/parser-lib": {
+        "version": "1.0.0"
+    },
+    "jms/serializer": {
+        "version": "1.10.0"
+    },
+    "jms/serializer-bundle": {
+        "version": "2.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "2.0",
+            "ref": "fe60ce509ef04a3f40da96e3979bc8d9b13b2372"
+        }
+    },
     "ocramius/package-versions": {
         "version": "1.2.0"
     },
     "ocramius/proxy-manager": {
         "version": "2.2.0"
+    },
+    "phpcollection/phpcollection": {
+        "version": "0.5.0"
+    },
+    "phpoption/phpoption": {
+        "version": "1.5.0"
     },
     "psr/cache": {
         "version": "1.0.1"
@@ -84,6 +108,15 @@
             "branch": "master",
             "version": "4.0",
             "ref": "aaddfdf43cdecd4cf91f992052d76c2cadc04543"
+        }
+    },
+    "symfony/apache-pack": {
+        "version": "1.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "1.0",
+            "ref": "c82bead70f9a4f656354a193df7bf0ca2114efa0"
         }
     },
     "symfony/asset": {
@@ -182,6 +215,12 @@
     "symfony/polyfill-mbstring": {
         "version": "v1.6.0"
     },
+    "symfony/polyfill-php72": {
+        "version": "v1.7.0"
+    },
+    "symfony/profiler-pack": {
+        "version": "v1.0.3"
+    },
     "symfony/property-access": {
         "version": "v4.0.3"
     },
@@ -206,6 +245,9 @@
             "ref": "34eb245ce4194e7ae713558084180e2c532e7afd"
         }
     },
+    "symfony/stopwatch": {
+        "version": "v4.0.4"
+    },
     "symfony/translation": {
         "version": "3.3",
         "recipe": {
@@ -229,6 +271,18 @@
     },
     "symfony/validator": {
         "version": "v4.0.3"
+    },
+    "symfony/var-dumper": {
+        "version": "v4.0.4"
+    },
+    "symfony/web-profiler-bundle": {
+        "version": "3.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "3.3",
+            "ref": "6bdfa1a95f6b2e677ab985cd1af2eae35d62e0f6"
+        }
     },
     "symfony/yaml": {
         "version": "v4.0.3"
