@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Travel{% endblock %}
+
+{% block header_js %}
+    <script type="text/javascript" src="{{ google_maps }}"></script>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-4">
+                <h3>Add Travel</h3>
+                {% for flashMessage in app.session.flashbag.get('notice') %}
+                    <div class="flash-notice">
+                        {{ flashMessage }}
+                    </div>
+                {% endfor %}
+
+                {{ form_start(travelForm) }}
+                {{ form_widget(travelForm) }}
+                <button type="submit" class="btn btn-primary">Save</button>
+                {{ form_end(travelForm) }}
+            </div>
+            <div class="col-sm-8">
+                <div id="map-canvas"></div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    <script src="{{ asset('js/geoCodeSituation.js') }}"></script>
+{% endblock %}
+
+{% block css %}
+    {{ parent() }}
+    <link href="{{ asset('css/main.css') }}" rel="stylesheet">
+{% endblock %}

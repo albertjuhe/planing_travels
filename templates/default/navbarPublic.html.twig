@@ -16,7 +16,7 @@
                 {% if app.user %}
                     <li><a href="{{ path('main_private') }}">Private Area</a></li>
                     <li><a href="#">My travels</a></li>
-                    <li><a href="#">Add Travel</a></li>
+                    <li><a href="{{ path('newTravel') }}">Add Travel</a></li>
                 {% endif %}
                 <li><a href="{{ path('homepage') }}#about">About</a></li>
                 <li><a href="{{ path('homepage') }}#contact">Contact</a></li>

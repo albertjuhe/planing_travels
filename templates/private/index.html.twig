@@ -3,11 +3,11 @@
 {% block content %}
     <div class="container">
         <div class="row">
-            <h1>MyArea</h1>
-            <h2>Wellcome: language: {{ app.request.getLocale() }}</h2>
+            <h1>{{ 'MyMaps'|trans }}</h1>
+            <h2>{{ 'Welcome'|trans }}</h2>
             {% for travel in travels %}
                 <div class="col-sm-3">
-                    <h3><a href="{{ path('travel', {'slug_travel': travel.slug}) }}">{{ travel.title }}</a></h3>
+                    <h3><a href="#">{{ travel.title }}</a></h3>
                     <div>
                         {% if travel.photo is empty %}
                             <img id="travel{{ travel.id }}" class="featurette-image img-responsive" data-src="holder.js/200x200/auto" alt="Travel photo">
@@ -16,7 +16,7 @@
                         {% endif %}
                     </div>
                     <div class="date-travel">
-                        <a href="{{ path('travel', {'slug_travel': travel.slug}) }}">   {{ travel.startAt | date("d/m/Y")}} To {{ travel.endAt |date("d/m/Y")}}</a>
+                        <a href="#">   {{ travel.startAt | date("d/m/Y")}} To {{ travel.endAt |date("d/m/Y")}}</a>
                     </div>
                     <div class="info-travel">
                         {{ travel.description }}

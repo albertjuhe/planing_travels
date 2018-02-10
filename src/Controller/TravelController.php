@@ -17,6 +17,10 @@ class TravelController extends Controller
     public function newTravel(Request $request,$_locale) {
 
         $travel = new Travel();
+        $travel->setUser($this->getUser());
+        $travel->setStars(0);
+        $travel->setWatch(0);
+
         $form = $this->createForm(TravelType::class,$travel);
         $form->handleRequest($request);
 

@@ -588,7 +588,7 @@ class Travel {
     }
 
     /**
-     * Set composiciones
+     * Set Location
      *
      * @param Collection $location
      * @return Travel
@@ -822,5 +822,21 @@ class Travel {
     public function getSharedusers()
     {
         return $this->sharedusers;
+    }
+
+    /**
+     * @return int
+     */
+    public function getStars(): int
+    {
+        return $this->stars;
+    }
+
+    /**
+     * @param int $stars
+     */
+    public function setStars(int $stars)
+    {
+        $this->stars = $stars;
     }
 }
