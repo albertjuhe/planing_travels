@@ -6,7 +6,7 @@
  * Time: 21:57
  */
 
-namespace App\Domain\Model;
+namespace App\Domain\Model\Travel\Repository;
 
 
 interface TravelRepository

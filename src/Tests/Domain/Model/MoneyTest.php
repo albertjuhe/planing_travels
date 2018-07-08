@@ -8,8 +8,8 @@
 
 namespace App\Tests\Domain\Model;
 
-use App\Domain\Model\Money;
-use App\Domain\Model\Currency;
+use App\Domain\Model\Money\ValueObject\Money;
+use App\Domain\Model\Money\ValueObject\Currency;
 use PHPUnit\Framework\TestCase;
 
 class MoneyTest extends TestCase

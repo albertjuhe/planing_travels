@@ -6,7 +6,7 @@
  * Time: 11:25
  */
 
-namespace App\Domain\Model;
+namespace App\Domain\Model\Money\ValueObject;
 
 
 class Currency
