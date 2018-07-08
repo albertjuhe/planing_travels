@@ -21,7 +21,7 @@ use App\Entity\Location;
 /**
  *
  * @ORM\Entity
- * @ORM\Entity(repositoryClass="App\Entity\TravelRepository")
+ * @ORM\Entity(repositoryClass="App\Entity\DbalTravelRepository")
  * @ORM\Table(name="travel")
  * @ORM\HasLifecycleCallbacks()
  *
