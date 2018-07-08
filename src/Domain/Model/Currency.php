@@ -12,6 +12,7 @@ namespace App\Domain\Model;
 class Currency
 {
     private $isoCode;
+
     public function __construct($anIsoCode)
     {
         $this->setIsoCode($anIsoCode);
@@ -26,5 +27,9 @@ class Currency
     public function isoCode()
     {
         return $this->isoCode;
+    }
+
+    public function equals(Currency $currency) {
+        return $this->isoCode() === $currency->isoCode();
     }
 }
