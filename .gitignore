@@ -4,4 +4,6 @@
 /public/bundles/
 /var/
 /vendor/
+/.idea/
+.gitignore
 ###< symfony/framework-bundle ###
