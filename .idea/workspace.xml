@@ -2,11 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     <list default="true" id="02134ae4-5458-4feb-a1b3-1c45123d6ed3" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/travel.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/travel.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
+=======
+    <list default="true" id="02134ae4-5458-4feb-a1b3-1c45123d6ed3" name="Default" comment="" />
+>>>>>>> Stashed changes
 =======
     <list default="true" id="02134ae4-5458-4feb-a1b3-1c45123d6ed3" name="Default" comment="" />
 >>>>>>> Stashed changes
@@ -27,7 +31,11 @@
         <entry file="file://$PROJECT_DIR$/templates/private/index.html.twig">
           <provider selected="true" editor-type-id="text-editor">
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             <state relative-caret-position="135">
+=======
+            <state relative-caret-position="-8">
+>>>>>>> Stashed changes
 =======
             <state relative-caret-position="-8">
 >>>>>>> Stashed changes
@@ -40,7 +48,11 @@
         <entry file="file://$PROJECT_DIR$/config/packages/translation.yaml">
           <provider selected="true" editor-type-id="text-editor">
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             <state relative-caret-position="189">
+=======
+            <state relative-caret-position="-8">
+>>>>>>> Stashed changes
 =======
             <state relative-caret-position="-8">
 >>>>>>> Stashed changes
@@ -53,8 +65,13 @@
         <entry file="file://$PROJECT_DIR$/.env">
           <provider selected="true" editor-type-id="text-editor">
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             <state relative-caret-position="459">
               <caret line="17" selection-start-line="17" selection-end-line="17" />
+=======
+            <state relative-caret-position="248">
+              <caret line="17" lean-forward="true" selection-start-line="17" selection-end-line="17" />
+>>>>>>> Stashed changes
 =======
             <state relative-caret-position="248">
               <caret line="17" lean-forward="true" selection-start-line="17" selection-end-line="17" />
@@ -67,7 +84,11 @@
         <entry file="file://$PROJECT_DIR$/src/Controller/DefaultController.php">
           <provider selected="true" editor-type-id="text-editor">
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             <state relative-caret-position="540">
+=======
+            <state relative-caret-position="-8">
+>>>>>>> Stashed changes
 =======
             <state relative-caret-position="-8">
 >>>>>>> Stashed changes
@@ -88,7 +109,11 @@
         <entry file="file://$PROJECT_DIR$/src/Controller/TravelController.php">
           <provider selected="true" editor-type-id="text-editor">
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             <state relative-caret-position="513">
+=======
+            <state>
+>>>>>>> Stashed changes
 =======
             <state>
 >>>>>>> Stashed changes
@@ -104,7 +129,11 @@
         <entry file="file://$PROJECT_DIR$/src/Entity/Travel.php">
           <provider selected="true" editor-type-id="text-editor">
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             <state relative-caret-position="13608">
+=======
+            <state>
+>>>>>>> Stashed changes
 =======
             <state>
 >>>>>>> Stashed changes
@@ -120,7 +149,11 @@
         <entry file="file://$PROJECT_DIR$/config/services.yaml">
           <provider selected="true" editor-type-id="text-editor">
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             <state relative-caret-position="756">
+=======
+            <state>
+>>>>>>> Stashed changes
 =======
             <state>
 >>>>>>> Stashed changes
@@ -298,6 +331,9 @@
   <component name="ProjectFrameBounds" extendedState="6">
 =======
   <component name="ProjectFrameBounds" extendedState="7">
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     <option name="x" value="338" />
     <option name="y" value="157" />
@@ -321,16 +357,27 @@
             <path>
               <item name="planing_travels" type="b2602c69:ProjectViewProjectNode" />
               <item name="planing_travels" type="462c0819:PsiDirectoryNode" />
+<<<<<<< Updated upstream
             </path>
             <path>
               <item name="planing_travels" type="b2602c69:ProjectViewProjectNode" />
               <item name="planing_travels" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
+=======
+>>>>>>> Stashed changes
             </path>
             <path>
               <item name="planing_travels" type="b2602c69:ProjectViewProjectNode" />
               <item name="planing_travels" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
+<<<<<<< Updated upstream
+=======
+            </path>
+            <path>
+              <item name="planing_travels" type="b2602c69:ProjectViewProjectNode" />
+              <item name="planing_travels" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+>>>>>>> Stashed changes
               <item name="Controller" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
@@ -431,7 +478,10 @@
       <workItem from="1518264206112" duration="2327000" />
       <workItem from="1530909362977" duration="5833000" />
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
       <workItem from="1531039926826" duration="507000" />
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
     </task>
@@ -439,7 +489,11 @@
   </component>
   <component name="TimeTrackingManager">
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     <option name="totallyTimeSpent" value="60998000" />
+=======
+    <option name="totallyTimeSpent" value="60491000" />
+>>>>>>> Stashed changes
 =======
     <option name="totallyTimeSpent" value="60491000" />
 >>>>>>> Stashed changes
@@ -447,6 +501,7 @@
   <component name="ToolWindowManager">
     <frame x="67" y="25" width="1853" height="1055" extended-state="6" />
     <layout>
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24515772" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -513,6 +568,41 @@
     </layout>
     <layout-to-restore>
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+=======
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.23907177" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Docker" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.5042965" side_tool="true" weight="0.21493213" />
+      <window_info anchor="right" id="Database" order="3" />
+      <window_info anchor="bottom" id="Database Changes" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="7" />
+      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="7" sideWeight="0.49570355" visible="true" weight="0.5375661" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.33439153" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.23952739" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info id="Structure" order="1" weight="0.25" />
+      <window_info anchor="right" id="Commander" order="0" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Version Control" order="7" />
+      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info anchor="bottom" id="REST Client" order="8" weight="0.3495475" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32918552" />
+      <window_info anchor="right" id="Database" order="3" />
+      <window_info anchor="bottom" id="Terminal" order="7" sideWeight="0.49570355" visible="true" weight="0.4453303" />
+      <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.5042965" side_tool="true" weight="0.21493213" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.33484164" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+    </layout>
+    <layout-to-restore>
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+>>>>>>> Stashed changes
       <window_info anchor="bottom" id="Run" order="2" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.22771214" />
@@ -520,13 +610,21 @@
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Version Control" order="8" />
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
       <window_info anchor="bottom" id="Find" order="1" />
       <window_info anchor="right" id="Database" order="3" />
       <window_info anchor="bottom" id="Terminal" order="9" visible="true" weight="0.21719457" />
       <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
       <window_info anchor="bottom" id="Version Control" order="8" />
+=======
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+>>>>>>> Stashed changes
 =======
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
@@ -737,7 +835,11 @@
     <entry file="file://$PROJECT_DIR$/src/Controller/DefaultController.php">
       <provider selected="true" editor-type-id="text-editor">
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         <state relative-caret-position="540">
+=======
+        <state relative-caret-position="-8">
+>>>>>>> Stashed changes
 =======
         <state relative-caret-position="-8">
 >>>>>>> Stashed changes
@@ -812,7 +914,11 @@
     <entry file="file://$PROJECT_DIR$/config/services.yaml">
       <provider selected="true" editor-type-id="text-editor">
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         <state relative-caret-position="756">
+=======
+        <state>
+>>>>>>> Stashed changes
 =======
         <state>
 >>>>>>> Stashed changes
@@ -823,7 +929,11 @@
     <entry file="file://$PROJECT_DIR$/src/Controller/TravelController.php">
       <provider selected="true" editor-type-id="text-editor">
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         <state relative-caret-position="513">
+=======
+        <state>
+>>>>>>> Stashed changes
 =======
         <state>
 >>>>>>> Stashed changes
@@ -837,7 +947,11 @@
     <entry file="file://$PROJECT_DIR$/src/Entity/Travel.php">
       <provider selected="true" editor-type-id="text-editor">
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         <state relative-caret-position="13608">
+=======
+        <state>
+>>>>>>> Stashed changes
 =======
         <state>
 >>>>>>> Stashed changes
@@ -851,7 +965,11 @@
     <entry file="file://$PROJECT_DIR$/config/packages/translation.yaml">
       <provider selected="true" editor-type-id="text-editor">
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         <state relative-caret-position="189">
+=======
+        <state relative-caret-position="-8">
+>>>>>>> Stashed changes
 =======
         <state relative-caret-position="-8">
 >>>>>>> Stashed changes
@@ -865,7 +983,11 @@
     <entry file="file://$PROJECT_DIR$/templates/private/index.html.twig">
       <provider selected="true" editor-type-id="text-editor">
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         <state relative-caret-position="135">
+=======
+        <state relative-caret-position="-8">
+>>>>>>> Stashed changes
 =======
         <state relative-caret-position="-8">
 >>>>>>> Stashed changes
@@ -890,8 +1012,13 @@
     <entry file="file://$PROJECT_DIR$/.env">
       <provider selected="true" editor-type-id="text-editor">
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         <state relative-caret-position="459">
           <caret line="17" selection-start-line="17" selection-end-line="17" />
+=======
+        <state relative-caret-position="248">
+          <caret line="17" lean-forward="true" selection-start-line="17" selection-end-line="17" />
+>>>>>>> Stashed changes
 =======
         <state relative-caret-position="248">
           <caret line="17" lean-forward="true" selection-start-line="17" selection-end-line="17" />
