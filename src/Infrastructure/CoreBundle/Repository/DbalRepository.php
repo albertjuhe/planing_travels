@@ -6,7 +6,7 @@
  * Time: 21:59
  */
 
-namespace App\Domain\Model\Travel\Repository;
+namespace App\Infrastructure\CoreBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 

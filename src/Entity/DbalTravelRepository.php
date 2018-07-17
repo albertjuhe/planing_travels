@@ -4,8 +4,8 @@
 
 namespace App\Entity;
 
-use App\Domain\Model\Travel\Repository\DbalRepository;
 use App\Domain\Model\Travel\Repository\TravelRepository;
+use App\Infrastructure\TravelBundle\Repository\DbalRepository;
 
 
 class DbalTravelRepository extends DbalRepository implements TravelRepository {
