@@ -4,16 +4,18 @@
 
 namespace App\Entity;
 
-use App\Domain\Model\Travel\Repository\TravelRepository;
-use App\Infrastructure\TravelBundle\Repository\DbalRepository;
+use App\Domain\Travel\Repository\TravelRepository;
+use App\Infrastructure\TravelBundle\Repository\PDOTravelRepository;
 
-
-class DbalTravelRepository extends DbalRepository implements TravelRepository {
+/*
+ * @Deprecated
+ */
+class DbalTravelRepository extends PDOTravelRepository implements TravelRepository {
 
     public function findAllOrderedByStarts($maximResults = 10) {
-        return $this->getEntityManager()->createQuery(
+/*        return $this->getEntityManager()->createQuery(
             'SELECT t FROM AppBundle:Travel t ORDER BY t.starts DESC'
         )->setMaxResults($maximResults)
-        ->getResult();
+        ->getResult();*/
     }
 }

@@ -183,7 +183,7 @@ class Gpx
     /**
      * Get location
      *
-     * @return \App\Entity\Travel
+     * @return App\Domain\Travel\Model\Travel
      */
     public function getTravel()
     {

@@ -6,7 +6,7 @@
  * Time: 08:10
  */
 
-namespace App\CoreBundle;
+namespace App\Infrastructure\CoreBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 

@@ -6,7 +6,7 @@
  * Time: 08:10
  */
 
-namespace App\TravelBundle;
+namespace App\Infrastructure\TravelBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 

@@ -3,7 +3,7 @@
                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
                           http://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd">
-   <entity name="Infrastructure\TravelBundle\Model" table="travel">
+   <entity name="App\Domain\Travel\Model" table="travel">
      <id name="id" column="id" type="int">
          <generator strategy="AUTO"/>
      </id>

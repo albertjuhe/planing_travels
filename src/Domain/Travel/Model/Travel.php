@@ -1,10 +1,13 @@
 <?php
-// src/AppBundle/Entity/Travel.php
 
 namespace App\Domain\Travel\Model;
 
 use App\Entity\Location;
 
+/**
+ * Class Travel
+ * @package App\Domain\Travel\Model
+ */
 class Travel {
 
     /**
@@ -47,6 +50,9 @@ class Travel {
      */
     private $lat0;
 
+    /**
+     * @var
+     */
     private $lng0;
 
     /**
@@ -87,11 +93,14 @@ class Travel {
     private $location;
 
     /**
-     * Starts
+     * Stars
      * @var
      */
-    private $starts;
+    private $stars;
 
+    /**
+     * @var
+     */
     private $watch;
 
     /**
