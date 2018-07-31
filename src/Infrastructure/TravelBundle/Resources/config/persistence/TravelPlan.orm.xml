@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+    <entity name="App\Domain\Travel\Model\TravelPlan" table="travelPlan">
+        <id name="id" type="integer" column="id">
+            <generator strategy="IDENTITY"/>
+        </id>
+        <field name="createdAt" type="datetime" column="createdAt" precision="0" scale="0" nullable="false"/>
+        <field name="updatedAt" type="datetime" column="updatedAt" precision="0" scale="0" nullable="false"/>
+        <field name="title" column="title" length="255" precision="0" scale="0" nullable="false"/>
+        <field name="description" type="text" column="description" precision="0" scale="0" nullable="true"/>
+    </entity>
+</doctrine-mapping>
