@@ -1,0 +1,137 @@
+App\Entity\User:
+    type: entity
+    table: users
+    repositoryClass: App\Repository\UserRepository
+    id:
+        id:
+            type: integer
+            scale: 0
+            length: null
+            unique: false
+            nullable: false
+            precision: 0
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        username:
+            type: string
+            scale: 0
+            length: 25
+            unique: true
+            nullable: false
+            precision: 0
+        password:
+            type: string
+            scale: 0
+            length: 64
+            unique: false
+            nullable: false
+            precision: 0
+        email:
+            type: string
+            scale: 0
+            length: 255
+            unique: true
+            nullable: false
+            precision: 0
+        isActive:
+            type: boolean
+            scale: 0
+            length: null
+            unique: false
+            nullable: false
+            precision: 0
+            column: is_active
+        createdAt:
+            type: datetime
+            scale: 0
+            length: null
+            unique: false
+            nullable: false
+            precision: 0
+        updatedAt:
+            type: datetime
+            scale: 0
+            length: null
+            unique: false
+            nullable: false
+            precision: 0
+        lastLogin:
+            type: datetime
+            scale: 0
+            length: null
+            unique: false
+            nullable: true
+            precision: 0
+            column: last_login
+        locale:
+            type: string
+            scale: 0
+            length: 100
+            unique: false
+            nullable: false
+            precision: 0
+        firstName:
+            type: string
+            scale: 0
+            length: 100
+            unique: false
+            nullable: false
+            precision: 0
+            column: first_name
+        lastName:
+            type: string
+            scale: 0
+            length: 100
+            unique: false
+            nullable: false
+            precision: 0
+            column: last_name
+    oneToMany:
+        location:
+            targetEntity: App\Entity\Location
+            cascade:
+                - persist
+            fetch: LAZY
+            mappedBy: user
+            inversedBy: null
+            orphanRemoval: false
+            orderBy: null
+        travel:
+            targetEntity: App\Entity\Travel
+            cascade:
+                - persist
+            fetch: LAZY
+            mappedBy: user
+            inversedBy: null
+            orphanRemoval: false
+            orderBy: null
+    manyToMany:
+        travelsshared:
+            targetEntity: App\Entity\Travel
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: sharedusers
+            joinTable:
+                name: travels_shared
+                schema: null
+                joinColumns:
+                    -
+                        name: travel_id
+                        unique: false
+                        nullable: false
+                        onDelete: null
+                        columnDefinition: null
+                        referencedColumnName: id
+                inverseJoinColumns:
+                    -
+                        name: user_id
+                        unique: false
+                        nullable: false
+                        onDelete: null
+                        columnDefinition: null
+                        referencedColumnName: id
+            orderBy: null
+    lifecycleCallbacks: {  }

@@ -1,0 +1,127 @@
+App\Entity\Location:
+    type: entity
+    table: location
+    id:
+        id:
+            type: integer
+            scale: 0
+            length: null
+            unique: false
+            nullable: false
+            precision: 0
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        createdAt:
+            type: datetime
+            scale: 0
+            length: null
+            unique: false
+            nullable: false
+            precision: 0
+        updatedAt:
+            type: datetime
+            scale: 0
+            length: null
+            unique: false
+            nullable: false
+            precision: 0
+        title:
+            type: string
+            scale: 0
+            length: 255
+            unique: false
+            nullable: false
+            precision: 0
+        url:
+            type: string
+            scale: 0
+            length: 255
+            unique: false
+            nullable: true
+            precision: 0
+        slug:
+            type: string
+            scale: 0
+            length: 128
+            unique: true
+            nullable: false
+            precision: 0
+        description:
+            type: text
+            scale: 0
+            length: null
+            unique: false
+            nullable: true
+            precision: 0
+        starts:
+            type: integer
+            scale: 0
+            length: null
+            unique: false
+            nullable: true
+            precision: 0
+    manyToOne:
+        user:
+            targetEntity: App\Entity\User
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: location
+            joinColumns:
+                user_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        mark:
+            targetEntity: App\Entity\Mark
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: location
+            joinColumns:
+                mark_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        travel:
+            targetEntity: App\Entity\Travel
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: location
+            joinColumns:
+                travel_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        typeLocation:
+            targetEntity: App\Entity\TypeLocation
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                typeLocation_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    oneToMany:
+        notas:
+            targetEntity: App\Entity\Nota
+            cascade:
+                - all
+            fetch: LAZY
+            mappedBy: location
+            inversedBy: null
+            orphanRemoval: false
+            orderBy: null
+        images:
+            targetEntity: App\Entity\Images
+            cascade:
+                - persist
+            fetch: LAZY
+            mappedBy: location
+            inversedBy: null
+            orphanRemoval: false
+            orderBy: null
+    lifecycleCallbacks:
+        preUpdate:
+            - preUpdate

@@ -8,7 +8,7 @@
 
 namespace App\Domain\Travel\Model;
 
-class TravelPlan
+class Travel
 {
     protected $id;
 
@@ -43,6 +43,8 @@ class TravelPlan
     private $starts;
 
     private $watch;
+
+    private $gpx;
 
     /**
      * @return mixed
@@ -314,6 +316,22 @@ class TravelPlan
     public function setWatch($watch)
     {
         $this->watch = $watch;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getGpx()
+    {
+        return $this->gpx;
+    }
+
+    /**
+     * @param mixed $gpx
+     */
+    public function setGpx($gpx): void
+    {
+        $this->gpx = $gpx;
     }
 
 
