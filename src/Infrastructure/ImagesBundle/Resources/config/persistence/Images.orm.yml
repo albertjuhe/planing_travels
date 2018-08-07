@@ -1,4 +1,4 @@
-App\Entity\Images:
+App\Domain\Images\Model\Images:
     type: entity
     table: images
     id:

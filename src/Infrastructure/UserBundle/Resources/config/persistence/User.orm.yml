@@ -1,4 +1,4 @@
-App\Entity\User:
+App\Domain\Model\User:
     type: entity
     table: users
     repositoryClass: App\Repository\UserRepository
@@ -90,7 +90,7 @@ App\Entity\User:
             column: last_name
     oneToMany:
         location:
-            targetEntity: App\Entity\Location
+            targetEntity: App\Domain\Location\Model\Location
             cascade:
                 - persist
             fetch: LAZY
@@ -99,7 +99,7 @@ App\Entity\User:
             orphanRemoval: false
             orderBy: null
         travel:
-            targetEntity: App\Entity\Travel
+            targetEntity: App\Domain\Travel\Model\Travel
             cascade:
                 - persist
             fetch: LAZY
@@ -109,7 +109,7 @@ App\Entity\User:
             orderBy: null
     manyToMany:
         travelsshared:
-            targetEntity: App\Entity\Travel
+            targetEntity: App\Domain\Travel\Model\Travel
             cascade: {  }
             fetch: LAZY
             mappedBy: null

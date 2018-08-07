@@ -1,4 +1,4 @@
-App\Entity\Mark:
+App\Domain\Mark\Model\Mark:
     type: entity
     table: mark
     id:
@@ -84,7 +84,7 @@ App\Entity\Mark:
             column: description
     oneToMany:
         location:
-            targetEntity: App\Entity\Location
+            targetEntity: App\Domain\Location\Model\Location
             cascade: {  }
             fetch: LAZY
             mappedBy: mark

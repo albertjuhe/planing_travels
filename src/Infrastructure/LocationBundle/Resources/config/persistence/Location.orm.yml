@@ -1,4 +1,4 @@
-App\Entity\Location:
+App\Domain\Location\Model\Location:
     type: entity
     table: location
     id:
@@ -64,7 +64,7 @@ App\Entity\Location:
             precision: 0
     manyToOne:
         user:
-            targetEntity: App\Entity\User
+            targetEntity: App\Domain\User\Model\User
             cascade: {  }
             fetch: LAZY
             mappedBy: null
@@ -74,7 +74,7 @@ App\Entity\Location:
                     referencedColumnName: id
             orphanRemoval: false
         mark:
-            targetEntity: App\Entity\Mark
+            targetEntity: App\Domain\Mark\Model\Mark
             cascade: {  }
             fetch: LAZY
             mappedBy: null
@@ -84,7 +84,7 @@ App\Entity\Location:
                     referencedColumnName: id
             orphanRemoval: false
         travel:
-            targetEntity: App\Entity\Travel
+            targetEntity: App\Domain\Travel\Model\Travel
             cascade: {  }
             fetch: LAZY
             mappedBy: null
@@ -94,7 +94,7 @@ App\Entity\Location:
                     referencedColumnName: id
             orphanRemoval: false
         typeLocation:
-            targetEntity: App\Entity\TypeLocation
+            targetEntity: App\Domain\TypeLocation\Model\TypeLocation
             cascade: {  }
             fetch: LAZY
             mappedBy: null
@@ -105,7 +105,7 @@ App\Entity\Location:
             orphanRemoval: false
     oneToMany:
         notas:
-            targetEntity: App\Entity\Nota
+            targetEntity: App\Domain\Note\Model\Note
             cascade:
                 - all
             fetch: LAZY
@@ -114,7 +114,7 @@ App\Entity\Location:
             orphanRemoval: false
             orderBy: null
         images:
-            targetEntity: App\Entity\Images
+            targetEntity: App\Domain\Images\Model\Images
             cascade:
                 - persist
             fetch: LAZY

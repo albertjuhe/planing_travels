@@ -1,4 +1,4 @@
-App\Entity\Nota:
+App\Domain\Model\Nota:
     type: entity
     table: nota
     id:
@@ -29,7 +29,7 @@ App\Entity\Nota:
             precision: 0
     manyToOne:
         location:
-            targetEntity: App\Entity\Location
+            targetEntity: App\Domain\Location\Model\Location
             cascade: {  }
             fetch: LAZY
             mappedBy: null

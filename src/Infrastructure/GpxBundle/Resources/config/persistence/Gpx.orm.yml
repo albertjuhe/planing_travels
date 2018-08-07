@@ -1,0 +1,45 @@
+App\Domain\Gpx\Model\Gpx:
+    type: entity
+    table: gpx
+    id:
+        id:
+            id: true
+            type: integer
+            generator:
+                strategy: IDENTITY
+    fields:
+        title:
+            type: string
+            length: 255
+            precision: 0
+            scale: 0
+            nullable: false
+        description:
+            type: string
+            length: 255
+            precision: 0
+            scale: 0
+            nullable: false
+        filename:
+            type: string
+            length: 255
+            precision: 0
+            scale: 0
+            nullable: false
+        color:
+            type: string
+            length: 255
+            precision: 0
+            scale: 0
+            nullable: false
+        createdAt:
+            type: datetime
+            precision: 0
+            scale: 0
+            nullable: false
+        updatedAt:
+            type: datetime
+            precision: 0
+            scale: 0
+            nullable: false
+    lifecycleCallbacks: {  }
