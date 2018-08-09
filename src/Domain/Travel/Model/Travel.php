@@ -46,6 +46,11 @@ class Travel
 
     private $gpx;
 
+    private $user;
+
+    private $sharedusers;
+
+
     /**
      * @return mixed
      */
@@ -332,6 +337,38 @@ class Travel
     public function setGpx($gpx): void
     {
         $this->gpx = $gpx;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param mixed $user
+     */
+    public function setUser($user): void
+    {
+        $this->user = $user;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSharedusers()
+    {
+        return $this->sharedusers;
+    }
+
+    /**
+     * @param mixed $sharedusers
+     */
+    public function setSharedusers($sharedusers): void
+    {
+        $this->sharedusers = $sharedusers;
     }
 
 
