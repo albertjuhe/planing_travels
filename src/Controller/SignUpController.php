@@ -1,40 +1,17 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Albert
- * Date: 20/01/2018
- * Time: 16:23
- */
+
 
 namespace App\Controller;
 
-use App\Entity\User;
+use App\Domain\User\Model\User;
 use App\Form\UserType;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
-class SecurityController extends Controller
+class SignUpController extends Controller
 {
-    /**
-     * @Route("/{_locale}/login", name="private_login")
-     */
-    public function login(Request $request, AuthenticationUtils $authUtils)
-    {
-        // get the login error if there is one
-        $error = $authUtils->getLastAuthenticationError();
-        // last username entered by the user
-        $lastUsername = $authUtils->getLastUsername();
-
-        return $this->render('security/login.html.twig', array(
-            'last_username' => $lastUsername,
-            'error' => $error,
-        ));
-    }
-
     /**
      *
      * @Route("/{_locale}/register",name="private_register")
