@@ -50,6 +50,8 @@ class Travel
 
     private $sharedusers;
 
+    private $location;
+
 
     /**
      * @return mixed

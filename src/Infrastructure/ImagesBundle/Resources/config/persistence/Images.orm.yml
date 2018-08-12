@@ -43,7 +43,7 @@ App\Domain\Images\Model\Images:
             precision: 0
     manyToOne:
         location:
-            targetEntity: App\Entity\Location
+            targetEntity: App\Domain\Location\Model\Location
             cascade: {  }
             fetch: LAZY
             mappedBy: null

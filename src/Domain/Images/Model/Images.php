@@ -155,7 +155,7 @@ class Images
     /**
      * Set location
      *
-     * @param \App\Entity\Location $location
+     * @param \App\Domain\Location\Model\Location $location
      * @return Images
      */
     public function setLocation( $location = null)

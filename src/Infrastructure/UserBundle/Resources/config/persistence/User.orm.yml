@@ -1,4 +1,4 @@
-App\Domain\Model\User:
+App\Domain\User\Model\User:
     type: entity
     table: users
     repositoryClass: App\Repository\UserRepository

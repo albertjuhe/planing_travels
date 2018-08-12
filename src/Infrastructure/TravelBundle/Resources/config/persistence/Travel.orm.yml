@@ -1,7 +1,6 @@
-App\Domain\Model\Travel:
+App\Domain\Travel\Model\Travel:
     type: entity
     table: travel
-    repositoryClass: App\Entity\TravelRepository
     id:
         id:
             type: integer

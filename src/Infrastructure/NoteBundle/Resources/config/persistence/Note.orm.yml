@@ -1,6 +1,6 @@
-App\Domain\Model\Nota:
+App\Domain\Note\Model\Note:
     type: entity
-    table: nota
+    table: note
     id:
         id:
             type: integer

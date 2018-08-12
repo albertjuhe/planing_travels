@@ -73,7 +73,7 @@ class Note
     /**
      * Set location
      *
-     * @param \App\Entity\Location $location
+     * @param \App\Domain\Location\Model\Location $location
      * @return Note
      */
     public function setLocation($location = null)
@@ -86,7 +86,7 @@ class Note
     /**
      * Get location
      *
-     * @return \App\Entity\Location
+     * @return \App\Domain\Location\Model\Location
      */
     public function getLocation()
     {

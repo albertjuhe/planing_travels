@@ -1,4 +1,4 @@
-App\Entity\TypeLocation:
+App\Domain\TypeLocation\Model\TypeLocation:
     type: entity
     table: typelocation
     id:

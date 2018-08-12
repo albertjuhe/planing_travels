@@ -406,7 +406,7 @@ class User implements UserInterface
     /**
      * Remove Location
      *
-     * @param \App\Entity\Location $location
+     * @param \App\Domain\Location\Model\Location $location
      */
     public function removeLocation(Location $location)
     {

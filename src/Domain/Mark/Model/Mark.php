@@ -177,10 +177,10 @@ class Mark {
     /**
      * Add location
      *
-     * @param \App\Entity\Location $location
+     * @param \App\Domain\Location\Model\Location $location
      * @return Mark
      */
-    public function addLocation(\App\Entity\Location $location)
+    public function addLocation(\App\Domain\Location\Model\Location $location)
     {
         $this->location[] = $location;
 
@@ -190,9 +190,9 @@ class Mark {
     /**
      * Remove location
      *
-     * @param \App\Entity\Location $location
+     * @param \App\Domain\Location\Model\Location $location
      */
-    public function removeLocation(\App\Entity\Location $location)
+    public function removeLocation(\App\Domain\Location\Model\Location $location)
     {
         $this->location->removeElement($location);
     }
