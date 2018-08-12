@@ -12,6 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use App\Application\UseCases\User\SignInUserService;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Class SignInController
