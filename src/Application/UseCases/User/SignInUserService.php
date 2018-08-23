@@ -3,8 +3,8 @@
 
 namespace App\Application\UseCases\User;
 
-
 use App\Domain\User\Model\User;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SignInUserService
 {

@@ -10,11 +10,24 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use App\Infrastructure\UserBundle\Repository\DoctrineUserRepository;
+use App\Domain\User\Repository\UserRepository;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Application\UseCases\User\SignUpUserService;
 
 class SignUpController extends Controller
 {
+    private $userRepository;
+
+    /**
+     * SignUpController constructor.
+     * @param $userRepository
+     */
+
+    public function __construct(DoctrineUserRepository $userRepository)
+    {
+        $this->userRepository = $userRepository;
+    }
+
     /**
      *
      * @Route("/{_locale}/register",name="private_register")
@@ -25,13 +38,11 @@ class SignUpController extends Controller
      */
     public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder)
     {
-        $userRepository = new DoctrineUserRepository();
-        $signUpUserService = new SignUpUserService($userRepository,$passwordEncoder);
-
         $user = new User();
         $form = $this->createForm(UserType::class, $user,array('attr'=>array('class'=>'form-signin')));
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $signUpUserService = new SignUpUserService($this->userRepository,$passwordEncoder);
             $signUpUserService->execute($user,$user->getPlainPassword());
             return $this->redirectToRoute('main_private');
         }

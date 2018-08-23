@@ -22,7 +22,7 @@ class SignUpUserService
      * @param $userRepository
      * @param $userPasswordEncoderInterface
      */
-    public function __construct($userRepository, $userPasswordEncoderInterface)
+    public function __construct(UserRepository $userRepository, UserPasswordEncoderInterface $userPasswordEncoderInterface)
     {
         $this->userRepository = $userRepository;
         $this->userPasswordEncoderInterface = $userPasswordEncoderInterface;
@@ -36,7 +36,6 @@ class SignUpUserService
     {
         $password = $this->userPasswordEncoderInterface->encodePassword($user, $password);
         $user->setPassword($password);
-        $userRepository = new DoctrineUserRepository();
-        $userRepository->save($user);
+        $this->userRepository->save($user);
     }
 }
