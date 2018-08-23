@@ -5,24 +5,19 @@ namespace App\Infrastructure\UserBundle\Repository;
 
 use App\Domain\User\Repository\UserRepository;
 use App\Domain\User\Model\User;
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\EntityRepository;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Persistence\ManagerRegistry;
 
-class DoctrineUserRepository implements UserRepository
+class DoctrineUserRepository extends  ServiceEntityRepository implements UserRepository
 {
-    /**
-     * @var EntityManager
-     */
-    private $em;
-
-    public function __construct(EntityManagerInterface $entityManger)
+    public function __construct(ManagerRegistry $registry)
     {
-        $this->em = $entityManger;
+        parent::__construct($registry, User::class);
     }
 
     public function save(User $user) {
-        $this->em->persist($user);
-        $this->em->flush($user);
+        $this->_em->persist($user);
+        $this->_em->flush($user);
     }
 
 }

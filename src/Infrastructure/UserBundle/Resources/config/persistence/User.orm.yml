@@ -1,7 +1,7 @@
 App\Domain\User\Model\User:
     type: entity
     table: users
-    repositoryClass: App\Repository\UserRepository
+    repositoryClass: App\Infrastructure\UserBundle\Repository\DoctrineUserRepository
     id:
         id:
             type: integer
