@@ -14,5 +14,13 @@ return [
     Knp\Bundle\MarkdownBundle\KnpMarkdownBundle::class => ['all' => true],
     Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle::class => ['all' => true],
     App\Infrastructure\CoreBundle\CoreBundle::class => ['all' => true],
+    App\Infrastructure\GpxBundle\GpxBundle::class => ['all' => true],
+    App\Infrastructure\ImagesBundle\ImagesBundle::class => ['all' => true],
+    App\Infrastructure\LocationBundle\LocationBundle::class => ['all' => true],
+    App\Infrastructure\MarkBundle\MarkBundle::class => ['all' => true],
+    App\Infrastructure\NoteBundle\NoteBundle::class => ['all' => true],
     App\Infrastructure\TravelBundle\TravelBundle::class => ['all' => true],
+    App\Infrastructure\TypeLocationBundle\TypeLocationBundle::class => ['all' => true],
+    App\Infrastructure\UserBundle\UserBundle::class => ['all' => true],
+    Symfony\Bundle\MonologBundle\MonologBundle::class => ['all' => true],
 ];
