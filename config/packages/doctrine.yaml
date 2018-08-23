@@ -59,9 +59,4 @@ doctrine:
                 prefix: App\Domain\User\Model
                 dir: '%kernel.root_dir%/../src/Infrastructure/UserBundle/Resources/config/persistence'
                 is_bundle: false
-            App:
-                is_bundle: false
-                type: annotation
-                dir: '%kernel.project_dir%/src/Entity'
-                prefix: 'App\Entity'
-                alias: App
+

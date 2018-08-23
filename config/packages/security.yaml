@@ -2,7 +2,7 @@ security:
 
     encoders:
         Symfony\Component\Security\Core\User\User: plaintext
-        App\Entity\User:
+        App\Domain\User\Model\User:
              algorithm: bcrypt
 
 
@@ -15,7 +15,7 @@ security:
                     password: albert
                     roles: 'ROLE_ADMIN'
         db_users:
-            entity: { class: App\Entity\User, property: username }
+            entity: { class: App\Domain\User\Model\User, property: username }
 
     firewalls:
         # disables authentication for assets and the profiler, adapt it according to your needs
