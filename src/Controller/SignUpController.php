@@ -43,7 +43,7 @@ class SignUpController extends Controller
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $signUpUserService = new SignUpUserService($this->userRepository,$passwordEncoder);
-            $signUpUserService->execute($user,$user->getPlainPassword());
+            $signUpUserService->execute($user);
             return $this->redirectToRoute('main_private');
         }
         return $this->render(

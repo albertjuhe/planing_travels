@@ -3,6 +3,7 @@
 
 namespace App\Application\UseCases\User;
 
+use App\Domain\User\Model\User;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use App\Domain\User\Repository\UserRepository;
 
@@ -32,9 +33,9 @@ class SignUpUserService
      * @param $user
      * @param $password
      */
-    public function execute($user,$password)
+    public function execute(User $user)
     {
-        $password = $this->userPasswordEncoderInterface->encodePassword($user, $password);
+        $password = $this->userPasswordEncoderInterface->encodePassword($user, $user->getPlainPassword());
         $user->setPassword($password);
         $this->userRepository->save($user);
     }

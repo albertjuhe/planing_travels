@@ -44,8 +44,7 @@ class User implements UserInterface
         $this->updatedAt = new \DateTime;
         $this->createdAt = new \DateTime;
         $this->locale = 'en';
-        // may not be needed, see section on salt below
-        // $this->salt = md5(uniqid('', true));
+
         $this->travel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->location = new \Doctrine\Common\Collections\ArrayCollection();
         $this->travelsshared = new \Doctrine\Common\Collections\ArrayCollection();
