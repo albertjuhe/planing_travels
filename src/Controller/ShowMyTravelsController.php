@@ -8,6 +8,7 @@
 
 namespace App\Controller;
 
+use App\Domain\User\Model\User;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
@@ -33,9 +34,10 @@ class ShowMyTravelsController extends Controller
      *
      * @return Response
      */
-    public function index() {
+    public function showMyTravels() {
         $user = $this->getUser();
-        $travels =  $getAllMyTravelsService = new GetAllMyTravelsService($this->travelRepository);
+        $getAllMyTravelsService = new GetAllMyTravelsService($this->travelRepository);
+        $travels = $getAllMyTravelsService->execute($user);
         return $this->render('private/index.html.twig', array('travels' =>$travels));
     }
 }
