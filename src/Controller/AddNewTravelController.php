@@ -1,34 +1,43 @@
 <?php
 namespace App\Controller;
 
-use App\Entity\Travel;
+use App\Domain\Travel\Model\Travel;
 use App\Form\TravelType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Infrastructure\TravelBundle\Repository\DoctrineTravelRepository;
+use App\Application\UseCases\Travel\AddTravelService;
 
-class TravelController extends Controller
+class AddNewTravelController extends Controller
 {
+    private $travelRepository;
+
+    /**
+     * ShowMyTravelsController constructor.
+     * @param $travelRepository
+     */
+    public function __construct(DoctrineTravelRepository $travelRepository)
+    {
+        $this->travelRepository = $travelRepository;
+    }
     /**
      * @Route("/{_locale}/private/new",name="newTravel")
      * @return Response
      */
     public function newTravel(Request $request,$_locale) {
-
         $travel = new Travel();
         $travel->setUser($this->getUser());
-        $travel->setStars(0);
+        $travel->setStarts(0);
         $travel->setWatch(0);
 
         $form = $this->createForm(TravelType::class,$travel);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $travel = $form->getData();
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($travel);
-            $em->flush();
+            $addTravelService = new AddTravelService($this->travelRepository);
+            $addTravelService->add($this->getUser(),$form->getData());
 
             return $this->redirectToRoute('main_private');
         }

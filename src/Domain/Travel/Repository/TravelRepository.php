@@ -9,6 +9,7 @@
 namespace App\Domain\Travel\Repository;
 
 use App\Domain\User\Model\User;
+use App\Domain\Travel\Model\Travel;
 
 interface TravelRepository
 {
@@ -17,11 +18,17 @@ interface TravelRepository
      * @param $maximResults
      * @return mixed
      */
-    public function findAllOrderedByStarts($maximResults);
+    public function TravelsAllOrderedByStarts($maximResults);
 
     /**
      * @param $user
      * @return mixed
      */
     public function getAllTravelsByUser(User $user);
+
+    /**
+     * @param Travel $travel
+     * @return mixed
+     */
+    public function save(Travel $travel);
 }

@@ -6,7 +6,7 @@ namespace App\Application\UseCases\Travel;
 use App\Domain\Travel\Repository\TravelRepository;
 use App\Domain\User\Model\User;
 
-class GetAllMyTravelsService
+class AddTravelService
 {
     /**
      * @var TravelRepository;
@@ -14,7 +14,7 @@ class GetAllMyTravelsService
     private $travelRepository;
 
     /**
-     * GetAllMyTravels constructor.
+     * AddTravelService constructor.
      * @param TravelRepository $travelRepository
      */
     public function __construct(TravelRepository $travelRepository)
@@ -22,9 +22,7 @@ class GetAllMyTravelsService
         $this->travelRepository = $travelRepository;
     }
 
-    public function execute(User $user) {
-        return $this->travelRepository->getAllTravelsByUser($user);
+    public function add(Travel $travel) {
+        $this->travelRepository->save($travel);
     }
-
-
 }
