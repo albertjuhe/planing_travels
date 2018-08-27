@@ -1,0 +1,94 @@
+App\Domain\Mark\Model\Mark:
+    type: entity
+    table: mark
+    id:
+        id:
+            type: string
+            scale: 0
+            length: 150
+            unique: false
+            nullable: false
+            precision: 0
+            id: true
+    fields:
+        title:
+            type: string
+            scale: 0
+            length: 255
+            unique: false
+            nullable: false
+            precision: 0
+        createdAt:
+            type: datetime
+            scale: 0
+            length: null
+            unique: false
+            nullable: false
+            precision: 0
+        updatedAt:
+            type: datetime
+            scale: 0
+            length: null
+            unique: false
+            nullable: false
+            precision: 0
+        lat:
+            type: decimal
+            scale: 8
+            length: null
+            unique: false
+            nullable: false
+            precision: 14
+        lng:
+            type: decimal
+            scale: 8
+            length: null
+            unique: false
+            nullable: false
+            precision: 14
+        lat0:
+            type: decimal
+            scale: 8
+            length: null
+            unique: false
+            nullable: true
+            precision: 14
+        lng0:
+            type: decimal
+            scale: 8
+            length: null
+            unique: false
+            nullable: true
+            precision: 14
+        lat1:
+            type: decimal
+            scale: 8
+            length: null
+            unique: false
+            nullable: true
+            precision: 14
+        lng1:
+            type: decimal
+            scale: 8
+            length: null
+            unique: false
+            nullable: true
+            precision: 14
+        json:
+            type: text
+            scale: 0
+            length: null
+            unique: false
+            nullable: true
+            precision: 0
+            column: description
+    oneToMany:
+        location:
+            targetEntity: App\Domain\Location\Model\Location
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: mark
+            inversedBy: null
+            orphanRemoval: false
+            orderBy: null
+    lifecycleCallbacks: {  }

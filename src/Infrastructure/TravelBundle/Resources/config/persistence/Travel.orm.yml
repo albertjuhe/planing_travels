@@ -1,0 +1,167 @@
+App\Domain\Travel\Model\Travel:
+    type: entity
+    table: travel
+    id:
+        id:
+            type: integer
+            scale: 0
+            length: null
+            unique: false
+            nullable: false
+            precision: 0
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        createdAt:
+            type: datetime
+            scale: 0
+            length: null
+            unique: false
+            nullable: false
+            precision: 0
+        updatedAt:
+            type: datetime
+            scale: 0
+            length: null
+            unique: false
+            nullable: false
+            precision: 0
+        title:
+            type: string
+            scale: 0
+            length: 255
+            unique: false
+            nullable: false
+            precision: 0
+        slug:
+            type: string
+            scale: 0
+            length: 128
+            unique: true
+            nullable: false
+            precision: 0
+        photo:
+            type: string
+            scale: 0
+            length: 255
+            unique: false
+            nullable: true
+            precision: 0
+        lat:
+            type: decimal
+            scale: 8
+            length: null
+            unique: false
+            nullable: false
+            precision: 14
+        lng:
+            type: decimal
+            scale: 8
+            length: null
+            unique: false
+            nullable: false
+            precision: 14
+        lat0:
+            type: decimal
+            scale: 8
+            length: null
+            unique: false
+            nullable: true
+            precision: 14
+        lng0:
+            type: decimal
+            scale: 8
+            length: null
+            unique: false
+            nullable: true
+            precision: 14
+        lat1:
+            type: decimal
+            scale: 8
+            length: null
+            unique: false
+            nullable: true
+            precision: 14
+        lng1:
+            type: decimal
+            scale: 8
+            length: null
+            unique: false
+            nullable: true
+            precision: 14
+        startAt:
+            type: datetime
+            scale: 0
+            length: null
+            unique: false
+            nullable: false
+            precision: 0
+        endAt:
+            type: datetime
+            scale: 0
+            length: null
+            unique: false
+            nullable: false
+            precision: 0
+        description:
+            type: text
+            scale: 0
+            length: null
+            unique: false
+            nullable: true
+            precision: 0
+        starts:
+            type: integer
+            scale: 0
+            length: null
+            unique: false
+            nullable: true
+            precision: 0
+        watch:
+            type: integer
+            scale: 0
+            length: null
+            unique: false
+            nullable: true
+            precision: 0
+    manyToOne:
+        user:
+            targetEntity: App\Domain\User\Model\User
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: travel
+            joinColumns:
+                user_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    oneToMany:
+        location:
+            targetEntity: App\Domain\Location\Model\Location
+            cascade:
+                - persist
+            fetch: LAZY
+            mappedBy: travel
+            inversedBy: null
+            orphanRemoval: false
+            orderBy: null
+        gpx:
+            targetEntity: App\Domain\Gpx\Model\Gpx
+            cascade:
+                - persist
+            fetch: LAZY
+            mappedBy: travel
+            inversedBy: null
+            orphanRemoval: false
+            orderBy: null
+    manyToMany:
+        sharedusers:
+            targetEntity: App\Domain\User\Model\User
+            cascade:
+                - persist
+            fetch: LAZY
+            mappedBy: travelsshared
+            inversedBy: null
+            joinTable: {  }
+            orderBy: null

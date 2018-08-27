@@ -1,0 +1,16 @@
+App\Domain\User\Model\User:
+  properties:
+    username:
+       - NotBlank: ~
+    plainPassword:
+       - NotBlank: ~
+    email:
+       - NotBlank: ~
+       - Email:
+           message: The email "{{ value }}" is not a valid email.
+    firstName:
+       - NotBlank: ~
+    getters:
+       PasswordCorrect:
+           - 'IsTrue':
+               message: The password is invalid.
