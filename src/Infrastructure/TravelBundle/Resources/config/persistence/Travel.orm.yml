@@ -35,12 +35,14 @@ App\Domain\Travel\Model\Travel:
             nullable: false
             precision: 0
         slug:
-            type: string
-            scale: 0
-            length: 128
-            unique: true
-            nullable: false
-            precision: 0
+           type: string
+           length: 500
+           gedmo:
+              translatable: {}
+              slug:
+                separator: -
+                fields:
+                   - title
         photo:
             type: string
             scale: 0

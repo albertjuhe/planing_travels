@@ -37,7 +37,7 @@ class AddNewTravelController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $addTravelService = new AddTravelService($this->travelRepository);
-            $addTravelService->add($this->getUser(),$form->getData());
+            $addTravelService->add($form->getData());
 
             return $this->redirectToRoute('main_private');
         }

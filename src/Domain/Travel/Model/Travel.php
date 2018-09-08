@@ -56,6 +56,14 @@ class Travel
 
     private $status;
 
+    /**
+     * Travel constructor.
+     */
+    public function __construct()
+    {
+        $this->updatedAt = new \DateTime;
+        $this->createdAt = new \DateTime;
+    }
 
 
     /**
