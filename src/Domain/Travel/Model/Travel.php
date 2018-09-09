@@ -63,6 +63,8 @@ class Travel
     {
         $this->updatedAt = new \DateTime;
         $this->createdAt = new \DateTime;
+        $this->setStarts(0);
+        $this->setWatch(0);
     }
 
 

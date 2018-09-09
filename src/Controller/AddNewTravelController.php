@@ -24,20 +24,20 @@ class AddNewTravelController extends Controller
     }
     /**
      * @Route("/{_locale}/private/new",name="newTravel")
-     * @return Response
+     * @param Request $request
+     * @param $_locale
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      */
     public function newTravel(Request $request,$_locale) {
         $travel = new Travel();
         $travel->setUser($this->getUser());
-        $travel->setStarts(0);
-        $travel->setWatch(0);
 
         $form = $this->createForm(TravelType::class,$travel);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $addTravelService = new AddTravelService($this->travelRepository);
-            $addTravelService->add($form->getData());
+            $addTravelService->add($travel);
 
             return $this->redirectToRoute('main_private');
         }
