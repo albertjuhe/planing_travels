@@ -22,6 +22,5 @@ class UserTest extends TestCase
 
         $user->setPlainPassword('password');
         $this->assertTrue($user->isPasswordCorrect());
-
     }
 }

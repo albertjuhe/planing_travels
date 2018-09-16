@@ -43,6 +43,12 @@ class DoctrineTravelRepository extends ServiceEntityRepository implements Travel
 
     }
 
+    public function getTravelById(int $id): Travel
+    {
+        // TODO: Implement findById() method.
+        return $this->findById($id);
+    }
+
     /**
      * @param Travel $travel
      * @throws \Doctrine\ORM\ORMException

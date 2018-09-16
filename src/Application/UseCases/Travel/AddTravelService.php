@@ -4,7 +4,7 @@
 namespace App\Application\UseCases\Travel;
 
 use App\Domain\Travel\Repository\TravelRepository;
-use App\Domain\User\Model\User;
+use App\Domain\Travel\Model\Travel;
 
 class AddTravelService
 {
