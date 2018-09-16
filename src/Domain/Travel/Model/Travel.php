@@ -8,6 +8,8 @@
 
 namespace App\Domain\Travel\Model;
 
+use App\Domain\User\Model\User;
+
 class Travel
 {
     protected $id;
@@ -67,7 +69,11 @@ class Travel
         $this->setWatch(0);
     }
 
-
+    public static function fromUser(User $user): Travel {
+        $travel = new self();
+        $travel->setUser($user);
+        return $travel;
+    }
     /**
      * @return mixed
      */

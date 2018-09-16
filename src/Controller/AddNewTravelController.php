@@ -29,8 +29,7 @@ class AddNewTravelController extends Controller
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      */
     public function newTravel(Request $request,$_locale) {
-        $travel = new Travel();
-        $travel->setUser($this->getUser());
+        $travel = Travel::fromUser($this->getUser());
 
         $form = $this->createForm(TravelType::class,$travel);
         $form->handleRequest($request);

@@ -14,7 +14,7 @@ use PHPUnit\Framework\TestCase;
 
 class MoneyTest extends TestCase
 {
-    public function testFromMOney() {
+    public function testFromMoney() {
         $money = new Money(150,new Currency('USD'));
         $newMoney = Money::fromMoney($money);
         $this->assertTrue($money->equal($newMoney));

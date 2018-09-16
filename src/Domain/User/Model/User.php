@@ -3,12 +3,11 @@
 namespace App\Domain\User\Model;
 
 use Symfony\Component\Security\Core\User\UserInterface;
+use App\Domain\Common\Model\IdentifiableDomainObject;
 
-
-class User implements UserInterface
+class User extends IdentifiableDomainObject implements UserInterface
 {
-
-    private $id;
+    private $userId;
 
     private $username;
 
@@ -50,7 +49,41 @@ class User implements UserInterface
         $this->travelsshared = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
-    public function isPasswordCorrect()
+    /**
+     * Check user equals
+     * @param User $user
+     * @return bool
+     */
+    public function equal(User $user ): bool  {
+        return (
+            $this->id() === $user->id()
+        );
+    }
+
+    /**
+     * Create from Id
+     * @param int $anId
+     * @return User
+     */
+    public static function fromId(int $anId) {
+        $user = new self();
+        $user->setId($anId);
+        return $user;
+    }
+
+    public function getUserId()
+    {
+        if (null === $this->userId) {
+            $this->userId = new UserId($this->id());
+        }
+        return $this->userId;
+    }
+
+    /**
+     * Check the password correct value, cannot be equal to the username and password
+     * @return bool
+     */
+    public function isPasswordCorrect(): bool
     {
         return ($this->firstName !== $this->plainPassword && $this->username !== $this->plainPassword);
     }
@@ -64,7 +97,7 @@ class User implements UserInterface
         // see section on salt below
         return null;
     }
-    public function getPassword()
+    public function getPassword(): String
     {
         return $this->password;
     }
@@ -79,33 +112,21 @@ class User implements UserInterface
     public function serialize()
     {
         return serialize(array(
-            $this->id,
+            $this->email,
             $this->username,
             $this->password,
-            // see section on salt below
-            // $this->salt,
         ));
     }
     /** @see \Serializable::unserialize() */
     public function unserialize($serialized)
     {
         list (
-            $this->id,
+            $this->userId,
             $this->username,
             $this->password,
-            // see section on salt below
-            // $this->salt
             ) = unserialize($serialized);
     }
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
+
     /**
      * Set username
      *
