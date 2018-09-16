@@ -71,7 +71,8 @@ class Travel
 
     public static function fromUser(User $user): Travel {
         $travel = new self();
-        return $travel->setUser($user);
+        $travel->setUser($user);
+        return $travel;
     }
     /**
      * @return mixed
