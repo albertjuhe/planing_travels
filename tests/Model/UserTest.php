@@ -26,6 +26,7 @@ class UserTest extends TestCase
     public function testEqual() {
         $user = User::fromId(1);
         $newUser = User::fromId(1);
+
         $this->assertTrue($user->equal($newUser));
 
         $newUser = User::fromId(4);
