@@ -36,5 +36,5 @@ interface TravelRepository
      * @param Integer $id
      * @return mixed
      */
-    public function findById(int $id): Travel;
+    public function getTravelById(int $id): Travel;
 }

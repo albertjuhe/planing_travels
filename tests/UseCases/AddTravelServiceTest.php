@@ -25,7 +25,7 @@ class AddTravelServiceTest extends TestCase
         $addTravelService = new AddTravelService($this->travelRepository);
         $addTravelService->add($travel);
 
-        $newTravel = $this->travelRepository->findById(self::TRAVELID);
+        $newTravel = $this->travelRepository->getTravelById(self::TRAVELID);
         $this->assertEquals($newTravel->getId(), $travel->getId());
     }
 }
