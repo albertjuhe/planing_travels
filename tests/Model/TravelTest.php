@@ -21,9 +21,9 @@ class TravelTest extends TestCase
         $travel = Travel::fromUser($user);
         $newUser = $travel->getUser();
 
-        $this->assertTrue($user->equal($newUser));
+        $this->assertTrue($user->equalsTo($newUser));
 
         $user = User::fromId(2);
-        $this->assertFalse($user->equal($newUser));
+        $this->assertFalse($user->equalsTo($newUser));
     }
 }

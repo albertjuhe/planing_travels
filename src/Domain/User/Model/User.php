@@ -57,7 +57,7 @@ class User extends IdentifiableDomainObject implements UserInterface
      * @param User $user
      * @return bool
      */
-    public function equal(User $user ): bool  {
+    public function equalsTo(User $user ): bool  {
         return $this->userId->equalsTo($user->userId);
     }
 
