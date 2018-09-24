@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Domain\Common\Event;
+namespace App\Domain\Event\Repository;
 
 interface EventStore
 {

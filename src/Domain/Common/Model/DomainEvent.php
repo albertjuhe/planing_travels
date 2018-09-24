@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Domain\Common\Event;
+namespace App\Domain\Common\Model;
 
 
 interface DomainEvent

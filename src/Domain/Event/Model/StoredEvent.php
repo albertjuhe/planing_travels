@@ -1,9 +1,9 @@
 <?php
 
 
-namespace App\Domain\Common\Model;
+namespace App\Domain\Event\Model;
 
-use App\Domain\Common\Event\DomainEvent;
+use App\Domain\Common\Model\DomainEvent;
 
 class StoredEvent implements DomainEvent
 {
