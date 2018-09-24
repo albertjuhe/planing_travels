@@ -3,11 +3,12 @@
 
 namespace App\Infrastructure\EventBundle\Repository;
 
-use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\SerializerInterface;
 use App\Domain\Common\Model\DomainEvent;
 use App\Domain\Event\Model\StoredEvent;
 use App\Domain\Event\Repository\EventStore;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Persistence\ManagerRegistry;
 
 class DoctrineEventStore extends ServiceEntityRepository implements EventStore
 {
@@ -22,7 +23,7 @@ class DoctrineEventStore extends ServiceEntityRepository implements EventStore
      * @param ManagerRegistry $registry
      * @param Serializer $serializer
      */
-    public function __construct(ManagerRegistry $registry, Serializer $serializer)
+    public function __construct(ManagerRegistry $registry, SerializerInterface $serializer)
     {
         parent::__construct($registry, StoredEvent::class);
         $this->serializer = $serializer;

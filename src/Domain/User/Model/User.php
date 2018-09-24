@@ -50,6 +50,12 @@ class User extends IdentifiableDomainObject implements UserInterface
         $this->travel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->location = new \Doctrine\Common\Collections\ArrayCollection();
         $this->travelsshared = new \Doctrine\Common\Collections\ArrayCollection();
+
+        $this->publishEvent();
+    }
+
+    public function publishEvent() {
+
     }
 
     /**
