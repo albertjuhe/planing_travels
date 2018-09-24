@@ -1,5 +1,5 @@
 <?php
-namespace App\Infrastructure\UserBundle\DependencyInjection;
+namespace App\Infrastructure\EventBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
