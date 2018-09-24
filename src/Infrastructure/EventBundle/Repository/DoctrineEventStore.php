@@ -3,9 +3,8 @@
 
 namespace App\Infrastructure\EventBundle\Repository;
 
-
-use App\Domain\Common\Event\DomainEvent;
-use App\Domain\Common\Event\EventStore;
+use App\Domain\Common\Model\DomainEvent;
+use App\Domain\Event\Repository\EventStore;
 
 class DoctrineEventStore extends ServiceEntityRepository implements EventStore
 {
