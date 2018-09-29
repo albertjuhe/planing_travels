@@ -59,9 +59,9 @@ doctrine:
                 prefix: App\Domain\User\Model
                 dir: '%kernel.root_dir%/../src/Infrastructure/UserBundle/Resources/config/persistence'
                 is_bundle: false
-            StoreEvent:
+            StoredEvent:
                 type: yml
-                prefix: App\Domain\Common\Event\Model
+                prefix: App\Domain\Event\Model
                 dir: '%kernel.root_dir%/../src/Infrastructure/EventBundle/Resources/config/persistence'
                 is_bundle: false
 
