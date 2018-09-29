@@ -6,7 +6,7 @@
  * Time: 18:47
  */
 
-namespace App\Tests\Domain\Model;
+namespace App\Tests\Domain\ValueObject;
 
 use App\Domain\Money\ValueObject\Money;
 use App\Domain\Money\ValueObject\Currency;

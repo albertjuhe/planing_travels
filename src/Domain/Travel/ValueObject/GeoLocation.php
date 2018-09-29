@@ -45,6 +45,19 @@ class GeoLocation
     }
 
     /**
+     * @param GeoLocation $geolocation
+     * @return bool
+     */
+    public function equal(GeoLocation $geolocation) {
+        return $this->lng === $geolocation->lng() &&
+            $this->lat === $geolocation->lat() &&
+            $this->lng0 === $geolocation->lng0() &&
+            $this->lat0 === $geolocation->lat0() &&
+            $this->lng1 === $geolocation->lng1() &&
+            $this->lat1 === $geolocation->lat1();
+    }
+
+    /**
      * @return float
      */
     public function lat(): float

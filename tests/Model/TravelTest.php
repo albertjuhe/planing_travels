@@ -5,6 +5,7 @@ namespace App\Tests\Model;
 
 use PHPUnit\Framework\TestCase;
 use App\Domain\Travel\Model\Travel;
+use App\Domain\Travel\ValueObject\GeoLocation;
 use App\Domain\User\Model\User;
 
 class TravelTest extends TestCase
@@ -25,5 +26,13 @@ class TravelTest extends TestCase
 
         $user = User::fromId(2);
         $this->assertFalse($user->equalsTo($newUser));
+    }
+
+    public function testFromGeoLocation() {
+        $geoLocation = new GeoLocation(10,20,30,40,50,60);
+        $travel = Travel::fromGeoLocation($geoLocation);
+
+        $geoLocation2 = new GeoLocation(10,20,30,40,50,60);
+        $this->assertTrue($geoLocation2->equal($travel->getGeoLocation()));
     }
 }
