@@ -82,18 +82,18 @@ function initialize() {
             var lng0 = map.getBounds().getNorthEast().lng();
             var lat1 = map.getBounds().getSouthWest().lat();
             var lng1 = map.getBounds().getSouthWest().lng();
-            $('#travel_lat0').val(lat0);
-            $('#travel_lng0').val(lng0);
-            $('#travel_lat1').val(lat1);
-            $('#travel_lng1').val(lng1);
+            $('#travel_geoLocation_lat0').val(lat0);
+            $('#travel_geoLocation_lng0').val(lng0);
+            $('#travel_geoLocation_lat1').val(lat1);
+            $('#travel_geoLocation_lng1').val(lng1);
         } else {
             map.setCenter(place.geometry.location);
             map.setZoom(17);  // Why 17? Because it looks good.
         }
         var latitude = place.geometry.location.lat();
         var longitude = place.geometry.location.lng();
-        $('#travel_lat').val(latitude);
-        $('#travel_lng').val(longitude);
+        $('#travel_geoLocation_lat').val(latitude);
+        $('#travel_geoLocation_lng').val(longitude);
         marker.setIcon(/** @type {google.maps.Icon} */({
             url: place.icon,
             size: new google.maps.Size(71, 71),

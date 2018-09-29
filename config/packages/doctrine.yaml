@@ -54,6 +54,11 @@ doctrine:
                 prefix: App\Domain\TypeLocation\Model
                 dir: '%kernel.root_dir%/../src/Infrastructure/TypeLocationBundle/Resources/config/persistence'
                 is_bundle: false
+            GeoLocation:
+                type: yml
+                prefix: App\Domain\Travel\ValueObject
+                dir: '%kernel.root_dir%/../src/Infrastructure/TravelBundle/Resources/config/persistence/ValueObject'
+                is_bundle: false
             User:
                 type: yml
                 prefix: App\Domain\User\Model
