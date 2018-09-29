@@ -9,6 +9,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use App\Infrastructure\TravelBundle\Doctrine\Types\GeoLocationType;
 
 class TravelType extends AbstractType
 {
@@ -16,13 +17,8 @@ class TravelType extends AbstractType
     {
         $builder
             ->add('title',TextType::class)
-            ->add('lat')
-            ->add('lng')
-            ->add('lat0')
-            ->add('lng0')
-            ->add('lat1')
-            ->add('lng1')
-            ->add('startAt',DateType::class)
+            ->add('geoLocation',GeoLocationType::class)
+             ->add('startAt',DateType::class)
             ->add('endAt', DateType::class)
             ->add('description',TextareaType::class);
     }

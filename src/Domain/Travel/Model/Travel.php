@@ -9,6 +9,7 @@
 namespace App\Domain\Travel\Model;
 
 use App\Domain\User\Model\User;
+use App\Domain\Travel\ValueObject\GeoLocation;
 
 class Travel
 {
@@ -18,30 +19,26 @@ class Travel
 
     protected $description;
 
+    /** @var \DateTime */
     protected $createdAt;
 
+    /** @var \DateTime */
     protected $updatedAt;
 
     private $slug;
 
     private $photo;
 
-    private $lat;
+    /** @var GeoLocation */
+    private $geoLocation;
 
-    private $lng;
-
-    private $lat0;
-
-    private $lng0;
-
-    private $lat1;
-
-    private $lng1;
-
+    /** @var \DateTime */
     protected $startAt;
 
+    /** @var \DateTime */
     protected $endAt;
 
+    /** @var int */
     private $starts;
 
     private $watch;
@@ -67,6 +64,7 @@ class Travel
         $this->createdAt = new \DateTime;
         $this->setStarts(0);
         $this->setWatch(0);
+        $this->geoLocation = new GeoLocation(0,0,0,0,0,0);
     }
 
     public static function fromUser(User $user): Travel {
@@ -74,6 +72,17 @@ class Travel
         $travel->setUser($user);
         return $travel;
     }
+
+    /**
+     * @param GeoLocation $geolocation
+     * @return Travel
+     */
+    public static function fromGeoLocation(GeoLocation $geolocation): Travel {
+        $travel = new self();
+        $travel->setGeoLocation($geolocation);
+        return $travel;
+    }
+
     /**
      * @return mixed
      */
@@ -125,7 +134,7 @@ class Travel
     /**
      * @return mixed
      */
-    public function getCreatedAt()
+    public function getCreatedAt(): \DateTime
     {
         return $this->createdAt;
     }
@@ -141,7 +150,7 @@ class Travel
     /**
      * @return mixed
      */
-    public function getUpdatedAt()
+    public function getUpdatedAt(): \DateTime
     {
         return $this->updatedAt;
     }
@@ -189,103 +198,7 @@ class Travel
     /**
      * @return mixed
      */
-    public function getLat()
-    {
-        return $this->lat;
-    }
-
-    /**
-     * @param mixed $lat
-     */
-    public function setLat($lat)
-    {
-        $this->lat = $lat;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getLng()
-    {
-        return $this->lng;
-    }
-
-    /**
-     * @param mixed $lng
-     */
-    public function setLng($lng)
-    {
-        $this->lng = $lng;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getLat0()
-    {
-        return $this->lat0;
-    }
-
-    /**
-     * @param mixed $lat0
-     */
-    public function setLat0($lat0)
-    {
-        $this->lat0 = $lat0;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getLng0()
-    {
-        return $this->lng0;
-    }
-
-    /**
-     * @param mixed $lng0
-     */
-    public function setLng0($lng0)
-    {
-        $this->lng0 = $lng0;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getLat1()
-    {
-        return $this->lat1;
-    }
-
-    /**
-     * @param mixed $lat1
-     */
-    public function setLat1($lat1)
-    {
-        $this->lat1 = $lat1;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getLng1()
-    {
-        return $this->lng1;
-    }
-
-    /**
-     * @param mixed $lng1
-     */
-    public function setLng1($lng1)
-    {
-        $this->lng1 = $lng1;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getStartAt()
+    public function getStartAt():? \DateTime
     {
         return $this->startAt;
     }
@@ -301,7 +214,7 @@ class Travel
     /**
      * @return mixed
      */
-    public function getEndAt()
+    public function getEndAt():? \DateTime
     {
         return $this->endAt;
     }
@@ -317,7 +230,7 @@ class Travel
     /**
      * @return mixed
      */
-    public function getStarts()
+    public function getStarts(): ?int
     {
         return $this->starts;
     }
@@ -325,7 +238,7 @@ class Travel
     /**
      * @param mixed $starts
      */
-    public function setStarts($starts)
+    public function setStarts(int $starts)
     {
         $this->starts = $starts;
     }
@@ -333,7 +246,7 @@ class Travel
     /**
      * @return mixed
      */
-    public function getWatch()
+    public function getWatch(): ?int
     {
         return $this->watch;
     }
@@ -341,7 +254,7 @@ class Travel
     /**
      * @param mixed $watch
      */
-    public function setWatch($watch)
+    public function setWatch(int $watch)
     {
         $this->watch = $watch;
     }
@@ -442,5 +355,20 @@ class Travel
         $this->status = $status;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getGeoLocation()
+    {
+        return $this->geoLocation;
+    }
+
+    /**
+     * @param mixed $geoLocation
+     */
+    public function setGeoLocation($geoLocation): void
+    {
+        $this->geoLocation = $geoLocation;
+    }
 
 }
