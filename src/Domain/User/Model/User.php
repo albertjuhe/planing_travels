@@ -7,6 +7,9 @@ use App\Domain\Common\Model\IdentifiableDomainObject;
 
 class User extends IdentifiableDomainObject implements UserInterface
 {
+    /**
+     * @var UserId
+     */
     private $userId;
 
     private $username;
@@ -54,10 +57,8 @@ class User extends IdentifiableDomainObject implements UserInterface
      * @param User $user
      * @return bool
      */
-    public function equal(User $user ): bool  {
-        return (
-            $this->id() === $user->id()
-        );
+    public function equalsTo(User $user ): bool  {
+        return $this->userId->equalsTo($user->userId);
     }
 
     /**
@@ -68,10 +69,19 @@ class User extends IdentifiableDomainObject implements UserInterface
     public static function fromId(int $anId) {
         $user = new self();
         $user->setId($anId);
+        $user->userId = new UserId($user->id());
         return $user;
     }
 
     public function getUserId()
+    {
+        if (null === $this->userId) {
+            $this->userId = new UserId($this->id());
+        }
+        return $this->userId;
+    }
+
+    public function userId()
     {
         if (null === $this->userId) {
             $this->userId = new UserId($this->id());
