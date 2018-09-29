@@ -17,9 +17,12 @@ class MoneyTest extends TestCase
 
     public function testFromMoney()
     {
-        $money = new Money(150, new Currency('USD'));
+        $currency = new Currency('USD');
+        $money = new Money(150, $currency);
         $newMoney = Money::fromMoney($money);
         $this->assertTrue($money->equal($newMoney));
+
+        $this->assertTrue($currency->equals($money->currency()));
     }
 
     public function testOfCurrency()

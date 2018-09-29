@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Model;
+namespace App\Tests\ValueObject;
 
 use App\Domain\Money\ValueObject\Currency;
 use PHPUnit\Framework\TestCase;

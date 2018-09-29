@@ -8,6 +8,7 @@
 
 namespace App\Controller;
 
+use App\Domain\User\Exceptions\UserDoesntExists;
 use App\Domain\User\Model\User;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -28,7 +29,6 @@ class ShowMyTravelsController extends Controller
         $this->travelRepository = $travelRepository;
     }
 
-
     /**
      * @Route("/{_locale}/private",name="main_private")
      *
@@ -36,6 +36,8 @@ class ShowMyTravelsController extends Controller
      */
     public function showMyTravels() {
         $user = $this->getUser();
+        if(!$user) new UserDoesntExists();
+
         $getAllMyTravelsService = new GetAllMyTravelsService($this->travelRepository);
         $travels = $getAllMyTravelsService->execute($user);
         return $this->render('private/index.html.twig', array('travels' =>$travels));
