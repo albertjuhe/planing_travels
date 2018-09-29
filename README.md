@@ -1,7 +1,8 @@
 # DDD articles
 * Don't Use Entities in Symfony Forms. Use Custom Data Objects Instead (https://blog.martinhujer.cz/symfony-forms-with-request-objects/)
 * RigorTalks (https://carlosbuenosvinos.com/category/rigor-talks/)
-
+* Emmbedables objects https://www.doctrine-project.org/projects/doctrine-orm/en/2.6/tutorials/embeddables.html
+* MApping types https://www.doctrine-project.org/projects/doctrine-orm/en/2.6/cookbook/advanced-field-value-conversion-using-custom-mapping-types.html
 # Symfony 4
 wiki: https://github.com/albertjuhe/planing_travels/wiki
 
