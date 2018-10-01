@@ -83,6 +83,13 @@ class Travel
         return $travel;
     }
 
+    public static function fromTitleAndGeolocationAndUser(string $title, GeoLocation $geolocation, User $user) {
+        $travel = self::fromGeoLocation($geolocation);
+        $travel->setTitle($title);
+        $travel->setUser($user);
+        return $travel;
+    }
+
     /**
      * @return mixed
      */

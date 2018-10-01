@@ -22,10 +22,12 @@ class DoctrineTravelRepository extends ServiceEntityRepository implements Travel
      * @param int $maximResults
      * @return mixed|void
      */
-    public function TravelsAllOrderedByStarts($maximResults = 10) {
+    public function TravelsAllOrderedBy($maximResults = 10) {
         $this->createQueryBuilder('t')
+            ->leftJoin('t.user','user')
             ->addOrderBy('t.starts')
             ->setMaxResults($maximResults)
+            ->getQuery()
             ->getResult();
     }
 

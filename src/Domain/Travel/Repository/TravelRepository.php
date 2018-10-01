@@ -18,7 +18,7 @@ interface TravelRepository
      * @param $maximResults
      * @return mixed
      */
-    public function TravelsAllOrderedByStarts($maximResults);
+    public function TravelsAllOrderedBy($maximResults);
 
     /**
      * @param $user
