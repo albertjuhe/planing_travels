@@ -13,6 +13,7 @@ use App\Domain\User\Exceptions\UserDoesntExists;
 
 class AddNewTravelController extends Controller
 {
+    /** @var DoctrineTravelRepository  */
     private $travelRepository;
 
     /**
