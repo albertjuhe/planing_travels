@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Infrastructure\TravelBundle\Repository\DoctrineTravelRepository;
 use App\Application\UseCases\Travel\AddTravelService;
+use App\Domain\User\Exceptions\UserDoesntExists;
 
 class AddNewTravelController extends Controller
 {
@@ -27,8 +28,12 @@ class AddNewTravelController extends Controller
      * @param Request $request
      * @param $_locale
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
+     * @throws UserDoesntExists
      */
     public function newTravel(Request $request,$_locale) {
+        if(!$this->getUser())
+            throw new UserDoesntExists();
+
         $travel = Travel::fromUser($this->getUser());
 
         $form = $this->createForm(TravelType::class,$travel);
