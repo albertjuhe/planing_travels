@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Form;
+namespace App\Infrastructure\TravelBundle\Form;
 
 use App\Domain\Travel\Model\Travel;
 use Symfony\Component\Form\AbstractType;
@@ -18,7 +18,7 @@ class TravelType extends AbstractType
         $builder
             ->add('title',TextType::class)
             ->add('geoLocation',GeoLocationType::class)
-             ->add('startAt',DateType::class)
+            ->add('startAt',DateType::class)
             ->add('endAt', DateType::class)
             ->add('description',TextareaType::class);
     }

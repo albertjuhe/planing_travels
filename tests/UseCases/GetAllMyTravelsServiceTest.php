@@ -26,6 +26,7 @@ class GetAllMyTravelsServiceTest extends TestCase
 
     public function testGetAllMyTravels() {
         $user = User::fromId(1);
+
         $getAllMyTravelsService = new GetAllMyTravelsService($this->travelRepository);
         $travels = $getAllMyTravelsService->execute($user);
 

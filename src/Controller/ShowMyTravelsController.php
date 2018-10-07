@@ -40,6 +40,7 @@ class ShowMyTravelsController extends Controller
 
         $getAllMyTravelsService = new GetAllMyTravelsService($this->travelRepository);
         $travels = $getAllMyTravelsService->execute($user);
+
         return $this->render('private/index.html.twig', array('travels' =>$travels));
     }
 }

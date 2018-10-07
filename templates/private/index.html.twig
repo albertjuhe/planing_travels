@@ -8,6 +8,7 @@
             {% for travel in travels %}
                 <div class="col-sm-3">
                     <h3><a href="#">{{ travel.title }}</a></h3>
+                    <div><a href="{{ path('updateTravel', { 'slug': travel.slug }) }}">Edit</a></div>
                     <div>
                         {% if travel.photo is empty %}
                             <img id="travel{{ travel.id }}" class="featurette-image img-responsive" data-src="holder.js/200x200/auto" alt="Travel photo">

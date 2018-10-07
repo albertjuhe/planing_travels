@@ -4,7 +4,7 @@
 namespace App\Controller;
 
 use App\Domain\User\Model\User;
-use App\Form\UserType;
+use App\Infrastructure\UserBundle\Form\UserType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,6 +16,7 @@ use App\Application\UseCases\User\SignUpUserService;
 
 class SignUpController extends Controller
 {
+    /** @var DoctrineUserRepository  */
     private $userRepository;
 
     /**

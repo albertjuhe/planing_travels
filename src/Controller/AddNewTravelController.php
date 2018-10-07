@@ -2,7 +2,7 @@
 namespace App\Controller;
 
 use App\Domain\Travel\Model\Travel;
-use App\Form\TravelType;
+use App\Infrastructure\TravelBundle\Form\TravelType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

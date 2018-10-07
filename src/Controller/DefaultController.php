@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Infrastructure\TravelBundle\Repository\DoctrineTravelRepository;
 
+
 class DefaultController extends Controller
 {
     /** @var DoctrineTravelRepository  */

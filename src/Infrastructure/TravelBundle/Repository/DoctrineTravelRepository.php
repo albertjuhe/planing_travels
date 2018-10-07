@@ -1,6 +1,7 @@
 <?php
 namespace App\Infrastructure\TravelBundle\Repository;
 
+use App\Domain\Travel\Exceptions\TravelDoesntExists;
 use App\Domain\Travel\Model\Travel;
 use App\Domain\User\Model\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -16,6 +17,15 @@ class DoctrineTravelRepository extends ServiceEntityRepository implements Travel
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Travel::class);
+    }
+
+    public function ofSlugOrFail($travelSlug) {
+        $travel = $this->findOneBy(['slug' => $travelSlug]);
+        if (null === $travel) {
+            throw new TravelDoesntExists();
+        }
+
+        return $travel;
     }
 
     /**
