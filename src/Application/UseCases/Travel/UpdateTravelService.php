@@ -32,7 +32,8 @@ class UpdateTravelService
 
     public function execute(Travel $travel, User $user) {
         //Only the owner can modify the travel
-        if (!$travel->getUser()->equalsTo($user)) throw new InvalidTravelUser();
+        //TODO - Check the user Id, this is not the correct way
+        if (!$travel->getUser()->getUserId()==$user->getUserId()) throw new InvalidTravelUser();
 
         $this->travelRepository->save($travel);
     }
