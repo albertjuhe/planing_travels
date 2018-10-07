@@ -7,6 +7,8 @@ use PHPUnit\Framework\TestCase;
 use App\Domain\Travel\Model\Travel;
 use App\Domain\Travel\ValueObject\GeoLocation;
 use App\Domain\User\Model\User;
+use App\Domain\Location\Model\Location;
+use App\Domain\Gpx\Model\Gpx;
 
 class TravelTest extends TestCase
 {
@@ -68,7 +70,10 @@ class TravelTest extends TestCase
         $travel->setSlug('travel-slug');
         $this->assertEquals('travel-slug',$travel->getSlug());
 
+        $location = Location::fromIdAndTitle(1,'Barcelona');
 
+        $travel->setLocation($location);
+        $this->assertTrue($travel->getLocation()->equals($location));
 
 
     }

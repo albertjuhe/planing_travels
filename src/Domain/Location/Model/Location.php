@@ -39,6 +39,18 @@ class Location {
         $this->createdAt = new \DateTime;
     }
 
+    static public function fromIdAndTitle(int $id, string $title) {
+        $location = new self();
+        $location->setTitle($title);
+        $location->id = $id;
+
+        return $location;
+    }
+
+    public function equals(Location $location) {
+        return $this->id === $location->getId();
+    }
+
     /**
      * Hook on pre-update operations
      * @ORM\PreUpdate

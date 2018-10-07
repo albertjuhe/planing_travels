@@ -8,6 +8,7 @@
 
 namespace App\Domain\Travel\Model;
 
+use App\Domain\Location\Model\Location;
 use App\Domain\User\Model\User;
 use App\Domain\Travel\ValueObject\GeoLocation;
 
@@ -15,8 +16,10 @@ class Travel
 {
     protected $id;
 
+    /** @var string */
     protected $title;
 
+    /** @var string */
     protected $description;
 
     /** @var \DateTime */
@@ -25,6 +28,7 @@ class Travel
     /** @var \DateTime */
     protected $updatedAt;
 
+    /** @var string */
     private $slug;
 
     private $photo;
@@ -41,16 +45,20 @@ class Travel
     /** @var int */
     private $starts;
 
+    /** @var int */
     private $watch;
 
     private $gpx;
 
+    /** @var User */
     private $user;
 
     private $sharedusers;
 
+    /** @var Location */
     private $location;
 
+    /** @var \DateTime */
     private $publishedAt;
 
     private $status;
@@ -65,6 +73,10 @@ class Travel
         $this->setStarts(0);
         $this->setWatch(0);
         $this->geoLocation = new GeoLocation(0,0,0,0,0,0);
+    }
+
+    public function equals(Travel $travel) {
+        return $this->id === $travel->getId();
     }
 
     public static function fromUser(User $user): Travel {
