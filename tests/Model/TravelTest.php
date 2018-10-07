@@ -35,4 +35,41 @@ class TravelTest extends TestCase
         $geoLocation2 = new GeoLocation(10,20,30,40,50,60);
         $this->assertTrue($geoLocation2->equal($travel->getGeoLocation()));
     }
+
+    public function testSettersGetters()
+    {
+        $geoLocation = new GeoLocation(10,20,30,40,50,60);
+        $user = User::fromId(2);
+
+        $travel = Travel::fromGeoLocation($geoLocation);
+        $travel->setUser($user);
+
+        $travel->setCreatedAt(new \DateTime('2018-01-01'));
+        $this->assertEquals(new \DateTime('2018-01-01'),$travel->getCreatedAt());
+
+        $travel->setUpdatedAt(new \DateTime('2018-01-01'));
+        $this->assertEquals(new \DateTime('2018-01-01'),$travel->getUpdatedAt());
+
+        $travel->setEndAt(new \DateTime('2018-01-01'));
+        $this->assertEquals(new \DateTime('2018-01-01'),$travel->getEndAt());
+
+        $travel->setStartAt(new \DateTime('2018-01-01'));
+        $this->assertEquals(new \DateTime('2018-01-01'),$travel->getStartAt());
+
+        $travel->setPublishedAt(new \DateTime('2018-01-01'));
+        $this->assertEquals(new \DateTime('2018-01-01'),$travel->getPublishedAt());
+
+        $travel->setTitle('title');
+        $this->assertEquals('title',$travel->getTitle());
+
+        $travel->setDescription('description');
+        $this->assertEquals('description',$travel->getDescription());
+
+        $travel->setSlug('travel-slug');
+        $this->assertEquals('travel-slug',$travel->getSlug());
+
+
+
+
+    }
 }
