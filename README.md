@@ -4,6 +4,7 @@
 * Emmbedables objects https://www.doctrine-project.org/projects/doctrine-orm/en/2.6/tutorials/embeddables.html
 * MApping types https://www.doctrine-project.org/projects/doctrine-orm/en/2.6/cookbook/advanced-field-value-conversion-using-custom-mapping-types.html
 * Command Bus: https://matthiasnoback.nl/2015/01/responsibilities-of-the-command-bus/
+* Transactional https://tactician.thephpleague.com/plugins/doctrine/
 
 # Symfony 4
 
