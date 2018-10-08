@@ -3,10 +3,11 @@
 * RigorTalks (https://carlosbuenosvinos.com/category/rigor-talks/)
 * Emmbedables objects https://www.doctrine-project.org/projects/doctrine-orm/en/2.6/tutorials/embeddables.html
 * MApping types https://www.doctrine-project.org/projects/doctrine-orm/en/2.6/cookbook/advanced-field-value-conversion-using-custom-mapping-types.html
-# Symfony 4
-wiki: https://github.com/albertjuhe/planing_travels/wiki
-# Command Bus
 * Command Bus: https://matthiasnoback.nl/2015/01/responsibilities-of-the-command-bus/
+
+# Symfony 4
+
+wiki: https://github.com/albertjuhe/planing_travels/wiki
 
 Building Travel Experience: Plan travels colaborative, sharing travel content, upload photos, comment travels and vote the best travel.
 Create a map and add Locations, Routes, GPS tracks.
