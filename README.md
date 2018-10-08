@@ -14,7 +14,9 @@ Create a map and add Locations, Routes, GPS tracks.
 
 ## TODO
 1) GraphQL Integration
-1) Angular 6 as a FrontEnd
+1) Angular as a FrontEnd
+1) RabitMQ Messaging
+1) ElasticSearch
 1) Comments travels and descriptions with markdown
 
 
