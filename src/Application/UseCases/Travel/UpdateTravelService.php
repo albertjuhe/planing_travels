@@ -13,6 +13,7 @@ use App\Domain\Travel\Exceptions\InvalidTravelUser;
 use App\Domain\User\Model\User;
 use App\Domain\Travel\Repository\TravelRepository;
 use App\Domain\Travel\Model\Travel;
+use App\Application\Command\UpdateTravelCommand;
 
 class UpdateTravelService
 {
@@ -30,7 +31,10 @@ class UpdateTravelService
         $this->travelRepository = $travelRepository;
     }
 
-    public function execute(Travel $travel, User $user) {
+    public function execute(UpdateTravelCommand $commnand) {
+        $travel = $commnand->travel();
+        $user = $commnand->user();
+
         //Only the owner can modify the travel
         //TODO - Check the user Id, this is not the correct way
         if (!$travel->getUser()->getUserId()==$user->getUserId()) throw new InvalidTravelUser();
@@ -40,3 +44,4 @@ class UpdateTravelService
 
 
 }
+

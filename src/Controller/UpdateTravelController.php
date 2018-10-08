@@ -9,6 +9,7 @@
 namespace App\Controller;
 
 use App\Domain\Travel\Model\Travel;
+use App\Domain\User\Model\User;
 use App\Infrastructure\UserBundle\Repository\DoctrineUserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,13 +19,15 @@ use App\Infrastructure\TravelBundle\Repository\DoctrineTravelRepository;
 use App\Application\UseCases\Travel\UpdateTravelService;
 use App\Domain\User\Exceptions\UserDoesntExists;
 use App\Infrastructure\TravelBundle\Form\UpdateTravelType;
+use App\Application\Command\UpdateTravelCommand;
+use App\Application\Command\CommandBus;
 
 
 class UpdateTravelController extends Controller
 {
-    /** @var DoctrineTravelRepository  */
+    /** @var DoctrineTravelRepository */
     private $travelRepository;
-    /** @var DoctrineUserRepository  */
+    /** @var DoctrineUserRepository */
     private $userRepository;
 
     /**
@@ -39,6 +42,7 @@ class UpdateTravelController extends Controller
 
     }
 
+
     /**
      * @Route("/{_locale}/private/travel/{slug}/update",name="updateTravel")
      * @param Request $request
@@ -49,27 +53,29 @@ class UpdateTravelController extends Controller
      * @throws \App\Domain\Travel\Exceptions\InvalidTravelUser
      * @throws \App\Domain\Travel\Exceptions\TravelDoesntExists
      */
-    public function updateTravel(Request $request,String $slug,$_locale) {
+    public function updateTravel(Request $request, String $slug, $_locale)
+    {
 
-        if(!$this->getUser()) throw new UserDoesntExists();
+        if (!$this->getUser()) throw new UserDoesntExists();
         /** @var Travel $travel */
         $travel = $this->travelRepository->ofSlugOrFail($slug);
 
-        $form = $this->createForm(UpdateTravelType::class,$travel);
+        $form = $this->createForm(UpdateTravelType::class, $travel);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
             $updateTravelService = new UpdateTravelService($this->travelRepository);
-            $updateTravelService->execute($travel, $this->getUser());
+            $commandUpdate = new UpdateTravelCommand($travel, $this->getUser());
+            $updateTravelService->execute($commandUpdate);
 
             return $this->redirectToRoute('main_private');
         }
 
-        return $this->render('travel/updateTravel.html.twig',[
+        return $this->render('travel/updateTravel.html.twig', [
             'travelForm' => $form->createView()
         ]);
 
     }
-
 
 }
