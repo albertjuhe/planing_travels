@@ -5,6 +5,8 @@ namespace App\Tests\Model;
 
 use PHPUnit\Framework\TestCase;
 use App\Domain\User\Model\User;
+use App\Domain\Travel\Model\Travel;
+use App\Domain\Travel\ValueObject\GeoLocation;
 
 class UserTest extends TestCase
 {
@@ -72,5 +74,45 @@ class UserTest extends TestCase
         $user->setUsername('username');
         $this->assertEquals('username',$user->getUsername());
 
+        $this->assertEquals(null,$user->getSalt());
+
+    }
+
+    public function testSerialize()  {
+        $user = User::fromId(1);
+        $user->setUsername('usernameTest');
+        $user->setPassword('passwordTest');
+        $serialized = "a:3:{i:0;N;i:1;s:12:\"usernameTest\";i:2;s:12:\"passwordTest\";}";
+
+        $this->assertSame($serialized,$user->serialize());
+    }
+
+    public function testUnserialize() {
+        $serialized = "a:3:{i:0;N;i:1;s:12:\"usernameTest\";i:2;s:12:\"passwordTest\";}";
+
+        $user = User::fromId(1);
+        $user->unserialize($serialized);
+
+        $this->assertEquals('usernameTest',$user->getUsername());
+        $this->assertEquals('passwordTest',$user->getPassword());
+
+        $this->assertEquals(1,$user->getUserId()->id());
+
+    }
+
+    public function testGetRoles() {
+        $user = new User();
+        $roles = $user->getRoles();
+
+        $this->assertCount(1,$roles);
+        $this->assertEquals('ROLE_USER',$roles[0]);
+    }
+
+    public function testAddTravel() {
+        $geoLocation = new GeoLocation(10,20,30,40,50,60);
+        $user = User::fromId(1);
+        $travel = Travel::fromTitleAndGeolocationAndUser('dummyTravel',$geoLocation,$user);
+        $user->addTravel($travel);
+        $this->assertCount(1,$user->getTravel());
     }
 }

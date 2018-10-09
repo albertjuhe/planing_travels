@@ -2,34 +2,52 @@
 
 namespace App\Domain\Location\Model;
 
+use App\Domain\Mark\Model\Mark;
+use App\Domain\Travel\Model\Travel;
+use App\Domain\TypeLocation\Model\TypeLocation;
+use App\Domain\User\Model\User;
+
 class Location {
 
+    /** @var int */
     private $id;
 
+    /** @var \DateTime  */
     protected $createdAt;
 
+    /** @var \DateTime  */
     protected $updatedAt;
 
+    /** @var string */
     private $title;
 
+    /** @var string */
     private $url;
 
+    /** @var string */
     private $slug;
 
+    /** @var string */
     private $description;
 
+    /** @var User */
     private $user;
 
+    /** @var Mark */
     protected $mark;
 
     private $notas;
 
+    /** @var \Doctrine\Common\Collections\ArrayCollection  */
     protected $images;
 
+    /** @var Travel */
     protected $travel;
 
+    /** @var TypeLocation */
     protected $typeLocation;
 
+    /** @var int */
     private $starts;
 
     public function __construct()

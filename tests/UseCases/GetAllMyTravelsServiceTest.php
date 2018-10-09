@@ -34,7 +34,7 @@ class GetAllMyTravelsServiceTest extends TestCase
             $this->assertTrue($travel->getUser()->equalsTo($user));
         }
 
-        $this->assertEquals(3,count($travels));
+        $this->assertCount(3,$travels);
     }
 
 }

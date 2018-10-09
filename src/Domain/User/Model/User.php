@@ -115,13 +115,16 @@ class User extends IdentifiableDomainObject implements UserInterface
     {
         return $this->password;
     }
+
     public function getRoles()
     {
         return array('ROLE_USER');
     }
+
     public function eraseCredentials()
     {
     }
+
     /** @see \Serializable::serialize() */
     public function serialize()
     {
