@@ -1,6 +1,6 @@
 <?php
 // src/Controller/DefaultController.php
-namespace App\Controller;
+namespace App\UI\Controller;
 
 use App\Application\UseCases\Travel\GetBestTravelsOrderedByService;
 use Symfony\Component\HttpFoundation\Response;

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Controller;
+namespace App\UI\Controller;
 
 use App\Domain\User\Model\User;
 use App\Infrastructure\UserBundle\Form\UserType;

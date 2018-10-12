@@ -1,5 +1,5 @@
 <?php
-namespace App\Controller;
+namespace App\UI\Controller;
 
 use App\Domain\Travel\Model\Travel;
 use App\Infrastructure\TravelBundle\Form\TravelType;
