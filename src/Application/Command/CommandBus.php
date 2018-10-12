@@ -9,6 +9,9 @@
 namespace App\Application\Command;
 
 
+use App\Application\UseCases\Travel\UpdateTravelService;
+use App\Infrastructure\TravelBundle\Repository\DoctrineTravelRepository;
+
 /**
  * Class CommandBus
  * @package App\Application\Command
@@ -18,14 +21,19 @@ class CommandBus
 
     /** @var array  */
     private $handlers = [];
+    /** @var  DoctrineTravelRepository */
+    private $doctrineTravelRepository;
 
     /**
      * CommandBus constructor.
-     * @param array $handlers
+     * @param DoctrineTravelRepository $doctrineTravelRepository
      */
-    public function __construct()
+    public function __construct(DoctrineTravelRepository $doctrineTravelRepository)
     {
         $this->handlers = [];
+        $this->doctrineTravelRepository = $doctrineTravelRepository;
+
+        $this->addHandler(UpdateTravelCommand::class, new UpdateTravelService($this->doctrineTravelRepository));
     }
 
     public function addHandler($commandName, $commandHandler) {

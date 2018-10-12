@@ -29,17 +29,22 @@ class UpdateTravelController extends Controller
     private $travelRepository;
     /** @var DoctrineUserRepository */
     private $userRepository;
+    /** @var CommandBus  */
+    private $commandBus;
 
     /**
      * UpdateTravelController constructor.
      * @param DoctrineTravelRepository $travelRepository
      * @param DoctrineUserRepository $userRepository
+     * @param CommandBus $commandBus
      */
-    public function __construct(DoctrineTravelRepository $travelRepository, DoctrineUserRepository $userRepository)
+    public function __construct(DoctrineTravelRepository $travelRepository,
+                                DoctrineUserRepository $userRepository,
+                                CommandBus $commandBus)
     {
         $this->travelRepository = $travelRepository;
         $this->userRepository = $userRepository;
-
+        $this->commandBus = $commandBus;
     }
 
 
@@ -65,9 +70,8 @@ class UpdateTravelController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $updateTravelService = new UpdateTravelService($this->travelRepository);
             $commandUpdate = new UpdateTravelCommand($travel, $this->getUser());
-            $updateTravelService->execute($commandUpdate);
+            $this->commandBus->handle($commandUpdate);
 
             return $this->redirectToRoute('main_private');
         }

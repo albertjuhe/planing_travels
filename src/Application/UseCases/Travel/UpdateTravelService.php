@@ -42,6 +42,5 @@ class UpdateTravelService
         $this->travelRepository->save($travel);
     }
 
-
 }
 
