@@ -31,6 +31,11 @@ class UpdateTravelService
         $this->travelRepository = $travelRepository;
     }
 
+    /**
+     * Modify a travel
+     * @param UpdateTravelCommand $commnand
+     * @throws InvalidTravelUser
+     */
     public function execute(UpdateTravelCommand $commnand) {
         $travel = $commnand->travel();
         $user = $commnand->user();

@@ -23,6 +23,10 @@ class AddTravelService
         $this->travelRepository = $travelRepository;
     }
 
+    /**
+     * Add new travel
+     * @param AddTravelCommand $commnand
+     */
     public function execute(AddTravelCommand $commnand) {
         $travel = $commnand->getTravel();
         $this->travelRepository->save($travel);
