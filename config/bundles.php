@@ -22,6 +22,5 @@ return [
     App\Infrastructure\TravelBundle\TravelBundle::class => ['all' => true],
     App\Infrastructure\TypeLocationBundle\TypeLocationBundle::class => ['all' => true],
     App\Infrastructure\UserBundle\UserBundle::class => ['all' => true],
-    Symfony\Bundle\MonologBundle\MonologBundle::class => ['all' => true],
-    League\Tactician\Bundle\TacticianBundle::class => ['all' => true],
+    Symfony\Bundle\MonologBundle\MonologBundle::class => ['all' => true]
 ];

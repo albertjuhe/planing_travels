@@ -33,12 +33,12 @@ class DoctrineTravelRepository extends ServiceEntityRepository implements Travel
      * @return mixed|void
      */
     public function TravelsAllOrderedBy($maximResults = 10) {
-        $this->createQueryBuilder('t')
+        $q = $this->createQueryBuilder('t')
             ->leftJoin('t.user','user')
             ->addOrderBy('t.starts')
             ->setMaxResults($maximResults)
-            ->getQuery()
-            ->getResult();
+            ->getQuery();
+            return $q->getResult();
     }
 
     /**

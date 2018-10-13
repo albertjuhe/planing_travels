@@ -1,0 +1,25 @@
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>Destination</th>
+        <th>Dates</th>
+        <th>Valoration</th>
+        <th>Visualizations</th>
+        <th>Forked</th>
+        <th>Traveler</th>
+    </tr>
+    </thead>
+    <tbody>
+   {%  for travel in travels %}
+
+       <tr>
+           <td><a href="#">{{ travel.title }}</a><br/>{{ travel.description }}</td>
+           <td>{{ travel.startAt|date("m/d/Y") }} to{{ travel.endAt|date("m/d/Y") }}</td>
+           <td><span class="glyphicon glyphicon-star" aria-hidden="true"></span> {{ travel.starts }}</td>
+           <td><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> {{ travel.watch }}</td>
+           <td><span class="glyphicon glyphicon-random" aria-hidden="true"></span> 0 </td>
+           <td>{{ travel.user.username }}</td>
+       </tr>
+   {%  endfor %}
+    </tbody>
+</table>

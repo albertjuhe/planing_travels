@@ -9,7 +9,7 @@
 namespace App\Application\UseCases\Travel;
 
 use App\Domain\Travel\Repository\TravelRepository;
-
+use App\Application\Command\BestTravelsListCommand;
 
 class GetBestTravelsOrderedByService
 {
@@ -28,11 +28,12 @@ class GetBestTravelsOrderedByService
     }
 
     /**
-     * @param int $numberMaxOfTravels
-     * @param $orderedBy
+     * @param BestTravelsListCommand $command
      * @return mixed
      */
-    public function execute(int $numberMaxOfTravels = 10, $orderedBy = 'star') {
+    public function execute(BestTravelsListCommand $command) {
+        $numberMaxOfTravels = $command->getNumberMaxOfTravels();
+        $orderedBy = $command->getOrderedBy();
         return $this->travelRepository->TravelsAllOrderedBy($numberMaxOfTravels);
     }
 }

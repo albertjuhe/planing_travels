@@ -30,9 +30,6 @@ class DefaultController extends Controller
      */
     public function index($_locale)
     {
-        $getBestTravelsOrderedByService = new GetBestTravelsOrderedByService($this->travelRepository);
-        $bestTravels = $getBestTravelsOrderedByService->execute();
-
-        return $this->render('default/index.html.twig',array('travels'=>$bestTravels,'locale'=>$_locale));
+        return $this->render('default/index.html.twig',array('locale'=>$_locale));
     }
 }
