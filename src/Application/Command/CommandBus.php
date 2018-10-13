@@ -10,6 +10,7 @@ namespace App\Application\Command;
 
 
 use App\Application\UseCases\Travel\UpdateTravelService;
+use App\Application\UseCases\Travel\AddTravelService;
 use App\Infrastructure\TravelBundle\Repository\DoctrineTravelRepository;
 
 /**
@@ -34,6 +35,8 @@ class CommandBus
         $this->doctrineTravelRepository = $doctrineTravelRepository;
 
         $this->addHandler(UpdateTravelCommand::class, new UpdateTravelService($this->doctrineTravelRepository));
+        $this->addHandler(AddTravelCommand::class, new AddTravelService($this->doctrineTravelRepository));
+
     }
 
     public function addHandler($commandName, $commandHandler) {

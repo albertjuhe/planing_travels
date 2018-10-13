@@ -11,26 +11,21 @@ namespace App\UI\Controller;
 use App\Domain\Travel\Model\Travel;
 use App\Domain\User\Model\User;
 use App\Infrastructure\UserBundle\Repository\DoctrineUserRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Infrastructure\TravelBundle\Repository\DoctrineTravelRepository;
-use App\Application\UseCases\Travel\UpdateTravelService;
 use App\Domain\User\Exceptions\UserDoesntExists;
 use App\Infrastructure\TravelBundle\Form\UpdateTravelType;
 use App\Application\Command\UpdateTravelCommand;
 use App\Application\Command\CommandBus;
 
-
-class UpdateTravelController extends Controller
+class UpdateTravelController extends BaseController
 {
     /** @var DoctrineTravelRepository */
     private $travelRepository;
     /** @var DoctrineUserRepository */
     private $userRepository;
-    /** @var CommandBus  */
-    private $commandBus;
 
     /**
      * UpdateTravelController constructor.
@@ -42,9 +37,9 @@ class UpdateTravelController extends Controller
                                 DoctrineUserRepository $userRepository,
                                 CommandBus $commandBus)
     {
+        parent::__construct($commandBus);
         $this->travelRepository = $travelRepository;
         $this->userRepository = $userRepository;
-        $this->commandBus = $commandBus;
     }
 
 

@@ -3,6 +3,7 @@
 
 namespace App\Application\UseCases\Travel;
 
+use App\Application\Command\AddTravelCommand;
 use App\Domain\Travel\Repository\TravelRepository;
 use App\Domain\Travel\Model\Travel;
 
@@ -22,7 +23,8 @@ class AddTravelService
         $this->travelRepository = $travelRepository;
     }
 
-    public function add(Travel $travel) {
+    public function execute(AddTravelCommand $commnand) {
+        $travel = $commnand->getTravel();
         $this->travelRepository->save($travel);
     }
 }

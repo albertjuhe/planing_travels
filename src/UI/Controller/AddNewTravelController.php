@@ -1,17 +1,19 @@
 <?php
 namespace App\UI\Controller;
 
+use App\Application\Command\AddTravelCommand;
 use App\Domain\Travel\Model\Travel;
 use App\Infrastructure\TravelBundle\Form\TravelType;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Infrastructure\TravelBundle\Repository\DoctrineTravelRepository;
-use App\Application\UseCases\Travel\AddTravelService;
 use App\Domain\User\Exceptions\UserDoesntExists;
+use App\Application\Command\CommandBus;
 
-class AddNewTravelController extends Controller
+
+
+class AddNewTravelController extends BaseController
 {
     /** @var DoctrineTravelRepository  */
     private $travelRepository;
@@ -19,9 +21,12 @@ class AddNewTravelController extends Controller
     /**
      * ShowMyTravelsController constructor.
      * @param $travelRepository
+     * @param $commandBus
      */
-    public function __construct(DoctrineTravelRepository $travelRepository)
+    public function __construct(DoctrineTravelRepository $travelRepository,
+                                CommandBus $commandBus)
     {
+        parent::__construct($commandBus);
         $this->travelRepository = $travelRepository;
     }
     /**
@@ -41,8 +46,8 @@ class AddNewTravelController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $addTravelService = new AddTravelService($this->travelRepository);
-            $addTravelService->add($travel);
+            $addTravelCommand = new AddTravelCommand($travel);
+            $this->commandBus->handle($addTravelCommand);
 
             return $this->redirectToRoute('main_private');
         }

@@ -8,6 +8,7 @@ use App\Application\UseCases\Travel\AddTravelService;
 use App\Infrastructure\TravelBundle\Repository\InMemoryTravelRepository;
 use App\Domain\Travel\Model\Travel;
 use App\Domain\User\Model\User;
+use App\Application\Command\AddTravelCommand;
 
 class AddTravelServiceTest extends TestCase
 {
@@ -25,7 +26,8 @@ class AddTravelServiceTest extends TestCase
         $travel->setUser(User::fromId(1));
 
         $addTravelService = new AddTravelService($this->travelRepository);
-        $addTravelService->add($travel);
+        $command = new AddTravelCommand($travel);
+        $addTravelService->execute($command);
 
         $newTravel = $this->travelRepository->getTravelById(self::TRAVELID);
         $this->assertEquals($newTravel->getId(), $travel->getId());
