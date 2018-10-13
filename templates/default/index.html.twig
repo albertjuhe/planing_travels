@@ -1,7 +1,5 @@
 {% extends 'base.html.twig' %}
 
-
-
 {% block content %}
 
     <div class="container marketing">
@@ -64,24 +62,12 @@
                     <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
                 </div><!-- /.col-lg-4 -->
             </div><!-- /.row -->
-
-
-            <!-- START THE FEATURETTES -->
-
-            <hr class="featurette-divider">
-
-            <div class="row featurette">
-                <a name="favoritplaces"></a>
-                <div class="col-md-12">
-                    <h2 class="featurette-heading">Best Travels. <span class="text-muted">It'll blow your mind.</span></h2>
-                    <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
-                    {{ render(controller(
+            <!-- Start Travels Best-->
+                {{ render(controller(
                         'App\\UI\\Controller\\BestTravelsListController::listBestTravels',
                         { 'maxtravels': 10 }
                     )) }}
-                </div>
-
-            </div>
+            <!-- End Travels Best-->
 
             <hr class="featurette-divider">
 

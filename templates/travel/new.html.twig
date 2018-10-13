@@ -7,8 +7,8 @@
 {% endblock %}
 
 {% block content %}
-    <div class="container">
-        <div class="row">
+    <div class="container" ng-app="GoogleMapsModule">
+        <div class="row" ng-controller="googleMaps">
             <div class="col-sm-4">
                 <h3>Add Travel</h3>
                 {% for flashMessage in app.session.flashbag.get('notice') %}
@@ -32,7 +32,7 @@
 
 {% block javascript %}
     {{ parent() }}
-    <script src="{{ asset('js/geoCodeSituation.js') }}"></script>
+    <script src="{{ asset('js/angular/js/google-maps-scripts.js') }}"></script>
 {% endblock %}
 
 {% block css %}
