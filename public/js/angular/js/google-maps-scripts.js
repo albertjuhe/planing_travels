@@ -6,6 +6,7 @@ app.controller('googleMaps',function($scope) {
         var autocomplete = new google.maps.places.Autocomplete(
             (document.getElementById('travel_title')),
             { types: ['geocode'] });
+
         var infowindow = new google.maps.InfoWindow();
 
         var mapCanvas = document.getElementById('map-canvas');
@@ -33,6 +34,7 @@ app.controller('googleMaps',function($scope) {
                 var lng0 = map.getBounds().getNorthEast().lng();
                 var lat1 = map.getBounds().getSouthWest().lat();
                 var lng1 = map.getBounds().getSouthWest().lng();
+
                 $('#travel_geoLocation_lat0').val(lat0);
                 $('#travel_geoLocation_lng0').val(lng0);
                 $('#travel_geoLocation_lat1').val(lat1);
