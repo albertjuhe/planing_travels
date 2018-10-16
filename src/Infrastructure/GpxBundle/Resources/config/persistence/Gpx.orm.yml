@@ -44,4 +44,13 @@ App\Domain\Gpx\Model\Gpx:
             scale: 0
             nullable: false
             column: updated_at
+    oneToMany:
+        travel:
+            targetEntity: App\Domain\Travel\Model\Travel
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: gpx
+            inversedBy: null
+            orphanRemoval: false
+            orderBy: null
     lifecycleCallbacks: {  }

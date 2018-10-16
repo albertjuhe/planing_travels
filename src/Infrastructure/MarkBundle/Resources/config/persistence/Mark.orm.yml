@@ -32,48 +32,6 @@ App\Domain\Mark\Model\Mark:
             unique: false
             nullable: false
             precision: 0
-        lat:
-            type: decimal
-            scale: 8
-            length: null
-            unique: false
-            nullable: false
-            precision: 14
-        lng:
-            type: decimal
-            scale: 8
-            length: null
-            unique: false
-            nullable: false
-            precision: 14
-        lat0:
-            type: decimal
-            scale: 8
-            length: null
-            unique: false
-            nullable: true
-            precision: 14
-        lng0:
-            type: decimal
-            scale: 8
-            length: null
-            unique: false
-            nullable: true
-            precision: 14
-        lat1:
-            type: decimal
-            scale: 8
-            length: null
-            unique: false
-            nullable: true
-            precision: 14
-        lng1:
-            type: decimal
-            scale: 8
-            length: null
-            unique: false
-            nullable: true
-            precision: 14
         json:
             type: text
             scale: 0
@@ -82,6 +40,10 @@ App\Domain\Mark\Model\Mark:
             nullable: true
             precision: 0
             column: description
+    embedded:
+        geoLocation:
+            class: App\Domain\Travel\ValueObject\GeoLocation
+            columnPrefix: false
     oneToMany:
         location:
             targetEntity: App\Domain\Location\Model\Location

@@ -2,6 +2,7 @@
 
 namespace App\Domain\Location\Model;
 
+use App\Domain\Images\Model\Images;
 use App\Domain\Mark\Model\Mark;
 use App\Domain\Travel\Model\Travel;
 use App\Domain\TypeLocation\Model\TypeLocation;
@@ -207,10 +208,10 @@ class Location {
     /**
      * Set user
      *
-     * @param \App\Entity\User $user
+     * @param User $user
      * @return Location
      */
-    public function setUser(\App\Entity\User $user = null)
+    public function setUser( User $user = null)
     {
         $this->user = $user;
 
@@ -220,9 +221,9 @@ class Location {
     /**
      * Get user
      *
-     * @return \App\Entity\User
+     * @return User
      */
-    public function getUser()
+    public function getUser(): User
     {
         return $this->user;
     }
@@ -253,7 +254,7 @@ class Location {
     /**
      * Get mark
      *
-     * @return \App\Entity\Mark
+     * @return Mark
      */
     public function getMark()
     {
@@ -263,10 +264,10 @@ class Location {
     /**
      * Set mark
      *
-     * @param \App\Entity\Mark $mark
+     * @param Mark $mark
      * @return Location
      */
-    public function setMark(\App\Entity\Mark $mark = null)
+    public function setMark( Mark $mark = null)
     {
         $this->mark = $mark;
 
@@ -274,13 +275,12 @@ class Location {
     }
 
 
-
     /**
      * Get travel
      *
-     * @return \App\Entity\Travel
+     * @return Travel
      */
-    public function getTravel()
+    public function getTravel(): Travel
     {
         return $this->travel;
     }
@@ -288,10 +288,10 @@ class Location {
     /**
      * Set travel
      *
-     * @param \App\Entity\Travel $travel
+     * @param Travel $travel
      * @return Location
      */
-    public function setTravel(\App\Entity\Travel $travel = null)
+    public function setTravel(Travel $travel)
     {
         $this->travel = $travel;
 
@@ -301,9 +301,9 @@ class Location {
     /**
      * Get typelocation
      *
-     * @return \App\Entity\TypeLocation
+     * @return TypeLocation
      */
-    public function getTypeLocation()
+    public function getTypeLocation(): TypeLocation
     {
         return $this->typeLocation;
     }
@@ -311,10 +311,10 @@ class Location {
     /**
      * Set travel
      *
-     * @param \App\Entity\TypeLocation $typeLocation
+     * @param TypeLocation $typeLocation
      * @return Location
      */
-    public function setTypeLocation($typeLocation = null)
+    public function setTypeLocation(TypeLocation $typeLocation)
     {
         $this->typeLocation = $typeLocation;
 
@@ -348,10 +348,10 @@ class Location {
     /**
      * Add images
      *
-     * @param \App\Entity\Images $images
+     * @param Images $images
      * @return Images
      */
-    public function addImages($images)
+    public function addImages(Images $images)
     {
         $this->images[] = $images;
 
@@ -361,9 +361,9 @@ class Location {
     /**
      * Remove images
      *
-     * @param \App\Entity\Images $images
+     * @param Images $images
      */
-    public function removeImages(\App\Entity\Images $images)
+    public function removeImages(Images $images)
     {
         $this->images->removeElement($images);
     }

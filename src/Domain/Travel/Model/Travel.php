@@ -8,6 +8,7 @@
 
 namespace App\Domain\Travel\Model;
 
+use App\Domain\Gpx\Model\Gpx;
 use App\Domain\Location\Model\Location;
 use App\Domain\User\Model\User;
 use App\Domain\Travel\ValueObject\GeoLocation;
@@ -48,11 +49,13 @@ class Travel
     /** @var int */
     private $watch;
 
+    /** @var Gpx */
     private $gpx;
 
     /** @var User */
     private $user;
 
+    /** @var Array */
     private $sharedusers;
 
     /** @var Location */
@@ -281,7 +284,7 @@ class Travel
     /**
      * @return mixed
      */
-    public function getGpx()
+    public function getGpx(): Gpx
     {
         return $this->gpx;
     }
@@ -289,7 +292,7 @@ class Travel
     /**
      * @param mixed $gpx
      */
-    public function setGpx($gpx): void
+    public function setGpx(Gpx $gpx): void
     {
         $this->gpx = $gpx;
     }
