@@ -8,22 +8,32 @@
 
 namespace App\Domain\Gpx\Model;
 
+use App\Domain\Travel\Model\Travel;
+
 class Gpx
 {
+    /** @var int */
     private $id;
 
+    /** @var string */
     private $title;
 
+    /** @var string */
     private $description;
 
+    /** @var string */
     private $filename;
 
+    /** @var string */
     private $color;
 
+    /** @var \DateTime  */
     protected $createdAt;
 
+    /** @var \DateTime  */
     protected $updatedAt;
 
+    /** @var Travel */
     private $travel;
 
     public function __construct()
@@ -33,9 +43,17 @@ class Gpx
     }
 
     /**
+     * @param Gpx $gpx
+     * @return bool
+     */
+    public function equals(Gpx $gpx) {
+        return $this->id === $gpx->getId();
+    }
+
+    /**
      * @return mixed
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
@@ -43,7 +61,7 @@ class Gpx
     /**
      * @param mixed $id
      */
-    public function setId($id)
+    public function setId(int $id)
     {
         $this->id = $id;
     }
@@ -51,7 +69,7 @@ class Gpx
     /**
      * @return mixed
      */
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->title;
     }
@@ -59,7 +77,7 @@ class Gpx
     /**
      * @param mixed $title
      */
-    public function setTitle($title)
+    public function setTitle(string $title)
     {
         $this->title = $title;
     }
@@ -67,7 +85,7 @@ class Gpx
     /**
      * @return mixed
      */
-    public function getDescription()
+    public function getDescription(): string
     {
         return $this->description;
     }
@@ -75,7 +93,7 @@ class Gpx
     /**
      * @param mixed $description
      */
-    public function setDescription($description)
+    public function setDescription(string $description)
     {
         $this->description = $description;
     }
@@ -83,7 +101,7 @@ class Gpx
     /**
      * @return mixed
      */
-    public function getFilename()
+    public function getFilename(): string
     {
         return $this->filename;
     }
@@ -91,7 +109,7 @@ class Gpx
     /**
      * @param mixed $filename
      */
-    public function setFilename($filename)
+    public function setFilename(string $filename)
     {
         $this->filename = $filename;
     }
@@ -99,7 +117,7 @@ class Gpx
     /**
      * @return mixed
      */
-    public function getColor()
+    public function getColor(): string
     {
         return $this->color;
     }
@@ -107,7 +125,7 @@ class Gpx
     /**
      * @param mixed $color
      */
-    public function setColor($color)
+    public function setColor(string $color)
     {
         $this->color = $color;
     }
@@ -147,7 +165,7 @@ class Gpx
     /**
      * @return mixed
      */
-    public function getTravel()
+    public function getTravel(): Travel
     {
         return $this->travel;
     }
@@ -155,7 +173,7 @@ class Gpx
     /**
      * @param mixed $travel
      */
-    public function setTravel($travel)
+    public function setTravel(Travel $travel)
     {
         $this->travel = $travel;
     }

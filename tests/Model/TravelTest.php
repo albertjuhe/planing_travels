@@ -70,11 +70,19 @@ class TravelTest extends TestCase
         $travel->setSlug('travel-slug');
         $this->assertEquals('travel-slug',$travel->getSlug());
 
+        $travel->setPhoto('photo.png');
+        $this->assertEquals('photo.png',$travel->getPhoto());
+
         $location = Location::fromIdAndTitle(1,'Barcelona');
 
         $travel->setLocation($location);
         $this->assertTrue($travel->getLocation()->equals($location));
 
+        $gpx = new Gpx();
+        $gpx->setId(1);
+        $travel->setGpx($gpx);
+        $gpx2 = $travel->getGpx();
+        $this->assertTrue($gpx->equals($gpx2));
 
     }
 }

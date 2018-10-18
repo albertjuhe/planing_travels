@@ -164,7 +164,7 @@ class Travel
     /**
      * @param mixed $createdAt
      */
-    public function setCreatedAt($createdAt)
+    public function setCreatedAt(\DateTime $createdAt)
     {
         $this->createdAt = $createdAt;
     }
@@ -180,7 +180,7 @@ class Travel
     /**
      * @param mixed $updatedAt
      */
-    public function setUpdatedAt($updatedAt)
+    public function setUpdatedAt(\DateTime $updatedAt)
     {
         $this->updatedAt = $updatedAt;
     }
@@ -196,7 +196,7 @@ class Travel
     /**
      * @param mixed $slug
      */
-    public function setSlug($slug)
+    public function setSlug(string $slug)
     {
         $this->slug = $slug;
     }
@@ -204,15 +204,17 @@ class Travel
     /**
      * @return mixed
      */
-    public function getPhoto()
+    public function getPhoto(): string
     {
         return $this->photo;
     }
 
+
     /**
-     * @param mixed $photo
+     * @param $photo
+     * @return string
      */
-    public function setPhoto($photo)
+    public function setPhoto(string $photo)
     {
         $this->photo = $photo;
     }
@@ -228,7 +230,7 @@ class Travel
     /**
      * @param mixed $startAt
      */
-    public function setStartAt($startAt)
+    public function setStartAt(\DateTime $startAt)
     {
         $this->startAt = $startAt;
     }
@@ -244,7 +246,7 @@ class Travel
     /**
      * @param mixed $endAt
      */
-    public function setEndAt($endAt)
+    public function setEndAt(\DateTime $endAt)
     {
         $this->endAt = $endAt;
     }
