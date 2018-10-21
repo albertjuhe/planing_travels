@@ -1,0 +1,38 @@
+
+<div class="modal fade" id="addpoint">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Add point to the {{ travel.title }}</h4>
+            </div>
+
+            <div class="modal-body">
+                <div id="infoForm"></div>
+                <form>
+                    <fieldset>
+                        <label>Adress</label>
+                        <input id="address" type="textbox" value="" placeholder="Enter Adress..."/><br/>
+                        <label>Title</label>
+                        <input id="title" type="textbox" value="" placeholder="Title"/><br/>
+                        <label>URL</label>
+                        <input id="link" type="textbox" value="" placeholder="URL Adress..."/><br/>
+                        <label>Comment</label>
+                        <textarea id="comment" placeholder="Enter comment..."></textarea>
+                        <label class="checkbox">Type of point
+                            <select id="pointtype">
+                                {{ render(controller('App\\UI\\Controller\\GetAllLocationsTypeController::getAllLocationsType')) }}
+                            </select>
+                        </label>
+                        <input id="travel" type="hidden" value="{{ travel.id }}"/><br/>
+                    </fieldset>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="mPoint.codeAddress()">Add point</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->

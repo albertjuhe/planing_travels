@@ -120,7 +120,7 @@ App\Domain\Travel\Model\Travel:
                 - persist
             fetch: LAZY
             mappedBy: travel
-            inversedBy: null
+            inversedBy: travel
             orphanRemoval: false
             orderBy: null
     manyToMany:

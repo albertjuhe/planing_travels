@@ -3,7 +3,7 @@
 
 namespace App\Application\UseCases\Travel;
 
-use App\Application\Command\AddTravelCommand;
+use App\Application\Command\Travel\AddTravelCommand;
 use App\Domain\Travel\Repository\TravelRepository;
 use App\Domain\Travel\Model\Travel;
 

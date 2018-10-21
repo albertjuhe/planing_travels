@@ -32,6 +32,7 @@ class Travel
     /** @var string */
     private $slug;
 
+    /** @var string */
     private $photo;
 
     /** @var GeoLocation */
@@ -49,8 +50,8 @@ class Travel
     /** @var int */
     private $watch;
 
-    /** @var Gpx */
-    private $gpx;
+    /** @var array */
+    private $gpx = [];
 
     /** @var User */
     private $user;
@@ -76,6 +77,8 @@ class Travel
         $this->setStarts(0);
         $this->setWatch(0);
         $this->geoLocation = new GeoLocation(0,0,0,0,0,0);
+        $this->gpx = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->sharedusers = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     public function equals(Travel $travel) {
@@ -204,7 +207,7 @@ class Travel
     /**
      * @return mixed
      */
-    public function getPhoto(): string
+    public function getPhoto():? string
     {
         return $this->photo;
     }
@@ -284,9 +287,9 @@ class Travel
     }
 
     /**
-     * @return mixed
+     * @return array
      */
-    public function getGpx(): Gpx
+    public function getGpx()
     {
         return $this->gpx;
     }

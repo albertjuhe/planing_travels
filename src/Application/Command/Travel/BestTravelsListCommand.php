@@ -1,12 +1,14 @@
 <?php
 
 
-namespace App\Application\Command;
+namespace App\Application\Command\Travel;
 
 class BestTravelsListCommand
 {
-private $numberMaxOfTravels;
-private $orderedBy;
+    /** @var int */
+    private $numberMaxOfTravels;
+    /** @var string */
+    private $orderedBy;
 
     /**
      * BestTravelsListCommand constructor.

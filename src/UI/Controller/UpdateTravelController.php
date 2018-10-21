@@ -17,7 +17,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Infrastructure\TravelBundle\Repository\DoctrineTravelRepository;
 use App\Domain\User\Exceptions\UserDoesntExists;
 use App\Infrastructure\TravelBundle\Form\UpdateTravelType;
-use App\Application\Command\UpdateTravelCommand;
+use App\Application\Command\Travel\UpdateTravelCommand;
 use App\Application\Command\CommandBus;
 
 class UpdateTravelController extends BaseController
@@ -41,7 +41,6 @@ class UpdateTravelController extends BaseController
         $this->travelRepository = $travelRepository;
         $this->userRepository = $userRepository;
     }
-
 
     /**
      * @Route("/{_locale}/private/travel/{slug}/update",name="updateTravel")

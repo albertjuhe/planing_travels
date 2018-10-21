@@ -1,7 +1,7 @@
 <?php
 namespace App\UI\Controller;
 
-use App\Application\Command\AddTravelCommand;
+use App\Application\Command\Travel\AddTravelCommand;
 use App\Domain\Travel\Model\Travel;
 use App\Infrastructure\TravelBundle\Form\TravelType;
 use Symfony\Component\HttpFoundation\Request;

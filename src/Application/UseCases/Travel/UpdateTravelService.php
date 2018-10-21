@@ -8,12 +8,11 @@
 
 namespace App\Application\UseCases\Travel;
 
-
 use App\Domain\Travel\Exceptions\InvalidTravelUser;
 use App\Domain\User\Model\User;
 use App\Domain\Travel\Repository\TravelRepository;
 use App\Domain\Travel\Model\Travel;
-use App\Application\Command\UpdateTravelCommand;
+use App\Application\Command\Travel\UpdateTravelCommand;
 
 class UpdateTravelService
 {

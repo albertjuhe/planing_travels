@@ -8,11 +8,15 @@
 
 namespace App\Application\Command;
 
-
 use App\Application\UseCases\Travel\GetBestTravelsOrderedByService;
+use App\Application\UseCases\Travel\ShowTravelService;
 use App\Application\UseCases\Travel\UpdateTravelService;
 use App\Application\UseCases\Travel\AddTravelService;
 use App\Infrastructure\TravelBundle\Repository\DoctrineTravelRepository;
+use App\Application\Command\Travel\UpdateTravelCommand;
+use App\Application\Command\Travel\AddTravelCommand;
+use App\Application\Command\Travel\BestTravelsListCommand;
+use App\Application\Command\Travel\ShowTravelBySlugCommand;
 
 /**
  * Class CommandBus
@@ -38,7 +42,7 @@ class CommandBus
         $this->addHandler(UpdateTravelCommand::class, new UpdateTravelService($this->doctrineTravelRepository));
         $this->addHandler(AddTravelCommand::class, new AddTravelService($this->doctrineTravelRepository));
         $this->addHandler(BestTravelsListCommand::class, new GetBestTravelsOrderedByService($this->doctrineTravelRepository));
-
+        $this->addHandler(ShowTravelBySlugCommand::class, new ShowTravelService($this->doctrineTravelRepository));
     }
 
     public function addHandler($commandName, $commandHandler) {

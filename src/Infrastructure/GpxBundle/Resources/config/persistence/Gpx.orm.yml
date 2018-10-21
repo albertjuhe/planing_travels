@@ -50,7 +50,7 @@ App\Domain\Gpx\Model\Gpx:
             cascade: {  }
             fetch: LAZY
             mappedBy: gpx
-            inversedBy: null
+            inversedBy: gpx
             orphanRemoval: false
             orderBy: null
     lifecycleCallbacks: {  }

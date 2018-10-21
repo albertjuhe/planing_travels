@@ -2,7 +2,7 @@
 
 namespace App\UI\Controller;
 
-use App\Application\Command\BestTravelsListCommand;
+use App\Application\Command\Travel\BestTravelsListCommand;
 use App\Application\Command\CommandBus;
 use App\Infrastructure\TravelBundle\Repository\DoctrineTravelRepository;
 

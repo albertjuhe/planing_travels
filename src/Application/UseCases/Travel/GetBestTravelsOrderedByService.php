@@ -9,7 +9,7 @@
 namespace App\Application\UseCases\Travel;
 
 use App\Domain\Travel\Repository\TravelRepository;
-use App\Application\Command\BestTravelsListCommand;
+use App\Application\Command\Travel\BestTravelsListCommand;
 
 class GetBestTravelsOrderedByService
 {

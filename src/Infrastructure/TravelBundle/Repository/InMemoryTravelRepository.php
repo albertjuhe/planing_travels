@@ -83,7 +83,16 @@ class InMemoryTravelRepository implements TravelRepository
         $travels = array_search($id, array_column($this->travel, 'travelId'));
 
         return $this->travel[$travels]['travel'];
+    }
 
+    public function findTravelBySlug(string $slug): Travel
+    {
+        // TODO: Implement findTravelBySlug() method.
+    }
+
+    public function ofSlugOrFail(string $slug)
+    {
+        // TODO: Implement ofSlugOrFail() method.
     }
 
 

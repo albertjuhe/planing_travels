@@ -6,7 +6,7 @@
  * Time: 21:12
  */
 
-namespace App\Application\Command;
+namespace App\Application\Command\Travel;
 
 use App\Domain\Travel\Model\Travel;
 

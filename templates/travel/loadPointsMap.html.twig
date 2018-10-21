@@ -1,0 +1,23 @@
+var objLocation;
+{% for location in locations %}
+    var popup = "";
+    var link = "{{ location.url}}";
+
+    if (link!='') {
+        popup = "<b><a href='{{ location.url}}' target='_blank'>{{ location.title}}</a></b><br/><i>{{ location.mark.title }}</i>";
+    } else {
+        popup = "<b>{{ location.title}}</b><br/><i>{{ location.mark.title }}</i>";
+    }
+    popup += "<br/>{{ location.description |e('js') | raw}}";
+    {% if location.images | length > 0 %}
+        popup += "<br/><img style='width:80%' src='{{ asset('uploads/gallery/') }}{{ location.images  | first}}'/>";
+    {% endif %}
+    var currentMark = L.marker([{{ location.mark.lat }},{{ location.mark.lng }} ],{icon: {{  location.typeLocation.title }}Marker,title: "{{ location.title}}" }).bindPopup(popup).addTo(map);
+    objLocation = mPoint.createLocation({{ location.id }},{{ location.mark.lat }},
+    {{ location.mark.lng }},
+    '{{ location.mark.title }}',
+    '{{ location.mark.id }}',
+    '{{ location.typeLocation.icon }}',
+    '','{{ location.title}}',currentMark);
+    mPoint.addPoint(objLocation);
+{% endfor %}

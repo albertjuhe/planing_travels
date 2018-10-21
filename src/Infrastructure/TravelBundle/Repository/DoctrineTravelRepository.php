@@ -19,7 +19,7 @@ class DoctrineTravelRepository extends ServiceEntityRepository implements Travel
         parent::__construct($registry, Travel::class);
     }
 
-    public function ofSlugOrFail($travelSlug) {
+    public function ofSlugOrFail(string $travelSlug): Travel {
         $travel = $this->findOneBy(['slug' => $travelSlug]);
         if (null === $travel) {
             throw new TravelDoesntExists();
@@ -55,10 +55,14 @@ class DoctrineTravelRepository extends ServiceEntityRepository implements Travel
 
     }
 
+    /**
+     * Find travel by Id
+     * @param int $id
+     * @return Travel
+     */
     public function getTravelById(int $id): Travel
     {
-        // TODO: Implement findById() method.
-        return $this->findById($id);
+         return $this->findById($id);
     }
 
     /**
