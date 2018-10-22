@@ -3,6 +3,7 @@
 
 namespace App\Infrastructure\UserBundle\Repository;
 
+use App\Domain\User\Exceptions\UserDoesntExists;
 use App\Domain\User\Repository\UserRepository;
 use App\Domain\User\Model\User;
 
@@ -21,4 +22,12 @@ class InMemoryUserRepository implements UserRepository
     {
         $this->users[$user->getUsername()] = $user;
     }
+
+    public function ofIdOrFail(int $userId): User
+    {
+        if ($userId === 0) throw new UserDoesntExists();
+        return User::fromId($userId);
+    }
+
+
 }

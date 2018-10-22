@@ -20,6 +20,7 @@ App\Domain\Location\Model\Location:
             unique: false
             nullable: false
             precision: 0
+            column: created_at
         updatedAt:
             type: datetime
             scale: 0
@@ -27,6 +28,7 @@ App\Domain\Location\Model\Location:
             unique: false
             nullable: false
             precision: 0
+            column: updated_at
         title:
             type: string
             scale: 0

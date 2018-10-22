@@ -4,6 +4,7 @@ namespace App\UI\Controller;
 use App\Application\Command\Travel\AddTravelCommand;
 use App\Domain\Travel\Model\Travel;
 use App\Infrastructure\TravelBundle\Form\TravelType;
+use App\Infrastructure\UserBundle\Repository\DoctrineUserRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -17,18 +18,19 @@ class AddNewTravelController extends BaseController
 {
     /** @var DoctrineTravelRepository  */
     private $travelRepository;
+    /** @var DoctrineUserRepository */
+    private $userRepository;
 
     /**
      * ShowMyTravelsController constructor.
      * @param $travelRepository
      * @param $commandBus
      */
-    public function __construct(DoctrineTravelRepository $travelRepository,
-                                CommandBus $commandBus)
+    public function __construct(CommandBus $commandBus)
     {
         parent::__construct($commandBus);
-        $this->travelRepository = $travelRepository;
     }
+
     /**
      * @Route("/{_locale}/private/new",name="newTravel")
      * @param Request $request
@@ -40,13 +42,13 @@ class AddNewTravelController extends BaseController
         if(!$this->getUser())
             throw new UserDoesntExists();
 
-        $travel = Travel::fromUser($this->getUser());
+        $travel = new Travel();
 
         $form = $this->createForm(TravelType::class,$travel);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $addTravelCommand = new AddTravelCommand($travel);
+            $addTravelCommand = new AddTravelCommand($travel,$this->getUser());
             $this->commandBus->handle($addTravelCommand);
 
             return $this->redirectToRoute('main_private');

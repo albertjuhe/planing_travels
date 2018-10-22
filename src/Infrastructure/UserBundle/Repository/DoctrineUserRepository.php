@@ -3,6 +3,7 @@
 
 namespace App\Infrastructure\UserBundle\Repository;
 
+use App\Domain\User\Exceptions\UserDoesntExists;
 use App\Domain\User\Repository\UserRepository;
 use App\Domain\User\Model\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -18,6 +19,15 @@ class DoctrineUserRepository extends ServiceEntityRepository implements UserRepo
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, User::class);
+    }
+
+    public function ofIdOrFail(int $userId): User {
+        $user = $this->findOneBy(['id' => $userId]);
+        if (null === $user) {
+            throw new UserDoesntExists();
+        }
+
+        return $user;
     }
 
     /**

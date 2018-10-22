@@ -119,7 +119,7 @@ App\Domain\Travel\Model\Travel:
             cascade:
                 - persist
             fetch: LAZY
-            mappedBy: travel
+            mappedBy: gpx
             inversedBy: travel
             orphanRemoval: false
             orderBy: null

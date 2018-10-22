@@ -17,6 +17,7 @@ use App\Application\Command\Travel\UpdateTravelCommand;
 use App\Application\Command\Travel\AddTravelCommand;
 use App\Application\Command\Travel\BestTravelsListCommand;
 use App\Application\Command\Travel\ShowTravelBySlugCommand;
+use App\Infrastructure\UserBundle\Repository\DoctrineUserRepository;
 
 /**
  * Class CommandBus
@@ -29,18 +30,21 @@ class CommandBus
     private $handlers = [];
     /** @var  DoctrineTravelRepository */
     private $doctrineTravelRepository;
+    /** @var DoctrineUserRepository */
+    private $doctrineUserRepository;
 
     /**
      * CommandBus constructor.
      * @param DoctrineTravelRepository $doctrineTravelRepository
      */
-    public function __construct(DoctrineTravelRepository $doctrineTravelRepository)
+    public function __construct(DoctrineTravelRepository $doctrineTravelRepository, DoctrineUserRepository $doctrineUserRepository)
     {
         $this->handlers = [];
         $this->doctrineTravelRepository = $doctrineTravelRepository;
+        $this->doctrineUserRepository = $doctrineUserRepository;
 
         $this->addHandler(UpdateTravelCommand::class, new UpdateTravelService($this->doctrineTravelRepository));
-        $this->addHandler(AddTravelCommand::class, new AddTravelService($this->doctrineTravelRepository));
+        $this->addHandler(AddTravelCommand::class, new AddTravelService($this->doctrineTravelRepository,$this->doctrineUserRepository));
         $this->addHandler(BestTravelsListCommand::class, new GetBestTravelsOrderedByService($this->doctrineTravelRepository));
         $this->addHandler(ShowTravelBySlugCommand::class, new ShowTravelService($this->doctrineTravelRepository));
     }

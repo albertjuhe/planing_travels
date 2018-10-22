@@ -49,7 +49,7 @@ App\Domain\Gpx\Model\Gpx:
             targetEntity: App\Domain\Travel\Model\Travel
             cascade: {  }
             fetch: LAZY
-            mappedBy: gpx
+            mappedBy: travel
             inversedBy: gpx
             orphanRemoval: false
             orderBy: null
