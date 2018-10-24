@@ -1,8 +1,8 @@
 {% extends 'base.html.twig' %}
 
 {% block content %}
-    <div class="container">
-        <div class="row">
+    <div class="container" ng-app="ShowTravels">
+        <div class="row" ng-controller="travelController">
             <h1>{{ 'MyMaps'|trans }}</h1>
             <h2>{{ 'Welcome'|trans }}</h2>
             {% for travel in travels %}
@@ -40,3 +40,8 @@
 
     </div>
 {%  endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    <script src="{{ asset('js/angular/js/show-travels.js') }}"></script>
+{% endblock %}
