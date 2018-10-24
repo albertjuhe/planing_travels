@@ -49,7 +49,6 @@ class UpdateTravelController extends BaseController
      * @param $_locale
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      * @throws UserDoesntExists
-     * @throws \App\Domain\Travel\Exceptions\InvalidTravelUser
      * @throws \App\Domain\Travel\Exceptions\TravelDoesntExists
      */
     public function updateTravel(Request $request, String $slug, $_locale)

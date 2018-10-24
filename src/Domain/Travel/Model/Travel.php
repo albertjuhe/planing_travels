@@ -12,9 +12,15 @@ use App\Domain\Gpx\Model\Gpx;
 use App\Domain\Location\Model\Location;
 use App\Domain\User\Model\User;
 use App\Domain\Travel\ValueObject\GeoLocation;
+use App\Domain\Common\Model\TriggerEventsTrait;
 
 class Travel
 {
+    use TriggerEventsTrait;
+
+    const TRAVEL_DRAFT = 10;
+    const TRAVEL_PUBLISHED = 20;
+
     protected $id;
 
     /** @var string */
@@ -65,6 +71,7 @@ class Travel
     /** @var \DateTime */
     private $publishedAt;
 
+    /** @var int */
     private $status;
 
     /**
@@ -79,6 +86,7 @@ class Travel
         $this->geoLocation = new GeoLocation(0,0,0,0,0,0);
         $this->gpx = new \Doctrine\Common\Collections\ArrayCollection();
         $this->sharedusers = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->status = self::TRAVEL_DRAFT;
     }
 
     public function equals(Travel $travel) {
@@ -372,6 +380,13 @@ class Travel
     public function getStatus()
     {
         return $this->status;
+    }
+
+    /**
+     * Publish the travel, is visible for all
+     */
+    public function publish() {
+        $this->status = self::TRAVEL_PUBLISHED;
     }
 
     /**

@@ -4,11 +4,9 @@ namespace App\UI\Controller;
 use App\Application\Command\Travel\AddTravelCommand;
 use App\Domain\Travel\Model\Travel;
 use App\Infrastructure\TravelBundle\Form\TravelType;
-use App\Infrastructure\UserBundle\Repository\DoctrineUserRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Infrastructure\TravelBundle\Repository\DoctrineTravelRepository;
 use App\Domain\User\Exceptions\UserDoesntExists;
 use App\Application\Command\CommandBus;
 
@@ -16,10 +14,6 @@ use App\Application\Command\CommandBus;
 
 class AddNewTravelController extends BaseController
 {
-    /** @var DoctrineTravelRepository  */
-    private $travelRepository;
-    /** @var DoctrineUserRepository */
-    private $userRepository;
 
     /**
      * ShowMyTravelsController constructor.

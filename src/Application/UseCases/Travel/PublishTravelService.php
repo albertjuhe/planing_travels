@@ -1,16 +1,23 @@
 <?php
-
+/**
+ * Created by PhpStorm.
+ * User: albert.juhe
+ * Date: 24/10/2018
+ * Time: 08:09
+ */
 
 namespace App\Application\UseCases\Travel;
 
-use App\Application\Command\Travel\AddTravelCommand;
+use App\Application\Command\Travel\PublishTravelCommand;
+use App\Domain\Travel\Exceptions\NotAllowedToPublishTravel;
 use App\Domain\Travel\Repository\TravelRepository;
 use App\Domain\Travel\Model\Travel;
+use App\Domain\User\Model\User;
 use App\Domain\User\Repository\UserRepository;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use App\Infrastructure\TravelBundle\Notification\TravelWasAdded;
+use App\Infrastructure\TravelBundle\Notification\TravelWasPublished;
 
-class AddTravelService
+class PublishTravelService
 {
     /** @var TravelRepository; */
     private $travelRepository;
@@ -35,27 +42,34 @@ class AddTravelService
     }
 
     /**
-     * @param AddTravelCommand $command
+     * @param PublishTravelCommand $command
      * @return Travel
      * @throws \Exception
      */
-    public function execute(AddTravelCommand $command)
+    public function execute(PublishTravelCommand $command)
     {
-        $travel = $command->getTravel();
+        $travelSlug = $command->getTravelSlug();
         $user = $command->getUser();
 
-        $this->userRepository->ofIdOrFail($user->getUserId()->id());
+        /** @var User $user */
+        $user = $this->userRepository->ofIdOrFail($user->getUserId());
+        /** @var Travel $travel */
+        $travel = $this->travelRepository->ofSlugOrFail($travelSlug);
 
-        $travel->setUser($user);
+        /** var only the owner can publish it */
+        if ($user->getUserId() != $travel->getUser()->getUserId()) throw new NotAllowedToPublishTravel();
+
+        $travel->publish();
         $this->travelRepository->save($travel);
 
         /**
-         * After adding a travel we have to send info to ElasticSearch and RabitMq
+         * Publish travel
         */
-        $travelWasAdded = new TravelWasAdded($travel,$user);
-        $this->eventDispatcher->dispatch(travelWasAdded::ADD_TRAVEL_EVENT_REQUEST, $travelWasAdded);
+        $travelWasPublished = new TravelWasPublished($travel,$user);
+        $this->eventDispatcher->dispatch(travelWasPublished::PUBLISH_TRAVEL_EVENT_REQUEST, $travelWasPublished);
 
         return $travel;
 
     }
+
 }

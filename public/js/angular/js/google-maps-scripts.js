@@ -1,6 +1,7 @@
 var app = angular.module('GoogleMapsModule',[]);
 
 app.controller('googleMaps',function($scope) {
+    this.scope = $scope;
 
     function initialize() {
         var autocomplete = new google.maps.places.Autocomplete(

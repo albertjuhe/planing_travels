@@ -89,6 +89,13 @@ App\Domain\Travel\Model\Travel:
             unique: false
             nullable: true
             precision: 0
+        status:
+            type: integer
+            scale: 0
+            length: null
+            unique: false
+            nullable: true
+            precision: 0
     embedded:
         geoLocation:
             class: App\Domain\Travel\ValueObject\GeoLocation

@@ -16,7 +16,6 @@
                         {{ flashMessage }}
                     </div>
                 {% endfor %}
-
                 {{ form_start(travelForm) }}
                 {{ form_row(travelForm.title) }}
                 {{ form_row(travelForm.description, {'attr': {'ng-model': 'description'}})  }}

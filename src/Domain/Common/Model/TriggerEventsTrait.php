@@ -1,0 +1,26 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: albert.juhe
+ * Date: 24/10/2018
+ * Time: 08:00
+ */
+
+namespace App\Domain\Common\Model;
+
+
+trait TriggerEventsTrait
+{
+    private $events = [];
+
+    protected function trigger($event)
+    {
+        $events[] = $event;
+    }
+
+    protected function getEvents()
+    {
+        return $this->events;
+    }
+
+}

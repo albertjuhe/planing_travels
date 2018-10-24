@@ -22,7 +22,7 @@ class DoctrineUserRepository extends ServiceEntityRepository implements UserRepo
     }
 
     public function ofIdOrFail(int $userId): User {
-        $user = $this->findOneBy(['id' => $userId]);
+        $user = $this->find($userId);
         if (null === $user) {
             throw new UserDoesntExists();
         }
