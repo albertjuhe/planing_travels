@@ -8,7 +8,7 @@ use App\Domain\Travel\Repository\TravelRepository;
 use App\Domain\Travel\Model\Travel;
 use App\Domain\User\Repository\UserRepository;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use App\Infrastructure\TravelBundle\Notification\TravelWasAdded;
+use App\Domain\Travel\Events\TravelWasAdded;
 
 class AddTravelService
 {

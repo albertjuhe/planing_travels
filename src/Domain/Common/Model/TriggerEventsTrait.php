@@ -15,10 +15,11 @@ trait TriggerEventsTrait
 
     protected function trigger($event)
     {
-        $events[] = $event;
+        $this->events[] = $event;
+
     }
 
-    protected function getEvents()
+    public function getEvents()
     {
         return $this->events;
     }

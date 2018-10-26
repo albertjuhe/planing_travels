@@ -30,13 +30,13 @@ class PublishTravelController extends BaseController
     }
 
     /**
-     * @Route("/{_locale}/private/publish/{slug}",name="publishTravel")
+     * @Route("/travel/publish/{slug}",name="publishTravel")
      * @param Request $request
      * @param $_locale
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      * @throws UserDoesntExists
      */
-    public function publishTravel(Request $request, $_locale, string $slug)
+    public function publishTravel(Request $request, string $slug)
     {
         if (!$this->getUser())
             throw new UserDoesntExists();

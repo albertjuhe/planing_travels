@@ -19,11 +19,17 @@ class AddTravelServiceTest extends TestCase
     private $travelRepository;
     /** @var InMemoryUserRepository */
     private $userRepository;
+    /** @var  EventDispatcherInterface */
+    private $dispatcher;
 
     public function setUp()
     {
      $this->travelRepository = new InMemoryTravelRepository();
      $this->userRepository = new InMemoryUserRepository();
+
+     $this->dispatcher = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     /**
@@ -34,7 +40,7 @@ class AddTravelServiceTest extends TestCase
         $travel->setId(self::TRAVELID);
         $user = User::fromId(1);
 
-        $addTravelService = new AddTravelService($this->travelRepository,$this->userRepository);
+        $addTravelService = new AddTravelService($this->travelRepository,$this->userRepository, $this->dispatcher );
         $command = new AddTravelCommand($travel,$user);
         $addTravelService->execute($command);
 
@@ -47,7 +53,7 @@ class AddTravelServiceTest extends TestCase
         $travel = new Travel();
         $user = User::fromId(0);
 
-        $addTravelService = new AddTravelService($this->travelRepository,$this->userRepository);
+        $addTravelService = new AddTravelService($this->travelRepository,$this->userRepository, $this->dispatcher );
         $command = new AddTravelCommand($travel,$user);
         $addTravelService->execute($command);
     }

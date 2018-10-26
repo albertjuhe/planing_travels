@@ -64,9 +64,10 @@ class PublishTravelService
 
         /**
          * Publish travel
-        */
+
         $travelWasPublished = new TravelWasPublished($travel,$user);
         $this->eventDispatcher->dispatch(travelWasPublished::PUBLISH_TRAVEL_EVENT_REQUEST, $travelWasPublished);
+*/
 
         return $travel;
 

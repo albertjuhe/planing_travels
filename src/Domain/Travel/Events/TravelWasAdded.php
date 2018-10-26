@@ -6,11 +6,11 @@
  * Time: 07:47
  */
 
-namespace App\Infrastructure\TravelBundle\Notification;
+namespace App\Domain\Travel\Events;
 
 
 use Symfony\Component\EventDispatcher\Event;
-use App\Domain\Travel\Travel;
+use App\Domain\Travel\Model\Travel;
 use App\Domain\User\Model\User;
 
 class TravelWasAdded extends Event

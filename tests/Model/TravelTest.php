@@ -85,4 +85,15 @@ class TravelTest extends TestCase
         $this->assertTrue($gpx->equals($gpx2));
 
     }
+
+    public function testPublishTravel() {
+        $user = User::fromId(1);
+        $travel = Travel::fromUser($user);
+
+        $this->assertEquals($travel->getStatus(),Travel::TRAVEL_DRAFT);
+        $travel->publish();
+        $this->assertEquals($travel->getStatus(),Travel::TRAVEL_PUBLISHED);
+        $this->assertCount(1,$travel->getEvents());
+
+    }
 }

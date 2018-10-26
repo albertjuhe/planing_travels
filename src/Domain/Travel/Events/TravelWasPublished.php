@@ -6,7 +6,7 @@
  * Time: 19:03
  */
 
-namespace App\Infrastructure\TravelBundle\Notification;
+namespace App\Domain\Travel\Events;
 
 
 use Symfony\Component\EventDispatcher\Event;

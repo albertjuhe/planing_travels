@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block content %}
-    <div class="container" ng-app="ShowTravels">
+    <div class="container" ng-app="ShowTravelsApp">
         <div class="row" ng-controller="travelController">
             <h1>{{ 'MyMaps'|trans }}</h1>
             <h2>{{ 'Welcome'|trans }}</h2>
@@ -14,7 +14,7 @@
                     </div>
                     <div>
                         {% if travel.photo is empty %}
-                            <img id="travel{{ travel.id }}" class="featurette-image img-responsive" data-src="holder.js/200x200/auto" alt="Travel photo">
+                            <img id="travel{{ travel.id }}" class="featurette-image img-responsive" data-src="holder/holder.js/200x200/auto" alt="Travel photo">
                         {% else %}
                             <img id="travel{{ travel.id }}" src="{{ asset(travel.getWebPath()) }}" width="200" alt="">
                         {% endif %}
@@ -43,5 +43,5 @@
 
 {% block javascript %}
     {{ parent() }}
-    <script src="{{ asset('js/angular/js/show-travels.js') }}"></script>
+    <script src="{{ asset('js/angular/app/show-travels.js') }}"></script>
 {% endblock %}

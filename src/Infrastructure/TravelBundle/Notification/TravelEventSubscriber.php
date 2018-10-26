@@ -26,15 +26,17 @@ class TravelEventSubscriber implements EventSubscriber
      * Event triggered after adding a Travel
      * @param TravelWasAdded $event
      */
-    public function addTravelRequestEvent(TravelWasAdded $event) {
+    public function addTravelRequestEvent(TravelWasAdded $event)
+    {
 
     }
 
     /**
      * Event triggered after publish a travel
      */
-    public function publishTravelRequestEvent(RequestEvent $event) {
-
+    public function publishTravelRequestEvent(RequestEvent $event)
+    {
+        echo "Published Travel";
     }
 
 }
