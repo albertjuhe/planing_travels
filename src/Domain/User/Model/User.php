@@ -6,6 +6,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use App\Domain\Common\Model\IdentifiableDomainObject;
 use App\Domain\Travel\Model\Travel;
 use App\Domain\Location\Model\Location;
+use App\Domain\User\ValueObject\UserId;
 
 class User extends IdentifiableDomainObject implements UserInterface
 {

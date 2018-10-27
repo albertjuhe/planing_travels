@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Domain\User\Model;
+namespace App\Domain\User\ValueObject;
 
 class UserId
 {

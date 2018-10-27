@@ -58,7 +58,7 @@ class Travel
     private $watch;
 
     /** @var array */
-    private $gpx = [];
+    private $gpx;
 
     /** @var User */
     private $user;

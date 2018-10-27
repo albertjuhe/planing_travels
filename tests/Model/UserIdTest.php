@@ -4,7 +4,7 @@
 namespace App\Tests\Model;
 
 use PHPUnit\Framework\TestCase;
-use App\Domain\User\Model\UserId;
+use App\Domain\User\ValueObject\UserId;
 
 class UserIdTest extends TestCAse
 {

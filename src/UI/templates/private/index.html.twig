@@ -7,7 +7,7 @@
             <h2>{{ 'Welcome'|trans }}</h2>
             {% for travel in travels %}
                 <div class="col-sm-3">
-                    <h3><a href="#">{{ travel.title }}</a></h3>
+                    <h3><a href="{{ path('show_travel',{'slug':travel.slug}) }}">{{ travel.title }}</a></h3>
                     <div>
                         <a href="{{ path('updateTravel', { 'slug': travel.slug }) }}">Edit</a>
                         <a href="{{ path('publishTravel', { 'slug': travel.slug }) }}">Publish</a>
