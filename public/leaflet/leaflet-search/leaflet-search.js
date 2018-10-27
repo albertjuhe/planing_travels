@@ -437,7 +437,7 @@ L.Control.Search = L.Control.extend({
 		L.Control.Search.callJsonp = function(data) {	//jsonp callback
 			var fdata = that._filterJSON(data);//_filterJSON defined in inizialize...
 			callAfter(fdata);
-		}
+		};
 		var script = L.DomUtil.create('script','search-jsonp', document.getElementsByTagName('body')[0] ),			
 			url = L.Util.template(this._getUrl(text)+'&'+this.options.jsonpParam+'=L.Control.Search.callJsonp', {s: text}); //parsing url
 			//rnd = '&_='+Math.floor(Math.random()*10000);

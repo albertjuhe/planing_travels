@@ -5,7 +5,7 @@ var locationGallery = function (pGallery) {
     this.pathGallery = pGallery;
     this.galleryZone = 'dz-ImageLocation';
     this.notesZone= 'notes';
-}
+};
 
 locationGallery.prototype.getLocationImages = function(location) {
     var _self = this;
@@ -31,4 +31,4 @@ locationGallery.prototype.getLocationImages = function(location) {
             $("#loaderDiv").show();
         }
     });
- }
+ };

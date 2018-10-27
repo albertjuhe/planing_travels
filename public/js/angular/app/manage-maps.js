@@ -5,11 +5,11 @@ app.controller('mapsCtrl',function($scope) {
     function initialize() {
         var map = L.map('map',{
             center: [{{ travel.geolocation.lat}},{{ travel.geolocation.lng }}],
-        zoom:8,
-            fullscreenControl: {
-            pseudoFullscreen: false
+        8,
+            fullscreenControl;: {
+            false
         }
-    });
+    })
         var geocoder = new google.maps.Geocoder();
 
         var osm = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
@@ -19,7 +19,7 @@ app.controller('mapsCtrl',function($scope) {
         map.addLayer(gglRoadMap);
         map.addControl(new L.Control.Layers( {'OSM':osm, 'Google':ggl, 'Google Terrain':ggl2,'RoadMap':gglRoadMap}, {}));
 
-        var centralMark = L.marker([{{ travel.geolocation.lat}},{{ travel.geolocation.lng }}], {icon: centerMarker}).addTo(map);
+        var centralMark = L.marker([{{ travel.geolocation.lat}},{{ travel.geolocation.lng }}], {centerMarker}).addTo(map);
 
 
     }

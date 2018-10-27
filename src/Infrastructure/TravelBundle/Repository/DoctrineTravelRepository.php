@@ -20,6 +20,7 @@ class DoctrineTravelRepository extends ServiceEntityRepository implements Travel
     }
 
     public function ofSlugOrFail(string $travelSlug): Travel {
+        /** @var Travel $travel */
         $travel = $this->findOneBy(['slug' => $travelSlug]);
         if (null === $travel) {
             throw new TravelDoesntExists();

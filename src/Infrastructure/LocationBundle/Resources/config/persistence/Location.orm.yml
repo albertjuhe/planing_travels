@@ -78,7 +78,7 @@ App\Domain\Location\Model\Location:
         mark:
             targetEntity: App\Domain\Mark\Model\Mark
             cascade: {  }
-            fetch: LAZY
+            fetch: EAGER
             mappedBy: null
             inversedBy: location
             joinColumns:
@@ -98,7 +98,7 @@ App\Domain\Location\Model\Location:
         typeLocation:
             targetEntity: App\Domain\TypeLocation\Model\TypeLocation
             cascade: {  }
-            fetch: LAZY
+            fetch: EAGER
             mappedBy: null
             inversedBy: null
             joinColumns:

@@ -122,7 +122,7 @@
         // of the Google Places API to help users fill in the information.
 
         function initialize() {
-            var gpxRoutes = new Array();
+            var gpxRoutes = [];
 
             autocomplete = new google.maps.places.Autocomplete((document.getElementById('address')),{ types: ['geocode'] });
             {% include 'travel/loadPointsMap.html.twig' with {'locations': travel.location} %}

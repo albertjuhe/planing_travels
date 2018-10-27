@@ -223,7 +223,7 @@ L.GPX = L.FeatureGroup.extend({
       if (!layers) return;
       _this.addLayer(layers);
       _this.fire('loaded');
-    }
+    };
     if (input.substr(0,1)==='<') { // direct XML has to start with a <
       var parser = new DOMParser();
       setTimeout(function() {
@@ -270,7 +270,7 @@ L.GPX = L.FeatureGroup.extend({
 
         // add track
         var l = new L.Polyline(coords, options.polyline_options);
-        this.fire('addline', { line: l })
+        this.fire('addline', { line: l });
         layers.push(l);
 
         if (options.marker_options.startIconUrl) {

@@ -78,7 +78,7 @@ mapPoint.prototype.panelItinerary = function() {
             $('.leaflet-routing-container').hide()
         } else $('.leaflet-routing-container').show();
     }
-}
+};
 
 //Create a location point object
 mapPoint.prototype.createLocation = function(id,latitude,longitude,placeAddress,place_id,typeIcon,description,address,currentMark) {
@@ -94,7 +94,7 @@ mapPoint.prototype.createLocation = function(id,latitude,longitude,placeAddress,
     l.currentMark = currentMark;
 
     return l;
-}
+};
 
 mapPoint.prototype.addPoint = function(locationPoint) {
 
@@ -157,11 +157,11 @@ mapPoint.prototype.save = function(locationPoint,currentMark) {
     locationPoint.currentMark = currentMark;
     this.rest('POST', _serializer,locationPoint);
 
-}
+};
 
 mapPoint.prototype.createButton = function(title,type,button_type,place_id) {
      return '<button data-place="'+place_id+'" style="margin:1px" data-function="'+title+'" data-target="'+'#'+title+'" data-toggle="modal" type="button" class="btn '+type+' btn-xs">'+title+'</button>';
-}
+};
 
 mapPoint.prototype.info = function(e) {
     var current = $(e.target);
@@ -203,7 +203,7 @@ mapPoint.prototype.showGallery = function(l) {
     if (typeof(this.plugin['locationGallery'].getLocationImages) === "function") { //Si té init l utilitzem
         this.plugin['locationGallery'].getLocationImages(l);
     }
-}
+};
 
 
 mapPoint.prototype.goMark = function(e) {
@@ -263,7 +263,7 @@ mapPoint.prototype.saveNota = function(nota) {
                 console.log('Error note ');
             }
         });        
-}
+};
 
 mapPoint.prototype.resetRoute = function() {
     $('#routePoints').empty();
@@ -294,11 +294,11 @@ mapPoint.prototype.handleDrop = function (e) {
 
     }
     return false;
-}
+};
 
 mapPoint.prototype.handleDragEnter = function (e) {
     console.log('Enter dragging');
-}
+};
 
 mapPoint.prototype.handleDragOver = function (e) {
     if (e.preventDefault) {
@@ -351,7 +351,7 @@ mapPoint.prototype.rest = function(typeRest,data,locationPoint) {
             }
         });
     }
-}
+};
 
     /*
      var request = {
@@ -447,7 +447,7 @@ mapPoint.prototype.getMark = function(pointtype,latitude,longitude,placeAdress,p
     }
 
     return {mark:currentMark,type:typeIcon};
-}
+};
 
 mapPoint.prototype.codeAddress = function() {
     var _self = this;
@@ -502,4 +502,4 @@ function __bind(fn, me) {
     return function () {
         return fn.apply(me, arguments);
     };
-};
+}

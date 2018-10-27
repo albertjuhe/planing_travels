@@ -2,7 +2,6 @@
 
 namespace App\Domain\Mark\Model;
 
-
 use App\Domain\Location\Model\Location;
 use App\Domain\Travel\ValueObject\GeoLocation;
 
