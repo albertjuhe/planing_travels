@@ -36,7 +36,9 @@ class UpdateTravelService
      * @throws InvalidTravelUser
      */
     public function execute(UpdateTravelCommand $commnand) {
+        /** @var Travel */
         $travel = $commnand->travel();
+        /** @var User */
         $user = $commnand->user();
 
         //Only the owner can modify the travel

@@ -15,7 +15,6 @@ use App\Domain\Travel\Model\Travel;
 use App\Domain\User\Model\User;
 use App\Domain\User\Repository\UserRepository;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use App\Infrastructure\TravelBundle\Notification\TravelWasPublished;
 
 class PublishTravelService
 {
