@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <div class="container" ng-app="ShowTravelsApp">
+        <div class="row" ng-controller="travelController">
+            <h1>{{ 'MyMaps'|trans }}</h1>
+            <h2>{{ 'Welcome'|trans }}</h2>
+            {% for travel in travels %}
+                <div class="col-sm-3">
+                    <h3><a href="{{ path('show_travel',{'slug':travel.slug}) }}">{{ travel.title }}</a></h3>
+                    <div>
+                        <a href="{{ path('updateTravel', { 'slug': travel.slug }) }}">Edit</a>
+                        <a href="{{ path('publishTravel', { 'slug': travel.slug }) }}">Publish</a>
+                    </div>
+                    <div>
+                        {% if travel.photo is empty %}
+                            <img id="travel{{ travel.id }}" class="featurette-image img-responsive" data-src="holder/holder.js/200x200/auto" alt="Travel photo">
+                        {% else %}
+                            <img id="travel{{ travel.id }}" src="{{ asset(travel.getWebPath()) }}" width="200" alt="">
+                        {% endif %}
+                    </div>
+                    <div class="date-travel">
+                        <a href="#">   {{ travel.startAt | date("d/m/Y")}} To {{ travel.endAt |date("d/m/Y")}}</a>
+                    </div>
+                    <div class="date-travel">
+                        <span>STATUS: {{ travel.status }}</span>
+                    </div>
+                    <div class="info-travel">
+                        {{ travel.description }}
+                    </div>
+                    <div>
+                        <span class="glyphicon glyphicon-star" aria-hidden="true"></span> Likes {{ travel.starts }}
+                        <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> Watch {{ travel.watch }}
+                    </div>
+                </div>
+            {% else %}
+                <div>Empty Travels</div>
+            {% endfor %}
+        </div>
+
+    </div>
+{%  endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    <script src="{{ asset('js/angular/app/show-travels.js') }}"></script>
+{% endblock %}

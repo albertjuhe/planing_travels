@@ -77,7 +77,7 @@ gapMatchInteraction.prototype.render = function(questionId,value,index) {
     //Building HTML Question
     var q = '#' + questionId;
     $(q).append('<div class="prompt">' + itemBody+ '</div>');
-    $(q).append('<div id="'+questionId+'_question"></div>')
+    $(q).append('<div id="'+questionId+'_question"></div>');
     $(q + '_question').append(boxes);
 
     this.dragableAndDropable(_self);
@@ -163,7 +163,7 @@ gapMatchInteraction.prototype.solution = function (question) {
                 $(_gapSolutions[i]).addClass("incorrect");
             }
             else {
-                $(_gapSolutions[i]).addClass("correct")
+                $(_gapSolutions[i]).addClass("correct");
                 correct++;
             }
         }
@@ -186,7 +186,7 @@ gapMatchInteraction.prototype.checkQuestion = function (question) {
                 $(_gapSolutions[i]).addClass("incorrect");
             }
             else {
-                $(_gapSolutions[i]).addClass("correct")
+                $(_gapSolutions[i]).addClass("correct");
                 correct++;
             }
         }
@@ -212,7 +212,7 @@ gapMatchInteraction.prototype.handleDrop = function (e) {
 
     }
     return false;
-}
+};
 
 //Start dragging, change opacity
 gapMatchInteraction.prototype.handleDragStart = function (e) {
@@ -225,7 +225,7 @@ gapMatchInteraction.prototype.handleDragStart = function (e) {
 
 gapMatchInteraction.prototype.handleDragEnter = function (e) {
     console.log('Enter dragging');
-}
+};
 
 gapMatchInteraction.prototype.handleDragOver = function (e) {
     if (e.preventDefault) {

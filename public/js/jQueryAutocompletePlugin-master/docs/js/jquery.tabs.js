@@ -433,8 +433,7 @@ $.fn.tabs = function(initial, settings) {
             for (var i = 0, k = settings.disabled.length; i < k; i++) {
                 tabs.slice(--settings.disabled[i],settings.disabled[i]+1).trigger('disableTab').end();
             }
-        };
-
+        }
         // attach enable event, required for reenabling a tab
         tabs.bind('enableTab', function() {
             var li = $(this).parents('li:eq(0)');

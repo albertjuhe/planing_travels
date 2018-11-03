@@ -20,6 +20,7 @@ App\Domain\Location\Model\Location:
             unique: false
             nullable: false
             precision: 0
+            column: created_at
         updatedAt:
             type: datetime
             scale: 0
@@ -27,6 +28,7 @@ App\Domain\Location\Model\Location:
             unique: false
             nullable: false
             precision: 0
+            column: updated_at
         title:
             type: string
             scale: 0
@@ -76,7 +78,7 @@ App\Domain\Location\Model\Location:
         mark:
             targetEntity: App\Domain\Mark\Model\Mark
             cascade: {  }
-            fetch: LAZY
+            fetch: EAGER
             mappedBy: null
             inversedBy: location
             joinColumns:
@@ -96,7 +98,7 @@ App\Domain\Location\Model\Location:
         typeLocation:
             targetEntity: App\Domain\TypeLocation\Model\TypeLocation
             cascade: {  }
-            fetch: LAZY
+            fetch: EAGER
             mappedBy: null
             inversedBy: null
             joinColumns:

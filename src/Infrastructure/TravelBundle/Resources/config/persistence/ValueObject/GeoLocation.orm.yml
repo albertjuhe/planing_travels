@@ -1,0 +1,51 @@
+App\Domain\Travel\ValueObject\GeoLocation:
+  type: embeddable
+  fields:
+    lat:
+        type: decimal
+        scale: 8
+        length: null
+        unique: false
+        nullable: false
+        precision: 14
+        column: lat
+    lng:
+        type: decimal
+        scale: 8
+        length: null
+        unique: false
+        nullable: false
+        precision: 14
+        column: lng
+    lat0:
+        type: decimal
+        scale: 8
+        length: null
+        unique: false
+        nullable: true
+        precision: 14
+        column: lat0
+    lng0:
+        type: decimal
+        scale: 8
+        length: null
+        unique: false
+        nullable: true
+        precision: 14
+        column: lng0
+    lat1:
+        type: decimal
+        scale: 8
+        length: null
+        unique: false
+        nullable: true
+        precision: 14
+        column: lat1
+    lng1:
+        type: decimal
+        scale: 8
+        length: null
+        unique: false
+        nullable: true
+        precision: 14
+        column: lng1

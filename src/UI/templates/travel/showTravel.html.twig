@@ -1,0 +1,140 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Travel {{travel.title }}{% endblock %}
+
+{% block navbar %}
+    {% include 'default/navbarPublic.html.twig' %}
+{% endblock %}
+
+{% block content %}
+    <div class="container" ng-app="ManageMaps" ng-controller="mapsCtrl">
+        {% include 'travel/travelInfoHeader.html.twig' with {'travel': travel,'mode':'ReadOnly'} %}
+        <div class="row">
+            <div class="col-sm-4">
+                {% include 'travel/locationsPanel.html.twig' %}
+            </div>
+            <div class="col-sm-8">
+                <div id="map"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4">
+                {% include 'travel/routePanel.html.twig' %}
+                {% include 'travel/tracksPanel.html.twig' with {'gpxs': travel.gpx} %}
+            </div>
+            <div class="col-sm-8">
+                {% include 'travel/infoLocationPanel.html.twig' with {'travel': travel} %}
+            </div>
+        </div>
+        {% include 'travel/modalFormAddPoint.html.twig' with {'travel': travel} %}
+    </div>
+{% endblock %}
+
+{% block css %}
+    {{ parent() }}
+    <link href="{{ asset('leaflet/leaflet.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/main.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('leaflet/leaflet-routing-machine.css') }}" />
+    <link rel="stylesheet" href="{{ asset('font-awesome-4.3.0/css/font-awesome.min.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('css/ionicons-2.0.1/css/ionicons.min.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('css/leaflet.awesome-markers.css')}}">
+    <link rel="stylesheet" href="{{ asset('css/dropzone.css')}}">
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+     <script src="{{ asset('js/angular/js/manage-maps.js') }}"></script>
+    <script src="{{ asset('js/jquery.ui.widget.js') }}"></script>
+    <script src="{{ asset('js/jquery.iframe-transport.js') }}"></script>
+    <script src="{{ asset('js/jquery.fileupload.js') }}"></script>
+    <script src="{{ asset('js/json2.js') }}"></script>
+    <script src="{{ asset('js/jquery.sortable.js') }}"></script>
+    <script src="{{ asset('leaflet/leaflet.js') }}"></script>
+    <script src="{{ asset('leaflet/leaflet-routing-machine.js') }}"></script>
+    <script src="{{ asset('leaflet/leaflet-plugins-master/layer/tile/Google.js') }}"></script>
+    <script src="{{ asset('js/leaflet.awesome-markers.min.js') }}"></script>
+    <script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/Leaflet.fullscreen.min.js'></script>
+    <link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/leaflet.fullscreen.css' rel='stylesheet' />
+    <script src="{{ asset('leaflet/leaflet-gpx-master/gpx.js') }}"></script>
+    <script src="{{ asset('js/markersDefinition.js') }}"></script>
+    <script src="{{ asset('js/mapPoint.js') }}"></script>
+    <script src="{{ asset('js/locationGallery.js') }}"></script>
+
+    <script>
+        var mPoint = new mapPoint();
+        mPoint.addPlugin('locationGallery',new locationGallery('{{ asset('uploads/gallery/') }}'));
+
+        var map = L.map('map',{
+            center: [{{ travel.geolocation.lat}},{{ travel.geolocation.lng }}],
+            zoom:8,
+            fullscreenControl: {
+                pseudoFullscreen: false
+            }
+        });
+        var geocoder = new google.maps.Geocoder();
+
+        var osm = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+        var ggl = new L.Google();
+        var ggl2 = new L.Google('TERRAIN');
+        var gglRoadMap = new L.Google('ROADMAP');
+        map.addLayer(gglRoadMap);
+        map.addControl(new L.Control.Layers( {'OSM':osm, 'Google':ggl, 'Google Terrain':ggl2,'RoadMap':gglRoadMap}, {}));
+
+        var centralMark = L.marker([{{ travel.geolocation.lat}},{{ travel.geolocation.lng }}], {icon: centerMarker}).addTo(map);
+
+        $( "#center" ).click(function() {
+            map.setView([{{ travel.geolocation.lat}},{{ travel.geolocation.lng }}],8);
+        });
+
+        $( "#remove-route" ).click(function() {
+            removeRoute();
+        });
+
+        $( "#calculate-route" ).click(function() {
+            calculateRoute();
+        });
+
+        $( "#reset" ).click(function() {
+            resetRoute();
+        });
+
+        $( "#itinerary" ).click(function() {
+            panelItinerary();
+        });
+
+        function calculateRoute() {
+            mPoint.calculateRoute();
+        }
+
+        function removeRoute() {
+            mPoint.removeRoute();
+        }
+
+        function resetRoute() {
+            mPoint.resetRoute();
+        }
+
+        function panelItinerary() {
+            mPoint.panelItinerary();
+        }
+
+        // This example displays an address form, using the autocomplete feature
+        // of the Google Places API to help users fill in the information.
+
+        function initialize() {
+            var gpxRoutes = [];
+
+            autocomplete = new google.maps.places.Autocomplete((document.getElementById('address')),{ types: ['geocode'] });
+            {% include 'travel/loadPointsMap.html.twig' with {'locations': travel.location} %}
+            {#'travel/loadGpxTracks.html.twig' with {'gpxs': travel.gpx} #}
+        }
+        initialize();
+
+    </script>
+{% endblock %}
+
+{% block aside %}{% endblock %}
+
+  {% block header_js %}
+      <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyBDFGff7mQ3mWhfZ5IYuqPxsCd049nqIn4"></script>
+  {% endblock %}

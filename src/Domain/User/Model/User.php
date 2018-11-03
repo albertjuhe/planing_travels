@@ -4,6 +4,9 @@ namespace App\Domain\User\Model;
 
 use Symfony\Component\Security\Core\User\UserInterface;
 use App\Domain\Common\Model\IdentifiableDomainObject;
+use App\Domain\Travel\Model\Travel;
+use App\Domain\Location\Model\Location;
+use App\Domain\User\ValueObject\UserId;
 
 class User extends IdentifiableDomainObject implements UserInterface
 {
@@ -22,8 +25,10 @@ class User extends IdentifiableDomainObject implements UserInterface
 
     private $isActive;
 
+    /** @var \DateTime  */
     protected $createdAt;
 
+    /** @var \DateTime  */
     protected $updatedAt;
 
     protected $lastLogin;
@@ -117,13 +122,16 @@ class User extends IdentifiableDomainObject implements UserInterface
     {
         return $this->password;
     }
+
     public function getRoles()
     {
         return array('ROLE_USER');
     }
+
     public function eraseCredentials()
     {
     }
+
     /** @see \Serializable::serialize() */
     public function serialize()
     {

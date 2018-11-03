@@ -8,54 +8,71 @@
 
 namespace App\Domain\Travel\Model;
 
+use App\Domain\Gpx\Model\Gpx;
+use App\Domain\Location\Model\Location;
 use App\Domain\User\Model\User;
+use App\Domain\Travel\ValueObject\GeoLocation;
+use App\Domain\Common\Model\TriggerEventsTrait;
+use App\Domain\Travel\Events\TravelWasPublished;
 
 class Travel
 {
+    use TriggerEventsTrait;
+
+    const TRAVEL_DRAFT = 10;
+    const TRAVEL_PUBLISHED = 20;
+
     protected $id;
 
+    /** @var string */
     protected $title;
 
+    /** @var string */
     protected $description;
 
+    /** @var \DateTime */
     protected $createdAt;
 
+    /** @var \DateTime */
     protected $updatedAt;
 
+    /** @var string */
     private $slug;
 
+    /** @var string */
     private $photo;
 
-    private $lat;
+    /** @var GeoLocation */
+    private $geoLocation;
 
-    private $lng;
-
-    private $lat0;
-
-    private $lng0;
-
-    private $lat1;
-
-    private $lng1;
-
+    /** @var \DateTime */
     protected $startAt;
 
+    /** @var \DateTime */
     protected $endAt;
 
+    /** @var int */
     private $starts;
 
+    /** @var int */
     private $watch;
 
+    /** @var array */
     private $gpx;
 
+    /** @var User */
     private $user;
 
+    /** @var Array */
     private $sharedusers;
 
+    /** @var Location */
     private $location;
 
+    /** @var \DateTime */
     private $publishedAt;
 
+    /** @var int */
     private $status;
 
     /**
@@ -67,6 +84,14 @@ class Travel
         $this->createdAt = new \DateTime;
         $this->setStarts(0);
         $this->setWatch(0);
+        $this->geoLocation = new GeoLocation(0,0,0,0,0,0);
+        $this->gpx = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->sharedusers = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->status = self::TRAVEL_DRAFT;
+    }
+
+    public function equals(Travel $travel) {
+        return $this->id === $travel->getId();
     }
 
     public static function fromUser(User $user): Travel {
@@ -74,6 +99,24 @@ class Travel
         $travel->setUser($user);
         return $travel;
     }
+
+    /**
+     * @param GeoLocation $geolocation
+     * @return Travel
+     */
+    public static function fromGeoLocation(GeoLocation $geolocation): Travel {
+        $travel = new self();
+        $travel->setGeoLocation($geolocation);
+        return $travel;
+    }
+
+    public static function fromTitleAndGeolocationAndUser(string $title, GeoLocation $geolocation, User $user) {
+        $travel = self::fromGeoLocation($geolocation);
+        $travel->setTitle($title);
+        $travel->setUser($user);
+        return $travel;
+    }
+
     /**
      * @return mixed
      */
@@ -125,7 +168,7 @@ class Travel
     /**
      * @return mixed
      */
-    public function getCreatedAt()
+    public function getCreatedAt(): \DateTime
     {
         return $this->createdAt;
     }
@@ -133,7 +176,7 @@ class Travel
     /**
      * @param mixed $createdAt
      */
-    public function setCreatedAt($createdAt)
+    public function setCreatedAt(\DateTime $createdAt)
     {
         $this->createdAt = $createdAt;
     }
@@ -141,7 +184,7 @@ class Travel
     /**
      * @return mixed
      */
-    public function getUpdatedAt()
+    public function getUpdatedAt(): \DateTime
     {
         return $this->updatedAt;
     }
@@ -149,7 +192,7 @@ class Travel
     /**
      * @param mixed $updatedAt
      */
-    public function setUpdatedAt($updatedAt)
+    public function setUpdatedAt(\DateTime $updatedAt)
     {
         $this->updatedAt = $updatedAt;
     }
@@ -165,7 +208,7 @@ class Travel
     /**
      * @param mixed $slug
      */
-    public function setSlug($slug)
+    public function setSlug(string $slug)
     {
         $this->slug = $slug;
     }
@@ -173,15 +216,17 @@ class Travel
     /**
      * @return mixed
      */
-    public function getPhoto()
+    public function getPhoto():? string
     {
         return $this->photo;
     }
 
+
     /**
-     * @param mixed $photo
+     * @param $photo
+     * @return string
      */
-    public function setPhoto($photo)
+    public function setPhoto(string $photo)
     {
         $this->photo = $photo;
     }
@@ -189,103 +234,7 @@ class Travel
     /**
      * @return mixed
      */
-    public function getLat()
-    {
-        return $this->lat;
-    }
-
-    /**
-     * @param mixed $lat
-     */
-    public function setLat($lat)
-    {
-        $this->lat = $lat;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getLng()
-    {
-        return $this->lng;
-    }
-
-    /**
-     * @param mixed $lng
-     */
-    public function setLng($lng)
-    {
-        $this->lng = $lng;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getLat0()
-    {
-        return $this->lat0;
-    }
-
-    /**
-     * @param mixed $lat0
-     */
-    public function setLat0($lat0)
-    {
-        $this->lat0 = $lat0;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getLng0()
-    {
-        return $this->lng0;
-    }
-
-    /**
-     * @param mixed $lng0
-     */
-    public function setLng0($lng0)
-    {
-        $this->lng0 = $lng0;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getLat1()
-    {
-        return $this->lat1;
-    }
-
-    /**
-     * @param mixed $lat1
-     */
-    public function setLat1($lat1)
-    {
-        $this->lat1 = $lat1;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getLng1()
-    {
-        return $this->lng1;
-    }
-
-    /**
-     * @param mixed $lng1
-     */
-    public function setLng1($lng1)
-    {
-        $this->lng1 = $lng1;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getStartAt()
+    public function getStartAt():? \DateTime
     {
         return $this->startAt;
     }
@@ -293,7 +242,7 @@ class Travel
     /**
      * @param mixed $startAt
      */
-    public function setStartAt($startAt)
+    public function setStartAt(\DateTime $startAt)
     {
         $this->startAt = $startAt;
     }
@@ -301,7 +250,7 @@ class Travel
     /**
      * @return mixed
      */
-    public function getEndAt()
+    public function getEndAt():? \DateTime
     {
         return $this->endAt;
     }
@@ -309,7 +258,7 @@ class Travel
     /**
      * @param mixed $endAt
      */
-    public function setEndAt($endAt)
+    public function setEndAt(\DateTime $endAt)
     {
         $this->endAt = $endAt;
     }
@@ -317,7 +266,7 @@ class Travel
     /**
      * @return mixed
      */
-    public function getStarts()
+    public function getStarts(): ?int
     {
         return $this->starts;
     }
@@ -325,7 +274,7 @@ class Travel
     /**
      * @param mixed $starts
      */
-    public function setStarts($starts)
+    public function setStarts(int $starts)
     {
         $this->starts = $starts;
     }
@@ -333,7 +282,7 @@ class Travel
     /**
      * @return mixed
      */
-    public function getWatch()
+    public function getWatch(): ?int
     {
         return $this->watch;
     }
@@ -341,13 +290,13 @@ class Travel
     /**
      * @param mixed $watch
      */
-    public function setWatch($watch)
+    public function setWatch(int $watch)
     {
         $this->watch = $watch;
     }
 
     /**
-     * @return mixed
+     * @return array
      */
     public function getGpx()
     {
@@ -357,7 +306,7 @@ class Travel
     /**
      * @param mixed $gpx
      */
-    public function setGpx($gpx): void
+    public function setGpx(Gpx $gpx): void
     {
         $this->gpx = $gpx;
     }
@@ -435,6 +384,19 @@ class Travel
     }
 
     /**
+     * Publish the travel, is visible for all
+     */
+    public function publish() {
+        $this->status = self::TRAVEL_PUBLISHED;
+
+        $this->trigger(
+            new TravelWasPublished($this, $this->getUser())
+        );
+
+        return $this;
+    }
+
+    /**
      * @param mixed $status
      */
     public function setStatus($status): void
@@ -442,5 +404,20 @@ class Travel
         $this->status = $status;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getGeoLocation()
+    {
+        return $this->geoLocation;
+    }
+
+    /**
+     * @param mixed $geoLocation
+     */
+    public function setGeoLocation($geoLocation): void
+    {
+        $this->geoLocation = $geoLocation;
+    }
 
 }

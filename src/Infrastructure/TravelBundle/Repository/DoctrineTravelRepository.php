@@ -1,6 +1,7 @@
 <?php
 namespace App\Infrastructure\TravelBundle\Repository;
 
+use App\Domain\Travel\Exceptions\TravelDoesntExists;
 use App\Domain\Travel\Model\Travel;
 use App\Domain\User\Model\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -18,15 +19,27 @@ class DoctrineTravelRepository extends ServiceEntityRepository implements Travel
         parent::__construct($registry, Travel::class);
     }
 
+    public function ofSlugOrFail(string $travelSlug): Travel {
+        /** @var Travel $travel */
+        $travel = $this->findOneBy(['slug' => $travelSlug]);
+        if (null === $travel) {
+            throw new TravelDoesntExists();
+        }
+
+        return $travel;
+    }
+
     /**
      * @param int $maximResults
      * @return mixed|void
      */
-    public function TravelsAllOrderedByStarts($maximResults = 10) {
-        $this->createQueryBuilder('t')
+    public function TravelsAllOrderedBy($maximResults = 10) {
+        $q = $this->createQueryBuilder('t')
+            ->leftJoin('t.user','user')
             ->addOrderBy('t.starts')
             ->setMaxResults($maximResults)
-            ->getResult();
+            ->getQuery();
+            return $q->getResult();
     }
 
     /**
@@ -43,10 +56,14 @@ class DoctrineTravelRepository extends ServiceEntityRepository implements Travel
 
     }
 
+    /**
+     * Find travel by Id
+     * @param int $id
+     * @return Travel
+     */
     public function getTravelById(int $id): Travel
     {
-        // TODO: Implement findById() method.
-        return $this->findById($id);
+         return $this->findById($id);
     }
 
     /**

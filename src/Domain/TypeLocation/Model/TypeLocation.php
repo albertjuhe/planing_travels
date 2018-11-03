@@ -6,26 +6,24 @@ namespace App\Domain\TypeLocation\Model;
 
 class TypeLocation
 {
-
+    /** @var int */
     private $id;
-
+    /** @var string */
     private $title;
-
+    /** @var string */
     private $icon;
-
+    /** @var \DateTime */
     protected $createdAt;
-
+    /** @var \DateTime */
     protected $updatedAt;
-
+    /** @var string */
     private $description;
-
 
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->location = new \Doctrine\Common\Collections\ArrayCollection();
         $this->updatedAt = new \DateTime;
         $this->createdAt = new \DateTime;
     }
@@ -109,7 +107,6 @@ class TypeLocation
         return $this->description;
     }
 
-
     /**
      * Set title
      *
@@ -156,7 +153,8 @@ class TypeLocation
         return $this->icon;
     }
 
-    public function __toString() {
+    public function __toString()
+    {
         return $this->title;
     }
 }

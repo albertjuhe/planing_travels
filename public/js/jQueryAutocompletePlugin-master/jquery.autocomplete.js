@@ -275,9 +275,8 @@ $.Autocompleter = function(input, options) {
 			stopLoading();
 			select.hide();
 		}
-	};
-
-	function trimWords(value) {
+    }
+    function trimWords(value) {
 		if (!value)
 			return [""];
 		if (!options.multiple)
@@ -314,14 +313,12 @@ $.Autocompleter = function(input, options) {
 			// select the portion of the value not typed by the user (so the next character will erase)
 			$(input).selection(previousValue.length, previousValue.length + sValue.length);
 		}
-	};
-
-	function hideResults() {
+    }
+    function hideResults() {
 		clearTimeout(timeout);
 		timeout = setTimeout(hideResultsNow, 200);
-	};
-
-	function hideResultsNow() {
+    }
+    function hideResultsNow() {
 		var wasVisible = select.visible();
 		select.hide();
 		clearTimeout(timeout);
@@ -344,9 +341,8 @@ $.Autocompleter = function(input, options) {
 				}
 			);
 		}
-	};
-
-	function receiveData(q, data) {
+    }
+    function receiveData(q, data) {
 		if ( data && data.length && hasFocus ) {
 			stopLoading();
 			select.display(data, q);
@@ -355,9 +351,8 @@ $.Autocompleter = function(input, options) {
 		} else {
 			hideResultsNow();
 		}
-	};
-
-	function request(term, success, failure) {
+    }
+    function request(term, success, failure) {
 		if (!options.matchCase)
 			term = term.toLowerCase();
 		var data = cache.load(term);
@@ -407,9 +402,8 @@ $.Autocompleter = function(input, options) {
         failure(term);
 			}
 		}
-	};
-
-	function parse(data) {
+    }
+    function parse(data) {
 		var parsed = [];
 		var rows = data.split("\n");
 		for (var i=0; i < rows.length; i++) {
@@ -424,12 +418,10 @@ $.Autocompleter = function(input, options) {
 			}
 		}
 		return parsed;
-	};
-
-	function stopLoading() {
+    }
+    function stopLoading() {
 		$input.removeClass(options.loadingClass);
-	};
-
+    }
 };
 
 $.Autocompleter.defaults = {
@@ -476,9 +468,8 @@ $.Autocompleter.Cache = function(options) {
 		}
 		if (i == -1) return false;
 		return i == 0 || options.matchContains;
-	};
-
-	function add(q, value) {
+    }
+    function add(q, value) {
 		if (length > options.cacheLength){
 			flush();
 		}
@@ -529,9 +520,8 @@ $.Autocompleter.Cache = function(options) {
 			if ( nullData++ < options.max ) {
 				stMatchSets[""].push(row);
 			}
-		};
-
-		// add the data items to the cache
+        }
+        // add the data items to the cache
 		$.each(stMatchSets, function(i, value) {
 			// increase the cache size
 			options.cacheLength++;
@@ -679,9 +669,8 @@ $.Autocompleter.Select = function (options, input, select, config) {
                 list.scrollTop(offset);
             }
         }
-	};
-
-	function movePosition(step) {
+    }
+    function movePosition(step) {
 		if (options.scrollJumpPosition || (!options.scrollJumpPosition && !((step < 0 && active == 0) || (step > 0 && active == listItems.size() - 1)) )) {
 			active += step;
 			if (active < 0) {

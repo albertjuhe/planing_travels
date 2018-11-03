@@ -14,11 +14,17 @@ use App\Domain\Travel\Model\Travel;
 interface TravelRepository
 {
     /**
+     * @param string $slug
+     * @return mixed
+     */
+    public function ofSlugOrFail(string $slug);
+
+    /**
      * Return the travels with max starts
      * @param $maximResults
      * @return mixed
      */
-    public function TravelsAllOrderedByStarts($maximResults);
+    public function TravelsAllOrderedBy($maximResults);
 
     /**
      * @param $user
@@ -37,4 +43,5 @@ interface TravelRepository
      * @return mixed
      */
     public function getTravelById(int $id): Travel;
+
 }

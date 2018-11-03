@@ -1,0 +1,16 @@
+//Carrega de tracks
+var url = "";
+{% for gpx in gpxs %}
+    var url = '{{ asset('uploads/gpx/') }}{{ gpx.filename}}';
+    gpxRoutes[0] = new L.GPX(url, {
+    async: true,
+    marker_options: {
+    startIconUrl: '{{ asset('img/pin-icon-start.png') }}',
+    endIconUrl: '{{ asset('img/pin-icon-end.png') }}',
+    shadowUrl: '{{ asset('img/pin-shadow.png') }}'
+    },
+    polyline_options: {color: '{{ gpx.color}}'}
+    }).on('loaded', function(e) {
+    map.fitBounds(e.target.getBounds());
+    }).addTo(map);
+{% endfor %}

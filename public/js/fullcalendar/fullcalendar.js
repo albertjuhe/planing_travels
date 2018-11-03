@@ -16,9 +16,7 @@
 	}
 })(function($, moment) {
 
-;;
-
-var fc = $.fullCalendar = { version: "2.3.2" };
+    var fc = $.fullCalendar = { version: "2.3.2" };
 var fcViews = fc.views = {};
 
 
@@ -117,8 +115,6 @@ function massageOverrides(input) {
 
 	return overrides;
 }
-
-;;
 
 // exports
 fc.intersectionToSeg = intersectionToSeg;
@@ -813,9 +809,7 @@ function debounce(func, wait) {
 	};
 }
 
-;;
-
-var ambigDateOfMonthRegex = /^\s*\d{4}-\d\d$/;
+    var ambigDateOfMonthRegex = /^\s*\d{4}-\d\d$/;
 var ambigTimeOrZoneRegex =
 	/^\s*\d{4}-(?:(\d\d-\d\d)|(W\d\d$)|(W\d\d-\d)|(\d\d\d))((T| )(\d\d(:\d\d(:\d\d(\.\d+)?)?)?)?)?$/;
 var newMomentProto = moment.fn; // where we will attach our new methods
@@ -1318,8 +1312,6 @@ setLocalValues = allowValueOptimization ? function(mom, a) {
 	moment.updateOffset(mom, false); // keepTime=false
 } : setMomentValues;
 
-;;
-
 // Single Date Formatting
 // -------------------------------------------------------------------------------------------------
 
@@ -1548,9 +1540,7 @@ function chunkFormatString(formatStr) {
 	return chunks;
 }
 
-;;
-
-fc.Class = Class; // export
+    fc.Class = Class; // export
 
 // class that all other classes will inherit from
 function Class() { }
@@ -1590,21 +1580,19 @@ Class.extend = function(members) {
 Class.mixin = function(members) {
 	copyOwnProps(members.prototype || members, this.prototype); // TODO: copyNativeMethods?
 };
-;;
-
-/* A rectangular panel that is absolutely positioned over other content
-------------------------------------------------------------------------------------------------------------------------
-Options:
-	- className (string)
-	- content (HTML string or jQuery element set)
-	- parentEl
-	- top
-	- left
-	- right (the x coord of where the right edge should be. not a "CSS" right)
-	- autoHide (boolean)
-	- show (callback)
-	- hide (callback)
-*/
+    /* A rectangular panel that is absolutely positioned over other content
+    ------------------------------------------------------------------------------------------------------------------------
+    Options:
+        - className (string)
+        - content (HTML string or jQuery element set)
+        - parentEl
+        - top
+        - left
+        - right (the x coord of where the right edge should be. not a "CSS" right)
+        - autoHide (boolean)
+        - show (callback)
+        - hide (callback)
+    */
 
 var Popover = Class.extend({
 
@@ -1759,18 +1747,16 @@ var Popover = Class.extend({
 
 });
 
-;;
+    /* A "coordinate map" converts pixel coordinates into an associated cell, which has an associated date
+    ------------------------------------------------------------------------------------------------------------------------
+    Common interface:
 
-/* A "coordinate map" converts pixel coordinates into an associated cell, which has an associated date
-------------------------------------------------------------------------------------------------------------------------
-Common interface:
+        CoordMap.prototype = {
+            build: function() {},
+            getCell: function(x, y) {}
+        };
 
-	CoordMap.prototype = {
-		build: function() {},
-		getCell: function(x, y) {}
-	};
-
-*/
+    */
 
 /* Coordinate map for a grid component
 ----------------------------------------------------------------------------------------------------------------------*/
@@ -1924,10 +1910,8 @@ var ComboCoordMap = Class.extend({
 
 });
 
-;;
-
-/* Tracks a drag's mouse movement, firing various handlers
-----------------------------------------------------------------------------------------------------------------------*/
+    /* Tracks a drag's mouse movement, firing various handlers
+    ----------------------------------------------------------------------------------------------------------------------*/
 
 var DragListener = fc.DragListener = Class.extend({
 
@@ -2312,14 +2296,12 @@ var DragListener = fc.DragListener = Class.extend({
 
 });
 
-;;
-
-/* Tracks mouse movements over a CoordMap and raises events about which cell the mouse is over.
-------------------------------------------------------------------------------------------------------------------------
-options:
-- subjectEl
-- subjectCenter
-*/
+    /* Tracks mouse movements over a CoordMap and raises events about which cell the mouse is over.
+    ------------------------------------------------------------------------------------------------------------------------
+    options:
+    - subjectEl
+    - subjectCenter
+    */
 
 var CellDragListener = DragListener.extend({
 
@@ -2504,10 +2486,8 @@ function isCellsEqual(cell1, cell2) {
 	return false;
 }
 
-;;
-
-/* Creates a clone of an element and lets it track the mouse as it moves
-----------------------------------------------------------------------------------------------------------------------*/
+    /* Creates a clone of an element and lets it track the mouse as it moves
+    ----------------------------------------------------------------------------------------------------------------------*/
 
 var MouseFollower = Class.extend({
 
@@ -2691,10 +2671,8 @@ var MouseFollower = Class.extend({
 
 });
 
-;;
-
-/* A utility class for rendering <tr> rows.
-----------------------------------------------------------------------------------------------------------------------*/
+    /* A utility class for rendering <tr> rows.
+    ----------------------------------------------------------------------------------------------------------------------*/
 // It leverages methods of the subclass and the View to determine custom rendering behavior for each row "type"
 // (such as highlight rows, day rows, helper rows, etc).
 
@@ -2795,10 +2773,8 @@ var RowRenderer = Class.extend({
 
 });
 
-;;
-
-/* An abstract class comprised of a "grid" of cells that each represent a specific datetime
-----------------------------------------------------------------------------------------------------------------------*/
+    /* An abstract class comprised of a "grid" of cells that each represent a specific datetime
+    ----------------------------------------------------------------------------------------------------------------------*/
 
 var Grid = fc.Grid = RowRenderer.extend({
 
@@ -3480,10 +3456,8 @@ var Grid = fc.Grid = RowRenderer.extend({
 
 });
 
-;;
-
-/* Event-rendering and event-interaction methods for the abstract Grid class
-----------------------------------------------------------------------------------------------------------------------*/
+    /* Event-rendering and event-interaction methods for the abstract Grid class
+    ----------------------------------------------------------------------------------------------------------------------*/
 
 Grid.mixin({
 
@@ -4499,10 +4473,8 @@ function getDraggedElMeta(el) {
 }
 
 
-;;
-
-/* A component that renders a grid of whole-days that runs horizontally. There can be multiple rows, one per week.
-----------------------------------------------------------------------------------------------------------------------*/
+    /* A component that renders a grid of whole-days that runs horizontally. There can be multiple rows, one per week.
+    ----------------------------------------------------------------------------------------------------------------------*/
 
 var DayGrid = Grid.extend({
 
@@ -4972,10 +4944,8 @@ var DayGrid = Grid.extend({
 
 });
 
-;;
-
-/* Event-rendering methods for the DayGrid class
-----------------------------------------------------------------------------------------------------------------------*/
+    /* Event-rendering methods for the DayGrid class
+    ----------------------------------------------------------------------------------------------------------------------*/
 
 DayGrid.mixin({
 
@@ -5290,10 +5260,8 @@ function compareDaySegCols(a, b) {
 	return a.leftCol - b.leftCol;
 }
 
-;;
-
-/* Methods relate to limiting the number events for a given day on a DayGrid
-----------------------------------------------------------------------------------------------------------------------*/
+    /* Methods relate to limiting the number events for a given day on a DayGrid
+    ----------------------------------------------------------------------------------------------------------------------*/
 // NOTE: all the segs being passed around in here are foreground segs
 
 DayGrid.mixin({
@@ -5661,10 +5629,8 @@ DayGrid.mixin({
 
 });
 
-;;
-
-/* A component that renders one or more columns of vertical time slots
-----------------------------------------------------------------------------------------------------------------------*/
+    /* A component that renders one or more columns of vertical time slots
+    ----------------------------------------------------------------------------------------------------------------------*/
 
 var TimeGrid = Grid.extend({
 
@@ -6161,10 +6127,8 @@ var TimeGrid = Grid.extend({
 
 });
 
-;;
-
-/* Event-rendering methods for the TimeGrid class
-----------------------------------------------------------------------------------------------------------------------*/
+    /* Event-rendering methods for the TimeGrid class
+    ----------------------------------------------------------------------------------------------------------------------*/
 
 TimeGrid.mixin({
 
@@ -6576,10 +6540,8 @@ function compareForwardSlotSegs(seg1, seg2) {
 		compareSegs(seg1, seg2);
 }
 
-;;
-
-/* An abstract class from which other views inherit from
-----------------------------------------------------------------------------------------------------------------------*/
+    /* An abstract class from which other views inherit from
+    ----------------------------------------------------------------------------------------------------------------------*/
 
 var View = fc.View = Class.extend({
 
@@ -7521,9 +7483,7 @@ var View = fc.View = Class.extend({
 
 });
 
-;;
-
-var Calendar = fc.Calendar = Class.extend({
+    var Calendar = fc.Calendar = Class.extend({
 
 	dirDefaults: null, // option defaults related to LTR or RTL
 	langDefaults: null, // option defaults related to current locale
@@ -8421,9 +8381,7 @@ function Calendar_constructor(element, overrides) {
 	t.initialize();
 }
 
-;;
-
-Calendar.defaults = {
+    Calendar.defaults = {
 
 	titleRangeSeparator: ' \u2014 ', // emphasized dash
 	monthYearFormat: 'MMMM YYYY', // required for en. other languages rely on datepicker computable option
@@ -8537,9 +8495,7 @@ Calendar.rtlDefaults = { // right-to-left defaults
 	}
 };
 
-;;
-
-var langOptionHash = fc.langs = {}; // initialize and expose
+    var langOptionHash = fc.langs = {}; // initialize and expose
 
 
 // TODO: document the structure and ordering of a FullCalendar lang file
@@ -8737,10 +8693,8 @@ function getMomentLocaleData(langCode) {
 // Also, sets it as the default.
 fc.lang('en', Calendar.englishDefaults);
 
-;;
-
-/* Top toolbar area with buttons and title
-----------------------------------------------------------------------------------------------------------------------*/
+    /* Top toolbar area with buttons and title
+    ----------------------------------------------------------------------------------------------------------------------*/
 // TODO: rename all header-related things to "toolbar"
 
 function Header(calendar, options) {
@@ -8969,9 +8923,7 @@ function Header(calendar, options) {
 
 }
 
-;;
-
-fc.sourceNormalizers = [];
+    fc.sourceNormalizers = [];
 fc.sourceFetchers = [];
 
 var ajaxDefaults = {
@@ -10080,10 +10032,8 @@ function backupEventDates(event) {
 	event._end = event.end ? event.end.clone() : null;
 }
 
-;;
-
-/* An abstract class for the "basic" views, as well as month view. Renders one or more rows of day cells.
-----------------------------------------------------------------------------------------------------------------------*/
+    /* An abstract class for the "basic" views, as well as month view. Renders one or more rows of day cells.
+    ----------------------------------------------------------------------------------------------------------------------*/
 // It is a manager for a DayGrid subcomponent, which does most of the heavy lifting.
 // It is responsible for managing width/height.
 
@@ -10396,10 +10346,8 @@ var BasicView = View.extend({
 
 });
 
-;;
-
-/* A month view with day cells running in rows (one-per-week) and columns
-----------------------------------------------------------------------------------------------------------------------*/
+    /* A month view with day cells running in rows (one-per-week) and columns
+    ----------------------------------------------------------------------------------------------------------------------*/
 
 var MonthView = BasicView.extend({
 
@@ -10443,9 +10391,7 @@ var MonthView = BasicView.extend({
 
 });
 
-;;
-
-fcViews.basic = {
+    fcViews.basic = {
 	'class': BasicView
 };
 
@@ -10466,10 +10412,8 @@ fcViews.month = {
 		fixedWeekCount: true
 	}
 };
-;;
-
-/* An abstract class for all agenda-related views. Displays one more columns with time slots running vertically.
-----------------------------------------------------------------------------------------------------------------------*/
+    /* An abstract class for all agenda-related views. Displays one more columns with time slots running vertically.
+    ----------------------------------------------------------------------------------------------------------------------*/
 // Is a manager for the TimeGrid subcomponent and possibly the DayGrid subcomponent (if allDaySlot is on).
 // Responsible for managing width/height.
 
@@ -10847,9 +10791,7 @@ var AgendaView = View.extend({
 
 });
 
-;;
-
-var AGENDA_ALL_DAY_EVENT_LIMIT = 5;
+    var AGENDA_ALL_DAY_EVENT_LIMIT = 5;
 
 fcViews.agenda = {
 	'class': AgendaView,
@@ -10872,7 +10814,5 @@ fcViews.agendaWeek = {
 	type: 'agenda',
 	duration: { weeks: 1 }
 };
-;;
-
-return fc; // export for Node/CommonJS
+    return fc; // export for Node/CommonJS
 });

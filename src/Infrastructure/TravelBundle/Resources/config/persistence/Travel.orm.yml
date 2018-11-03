@@ -20,6 +20,7 @@ App\Domain\Travel\Model\Travel:
             unique: false
             nullable: false
             precision: 0
+            column: created_at
         updatedAt:
             type: datetime
             scale: 0
@@ -27,6 +28,7 @@ App\Domain\Travel\Model\Travel:
             unique: false
             nullable: false
             precision: 0
+            column: updated_at
         title:
             type: string
             scale: 0
@@ -50,48 +52,6 @@ App\Domain\Travel\Model\Travel:
             unique: false
             nullable: true
             precision: 0
-        lat:
-            type: decimal
-            scale: 8
-            length: null
-            unique: false
-            nullable: false
-            precision: 14
-        lng:
-            type: decimal
-            scale: 8
-            length: null
-            unique: false
-            nullable: false
-            precision: 14
-        lat0:
-            type: decimal
-            scale: 8
-            length: null
-            unique: false
-            nullable: true
-            precision: 14
-        lng0:
-            type: decimal
-            scale: 8
-            length: null
-            unique: false
-            nullable: true
-            precision: 14
-        lat1:
-            type: decimal
-            scale: 8
-            length: null
-            unique: false
-            nullable: true
-            precision: 14
-        lng1:
-            type: decimal
-            scale: 8
-            length: null
-            unique: false
-            nullable: true
-            precision: 14
         startAt:
             type: datetime
             scale: 0
@@ -99,6 +59,7 @@ App\Domain\Travel\Model\Travel:
             unique: false
             nullable: false
             precision: 0
+            column: start_at
         endAt:
             type: datetime
             scale: 0
@@ -106,6 +67,7 @@ App\Domain\Travel\Model\Travel:
             unique: false
             nullable: false
             precision: 0
+            column: end_at
         description:
             type: text
             scale: 0
@@ -127,6 +89,17 @@ App\Domain\Travel\Model\Travel:
             unique: false
             nullable: true
             precision: 0
+        status:
+            type: integer
+            scale: 0
+            length: null
+            unique: false
+            nullable: true
+            precision: 0
+    embedded:
+        geoLocation:
+            class: App\Domain\Travel\ValueObject\GeoLocation
+            columnPrefix: false
     manyToOne:
         user:
             targetEntity: App\Domain\User\Model\User
@@ -153,8 +126,8 @@ App\Domain\Travel\Model\Travel:
             cascade:
                 - persist
             fetch: LAZY
-            mappedBy: travel
-            inversedBy: null
+            mappedBy: gpx
+            inversedBy: travel
             orphanRemoval: false
             orderBy: null
     manyToMany:
