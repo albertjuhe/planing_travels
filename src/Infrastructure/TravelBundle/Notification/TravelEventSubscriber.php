@@ -8,35 +8,26 @@
 
 namespace App\Infrastructure\TravelBundle\Notification;
 
+use App\Domain\Event\DomainEvent;
+use App\Domain\Event\DomainEventSubscriber;
+use App\Domain\Travel\Events\TravelWasAdded;
+use App\Domain\Travel\Events\TravelWasPublished;
 
-use Doctrine\Common\EventSubscriber;
-
-class TravelEventSubscriber implements EventSubscriber
+class TravelEventSubscriber implements DomainEventSubscriber
 {
-
-    public function getSubscribedEvents()
+    public function handle(DomainEvent $domainEvent)
     {
-        return array(
-            'add_travel_request_event',
-            'publish_travel_request_event'
-        );
+        // TODO: Implement handle() method.
     }
 
     /**
-     * Event triggered after adding a Travel
-     * @param TravelWasAdded $event
+     * Check the domainEvent to treat
+     * @param DomainEvent $domainEvent
+     * @return bool|mixed
      */
-    public function addTravelRequestEvent(TravelWasAdded $event)
+    public function isSubscribedTo(DomainEvent $domainEvent)
     {
-
+       return ($domainEvent instanceof TravelWasPublished ||
+           $domainEvent instanceof TravelWasAdded);
     }
-
-    /**
-     * Event triggered after publish a travel
-     */
-    public function publishTravelRequestEvent(RequestEvent $event)
-    {
-        echo "Published Travel";
-    }
-
 }

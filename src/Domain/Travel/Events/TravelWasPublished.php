@@ -8,8 +8,7 @@
 
 namespace App\Domain\Travel\Events;
 
-
-use App\Domain\Common\Model\DomainEvent;
+use App\Domain\Event\DomainEvent;
 use App\Domain\Travel\Model\Travel;
 use App\Domain\User\Model\User;
 

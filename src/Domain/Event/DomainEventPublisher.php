@@ -3,37 +3,63 @@
 
 namespace App\Domain\Event;
 
-use App\Domain\Common\Model\DomainEvent;
-
 class DomainEventPublisher
 {
+    /**
+     * @var DomainEventSubscriber[]
+     */
     private $subscribers;
+
+    /**
+     * @var DomainEventPublisher
+     */
     private static $instance = null;
+
+    private $id = 0;
 
     public static function instance()
     {
         if (null === static::$instance) {
-            static::$instance = new static();
+            static::$instance = new self();
         }
+
         return static::$instance;
     }
+
     private function __construct()
     {
         $this->subscribers = [];
     }
+
     public function __clone()
     {
         throw new \BadMethodCallException('Clone is not supported');
     }
-    public function subscribe(DomainEventSubscriber $aDomainEventSubscriber)
+
+    public function subscribe($aDomainEventSubscriber)
     {
-        $this->subscribers[] = $aDomainEventSubscriber;
+        $id = $this->id;
+        $this->subscribers[$id] = $aDomainEventSubscriber;
+        $this->id++;
+
+        return $id;
     }
-    public function publish(DomainEvent $anEvent)
+
+    public function ofId($id)
+    {
+        return isset($this->subscribers[$id]) ? $this->subscribers[$id] : null;
+    }
+
+    public function unsubscribe($id)
+    {
+        unset($this->subscribers[$id]);
+    }
+
+    public function publish(DomainEvent $aDomainEvent)
     {
         foreach ($this->subscribers as $aSubscriber) {
-            if ($aSubscriber->isSubscribedTo($anEvent)) {
-                $aSubscriber->handle($anEvent);
+            if ($aSubscriber->isSubscribedTo($aDomainEvent)) {
+                $aSubscriber->handle($aDomainEvent);
             }
         }
     }
