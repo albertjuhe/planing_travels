@@ -25,13 +25,13 @@ class GetAllMyTravelsServiceTest extends TestCase
     }
 
     public function testGetAllMyTravels() {
-        $user = User::fromId(1);
+        $user = User::byId(1);
 
         $getAllMyTravelsService = new GetAllMyTravelsService($this->travelRepository);
         $travels = $getAllMyTravelsService->execute($user);
 
         foreach($travels as $travel) {
-            $this->assertTrue($travel->getUser()->equalsTo($user));
+            $this->assertEquals($travel->getUser()->userId(),$user->userId());
         }
 
         $this->assertCount(3,$travels);
