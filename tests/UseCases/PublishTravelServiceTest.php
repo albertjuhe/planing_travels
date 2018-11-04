@@ -7,6 +7,7 @@ namespace App\Tests\UseCases;
 use App\Application\Command\Travel\PublishTravelCommand;
 use App\Application\UseCases\Travel\PublishTravelService;
 use App\Application\UseCases\Travel\UpdateTravelService;
+use App\Domain\Event\DomainEventPublisher;
 use App\Domain\Travel\Model\Travel;
 use App\Domain\User\Model\User;
 use App\Infrastructure\TravelBundle\Repository\InMemoryTravelRepository;
