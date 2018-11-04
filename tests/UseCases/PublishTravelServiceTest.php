@@ -7,7 +7,10 @@ namespace App\Tests\UseCases;
 use App\Application\Command\Travel\PublishTravelCommand;
 use App\Application\UseCases\Travel\PublishTravelService;
 use App\Application\UseCases\Travel\UpdateTravelService;
+use App\Domain\Common\Model\TriggerEventsTrait;
+use App\Domain\Event\DomainEvent;
 use App\Domain\Event\DomainEventPublisher;
+use App\Domain\Event\DomainEventSubscriber;
 use App\Domain\Travel\Model\Travel;
 use App\Domain\User\Model\User;
 use App\Infrastructure\TravelBundle\Repository\InMemoryTravelRepository;
@@ -22,11 +25,14 @@ class PublishTravelServiceTest extends TestCase
     private $travelRepository;
     /** @var InMemoryUserRepository */
     private $userRepository;
+    /** @var int */
+    private $idSubscriber;
 
     protected function setUp()
     {
         $this->travelRepository = new InMemoryTravelRepository();
         $this->userRepository = new InMemoryUserRepository();
+        $this->idSubscriber = DomainEventPublisher::instance()->subscribe(new DomainEventAllSubscriber());
     }
 
     public function testPublishTravel()
@@ -51,5 +57,28 @@ class PublishTravelServiceTest extends TestCase
         $travelPublished = $this->travelRepository->getTravelById(1);
         $this->assertEquals($travelPublished->getStatus(),Travel::TRAVEL_PUBLISHED);
 
+        /** @var  DomainEventAllSubscriber */
+        $subscriber = DomainEventPublisher::instance()->ofId($this->idSubscriber);
+        $this->assertCount(1,$subscriber->getEvents());
     }
+}
+
+/**
+ * This subscriber is subscribed to all events
+ * Class GeneralEventSubscriber
+ * @package App\Tests\UseCases
+ */
+class DomainEventAllSubscriber implements DomainEventSubscriber {
+    use TriggerEventsTrait;
+
+    public function handle(DomainEvent $domainEvent)
+    {
+        $this->trigger($domainEvent);
+    }
+
+    public function isSubscribedTo(DomainEvent $domainEvent)
+    {
+       return true;
+    }
+
 }
