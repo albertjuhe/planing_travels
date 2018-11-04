@@ -93,7 +93,5 @@ class TravelTest extends TestCase
         $this->assertEquals($travel->getStatus(),Travel::TRAVEL_DRAFT);
         $travel->publish();
         $this->assertEquals($travel->getStatus(),Travel::TRAVEL_PUBLISHED);
-        $this->assertCount(1,$travel->getEvents());
-
     }
 }

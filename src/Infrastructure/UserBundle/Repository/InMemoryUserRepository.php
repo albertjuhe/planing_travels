@@ -26,7 +26,7 @@ class InMemoryUserRepository implements UserRepository
     public function ofIdOrFail(int $userId): User
     {
         if ($userId === 0) throw new UserDoesntExists();
-        return User::fromId($userId);
+        return User::byId($userId);
     }
 
 

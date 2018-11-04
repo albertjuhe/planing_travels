@@ -15,7 +15,6 @@ use App\Domain\Travel\Model\Travel;
 use App\Domain\User\Model\User;
 use App\Domain\User\Repository\UserRepository;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use App\Infrastructure\TravelBundle\Notification\TravelWasPublished;
 
 class PublishTravelService
 {
@@ -23,8 +22,6 @@ class PublishTravelService
     private $travelRepository;
     /** @var UserRepository */
     private $userRepository;
-    /** @var EventDispatcherInterface */
-    private $eventDispatcher;
 
     /**
      * AddTravelService constructor.
@@ -33,12 +30,10 @@ class PublishTravelService
      * @param EventDispatcherInterface $eventDispatcher
      */
     public function __construct(TravelRepository $travelRepository,
-                                UserRepository $userRepository,
-                                EventDispatcherInterface $eventDispatcher)
+                                UserRepository $userRepository)
     {
         $this->travelRepository = $travelRepository;
         $this->userRepository = $userRepository;
-        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -61,13 +56,6 @@ class PublishTravelService
 
         $travel->publish();
         $this->travelRepository->save($travel);
-
-        /**
-         * Publish travel
-
-        $travelWasPublished = new TravelWasPublished($travel,$user);
-        $this->eventDispatcher->dispatch(travelWasPublished::PUBLISH_TRAVEL_EVENT_REQUEST, $travelWasPublished);
-*/
 
         return $travel;
 

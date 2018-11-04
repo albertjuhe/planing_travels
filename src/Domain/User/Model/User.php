@@ -25,10 +25,10 @@ class User extends IdentifiableDomainObject implements UserInterface
 
     private $isActive;
 
-    /** @var \DateTime  */
+    /** @var \DateTime */
     protected $createdAt;
 
-    /** @var \DateTime  */
+    /** @var \DateTime */
     protected $updatedAt;
 
     protected $lastLogin;
@@ -55,6 +55,13 @@ class User extends IdentifiableDomainObject implements UserInterface
         $this->travel = new \Doctrine\Common\Collections\ArrayCollection();
         $this->location = new \Doctrine\Common\Collections\ArrayCollection();
         $this->travelsshared = new \Doctrine\Common\Collections\ArrayCollection();
+
+        $this->publishEvent();
+    }
+
+    public function publishEvent()
+    {
+
     }
 
     /**
@@ -62,7 +69,8 @@ class User extends IdentifiableDomainObject implements UserInterface
      * @param User $user
      * @return bool
      */
-    public function equalsTo(User $user ): bool  {
+    public function equalsTo(User $user): bool
+    {
         return $this->userId->equalsTo($user->userId);
     }
 
@@ -71,10 +79,25 @@ class User extends IdentifiableDomainObject implements UserInterface
      * @param int $anId
      * @return User
      */
-    public static function fromId(int $anId) {
+    public static function fromId(int $anId)
+    {
         $user = new self();
         $user->setId($anId);
         $user->userId = new UserId($user->id());
+
+        return $user;
+    }
+
+    /**
+     * Create from int Id
+     * @param int $anId
+     * @return User
+     */
+    public static function byId(int $anId)
+    {
+        $user = new self();
+        $user->userId = $anId;
+
         return $user;
     }
 
@@ -102,16 +125,19 @@ class User extends IdentifiableDomainObject implements UserInterface
     {
         return ($this->firstName !== $this->plainPassword && $this->username !== $this->plainPassword);
     }
+
     public function getUsername()
     {
         return $this->username;
     }
+
     public function getSalt()
     {
         // you *may* need a real salt depending on your encoder
         // see section on salt below
         return null;
     }
+
     public function getPassword(): String
     {
         return $this->password;
@@ -135,6 +161,7 @@ class User extends IdentifiableDomainObject implements UserInterface
             $this->password,
         ));
     }
+
     /** @see \Serializable::unserialize() */
     public function unserialize($serialized)
     {
@@ -157,6 +184,7 @@ class User extends IdentifiableDomainObject implements UserInterface
         $this->username = $username;
         return $this;
     }
+
     /**
      * Set password
      *
@@ -169,6 +197,7 @@ class User extends IdentifiableDomainObject implements UserInterface
         $this->password = $password;
         return $this;
     }
+
     /**
      * Set email
      *
@@ -181,6 +210,7 @@ class User extends IdentifiableDomainObject implements UserInterface
         $this->email = $email;
         return $this;
     }
+
     /**
      * Get email
      *
@@ -190,6 +220,7 @@ class User extends IdentifiableDomainObject implements UserInterface
     {
         return $this->email;
     }
+
     /**
      * Set isActive
      *
@@ -202,6 +233,7 @@ class User extends IdentifiableDomainObject implements UserInterface
         $this->isActive = $isActive;
         return $this;
     }
+
     /**
      * Get isActive
      *
@@ -211,6 +243,7 @@ class User extends IdentifiableDomainObject implements UserInterface
     {
         return $this->isActive;
     }
+
     /**
      * Set createdAt
      *
@@ -223,6 +256,7 @@ class User extends IdentifiableDomainObject implements UserInterface
         $this->createdAt = $createdAt;
         return $this;
     }
+
     /**
      * Get createdAt
      *
@@ -232,6 +266,7 @@ class User extends IdentifiableDomainObject implements UserInterface
     {
         return $this->createdAt;
     }
+
     /**
      * Set updatedAt
      *
@@ -244,6 +279,7 @@ class User extends IdentifiableDomainObject implements UserInterface
         $this->updatedAt = $updatedAt;
         return $this;
     }
+
     /**
      * Get updatedAt
      *
@@ -253,6 +289,7 @@ class User extends IdentifiableDomainObject implements UserInterface
     {
         return $this->updatedAt;
     }
+
     /**
      * Set lastLogin
      *
@@ -265,6 +302,7 @@ class User extends IdentifiableDomainObject implements UserInterface
         $this->lastLogin = $lastLogin;
         return $this;
     }
+
     /**
      * Get lastLogin
      *
@@ -274,6 +312,7 @@ class User extends IdentifiableDomainObject implements UserInterface
     {
         return $this->lastLogin;
     }
+
     /**
      * Set locale
      *
@@ -286,6 +325,7 @@ class User extends IdentifiableDomainObject implements UserInterface
         $this->locale = $locale;
         return $this;
     }
+
     /**
      * Get locale
      *
@@ -295,14 +335,17 @@ class User extends IdentifiableDomainObject implements UserInterface
     {
         return $this->locale;
     }
+
     public function getPlainPassword()
     {
         return $this->plainPassword;
     }
+
     public function setPlainPassword($password)
     {
         $this->plainPassword = $password;
     }
+
     /**
      * Set firstName
      *
@@ -315,6 +358,7 @@ class User extends IdentifiableDomainObject implements UserInterface
         $this->firstName = $firstName;
         return $this;
     }
+
     /**
      * Get firstName
      *
@@ -324,6 +368,7 @@ class User extends IdentifiableDomainObject implements UserInterface
     {
         return $this->firstName;
     }
+
     /**
      * Set lastName
      *
@@ -336,6 +381,7 @@ class User extends IdentifiableDomainObject implements UserInterface
         $this->lastName = $lastName;
         return $this;
     }
+
     /**
      * Get lastName
      *

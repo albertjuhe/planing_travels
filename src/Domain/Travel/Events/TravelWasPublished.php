@@ -8,12 +8,11 @@
 
 namespace App\Domain\Travel\Events;
 
-
-use Symfony\Component\EventDispatcher\Event;
+use App\Domain\Event\DomainEvent;
 use App\Domain\Travel\Model\Travel;
 use App\Domain\User\Model\User;
 
-class TravelWasPublished extends Event
+class TravelWasPublished implements DomainEvent
 {
     const PUBLISH_TRAVEL_EVENT_REQUEST = 'publish_travel_request_event';
 
@@ -72,7 +71,7 @@ class TravelWasPublished extends Event
     /**
      * @return \DateTime
      */
-    public function getOccuredOn(): \DateTime
+    public function occurredOn()
     {
         return $this->occuredOn;
     }

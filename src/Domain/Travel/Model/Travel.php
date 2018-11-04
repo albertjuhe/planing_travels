@@ -8,17 +8,15 @@
 
 namespace App\Domain\Travel\Model;
 
+use App\Domain\Event\DomainEventPublisher;
 use App\Domain\Gpx\Model\Gpx;
 use App\Domain\Location\Model\Location;
 use App\Domain\User\Model\User;
 use App\Domain\Travel\ValueObject\GeoLocation;
-use App\Domain\Common\Model\TriggerEventsTrait;
 use App\Domain\Travel\Events\TravelWasPublished;
 
 class Travel
 {
-    use TriggerEventsTrait;
-
     const TRAVEL_DRAFT = 10;
     const TRAVEL_PUBLISHED = 20;
 
@@ -389,7 +387,7 @@ class Travel
     public function publish() {
         $this->status = self::TRAVEL_PUBLISHED;
 
-        $this->trigger(
+        DomainEventPublisher::instance()->publish(
             new TravelWasPublished($this, $this->getUser())
         );
 
