@@ -52,7 +52,7 @@ class PublishTravelServiceTest extends TestCase
         $publishTravelCommand = new PublishTravelCommand($travel->getSlug(),$user);
         /** @var UpdateTravelService */
         $publishTravelService = new PublishTravelService($this->travelRepository,$this->userRepository);
-        $publishTravelService->execute($publishTravelCommand);
+        $publishTravelService->handle($publishTravelCommand);
 
         $travelPublished = $this->travelRepository->getTravelById(1);
         $this->assertEquals($travelPublished->getStatus(),Travel::TRAVEL_PUBLISHED);
