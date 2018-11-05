@@ -39,7 +39,7 @@ class PublishTravelService
      * @return Travel
      * @throws \Exception
      */
-    public function execute(PublishTravelCommand $command)
+    public function handle(PublishTravelCommand $command)
     {
         $travelSlug = $command->getTravelSlug();
         $user = $command->getUser();

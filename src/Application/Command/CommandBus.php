@@ -20,7 +20,6 @@ use App\Application\Command\Travel\AddTravelCommand;
 use App\Application\Command\Travel\BestTravelsListCommand;
 use App\Application\Command\Travel\ShowTravelBySlugCommand;
 use App\Infrastructure\UserBundle\Repository\DoctrineUserRepository;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Class CommandBus
@@ -35,32 +34,25 @@ class CommandBus
     private $doctrineTravelRepository;
     /** @var DoctrineUserRepository */
     private $doctrineUserRepository;
-    /** @var EventDispatcherInterface */
-    private $eventDispatcher;
 
      /**
      * CommandBus constructor.
      * @param DoctrineTravelRepository $doctrineTravelRepository
      * @param DoctrineUserRepository $doctrineUserRepository
-     * @param EventDispatcherInterface $eventDispatcher
-     */
+      */
     public function __construct(DoctrineTravelRepository $doctrineTravelRepository,
-                                DoctrineUserRepository $doctrineUserRepository,
-                                EventDispatcherInterface $eventDispatcher)
+                                DoctrineUserRepository $doctrineUserRepository)
     {
         //TODO Refactor to Tactician
         $this->handlers = [];
         $this->doctrineTravelRepository = $doctrineTravelRepository;
         $this->doctrineUserRepository = $doctrineUserRepository;
-        $this->eventDispatcher = $eventDispatcher;
 
         $this->addHandler(UpdateTravelCommand::class, new UpdateTravelService($this->doctrineTravelRepository));
         $this->addHandler(AddTravelCommand::class, new AddTravelService($this->doctrineTravelRepository,
-            $this->doctrineUserRepository,
-            $this->eventDispatcher));
+            $this->doctrineUserRepository));
         $this->addHandler(PublishTravelCommand::class, new PublishTravelService($this->doctrineTravelRepository,
-            $this->doctrineUserRepository,
-            $this->eventDispatcher));
+            $this->doctrineUserRepository));
         $this->addHandler(BestTravelsListCommand::class, new GetBestTravelsOrderedByService($this->doctrineTravelRepository));
         $this->addHandler(ShowTravelBySlugCommand::class, new ShowTravelService($this->doctrineTravelRepository));
     }

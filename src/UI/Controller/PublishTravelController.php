@@ -9,15 +9,17 @@
 namespace App\UI\Controller;
 
 use App\Application\Command\Travel\PublishTravelCommand;
-use App\Domain\Travel\Model\Travel;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Domain\User\Exceptions\UserDoesntExists;
-use App\Application\Command\CommandBus;
+use League\Tactician\CommandBus;
 
-class PublishTravelController extends BaseController
+class PublishTravelController extends Controller
 {
+    /** @var CommandBus */
+    private $commandBus;
 
     /**
      * ShowMyTravelsController constructor.
@@ -26,13 +28,13 @@ class PublishTravelController extends BaseController
      */
     public function __construct(CommandBus $commandBus)
     {
-        parent::__construct($commandBus);
+       $this->commandBus = $commandBus;
     }
 
     /**
      * @Route("/travel/publish/{slug}",name="publishTravel")
      * @param Request $request
-     * @param $_locale
+     * @param $slug
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      * @throws UserDoesntExists
      */
