@@ -14,7 +14,6 @@ use App\Domain\Travel\Repository\TravelRepository;
 use App\Domain\Travel\Model\Travel;
 use App\Domain\User\Model\User;
 use App\Domain\User\Repository\UserRepository;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class PublishTravelService
 {
@@ -27,7 +26,6 @@ class PublishTravelService
      * AddTravelService constructor.
      * @param TravelRepository $travelRepository
      * @param UserRepository $userRepository
-     * @param EventDispatcherInterface $eventDispatcher
      */
     public function __construct(TravelRepository $travelRepository,
                                 UserRepository $userRepository)

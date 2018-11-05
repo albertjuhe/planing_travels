@@ -3,6 +3,7 @@
 
 namespace App\Domain\Event;
 
+use App\Domain\Common\Model\TriggerEventsTrait;
 use App\Domain\Event\Repository\EventStore;
 
 /**
@@ -12,6 +13,8 @@ use App\Domain\Event\Repository\EventStore;
  */
 class PersistDomainEventSubscriber implements DomainEventSubscriber
 {
+    use TriggerEventsTrait;
+
     private $eventStore;
 
     /**
