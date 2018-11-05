@@ -26,3 +26,18 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+    travel.publish_handler:
+        class: App\Application\UseCases\Travel\PublishTravelService
+        arguments: ['@doctrine.travel.repository','@doctrine.user.repository']
+        tags:
+          - { name: tactician.handler, command: App\Application\Command\Travel\PublishTravelCommand}
+
+    App\Infrastructure\TravelBundle\Repository\DoctrineTravelRepository:
+        arguments: ['@doctrine']
+
+    doctrine.travel.repository: '@App\Infrastructure\TravelBundle\Repository\DoctrineTravelRepository'
+
+    App\Infrastructure\UserBundle\Repository\DoctrineUserRepository:
+        arguments: ['@doctrine']
+
+    doctrine.user.repository: '@App\Infrastructure\UserBundle\Repository\DoctrineUserRepository'
