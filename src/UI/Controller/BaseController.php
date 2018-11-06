@@ -10,7 +10,7 @@ namespace App\UI\Controller;
 
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use App\Application\Command\CommandBus;
+use League\Tactician\CommandBus;
 
 class BaseController extends Controller
 {

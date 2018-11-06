@@ -7,7 +7,6 @@ use App\Application\Command\Travel\AddTravelCommand;
 use App\Domain\Travel\Repository\TravelRepository;
 use App\Domain\Travel\Model\Travel;
 use App\Domain\User\Repository\UserRepository;
-use App\Domain\Travel\Events\TravelWasAdded;
 
 class AddTravelService
 {
@@ -34,12 +33,12 @@ class AddTravelService
      * @return Travel
      * @throws \Exception
      */
-    public function execute(AddTravelCommand $command)
+    public function handle(AddTravelCommand $command)
     {
         $travel = $command->getTravel();
         $user = $command->getUser();
 
-        $this->userRepository->ofIdOrFail($user->getUserId()->id());
+        $this->userRepository->ofIdOrFail($user->getUserId());
 
         $travel->setUser($user);
         $this->travelRepository->save($travel);

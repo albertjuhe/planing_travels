@@ -18,28 +18,23 @@ use App\Infrastructure\TravelBundle\Repository\DoctrineTravelRepository;
 use App\Domain\User\Exceptions\UserDoesntExists;
 use App\Infrastructure\TravelBundle\Form\UpdateTravelType;
 use App\Application\Command\Travel\UpdateTravelCommand;
-use App\Application\Command\CommandBus;
+use League\Tactician\CommandBus;
 
 class UpdateTravelController extends BaseController
 {
     /** @var DoctrineTravelRepository */
     private $travelRepository;
-    /** @var DoctrineUserRepository */
-    private $userRepository;
 
     /**
      * UpdateTravelController constructor.
      * @param DoctrineTravelRepository $travelRepository
-     * @param DoctrineUserRepository $userRepository
      * @param CommandBus $commandBus
      */
     public function __construct(DoctrineTravelRepository $travelRepository,
-                                DoctrineUserRepository $userRepository,
                                 CommandBus $commandBus)
     {
         parent::__construct($commandBus);
         $this->travelRepository = $travelRepository;
-        $this->userRepository = $userRepository;
     }
 
     /**

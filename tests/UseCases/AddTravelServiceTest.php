@@ -34,11 +34,11 @@ class AddTravelServiceTest extends TestCase
     public function testAddTravel() {
         $travel = new Travel();
         $travel->setId(self::TRAVELID);
-        $user = User::fromId(1);
+        $user = User::byId(1);
 
         $addTravelService = new AddTravelService($this->travelRepository,$this->userRepository);
         $command = new AddTravelCommand($travel,$user);
-        $addTravelService->execute($command);
+        $addTravelService->handle($command);
 
         $newTravel = $this->travelRepository->getTravelById(self::TRAVELID);
         $this->assertEquals($newTravel->getId(), $travel->getId());
@@ -47,11 +47,11 @@ class AddTravelServiceTest extends TestCase
     public function testAddTravelWithInvalidUser() {
         $this->expectExceptionObject(new UserDoesntExists);
         $travel = new Travel();
-        $user = User::fromId(0);
+        $user = User::byId(0);
 
         $addTravelService = new AddTravelService($this->travelRepository,$this->userRepository, $this->dispatcher );
         $command = new AddTravelCommand($travel,$user);
-        $addTravelService->execute($command);
+        $addTravelService->handle($command);
     }
 
 }

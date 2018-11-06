@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Domain\User\Exceptions\UserDoesntExists;
-use App\Application\Command\CommandBus;
+use League\Tactician\CommandBus;
 
 
 

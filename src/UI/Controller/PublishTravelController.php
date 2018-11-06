@@ -16,10 +16,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Domain\User\Exceptions\UserDoesntExists;
 use League\Tactician\CommandBus;
 
-class PublishTravelController extends Controller
+class PublishTravelController extends BaseController
 {
-    /** @var CommandBus */
-    private $commandBus;
 
     /**
      * ShowMyTravelsController constructor.
@@ -28,7 +26,7 @@ class PublishTravelController extends Controller
      */
     public function __construct(CommandBus $commandBus)
     {
-       $this->commandBus = $commandBus;
+        parent::__construct($commandBus);
     }
 
     /**

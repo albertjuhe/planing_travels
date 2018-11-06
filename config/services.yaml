@@ -26,12 +26,38 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+    # Command handler
     travel.publish_handler:
         class: App\Application\UseCases\Travel\PublishTravelService
         arguments: ['@doctrine.travel.repository','@doctrine.user.repository']
         tags:
           - { name: tactician.handler, command: App\Application\Command\Travel\PublishTravelCommand}
 
+    travel.update_handler:
+      class: App\Application\UseCases\Travel\UpdateTravelService
+      arguments: ['@doctrine.travel.repository']
+      tags:
+      - { name: tactician.handler, command: App\Application\Command\Travel\UpdateTravelCommand}
+
+    travel.add_handler:
+      class: App\Application\UseCases\Travel\AddTravelService
+      arguments: ['@doctrine.travel.repository','@doctrine.user.repository']
+      tags:
+      - { name: tactician.handler, command: App\Application\Command\Travel\AddTravelCommand}
+
+    travel.best_travels_handler:
+      class: App\Application\UseCases\Travel\GetBestTravelsOrderedByService
+      arguments: ['@doctrine.travel.repository']
+      tags:
+      - { name: tactician.handler, command: App\Application\Command\Travel\BestTravelsListCommand}
+
+    travel.show_handler:
+      class: App\Application\UseCases\Travel\ShowTravelService
+      arguments: ['@doctrine.travel.repository']
+      tags:
+      - { name: tactician.handler, command: App\Application\Command\Travel\ShowTravelBySlugCommand}
+
+  # Repository
     App\Infrastructure\TravelBundle\Repository\DoctrineTravelRepository:
         arguments: ['@doctrine']
 

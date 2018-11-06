@@ -3,21 +3,17 @@
 namespace App\UI\Controller;
 
 use App\Application\Command\Travel\BestTravelsListCommand;
-use App\Application\Command\CommandBus;
-use App\Infrastructure\TravelBundle\Repository\DoctrineTravelRepository;
+use League\Tactician\CommandBus;
 
 class BestTravelsListController extends BaseController
 {
-    /** @var DoctrineTravelRepository  */
-    private $travelRepository;
 
     /**
      * BestTravelsListController constructor.
-     * @param DoctrineTravelRepository $travelRepository
+     * @param CommandBus $commandBus
      */
-    public function __construct(DoctrineTravelRepository $travelRepository, CommandBus $commandBus)
+    public function __construct(CommandBus $commandBus)
     {
-        $this->travelRepository = $travelRepository;
         $this->commandBus = $commandBus;
     }
 

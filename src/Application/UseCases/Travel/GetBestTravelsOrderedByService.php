@@ -31,7 +31,7 @@ class GetBestTravelsOrderedByService
      * @param BestTravelsListCommand $command
      * @return mixed
      */
-    public function execute(BestTravelsListCommand $command) {
+    public function handle(BestTravelsListCommand $command) {
         $numberMaxOfTravels = $command->getNumberMaxOfTravels();
         $orderedBy = $command->getOrderedBy();
         return $this->travelRepository->TravelsAllOrderedBy($numberMaxOfTravels);

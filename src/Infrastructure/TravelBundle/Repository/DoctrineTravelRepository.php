@@ -73,7 +73,6 @@ class DoctrineTravelRepository extends ServiceEntityRepository implements Travel
      */
     public function save(Travel $travel) {
         $this->_em->persist($travel);
-        $this->_em->flush($travel);
     }
 
 }

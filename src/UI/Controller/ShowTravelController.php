@@ -4,25 +4,18 @@
 namespace App\UI\Controller;
 
 use App\Application\Command\Travel\ShowTravelBySlugCommand;
-use App\Application\UseCases\Travel\ShowTravelService;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Infrastructure\TravelBundle\Repository\DoctrineTravelRepository;
-use App\Application\Command\CommandBus;
+use League\Tactician\CommandBus;
 
 class ShowTravelController extends BaseController
 {
-    /** @var DoctrineTravelRepository */
-    private $travelRepository;
-
     /**
      * ShowTravelController constructor.
      * @param DoctrineTravelRepository $travelRepository
      */
-    public function __construct(DoctrineTravelRepository $travelRepository, CommandBus $commandBus)
+    public function __construct(CommandBus $commandBus)
     {
         parent::__construct($commandBus);
-        $this->travelRepository = $travelRepository;
     }
 
     /**
