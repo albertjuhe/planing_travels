@@ -57,13 +57,26 @@ services:
       tags:
       - { name: tactician.handler, command: App\Application\Command\Travel\ShowTravelBySlugCommand}
 
-  # Repository
+   # Tactician middleware Store domain events
+    App\Application\Middleware\DomainEventsMiddleware:
+        arguments: ['@doctrine.travel_event.repository']
+
+    tactician.middleware.domainEventStore: '@App\Application\Middleware\DomainEventsMiddleware'
+
+   # Repository travel
     App\Infrastructure\TravelBundle\Repository\DoctrineTravelRepository:
         arguments: ['@doctrine']
 
     doctrine.travel.repository: '@App\Infrastructure\TravelBundle\Repository\DoctrineTravelRepository'
 
+    # Repository User
     App\Infrastructure\UserBundle\Repository\DoctrineUserRepository:
         arguments: ['@doctrine']
 
     doctrine.user.repository: '@App\Infrastructure\UserBundle\Repository\DoctrineUserRepository'
+
+    # Event store repository
+    App\Infrastructure\EventBundle\Repository\DoctrineEventStore:
+      arguments: ['@doctrine','@jms_serializer']
+
+    doctrine.travel_event.repository: '@App\Infrastructure\EventBundle\Repository\DoctrineEventStore'

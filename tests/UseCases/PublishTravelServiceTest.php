@@ -69,6 +69,7 @@ class PublishTravelServiceTest extends TestCase
  * @package App\Tests\UseCases
  */
 class DomainEventAllSubscriber implements DomainEventSubscriber {
+
     use TriggerEventsTrait;
 
     public function handle(DomainEvent $domainEvent)

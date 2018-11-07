@@ -4,4 +4,5 @@ tactician:
       middleware:
         - tactician.middleware.locking
         - tactician.middleware.doctrine
+        - tactician.middleware.domainEventStore
         - tactician.middleware.command_handler
