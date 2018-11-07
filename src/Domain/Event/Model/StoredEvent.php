@@ -3,7 +3,7 @@
 
 namespace App\Domain\Event\Model;
 
-use App\Domain\Common\Model\DomainEvent;
+use App\Domain\Event\DomainEvent;
 
 class StoredEvent implements DomainEvent
 {
