@@ -55,7 +55,7 @@ class Travel
     /** @var int */
     private $watch;
 
-    /** @var array */
+    /** @var Gpx */
     private $gpx;
 
     /** @var User */
@@ -83,7 +83,6 @@ class Travel
         $this->setStarts(0);
         $this->setWatch(0);
         $this->geoLocation = new GeoLocation(0,0,0,0,0,0);
-        $this->gpx = new \Doctrine\Common\Collections\ArrayCollection();
         $this->sharedusers = new \Doctrine\Common\Collections\ArrayCollection();
         $this->status = self::TRAVEL_DRAFT;
     }
@@ -294,7 +293,7 @@ class Travel
     }
 
     /**
-     * @return array
+     * @return Gpx
      */
     public function getGpx()
     {
