@@ -6,7 +6,7 @@
  * Time: 19:59
  */
 
-namespace App\UI\Controller;
+namespace App\UI\Controller\http;
 
 use App\Domain\User\Exceptions\UserDoesntExists;
 use App\Domain\User\Model\User;

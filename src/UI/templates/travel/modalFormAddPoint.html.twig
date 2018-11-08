@@ -21,7 +21,7 @@
                         <textarea id="comment" placeholder="Enter comment..."></textarea>
                         <label class="checkbox">Type of point
                             <select id="pointtype">
-                                {{ render(controller('App\\UI\\Controller\\GetAllLocationsTypeController::getAllLocationsType')) }}
+                                {{ render(controller('App\\UI\\Controller\\http\\GetAllLocationsTypeController::getAllLocationsType')) }}
                             </select>
                         </label>
                         <input id="travel" type="hidden" value="{{ travel.id }}"/><br/>

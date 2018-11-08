@@ -1,5 +1,5 @@
 <?php
-namespace App\UI\Controller;
+namespace App\UI\Controller\http;
 
 use App\Application\Command\Travel\AddTravelCommand;
 use App\Domain\Travel\Model\Travel;

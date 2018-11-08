@@ -6,7 +6,7 @@
  * Time: 19:14
  */
 
-namespace App\UI\Controller;
+namespace App\UI\Controller\http;
 
 use App\Application\Command\Travel\PublishTravelCommand;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;

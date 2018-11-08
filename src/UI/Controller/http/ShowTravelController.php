@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\UI\Controller;
+namespace App\UI\Controller\http;
 
 use App\Application\Command\Travel\ShowTravelBySlugCommand;
 use Symfony\Component\Routing\Annotation\Route;

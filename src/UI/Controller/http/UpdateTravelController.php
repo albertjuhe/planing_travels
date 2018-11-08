@@ -5,8 +5,7 @@
  * Date: 03/10/2018
  * Time: 07:10
  */
-
-namespace App\UI\Controller;
+namespace App\UI\Controller\http;
 
 use App\Domain\Travel\Model\Travel;
 use App\Domain\User\Model\User;

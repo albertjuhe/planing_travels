@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\UI\Controller;
+namespace App\UI\Controller\http;
 
 use App\Infrastructure\TypeLocationBundle\Repository\DoctrineTypeLocation;
 use App\Domain\TypeLocation\Model\TypeLocation;
