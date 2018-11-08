@@ -3,11 +3,17 @@ App\Domain\Event\Model\StoredEvent:
      table: event
      repositoryClass: App\Infrastructure\EventBundle\Repository\DoctrineEventStore
      id:
-       eventId:
-          type: integer
-          column: id
-          generator:
-          strategy: AUTO
+        eventId:
+            type: integer
+            scale: 0
+            length: null
+            unique: false
+            nullable: false
+            precision: 0
+            id: true
+            column: id
+            generator:
+              strategy: IDENTITY
      fields:
         eventBody:
           column: body

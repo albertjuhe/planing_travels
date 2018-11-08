@@ -125,7 +125,7 @@ App\Domain\User\Model\User:
                         name: travel_id
                         unique: false
                         nullable: false
-                        onDelete: null
+                        onDelete: nullD
                         columnDefinition: null
                         referencedColumnName: id
                 inverseJoinColumns:

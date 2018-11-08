@@ -33,7 +33,7 @@ class TravelWasPublished implements DomainEvent
     {
         $this->travel = $travel;
         $this->user = $user;
-        $this->occuredOn = (new \DateTimeImmutable())->getTimestamp();
+        $this->occuredOn = new \DateTime();
     }
 
     /**
