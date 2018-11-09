@@ -8,10 +8,11 @@
 
 namespace App\Domain\Travel\Events;
 
+
 use App\Domain\Event\DomainEvent;
 use App\Domain\Travel\Model\Travel;
 
-class TravelWasAdded implements DomainEvent
+class TravelWasUpdated implements DomainEvent
 {
     const ADD_TRAVEL_EVENT_REQUEST = 'add_travel_request_event';
 
@@ -23,6 +24,7 @@ class TravelWasAdded implements DomainEvent
     /**
      * travelWasAdded constructor.
      * @param Travel $travel
+     * @param User $user
      * @throws \Exception
      */
     public function __construct(Travel $travel)
@@ -30,6 +32,15 @@ class TravelWasAdded implements DomainEvent
         $this->travel = $travel;
         $this->occuredOn = new \DateTime();
     }
+
+    /**
+     * @return \DateTime
+     */
+    public function occurredOn()
+    {
+        return $this->occuredOn;
+    }
+
 
     /**
      * @return Travel
@@ -63,12 +74,5 @@ class TravelWasAdded implements DomainEvent
         $this->occuredOn = $occuredOn;
     }
 
-    /**
-     * @return \DateTime
-     */
-    public function occurredOn()
-    {
-        return $this->occuredOn;
-    }
 
 }

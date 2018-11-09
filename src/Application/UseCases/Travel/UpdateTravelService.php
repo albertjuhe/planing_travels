@@ -8,6 +8,8 @@
 
 namespace App\Application\UseCases\Travel;
 
+use App\Domain\Event\DomainEventPublisher;
+use App\Domain\Travel\Events\TravelWasUpdated;
 use App\Domain\Travel\Exceptions\InvalidTravelUser;
 use App\Domain\User\Model\User;
 use App\Domain\Travel\Repository\TravelRepository;
@@ -42,9 +44,10 @@ class UpdateTravelService
         $user = $commnand->user();
 
         //Only the owner can modify the travel
-        //TODO - Check the user Id, this is not the correct way
-        if (!$travel->getUser()->getUserId()==$user->getUserId()) throw new InvalidTravelUser();
+        if (!$travel->getUser()->getUserId()==$user->getUserId())
+            throw new InvalidTravelUser();
 
+        DomainEventPublisher::instance()->publish(new TravelWasUpdated($travel));
         $this->travelRepository->save($travel);
     }
 

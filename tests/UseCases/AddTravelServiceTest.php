@@ -19,8 +19,6 @@ class AddTravelServiceTest extends TestCase
     private $travelRepository;
     /** @var InMemoryUserRepository */
     private $userRepository;
-    /** @var  EventDispatcherInterface */
-    private $dispatcher;
 
     public function setUp()
     {
@@ -49,7 +47,7 @@ class AddTravelServiceTest extends TestCase
         $travel = new Travel();
         $user = User::byId(0);
 
-        $addTravelService = new AddTravelService($this->travelRepository,$this->userRepository, $this->dispatcher );
+        $addTravelService = new AddTravelService($this->travelRepository,$this->userRepository);
         $command = new AddTravelCommand($travel,$user);
         $addTravelService->handle($command);
     }

@@ -4,9 +4,12 @@
 namespace App\Application\UseCases\Travel;
 
 use App\Application\Command\Travel\AddTravelCommand;
+use App\Domain\Event\DomainEventPublisher;
+use App\Domain\Travel\Events\TravelWasAdded;
 use App\Domain\Travel\Repository\TravelRepository;
 use App\Domain\Travel\Model\Travel;
 use App\Domain\User\Repository\UserRepository;
+use Symfony\Bridge\Doctrine\Tests\Fixtures\User;
 
 class AddTravelService
 {
@@ -35,16 +38,17 @@ class AddTravelService
      */
     public function handle(AddTravelCommand $command)
     {
+        /** @var Travel $travel */
         $travel = $command->getTravel();
+        /** @var User $user */
         $user = $command->getUser();
 
         $this->userRepository->ofIdOrFail($user->getUserId());
 
         $travel->setUser($user);
+        DomainEventPublisher::instance()->publish(new TravelWasAdded($travel));
         $this->travelRepository->save($travel);
 
-
         return $travel;
-
     }
 }
