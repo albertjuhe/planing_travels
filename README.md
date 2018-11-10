@@ -26,6 +26,8 @@ Create a map and add Locations, Routes, GPS tracks.
 1) ElasticSearch
 1) RabbitMQ
 1) Comments travels and descriptions with markdown
+1) OERPUB Blob travel
+1) Docker
 
 
 
