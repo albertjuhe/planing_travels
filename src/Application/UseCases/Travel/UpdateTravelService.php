@@ -47,7 +47,7 @@ class UpdateTravelService
         if (!$travel->getUser()->getUserId()==$user->getUserId())
             throw new InvalidTravelUser();
 
-        DomainEventPublisher::instance()->publish(new TravelWasUpdated($travel));
+        DomainEventPublisher::instance()->publish(new TravelWasUpdated($travel->toArray()));
         $this->travelRepository->save($travel);
     }
 

@@ -23,11 +23,10 @@ class TravelWasUpdated implements DomainEvent
 
     /**
      * travelWasAdded constructor.
-     * @param Travel $travel
-     * @param User $user
+     * @param array $travel
      * @throws \Exception
      */
-    public function __construct(Travel $travel)
+    public function __construct(array $travel)
     {
         $this->travel = $travel;
         $this->occuredOn = new \DateTime();
@@ -45,7 +44,7 @@ class TravelWasUpdated implements DomainEvent
     /**
      * @return Travel
      */
-    public function getTravel(): Travel
+    public function getTravel(): array
     {
         return $this->travel;
     }
@@ -53,7 +52,7 @@ class TravelWasUpdated implements DomainEvent
     /**
      * @param Travel $travel
      */
-    public function setTravel(Travel $travel): void
+    public function setTravel(array $travel): void
     {
         $this->travel = $travel;
     }

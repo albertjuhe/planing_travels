@@ -9,6 +9,7 @@ App\Domain\Travel\Model\Travel:
             unique: false
             nullable: false
             precision: 0
+            groups: ['elastica']
             id: true
             generator:
                 strategy: IDENTITY
@@ -20,6 +21,7 @@ App\Domain\Travel\Model\Travel:
             unique: false
             nullable: false
             precision: 0
+            groups: ['elastica']
             column: created_at
         updatedAt:
             type: datetime
@@ -28,6 +30,7 @@ App\Domain\Travel\Model\Travel:
             unique: false
             nullable: false
             precision: 0
+            groups: ['elastica']
             column: updated_at
         title:
             type: string
@@ -35,10 +38,12 @@ App\Domain\Travel\Model\Travel:
             length: 255
             unique: false
             nullable: false
+            groups: ['elastica']
             precision: 0
         slug:
            type: string
            length: 500
+           groups: ['elastica']
            gedmo:
               translatable: {}
               slug:
@@ -51,6 +56,7 @@ App\Domain\Travel\Model\Travel:
             length: 255
             unique: false
             nullable: true
+            groups: ['elastica']
             precision: 0
         startAt:
             type: datetime
@@ -58,6 +64,7 @@ App\Domain\Travel\Model\Travel:
             length: null
             unique: false
             nullable: false
+            groups: ['elastica']
             precision: 0
             column: start_at
         endAt:
@@ -67,6 +74,7 @@ App\Domain\Travel\Model\Travel:
             unique: false
             nullable: false
             precision: 0
+            groups: ['elastica']
             column: end_at
         description:
             type: text
@@ -74,6 +82,7 @@ App\Domain\Travel\Model\Travel:
             length: null
             unique: false
             nullable: true
+            groups: ['elastica']
             precision: 0
         starts:
             type: integer
@@ -81,6 +90,7 @@ App\Domain\Travel\Model\Travel:
             length: null
             unique: false
             nullable: true
+            groups: ['elastica']
             precision: 0
         watch:
             type: integer
@@ -88,6 +98,7 @@ App\Domain\Travel\Model\Travel:
             length: null
             unique: false
             nullable: true
+            groups: ['elastica']
             precision: 0
         status:
             type: integer
@@ -95,6 +106,7 @@ App\Domain\Travel\Model\Travel:
             length: null
             unique: false
             nullable: true
+            groups: ['elastica']
             precision: 0
     embedded:
         geoLocation:
@@ -107,6 +119,7 @@ App\Domain\Travel\Model\Travel:
             fetch: LAZY
             mappedBy: null
             inversedBy: travel
+            max_depth: 1
             joinColumns:
                 user_id:
                     referencedColumnName: id
@@ -120,6 +133,7 @@ App\Domain\Travel\Model\Travel:
             mappedBy: travel
             inversedBy: null
             orphanRemoval: false
+            max_depth: 1
             orderBy: null
         gpx:
             targetEntity: App\Domain\Gpx\Model\Gpx
@@ -129,6 +143,7 @@ App\Domain\Travel\Model\Travel:
             mappedBy: travel
             inversedBy: null
             orphanRemoval: false
+            max_depth: 1
             orderBy: null
     manyToMany:
         sharedusers:
@@ -138,5 +153,6 @@ App\Domain\Travel\Model\Travel:
             fetch: LAZY
             mappedBy: travelsshared
             inversedBy: null
+            max_depth: 1
             joinTable: {  }
             orderBy: null

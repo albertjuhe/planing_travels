@@ -71,16 +71,6 @@ class Location {
     }
 
     /**
-     * Hook on pre-update operations
-     * @ORM\PreUpdate
-     */
-    public function preUpdate()
-    {
-        $this->updatedAt = new \DateTime;
-    }
-
-
-    /**
      * Get id
      *
      * @return integer
