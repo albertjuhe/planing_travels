@@ -124,6 +124,4 @@ App\Domain\Location\Model\Location:
             inversedBy: null
             orphanRemoval: false
             orderBy: null
-    lifecycleCallbacks:
-        preUpdate:
-            - preUpdate
+

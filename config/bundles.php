@@ -24,5 +24,6 @@ return [
     App\Infrastructure\UserBundle\UserBundle::class => ['all' => true],
     App\Infrastructure\EventBundle\EventBundle::class => ['all' => true],
     Symfony\Bundle\MonologBundle\MonologBundle::class => ['all' => true],
-    League\Tactician\Bundle\TacticianBundle::class => ['all' => true ]
+    League\Tactician\Bundle\TacticianBundle::class => ['all' => true],
+    FOS\ElasticaBundle\FOSElasticaBundle::class => ['all' => true],
 ];

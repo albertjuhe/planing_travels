@@ -385,9 +385,14 @@ class Travel
      */
     public function publish() {
         $this->status = self::TRAVEL_PUBLISHED;
+        $this->publishedAt = new \DateTime();
 
         DomainEventPublisher::instance()->publish(
-            new TravelWasPublished($this, $this->getUser())
+            new TravelWasPublished([
+                'id' => $this->getId(),
+                'publishedAt' => $this->getPublishedAt(),
+                'status' => $this->getStatus()
+            ], $this->getUser()->getUserId())
         );
 
         return $this;
@@ -415,6 +420,29 @@ class Travel
     public function setGeoLocation($geoLocation): void
     {
         $this->geoLocation = $geoLocation;
+    }
+
+    /**
+     * info
+     * @return array
+     */
+    public function toArray() {
+        return [
+            'id' => $this->id,
+            'title' => $this->getTitle(),
+            'description' => $this->getDescription(),
+            'createdAt' => $this->getCreatedAt(),
+            'updatedAt' => $this->getUpdatedAt(),
+            'slug' => $this->getSlug(),
+            'latitude' => $this->getGeoLocation()->lat(),
+            'longitud' => $this->getGeoLocation()->lng(),
+            'startAt' => $this->getStartAt(),
+            'endAt' => $this->getEndAt(),
+            'userId' => $this->getUser()->getUserId(),
+            'username' => $this->getUser()->getUsername(),
+            'publishedAt' => $this->getPublishedAt(),
+            'status' => $this->getStatus()
+            ];
     }
 
 }

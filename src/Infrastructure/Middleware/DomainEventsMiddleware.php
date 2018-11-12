@@ -6,7 +6,7 @@
  * Time: 19:23
  */
 
-namespace App\Application\Middleware;
+namespace App\Infrastructure\Middleware;
 
 
 use App\Domain\Event\DomainEventPublisher;

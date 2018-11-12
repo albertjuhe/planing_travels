@@ -61,7 +61,7 @@ services:
     App\Application\Middleware\DomainEventsMiddleware:
         arguments: ['@doctrine.travel_event.repository']
 
-    tactician.middleware.domainEventStore: '@App\Application\Middleware\DomainEventsMiddleware'
+    tactician.middleware.domainEventStore: '@App\Infrastructure\Middleware\DomainEventsMiddleware'
 
    # Repository travel
     App\Infrastructure\TravelBundle\Repository\DoctrineTravelRepository:

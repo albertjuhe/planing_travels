@@ -9,27 +9,25 @@
 namespace App\Domain\Travel\Events;
 
 use App\Domain\Event\DomainEvent;
-use App\Domain\Travel\Model\Travel;
-use App\Domain\User\Model\User;
 
 class TravelWasPublished implements DomainEvent
 {
     const PUBLISH_TRAVEL_EVENT_REQUEST = 'publish_travel_request_event';
 
-    /** @var Travel */
+    /** @var array */
     private $travel;
-    /** @var User */
+    /** @var int */
     private $user;
     /** @var \DateTime */
     private $occuredOn;
 
     /**
      * travelWasAdded constructor.
-     * @param Travel $travel
-     * @param User $user
+     * @param array $travel
+     * @param int $user
      * @throws \Exception
      */
-    public function __construct(Travel $travel, User $user)
+    public function __construct(array $travel, int $user)
     {
         $this->travel = $travel;
         $this->user = $user;
@@ -37,19 +35,35 @@ class TravelWasPublished implements DomainEvent
     }
 
     /**
-     * @return Travel
+     * @return array
      */
-    public function getTravel(): Travel
+    public function getTravel(): array
     {
         return $this->travel;
     }
 
     /**
-     * @return User
+     * @param array $travel
      */
-    public function getUser(): User
+    public function setTravel(array $travel): void
+    {
+        $this->travel = $travel;
+    }
+
+    /**
+     * @return int
+     */
+    public function getUser(): int
     {
         return $this->user;
+    }
+
+    /**
+     * @param int $user
+     */
+    public function setUser(int $user): void
+    {
+        $this->user = $user;
     }
 
     /**

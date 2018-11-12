@@ -1,0 +1,35 @@
+# Read the documentation: https://github.com/FriendsOfSymfony/FOSElasticaBundle/blob/master/Resources/doc/setup.md
+fos_elastica:
+    clients:
+        default: { host: localhost, port: 9200 }
+    indexes:
+        travel:
+            types:
+                travel:
+                    properties:
+                        id:
+                            type: integer
+                        createdAt: ~
+                        updatedAt: ~
+                        title:
+                            type: text
+                        slug:
+                            type:
+                                text
+                        photo: ~
+                        startAt: ~
+                        endAt: ~
+                        description:
+                            type: text
+                        starts: ~
+                        watch: ~
+                        status: ~
+                    persistence:
+                        driver: orm
+                        model: App\Infrastructure\TravelBundle\Resources\config\persistence\Travel.orm.yml
+                        provider: ~
+                        listener:
+                            insert: false
+                            update: false
+                            delete: false
+                        finder: ~
