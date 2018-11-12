@@ -50,15 +50,7 @@ class TravelWasUpdated implements DomainEvent
         return $this->travel;
     }
 
-    /**
-     * @param Travel $travel
-     */
-    public function setTravel(Travel $travel): void
-    {
-        $this->travel = $travel;
-    }
-
-    /**
+  /**
      * @return \DateTime
      */
     public function getOccuredOn(): \DateTime
