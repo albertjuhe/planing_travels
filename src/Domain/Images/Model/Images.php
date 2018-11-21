@@ -18,10 +18,8 @@ class Images
 
     private $location;
 
-
     public function __construct()
     {
-
         $this->updatedAt = new \DateTime;
         $this->createdAt = new \DateTime;
     }

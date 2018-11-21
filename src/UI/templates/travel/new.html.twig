@@ -18,18 +18,18 @@
                 {% endfor %}
                 {{ form_start(travelForm) }}
                 {{ form_row(travelForm.title) }}
-                {{ form_row(travelForm.description, {'attr': {'ng-model': 'description'}})  }}
+                {{ form_row(travelForm.description)  }}
                 {{ form_row(travelForm.startAt) }}
                 {{ form_row(travelForm.endAt) }}
-                {{ form_row(travelForm.geoLocation.lat, {'attr': {'ng-model': 'lat'}}) }}
-                {{ form_row(travelForm.geoLocation.lng, {'attr': {'ng-model': 'lng'}}) }}
-                {{ form_row(travelForm.geoLocation.lat0, {'attr': {'ng-model': 'lat0'}}) }}
-                {{ form_row(travelForm.geoLocation.lng0, {'attr': {'ng-model': 'lng0'}}) }}
-                {{ form_row(travelForm.geoLocation.lat1, {'attr': {'ng-model': 'lat1'}}) }}
-                {{ form_row(travelForm.geoLocation.lng1, {'attr': {'ng-model': 'lng1'}}) }}
+                {{ form_row(travelForm.geoLocation.lat) }}
+                {{ form_row(travelForm.geoLocation.lng) }}
+                {{ form_row(travelForm.geoLocation.lat0) }}
+                {{ form_row(travelForm.geoLocation.lng0) }}
+                {{ form_row(travelForm.geoLocation.lat1) }}
+                {{ form_row(travelForm.geoLocation.lng1) }}
                 {{ form_widget(travelForm) }}
 
-                <button type="submit" class="btn btn-primary">Save</button>
+                <input type="submit" class="btn btn-primary" value="Save"/>
                 {{ form_end(travelForm) }}
             </div>
             <div class="col-sm-8">

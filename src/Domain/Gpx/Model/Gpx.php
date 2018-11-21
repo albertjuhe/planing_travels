@@ -46,7 +46,8 @@ class Gpx
      * @param Gpx $gpx
      * @return bool
      */
-    public function equals(Gpx $gpx) {
+    public function equals(Gpx $gpx)
+    {
         return $this->id === $gpx->getId();
     }
 

@@ -53,7 +53,6 @@ class DoctrineEventStore extends ServiceEntityRepository implements EventStore
 
     public function save(StoredEvent $storedEvent) {
         $this->_em->persist($storedEvent);
-       // $this->_em->flush($storedEvent);
     }
 
 }

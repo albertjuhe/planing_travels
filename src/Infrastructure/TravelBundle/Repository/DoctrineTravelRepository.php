@@ -19,7 +19,8 @@ class DoctrineTravelRepository extends ServiceEntityRepository implements Travel
         parent::__construct($registry, Travel::class);
     }
 
-    public function ofSlugOrFail(string $travelSlug): Travel {
+    public function ofSlugOrFail(string $travelSlug): Travel
+    {
         /** @var Travel $travel */
         $travel = $this->findOneBy(['slug' => $travelSlug]);
         if (null === $travel) {
@@ -33,7 +34,8 @@ class DoctrineTravelRepository extends ServiceEntityRepository implements Travel
      * @param int $maximResults
      * @return mixed|void
      */
-    public function TravelsAllOrderedBy($maximResults = 10) {
+    public function TravelsAllOrderedBy($maximResults = 10)
+    {
         $q = $this->createQueryBuilder('t')
             ->leftJoin('t.user','user')
             ->addOrderBy('t.starts')

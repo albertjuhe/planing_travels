@@ -35,7 +35,8 @@ class SignInUserService
     /**
      * Sign User
      */
-    public function execute() {
+    public function execute()
+    {
         // get the login error if there is one
         $this->error = $this->authUtils->getLastAuthenticationError();
         // last username entered by the user

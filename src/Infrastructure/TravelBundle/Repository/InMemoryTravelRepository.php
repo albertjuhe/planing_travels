@@ -65,7 +65,7 @@ class InMemoryTravelRepository implements TravelRepository
      */
     public function getAllTravelsByUser(User $user)
     {
-      return $this->findBy('userId',$user->getUserId());
+      return $this->findByKeyValue('userId',$user->getUserId());
     }
 
     public function getTravelById(int $id): Travel
@@ -77,11 +77,11 @@ class InMemoryTravelRepository implements TravelRepository
 
     public function findTravelBySlug(string $slug): Travel
     {
-        $travels = $this->findBy('slug',$slug);
+        $travels = $this->findByKeyValue('slug',$slug);
         return (sizeof($travels)>0)?$travels[0]:null;
     }
 
-    private function findBy(string $key, string $value) {
+    private function findByKeyValue(string $key, string $value) {
         $result= [];
 
         $total =  array_column($this->travel, $key);
@@ -95,6 +95,16 @@ class InMemoryTravelRepository implements TravelRepository
     public function ofSlugOrFail(string $slug)
     {
        return $this->findTravelBySlug($slug);
+    }
+
+    public function find($id)
+    {
+        // TODO: Implement find() method.
+    }
+
+    public function findBy(array $criteria)
+    {
+        // TODO: Implement findBy() method.
     }
 
 

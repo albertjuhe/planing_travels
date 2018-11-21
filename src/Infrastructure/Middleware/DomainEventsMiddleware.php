@@ -21,13 +21,12 @@ class DomainEventsMiddleware implements Middleware
     public function __construct(EventStore $eventStore)
     {
         $this->eventStore = $eventStore;
+        $persistDomainEventSubscriber = new PersistDomainEventSubscriber($this->eventStore);
+        DomainEventPublisher::instance()->subscribe($persistDomainEventSubscriber);
     }
 
     public function execute($command, callable $next)
     {
-        $persistDomainEventSubscriber = new PersistDomainEventSubscriber($this->eventStore);
-        DomainEventPublisher::instance()->subscribe($persistDomainEventSubscriber);
-
         $returnValue = $next($command);
 
         return $returnValue;

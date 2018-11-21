@@ -23,7 +23,10 @@ class SignUpUserService
      * @param $userRepository
      * @param $userPasswordEncoderInterface
      */
-    public function __construct(UserRepository $userRepository, UserPasswordEncoderInterface $userPasswordEncoderInterface)
+    public function __construct(
+        UserRepository $userRepository,
+        UserPasswordEncoderInterface $userPasswordEncoderInterface
+    )
     {
         $this->userRepository = $userRepository;
         $this->userPasswordEncoderInterface = $userPasswordEncoderInterface;

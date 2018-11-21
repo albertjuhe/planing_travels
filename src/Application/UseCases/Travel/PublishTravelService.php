@@ -28,7 +28,8 @@ class PublishTravelService
      * @param UserRepository $userRepository
      */
     public function __construct(TravelRepository $travelRepository,
-                                UserRepository $userRepository)
+                                UserRepository $userRepository
+    )
     {
         $this->travelRepository = $travelRepository;
         $this->userRepository = $userRepository;

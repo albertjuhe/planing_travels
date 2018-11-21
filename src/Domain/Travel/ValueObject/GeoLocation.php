@@ -34,7 +34,14 @@ class GeoLocation
      * @param float $latitud1
      * @param float $longitud1
      */
-    public function __construct(float $latitud,float $longitud,float $latitud0,float $longitud0,float $latitud1,float $longitud1)
+    public function __construct(
+        float $latitud,
+        float $longitud,
+        float $latitud0,
+        float $longitud0,
+        float $latitud1,
+        float $longitud1
+    )
     {
         $this->lat = $latitud;
         $this->lng = $longitud;

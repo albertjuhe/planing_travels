@@ -9,21 +9,28 @@ fos_elastica:
                     properties:
                         id:
                             type: integer
-                        createdAt: ~
-                        updatedAt: ~
+                        createdAt:
+                            type: date
+                        updatedAt:
+                            type: date
                         title:
                             type: text
                         slug:
-                            type:
-                                text
+                            type: text
                         photo: ~
-                        startAt: ~
-                        endAt: ~
+                        startAt:
+                            type: date
+                        endAt:
+                            type: date
                         description:
                             type: text
+                        publishedAt:
+                            type: date
                         starts: ~
                         watch: ~
                         status: ~
+                        geolocation:
+                            type: geo_point
                     persistence:
                         driver: orm
                         model: App\Infrastructure\TravelBundle\Resources\config\persistence\Travel.orm.yml

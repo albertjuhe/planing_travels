@@ -101,13 +101,15 @@ class Travel
      * @param GeoLocation $geolocation
      * @return Travel
      */
-    public static function fromGeoLocation(GeoLocation $geolocation): Travel {
+    public static function fromGeoLocation(GeoLocation $geolocation): Travel
+    {
         $travel = new self();
         $travel->setGeoLocation($geolocation);
         return $travel;
     }
 
-    public static function fromTitleAndGeolocationAndUser(string $title, GeoLocation $geolocation, User $user) {
+    public static function fromTitleAndGeolocationAndUser(string $title, GeoLocation $geolocation, User $user)
+    {
         $travel = self::fromGeoLocation($geolocation);
         $travel->setTitle($title);
         $travel->setUser($user);
@@ -383,7 +385,8 @@ class Travel
     /**
      * Publish the travel, is visible for all
      */
-    public function publish() {
+    public function publish()
+    {
         $this->status = self::TRAVEL_PUBLISHED;
         $this->publishedAt = new \DateTime();
 
@@ -426,9 +429,9 @@ class Travel
      * info
      * @return array
      */
-    public function toArray() {
+    public function toArray()
+    {
         return [
-            'id' => $this->id,
             'title' => $this->getTitle(),
             'description' => $this->getDescription(),
             'createdAt' => $this->getCreatedAt(),

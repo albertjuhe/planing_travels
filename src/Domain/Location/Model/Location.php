@@ -58,7 +58,11 @@ class Location {
         $this->createdAt = new \DateTime;
     }
 
-    static public function fromIdAndTitle(int $id, string $title) {
+    static public function fromIdAndTitle(
+        int $id,
+        string $title
+    )
+    {
         $location = new self();
         $location->setTitle($title);
         $location->id = $id;
@@ -66,7 +70,8 @@ class Location {
         return $location;
     }
 
-    public function equals(Location $location) {
+    public function equals(Location $location)
+    {
         return $this->id === $location->getId();
     }
 

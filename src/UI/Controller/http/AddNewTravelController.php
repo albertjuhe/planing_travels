@@ -32,7 +32,8 @@ class AddNewTravelController extends BaseController
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      * @throws UserDoesntExists
      */
-    public function newTravel(Request $request,$_locale) {
+    public function newTravel(Request $request,$_locale)
+    {
         if(!$this->getUser())
             throw new UserDoesntExists();
 

@@ -41,7 +41,7 @@ services:
 
     travel.add_handler:
       class: App\Application\UseCases\Travel\AddTravelService
-      arguments: ['@doctrine.travel.repository','@doctrine.user.repository']
+      arguments: ['@doctrine.travel.repository','@doctrine.user.repository','@elasticsearch.travel.repository']
       tags:
       - { name: tactician.handler, command: App\Application\Command\Travel\AddTravelCommand}
 
@@ -80,3 +80,18 @@ services:
       arguments: ['@doctrine','@jms_serializer']
 
     doctrine.travel_event.repository: '@App\Infrastructure\EventBundle\Repository\DoctrineEventStore'
+
+    # Tactician middleware Store elasticsearch
+    App\Application\Middleware\ElasticSearchMiddleware:
+        arguments: ['@elasticsearch.travel.repository']
+
+    tactician.middleware.elasticSearchTravel: '@App\Infrastructure\Middleware\ElasticSearchMiddleware'
+
+    # Elasticsearch Repository
+    elasticsearch.travel.repository: '@App\Infrastructure\TravelBundle\Repository\ElasticSearchTravelRepository'
+
+   # Listener postpersist
+    elasticsearch.listener:
+      class: App\Infrastructure\CoreBundle\Notification\ElasticSearchListener
+      tags:
+      - { name: doctrine.event_listener, event: postPersist }

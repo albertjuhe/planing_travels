@@ -34,7 +34,8 @@ class ShowMyTravelsController extends Controller
      *
      * @return Response
      */
-    public function showMyTravels() {
+    public function showMyTravels()
+    {
         $user = $this->getUser();
         if(!$user) new UserDoesntExists();
 

@@ -20,13 +20,14 @@ class ShowTravelService
     }
 
     /**
-     * @param ShowTravelBySlugCommand $comamnd
+     * @param ShowTravelBySlugCommand $command
      * @return \App\Domain\Travel\Model\Travel
      * @throws TravelDoesntExists
      */
-    public function handle(ShowTravelBySlugCommand $comamnd) {
-        if ($comamnd->getSlug() === null) throw new TravelDoesntExists();
-        return $this->travelRepository->ofSlugOrFail($comamnd->getSlug());
+    public function handle(ShowTravelBySlugCommand $command)
+    {
+        if ($command->getSlug() === null) throw new TravelDoesntExists();
+        return $this->travelRepository->ofSlugOrFail($command->getSlug());
     }
 
 }

@@ -44,4 +44,17 @@ interface TravelRepository
      */
     public function getTravelById(int $id): Travel;
 
+    /**
+     * @param array $criteria
+     * @return mixed
+     */
+    public function findBy(array $criteria);
+
+    /**
+     * Find by Id
+     * @param $id
+     * @return mixed
+     */
+    public function find($id);
+
 }

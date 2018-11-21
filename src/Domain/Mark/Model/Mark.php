@@ -41,7 +41,11 @@ class Mark
 
     }
 
-    static function fromGeolocationAndId(GeoLocation $geoLocation, int $id) {
+    static function fromGeolocationAndId(
+        GeoLocation $geoLocation,
+        int $id
+    )
+    {
         $mark = new self();
         $mark->setId($id);
         $mark->setGeoLocation($geoLocation);
@@ -68,8 +72,6 @@ class Mark
     {
         $this->geoLocation = $geoLocation;
     }
-
-
 
     /**
      * Get id

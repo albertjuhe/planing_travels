@@ -17,7 +17,11 @@ class StoredEvent implements DomainEvent
      * @param \DateTime $anOccurredOn
      * @param string $anEventBody
      */
-    public function __construct($aTypeName, \DateTime $anOccurredOn, $anEventBody)
+    public function __construct(
+        $aTypeName,
+        \DateTime $anOccurredOn,
+        $anEventBody
+    )
     {
         $this->eventBody = $anEventBody;
         $this->typeName = $aTypeName;

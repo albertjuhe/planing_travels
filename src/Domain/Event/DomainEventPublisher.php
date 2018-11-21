@@ -3,6 +3,10 @@
 
 namespace App\Domain\Event;
 
+/**
+ * Class DomainEventPublisher
+ * @package App\Domain\Event
+ */
 class DomainEventPublisher
 {
     /**

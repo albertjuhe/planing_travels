@@ -17,7 +17,6 @@ class TravelEventSubscriber implements DomainEventSubscriber
 {
     public function handle(DomainEvent $domainEvent)
     {
-        // TODO: Implement handle() method.
     }
 
     /**

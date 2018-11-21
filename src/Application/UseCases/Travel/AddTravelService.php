@@ -10,6 +10,7 @@ use App\Domain\Travel\Repository\TravelRepository;
 use App\Domain\Travel\Model\Travel;
 use App\Domain\User\Repository\UserRepository;
 use Symfony\Bridge\Doctrine\Tests\Fixtures\User;
+use FOS\ElasticaBundle\Elastica\Index;
 
 class AddTravelService
 {
@@ -24,11 +25,12 @@ class AddTravelService
      * @param UserRepository $userRepository
      */
     public function __construct(TravelRepository $travelRepository,
-                                UserRepository $userRepository)
+                                UserRepository $userRepository
+    )
     {
         $this->travelRepository = $travelRepository;
         $this->userRepository = $userRepository;
-
+        $this->elasticSearchTravelRepository = $elasticSearchTravelRepository;
     }
 
     /**
@@ -46,9 +48,11 @@ class AddTravelService
         $this->userRepository->ofIdOrFail($user->getUserId());
 
         $travel->setUser($user);
+        /** @var Index $index */
         DomainEventPublisher::instance()->publish(new TravelWasAdded($travel));
         $this->travelRepository->save($travel);
 
         return $travel;
     }
+
 }
