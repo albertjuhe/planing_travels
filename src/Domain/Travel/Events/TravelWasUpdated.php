@@ -49,6 +49,7 @@ class TravelWasUpdated implements DomainEvent
         return $this->travel;
     }
 
+  /**
     /**
      * @param Travel $travel
      */
