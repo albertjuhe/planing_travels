@@ -13,6 +13,7 @@ use App\Domain\Travel\Model\Travel;
 use App\Domain\User\Model\User;
 use PHPUnit\Framework\TestCase;
 use App\Domain\Travel\ValueObject\GeoLocation;
+use App\Application\DataTransformers\Travel\TravelPublishDataTransformer;
 
 class TravelWasPublishedTest extends TestCase
 {
@@ -28,8 +29,8 @@ class TravelWasPublishedTest extends TestCase
     }
 
     public function testSettersGetters() {
-        $travelWasPublished = new TravelWasPublished($this->travel, $this->user);
-        $this->assertEquals($this->travel->getId(), $travelWasPublished->getTravel()->getId());
+        $travelWasPublished = new TravelWasPublished( (new TravelPublishDataTransformer($this->travel))->read(), $this->user->getUserId());
+        $this->assertEquals($this->travel->getId(), $travelWasPublished->getTravel()['id']);
 
         $now = new \DateTime();
         $travelWasPublished->setOccuredOn($now);

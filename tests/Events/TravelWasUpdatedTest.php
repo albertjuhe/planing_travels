@@ -11,6 +11,7 @@ namespace App\Tests\Events;
 use App\Domain\Travel\Model\Travel;
 use App\Domain\Travel\Events\TravelWasUpdated;
 use App\Domain\Travel\ValueObject\GeoLocation;
+use App\Application\DataTransformers\Travel\TravelPublishDataTransformer;
 use PHPUnit\Framework\TestCase;
 
 class TravelWasUpdatedTest extends TestCase
@@ -24,8 +25,8 @@ class TravelWasUpdatedTest extends TestCase
     }
 
     public function testSettersGetters() {
-        $travelWasPublished = new TravelWasUpdated($this->travel);
-        $this->assertEquals($this->travel->getId(), $travelWasPublished->getTravel()->getId());
+        $travelWasPublished = new TravelWasUpdated((new TravelPublishDataTransformer($this->travel))->read());
+        $this->assertEquals($this->travel->getId(), $travelWasPublished->getTravel()['id']);
 
         $now = new \DateTime();
         $travelWasPublished->setOccuredOn($now);

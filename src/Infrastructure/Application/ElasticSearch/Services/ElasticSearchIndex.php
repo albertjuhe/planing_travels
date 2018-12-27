@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Infrastructure\CoreBundle\Services;
+namespace App\Infrastructure\Application\ElasticSearch\Services;
 
 use FOS\ElasticaBundle\Elastica\Index;
 use FOS\ElasticaBundle\Index\IndexManager;

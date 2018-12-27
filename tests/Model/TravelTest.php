@@ -87,7 +87,7 @@ class TravelTest extends TestCase
     }
 
     public function testPublishTravel() {
-        $user = User::fromId(1);
+        $user = User::byId(1);
         $travel = Travel::fromUser($user);
 
         $this->assertEquals($travel->getStatus(),Travel::TRAVEL_DRAFT);

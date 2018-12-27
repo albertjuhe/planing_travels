@@ -1,9 +1,9 @@
 <?php
 
 
-namespace App\Infrastructure\CoreBundle\Repository;
+namespace App\Infrastructure\Application\ElasticSearch\Repository;
 
-use App\Infrastructure\CoreBundle\Services\ElasticSearchIndex;
+use App\Infrastructure\Application\ElasticSearch\Services\ElasticSearchIndex;
 
 class ElasticSearchRepository
 {

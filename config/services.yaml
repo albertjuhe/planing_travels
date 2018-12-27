@@ -92,6 +92,6 @@ services:
 
    # Listener postpersist
     elasticsearch.listener:
-      class: App\Infrastructure\CoreBundle\Notification\ElasticSearchListener
+      class: App\Infrastructure\Application\ElasticSearch\Notification\ElasticSearchListener
       tags:
       - { name: doctrine.event_listener, event: postPersist }

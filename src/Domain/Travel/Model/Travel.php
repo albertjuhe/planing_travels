@@ -14,6 +14,7 @@ use App\Domain\Location\Model\Location;
 use App\Domain\User\Model\User;
 use App\Domain\Travel\ValueObject\GeoLocation;
 use App\Domain\Travel\Events\TravelWasPublished;
+use App\Application\DataTransformers\Travel\TravelPublishDataTransformer;
 
 class Travel
 {
@@ -82,16 +83,18 @@ class Travel
         $this->createdAt = new \DateTime;
         $this->setStarts(0);
         $this->setWatch(0);
-        $this->geoLocation = new GeoLocation(0,0,0,0,0,0);
+        $this->geoLocation = new GeoLocation(0, 0, 0, 0, 0, 0);
         $this->sharedusers = new \Doctrine\Common\Collections\ArrayCollection();
         $this->status = self::TRAVEL_DRAFT;
     }
 
-    public function equals(Travel $travel) {
+    public function equals(Travel $travel)
+    {
         return $this->id === $travel->getId();
     }
 
-    public static function fromUser(User $user): Travel {
+    public static function fromUser(User $user): Travel
+    {
         $travel = new self();
         $travel->setUser($user);
         return $travel;
@@ -215,7 +218,7 @@ class Travel
     /**
      * @return mixed
      */
-    public function getPhoto():? string
+    public function getPhoto(): ?string
     {
         return $this->photo;
     }
@@ -233,7 +236,7 @@ class Travel
     /**
      * @return mixed
      */
-    public function getStartAt():? \DateTime
+    public function getStartAt(): ?\DateTime
     {
         return $this->startAt;
     }
@@ -249,7 +252,7 @@ class Travel
     /**
      * @return mixed
      */
-    public function getEndAt():? \DateTime
+    public function getEndAt(): ?\DateTime
     {
         return $this->endAt;
     }
@@ -391,11 +394,9 @@ class Travel
         $this->publishedAt = new \DateTime();
 
         DomainEventPublisher::instance()->publish(
-            new TravelWasPublished([
-                'id' => $this->getId(),
-                'publishedAt' => $this->getPublishedAt(),
-                'status' => $this->getStatus()
-            ], $this->getUser()->getUserId())
+            new TravelWasPublished(
+                (new TravelPublishDataTransformer($this))->read(),
+                $this->getUser()->getUserId())
         );
 
         return $this;
@@ -445,7 +446,7 @@ class Travel
             'username' => $this->getUser()->getUsername(),
             'publishedAt' => $this->getPublishedAt(),
             'status' => $this->getStatus()
-            ];
+        ];
     }
 
 }

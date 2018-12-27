@@ -10,8 +10,8 @@ use App\Domain\User\Model\User;
 use Elastica\Document;
 use FOS\ElasticaBundle\Index\IndexManager;
 use FOS\ElasticaBundle\Elastica\Index;
-use App\Infrastructure\CoreBundle\Services\ElasticSearchIndex;
-use App\Infrastructure\CoreBundle\Repository\ElasticSearchRepository;
+use App\Infrastructure\Application\ElasticSearch\Services\ElasticSearchIndex;
+use App\Infrastructure\Application\ElasticSearch\Repository\ElasticSearchRepository;
 
 class ElasticSearchTravelRepository extends ElasticSearchRepository implements TravelRepository
 {
@@ -56,7 +56,6 @@ class ElasticSearchTravelRepository extends ElasticSearchRepository implements T
     {
         $this->typeDocument->getIndex()->refresh();
     }
-
 
     public function ofSlugOrFail(string $slug)
     {

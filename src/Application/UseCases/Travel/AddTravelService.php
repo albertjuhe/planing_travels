@@ -30,7 +30,6 @@ class AddTravelService
     {
         $this->travelRepository = $travelRepository;
         $this->userRepository = $userRepository;
-        $this->elasticSearchTravelRepository = $elasticSearchTravelRepository;
     }
 
     /**
