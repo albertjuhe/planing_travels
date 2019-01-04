@@ -52,6 +52,10 @@ class ElasticSearchTravelRepository extends ElasticSearchRepository implements T
         $this->refresh();
     }
 
+    public function update(Travel $travel)
+    {
+    }
+
     public function refresh()
     {
         $this->typeDocument->getIndex()->refresh();
