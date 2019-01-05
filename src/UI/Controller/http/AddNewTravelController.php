@@ -17,7 +17,6 @@ class AddNewTravelController extends BaseController
 
     /**
      * ShowMyTravelsController constructor.
-     * @param $travelRepository
      * @param $commandBus
      */
     public function __construct(CommandBus $commandBus)

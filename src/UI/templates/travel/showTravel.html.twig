@@ -8,7 +8,7 @@
 
 {% block content %}
     <div class="container" ng-app="ManageMaps" ng-controller="mapsCtrl">
-        {% include 'travel/travelInfoHeader.html.twig' with {'travel': travel,'mode':'ReadOnly'} %}
+        {% include 'travel/travelInfoHeader.html.twig' with {'travel': travel,'mode':'Edit'} %}
         <div class="row">
             <div class="col-sm-4">
                 {% include 'travel/locationsPanel.html.twig' %}
