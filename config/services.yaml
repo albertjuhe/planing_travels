@@ -95,3 +95,4 @@ services:
       class: App\Infrastructure\Application\ElasticSearch\Notification\ElasticSearchListener
       tags:
       - { name: doctrine.event_listener, event: postPersist }
+      - { name: doctrine.event_listener, event: postUpdate }
