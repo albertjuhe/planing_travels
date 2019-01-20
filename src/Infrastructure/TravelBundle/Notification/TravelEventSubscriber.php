@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: albert.juhe
- * Date: 24/10/2018
- * Time: 18:53
- */
 
 namespace App\Infrastructure\TravelBundle\Notification;
 

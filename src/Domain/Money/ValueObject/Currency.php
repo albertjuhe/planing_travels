@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: ajuhe
- * Date: 8/07/18
- * Time: 11:25
- */
+
 
 namespace App\Domain\Money\ValueObject;
 

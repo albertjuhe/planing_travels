@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Albert
- * Date: 20/01/2018
- * Time: 18:06
- */
+
 
 namespace App\EventSubscriber;
 

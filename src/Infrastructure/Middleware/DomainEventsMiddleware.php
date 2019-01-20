@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: albert.juhe
- * Date: 06/11/2018
- * Time: 19:23
- */
+
 
 namespace App\Infrastructure\Middleware;
 

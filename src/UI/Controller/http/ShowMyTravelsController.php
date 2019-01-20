@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Albert
- * Date: 20/01/2018
- * Time: 19:59
- */
 
 namespace App\UI\Controller\http;
 

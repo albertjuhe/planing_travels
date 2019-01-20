@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: albert.juhe
- * Date: 25/07/2018
- * Time: 08:43
- */
+
 
 namespace App\Domain\Travel\Model;
 

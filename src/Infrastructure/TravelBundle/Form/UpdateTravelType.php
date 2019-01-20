@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: albert.juhe
- * Date: 03/10/2018
- * Time: 08:03
- */
+
 
 namespace App\Infrastructure\TravelBundle\Form;
 
