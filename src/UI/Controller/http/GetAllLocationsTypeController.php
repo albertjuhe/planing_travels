@@ -28,7 +28,7 @@ class GetAllLocationsTypeController extends BaseController
     public function getAllLocationsType()
     {
         $getAllTypeLocationService = new GetAllTypeLocationService($this->typeLocationRepository);
-        $typeLocations = $getAllTypeLocationService->handle();
+        $typeLocations = $getAllTypeLocationService->execute();
 
         return $this->render('travel/typeLocationSelect.html.twig',
             array('typesLocation' => $typeLocations ));
