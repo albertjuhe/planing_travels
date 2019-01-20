@@ -12,6 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use App\Domain\User\Exceptions\UserDoesntExists;
 use League\Tactician\CommandBus;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class AddNewLocationAPIController extends BaseController
 {
