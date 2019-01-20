@@ -8,10 +8,10 @@
 
 namespace App\Application\Command\User;
 
-
+use App\Application\Command\Command;
 use App\Domain\User\Model\User;
 
-class SignInUserCommand
+class SignInUserCommand extends Command
 {
     /** @var User */
     private $user;

@@ -8,10 +8,11 @@
 
 namespace App\Application\UseCases\Travel;
 
+use App\Application\UseCases\usesCasesService;
 use App\Domain\Travel\Repository\TravelRepository;
 use App\Application\Command\Travel\BestTravelsListCommand;
 
-class GetBestTravelsOrderedByService
+class GetBestTravelsOrderedByService implements usesCasesService
 {
     /**
      * @var TravelRepository;

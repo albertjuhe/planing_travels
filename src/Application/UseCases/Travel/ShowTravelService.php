@@ -2,10 +2,11 @@
 namespace App\Application\UseCases\Travel;
 
 use App\Application\Command\Travel\ShowTravelBySlugCommand;
+use App\Application\UseCases\UsesCasesService;
 use App\Domain\Travel\Exceptions\TravelDoesntExists;
 use App\Domain\Travel\Repository\TravelRepository;
 
-class ShowTravelService
+class ShowTravelService implements UsesCasesService
 {
     /** @var TravelRepository */
     private $travelRepository;

@@ -9,13 +9,14 @@
 namespace App\Application\UseCases\Travel;
 
 use App\Application\Command\Travel\PublishTravelCommand;
+use App\Application\UseCases\usesCasesService;
 use App\Domain\Travel\Exceptions\NotAllowedToPublishTravel;
 use App\Domain\Travel\Repository\TravelRepository;
 use App\Domain\Travel\Model\Travel;
 use App\Domain\User\Model\User;
 use App\Domain\User\Repository\UserRepository;
 
-class PublishTravelService
+class PublishTravelService implements usesCasesService
 {
     /** @var TravelRepository; */
     private $travelRepository;

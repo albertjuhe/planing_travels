@@ -3,7 +3,9 @@
 
 namespace App\Application\Command\Travel;
 
-class BestTravelsListCommand
+use App\Application\Command\Command;
+
+class BestTravelsListCommand extends Command
 {
     /** @var int */
     private $numberMaxOfTravels;

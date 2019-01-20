@@ -6,6 +6,7 @@ use App\Application\Command\Travel\AddTravelCommand;
 use App\Domain\Travel\Model\Travel;
 use App\Infrastructure\TravelBundle\Form\TravelType;
 use App\UI\Controller\http\BaseController;
+use App\Domain\Location\Model\Location;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -26,7 +27,13 @@ class AddNewLocationAPIController extends BaseController
      * @Route("/api/user/{userId}/location",name="newAPILocation")
      * @Method({"POST"})
      */
-    public function newLocation($userId) {
-        return new JsonResponse(array('data' => $userId));
+    public function newLocation(Request $request, $userId)
+    {
+        $body = $request->getContent();
+        $data = json_decode($body);
+
+        $location = new Location();
+
+        return new Response($body);
     }
 }

@@ -8,10 +8,11 @@
 
 namespace App\Application\Command\Travel;
 
+use App\Application\Command\Command;
 use App\Domain\Travel\Model\Travel;
 use App\Domain\User\Model\User;
 
-class AddTravelCommand
+class AddTravelCommand extends Command
 {
     /** @var Travel */
     private $travel;

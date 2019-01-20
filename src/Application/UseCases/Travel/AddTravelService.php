@@ -4,6 +4,7 @@
 namespace App\Application\UseCases\Travel;
 
 use App\Application\Command\Travel\AddTravelCommand;
+use App\Application\UseCases\UsesCasesService;
 use App\Domain\Event\DomainEventPublisher;
 use App\Domain\Travel\Events\TravelWasAdded;
 use App\Domain\Travel\Repository\TravelRepository;
@@ -12,7 +13,7 @@ use App\Domain\User\Repository\UserRepository;
 use Symfony\Bridge\Doctrine\Tests\Fixtures\User;
 use FOS\ElasticaBundle\Elastica\Index;
 
-class AddTravelService
+class AddTravelService implements UsesCasesService
 {
     /** @var TravelRepository; */
     private $travelRepository;

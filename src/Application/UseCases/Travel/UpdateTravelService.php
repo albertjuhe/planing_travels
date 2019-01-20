@@ -8,6 +8,7 @@
 
 namespace App\Application\UseCases\Travel;
 
+use App\Application\UseCases\UsesCasesService;
 use App\Domain\Event\DomainEventPublisher;
 use App\Domain\Travel\Events\TravelWasUpdated;
 use App\Domain\Travel\Exceptions\InvalidTravelUser;
@@ -16,7 +17,7 @@ use App\Domain\Travel\Repository\TravelRepository;
 use App\Domain\Travel\Model\Travel;
 use App\Application\Command\Travel\UpdateTravelCommand;
 
-class UpdateTravelService
+class UpdateTravelService implements UsesCasesService
 {
     /**
      * @var TravelRepository;

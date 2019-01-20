@@ -3,6 +3,7 @@
 
 namespace App\Application\UseCases\TypeLocation;
 
+
 use App\Domain\TypeLocation\Repository\TypeLocationRepository;
 
 class GetAllTypeLocationService

@@ -3,8 +3,9 @@
 
 namespace App\Application\Command\Travel;
 
+use App\Application\Command\Command;
 
-class ShowTravelBySlugCommand
+class ShowTravelBySlugCommand extends Command
 {
 /** @var string */
     private $slug;

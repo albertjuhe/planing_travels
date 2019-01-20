@@ -8,9 +8,10 @@
 
 namespace App\Application\Command\Travel;
 
+use App\Application\Command\Command;
 use App\Domain\User\Model\User;
 
-class PublishTravelCommand
+class PublishTravelCommand extends Command
 {
     /** @var string */
     private $travelSlug;
