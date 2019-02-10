@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: albert.juhe
- * Date: 24/10/2018
- * Time: 07:47
- */
+
 
 namespace App\Domain\Travel\Events;
 

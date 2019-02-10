@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: albert.juhe
- * Date: 31/07/2018
- * Time: 08:58
- */
+
 
 namespace App\Domain\Gpx\Model;
 
