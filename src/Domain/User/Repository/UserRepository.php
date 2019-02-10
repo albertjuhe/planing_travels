@@ -9,5 +9,5 @@ interface UserRepository
 
     public function save(User $user);
 
-    public function ofIdOrFail(int $userId): User;
-    }
+    public function ofIdOrFail(int $userId): ?User;
+}

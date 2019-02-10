@@ -69,6 +69,21 @@ class DoctrineTravelRepository extends ServiceEntityRepository implements Travel
     }
 
     /**
+     * @param int $travelId
+     * @return Travel
+     * @throws TravelDoesntExists
+     */
+    public function ofIdOrFail(int $travelId): Travel
+    {
+        $travel = $this->find($travelId);
+        if (null === $travel) {
+            throw new TravelDoesntExists();
+        }
+
+        return $travel;
+    }
+
+    /**
      * @param Travel $travel
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException

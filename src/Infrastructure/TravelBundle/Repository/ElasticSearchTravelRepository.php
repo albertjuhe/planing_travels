@@ -5,7 +5,7 @@ namespace App\Infrastructure\TravelBundle\Repository;
 
 
 use App\Domain\Travel\Model\Travel;
-use App\Domain\Travel\Repository\TravelRepository;
+use App\Domain\Travel\Repository\IndexerRepository;
 use App\Domain\User\Model\User;
 use Elastica\Document;
 use FOS\ElasticaBundle\Index\IndexManager;
@@ -13,7 +13,7 @@ use FOS\ElasticaBundle\Elastica\Index;
 use App\Infrastructure\Application\ElasticSearch\Services\ElasticSearchIndex;
 use App\Infrastructure\Application\ElasticSearch\Repository\ElasticSearchRepository;
 
-class ElasticSearchTravelRepository extends ElasticSearchRepository implements TravelRepository
+class ElasticSearchTravelRepository extends ElasticSearchRepository implements IndexerRepository
 {
     const TRAVEL_INDEX = 'travel';
     const TRAVEL_DOCUMENT_TYPE = 'travel';
@@ -52,44 +52,10 @@ class ElasticSearchTravelRepository extends ElasticSearchRepository implements T
         $this->refresh();
     }
 
-    public function update(Travel $travel)
-    {
-    }
-
     public function refresh()
     {
         $this->typeDocument->getIndex()->refresh();
     }
 
-    public function ofSlugOrFail(string $slug)
-    {
-        // TODO: Implement ofSlugOrFail() method.
-    }
-
-    public function TravelsAllOrderedBy($maximResults)
-    {
-        // TODO: Implement TravelsAllOrderedBy() method.
-    }
-
-    public function getAllTravelsByUser(User $user)
-    {
-        // TODO: Implement getAllTravelsByUser() method.
-    }
-
-
-    public function getTravelById(int $id): Travel
-    {
-        // TODO: Implement getTravelById() method.
-    }
-
-    public function findBy(array $criteria)
-    {
-        // TODO: Implement findBy() method.
-    }
-
-    public function find($id)
-    {
-        // TODO: Implement find() method.
-    }
 
 }

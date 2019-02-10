@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: ajuhe
- * Date: 8/07/18
- * Time: 21:57
- */
 
 namespace App\Domain\Travel\Repository;
 
@@ -13,6 +7,12 @@ use App\Domain\Travel\Model\Travel;
 
 interface TravelRepository
 {
+    /**
+     * @param int $travelId
+     * @return Travel
+     */
+    public function ofIdOrFail(int $travelId): Travel;
+
     /**
      * @param string $slug
      * @return mixed

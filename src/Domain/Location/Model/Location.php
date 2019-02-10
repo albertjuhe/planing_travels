@@ -5,18 +5,20 @@ namespace App\Domain\Location\Model;
 use App\Domain\Images\Model\Images;
 use App\Domain\Mark\Model\Mark;
 use App\Domain\Travel\Model\Travel;
+use App\Domain\Travel\ValueObject\GeoLocation;
 use App\Domain\TypeLocation\Model\TypeLocation;
 use App\Domain\User\Model\User;
 
-class Location {
+class Location
+{
 
     /** @var int */
     private $id;
 
-    /** @var \DateTime  */
+    /** @var \DateTime */
     protected $createdAt;
 
-    /** @var \DateTime  */
+    /** @var \DateTime */
     protected $updatedAt;
 
     /** @var string */
@@ -39,7 +41,7 @@ class Location {
 
     private $notas;
 
-    /** @var \Doctrine\Common\Collections\ArrayCollection  */
+    /** @var \Doctrine\Common\Collections\ArrayCollection */
     protected $images;
 
     /** @var Travel */
@@ -58,6 +60,20 @@ class Location {
         $this->createdAt = new \DateTime;
     }
 
+    static public function fromCompleteAddress(
+        string $placeAddress,
+        string $IdType,
+        string $link,
+        string $comment,
+        string $latitude,
+        string $longitude,
+        string $placeId,
+        string $address
+    )
+    {
+
+    }
+
     static public function fromIdAndTitle(
         int $id,
         string $title
@@ -66,6 +82,17 @@ class Location {
         $location = new self();
         $location->setTitle($title);
         $location->id = $id;
+
+        return $location;
+    }
+
+    static public function fromArray(array $data): Location
+    {
+        $location = new Location();
+        $location->setTypeLocation($data['IdType']);
+        $location->setDescription($data['comment']);
+        $location->setUrl($data['link']);
+        $location->setTitle($data['placeAddress']);
 
         return $location;
     }
@@ -206,7 +233,7 @@ class Location {
      * @param User $user
      * @return Location
      */
-    public function setUser( User $user = null)
+    public function setUser(User $user = null)
     {
         $this->user = $user;
 
@@ -262,7 +289,7 @@ class Location {
      * @param Mark $mark
      * @return Location
      */
-    public function setMark( Mark $mark = null)
+    public function setMark(Mark $mark = null)
     {
         $this->mark = $mark;
 
@@ -332,7 +359,7 @@ class Location {
      */
     public function setStarts($starts)
     {
-       $this->starts = $starts;
+        $this->starts = $starts;
     }
 
     public function __toString()

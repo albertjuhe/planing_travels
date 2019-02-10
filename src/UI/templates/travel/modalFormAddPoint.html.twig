@@ -24,7 +24,8 @@
                                 {{ render(controller('App\\UI\\Controller\\http\\GetAllLocationsTypeController::getAllLocationsType')) }}
                             </select>
                         </label>
-                        <input id="travel" type="hidden" value="{{ travel.id }}"/><br/>
+                        <input id="travel" type="hidden" value="{{ travel.id }}"/>
+                        <input id="user" type="hidden" value="{{ travel.user.getUserId }}"/><br/><br/>
                     </fieldset>
                 </form>
             </div>

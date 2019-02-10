@@ -6,6 +6,7 @@ namespace App\Application\Command\Location;
 
 use App\Application\Command\Command;
 use App\Domain\Location\Model\Location;
+use App\Domain\Mark\Model\Mark;
 use App\Domain\User\Model\User;
 
 class AddLocationCommand extends Command
@@ -27,16 +28,16 @@ class AddLocationCommand extends Command
     private $user;
 
     /**
-     * AddLocationCommand constructor.
-     * @param int $travelId
-     * @param Location $location
-     * @param User $user
+     * @var Mark
      */
-    public function __construct(int $travelId, Location $location, User $user)
+    private $mark;
+
+       public function __construct(int $travelId, Location $location, User $user, Mark $mark)
     {
         $this->travelId = $travelId;
         $this->location = $location;
         $this->user = $user;
+        $this->mark = $mark;
     }
 
     /**
@@ -61,6 +62,14 @@ class AddLocationCommand extends Command
     public function getUser(): User
     {
         return $this->user;
+    }
+
+    /**
+     * @return Mark
+     */
+    public function getMark(): Mark
+    {
+        return $this->mark;
     }
 
 
