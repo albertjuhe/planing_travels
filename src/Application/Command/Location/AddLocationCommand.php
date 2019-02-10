@@ -23,21 +23,30 @@ class AddLocationCommand extends Command
     private $location;
 
     /**
-     * @var User
+     * @var int
      */
     private $user;
+
+    private $locationType;
 
     /**
      * @var Mark
      */
     private $mark;
 
-       public function __construct(int $travelId, Location $location, User $user, Mark $mark)
+    public function __construct(
+        int $travelId,
+        Location $location,
+        int $user,
+        Mark $mark,
+        int $locationType
+    )
     {
         $this->travelId = $travelId;
         $this->location = $location;
         $this->user = $user;
         $this->mark = $mark;
+        $this->locationType = $locationType;
     }
 
     /**
@@ -57,9 +66,9 @@ class AddLocationCommand extends Command
     }
 
     /**
-     * @return User
+     * @return int
      */
-    public function getUser(): User
+    public function getUser(): int
     {
         return $this->user;
     }
@@ -72,6 +81,13 @@ class AddLocationCommand extends Command
         return $this->mark;
     }
 
+    /**
+     * @return int
+     */
+    public function getLocationType(): int
+    {
+        return $this->locationType;
+    }
 
 
 }

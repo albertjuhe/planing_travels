@@ -49,7 +49,7 @@ class AddTravelService implements UsesCasesService
 
         $travel->setUser($user);
         /** @var Index $index */
-        DomainEventPublisher::instance()->publish(new TravelWasAdded($travel));
+        DomainEventPublisher::instance()->publish(new TravelWasAdded($travel->toArray()));
         $this->travelRepository->save($travel);
 
         return $travel;

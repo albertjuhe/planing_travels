@@ -24,6 +24,11 @@ services:
         resource: '../src/UI/Controller'
         tags: ['controller.service_arguments']
 
+    twig.extension.text:
+        class: Twig_Extensions_Extension_Text
+        tags:
+         - { name: twig.extension }
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
     # Command handler
@@ -60,6 +65,8 @@ services:
     location.add_handler:
       class: App\Application\UseCases\Location\AddLocationService
       arguments:  ['@doctrine.travel.repository','@doctrine.user.repository', '@doctrine.mark.repository', '@doctrine.location.repository' ]
+      tags:
+        - { name: tactician.handler, command: App\Application\Command\Location\AddLocationCommand}
 
    # Tactician middleware Store domain events
     App\Application\Middleware\DomainEventsMiddleware:

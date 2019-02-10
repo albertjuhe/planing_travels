@@ -12,7 +12,7 @@ interface MarkRepository
      * @param $id
      * @return Mark|null
      */
-    public function ofIdOrSave($id): ?Mark;
+    public function ofIdOrSave(Mark $mark): ?Mark;
 
     /**
      * @param Mark $mark

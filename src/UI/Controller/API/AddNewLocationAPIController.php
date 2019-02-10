@@ -49,14 +49,14 @@ class AddNewLocationAPIController extends BaseController
         $location = Location::fromArray($data);
 
         $geolocation = new GeoLocation($data['latitude'],$data['longitude'], 0, 0,0,0);
-        $mark = Mark::fromGeolocationAndId($geolocation, $data['placeId']);
+        $mark = Mark::fromGeolocationAndId($geolocation, $data['place_id']);
         $mark->setJson($request->getContent());
         $mark->setTitle($data['address']);
 
         $location->setMark($mark);
 
 
-        $addLocationCommand = new AddLocationCommand($data['travel'], $location, $user->getUserId(), $mark);
+        $addLocationCommand = new AddLocationCommand($data['travel'], $location, $userId, $mark, $data['IdType']);
         $this->commandBus->handle($addLocationCommand);
 
         return new JsonResponse(

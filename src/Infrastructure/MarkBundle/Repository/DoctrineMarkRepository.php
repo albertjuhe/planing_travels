@@ -21,10 +21,10 @@ class DoctrineMarkRepository extends ServiceEntityRepository implements MarkRepo
         parent::__construct($registry, Mark::class);
     }
 
-    public function ofIdOrSave($id): Mark
+    public function ofIdOrSave(Mark $mark): Mark
     {
-        $mark = $this->find($id);
-        if (!$mark instanceof Mark) $this->save($mark);
+        $markStore = $this->find($mark->getId());
+        if (!$markStore instanceof Mark) $this->save($mark);
 
         return $mark;
 

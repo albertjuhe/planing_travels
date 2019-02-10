@@ -89,7 +89,6 @@ class Location
     static public function fromArray(array $data): Location
     {
         $location = new Location();
-        $location->setTypeLocation($data['IdType']);
         $location->setDescription($data['comment']);
         $location->setUrl($data['link']);
         $location->setTitle($data['placeAddress']);
@@ -373,7 +372,7 @@ class Location
      * @param Images $images
      * @return Images
      */
-    public function addImages(Images $images)
+    public function addImages(Images $images): Location
     {
         $this->images[] = $images;
 
@@ -397,6 +396,24 @@ class Location
     public function getImages()
     {
         return $this->images;
+    }
+
+    public function toArray()
+    {
+        return [
+            'id' => $this->id,
+            'createdAt' => $this->createdAt,
+            'updatedAt' => $this->updatedAt,
+            'title' => $this->title,
+            'url' => $this->url,
+            'slug' => $this->slug,
+            'description' => $this->description,
+            'user' => $this->user->getUserId()->id(),
+            'mark' => $this->mark,
+            'travel' => $this->travel,
+            'typeLocation' => $this->typeLocation,
+            'stars' => $this->starts
+        ];
     }
 
 

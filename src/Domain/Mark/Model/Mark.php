@@ -8,7 +8,7 @@ use App\Domain\Travel\ValueObject\GeoLocation;
 class Mark
 {
 
-    /** @var int */
+    /** @var string */
     private $id;
 
     /** @var string */
@@ -43,7 +43,7 @@ class Mark
 
     static function fromGeolocationAndId(
         GeoLocation $geoLocation,
-        int $id
+        string $id
     )
     {
         $mark = new self();
@@ -78,7 +78,7 @@ class Mark
      *
      * @return string
      */
-    public function getId()
+    public function getId(): string
     {
         return $this->id;
     }
@@ -88,7 +88,7 @@ class Mark
      *
      * @return string
      */
-    public function setId($id)
+    public function setId(string $id)
     {
         return $this->id = $id;
     }

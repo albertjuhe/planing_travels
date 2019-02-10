@@ -11,18 +11,18 @@ class LocationWasAdded implements DomainEvent
 {
     const ADD_LOCATION_EVENT_REQUEST = 'add_location_request_event';
 
-    /** @var Location */
+    /** @var array */
     private $location;
     /** @var \DateTime */
     private $occuredOn;
 
-    public function __construct(Location $location)
+    public function __construct(array $location)
     {
         $this->location = $location;
         $this->occuredOn = new \DateTime();
     }
 
-    public function getLocation(): Location
+    public function getLocation(): array
     {
         return $this->location;
     }
