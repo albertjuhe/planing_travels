@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Domain\Travel\Events;
 
 use App\Domain\Event\DomainEvent;
@@ -16,7 +15,7 @@ class TravelWasAdded implements DomainEvent
     /** @var \DateTime */
     private $occuredOn;
 
-     public function __construct(array $travel)
+    public function __construct(array $travel)
     {
         $this->travel = $travel;
         $this->occuredOn = new \DateTime();
@@ -53,5 +52,4 @@ class TravelWasAdded implements DomainEvent
     {
         return $this->occuredOn;
     }
-
 }

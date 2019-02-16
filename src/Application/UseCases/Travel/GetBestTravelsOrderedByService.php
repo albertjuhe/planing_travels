@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: albert.juhe
  * Date: 01/10/2018
- * Time: 07:13
+ * Time: 07:13.
  */
 
 namespace App\Application\UseCases\Travel;
@@ -21,6 +21,7 @@ class GetBestTravelsOrderedByService implements usesCasesService
 
     /**
      * GetAllMyTravels constructor.
+     *
      * @param TravelRepository $travelRepository
      */
     public function __construct(TravelRepository $travelRepository)
@@ -30,12 +31,14 @@ class GetBestTravelsOrderedByService implements usesCasesService
 
     /**
      * @param BestTravelsListCommand $command
+     *
      * @return mixed
      */
     public function handle(BestTravelsListCommand $command)
     {
         $numberMaxOfTravels = $command->getNumberMaxOfTravels();
         $orderedBy = $command->getOrderedBy();
+
         return $this->travelRepository->TravelsAllOrderedBy($numberMaxOfTravels);
     }
 }

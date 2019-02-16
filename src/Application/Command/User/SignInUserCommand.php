@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: albert.juhe
  * Date: 09/11/2018
- * Time: 17:30
+ * Time: 17:30.
  */
 
 namespace App\Application\Command\User;
@@ -18,6 +18,7 @@ class SignInUserCommand extends Command
 
     /**
      * SignUpCommand constructor.
+     *
      * @param User $user
      */
     public function __construct(User $user)

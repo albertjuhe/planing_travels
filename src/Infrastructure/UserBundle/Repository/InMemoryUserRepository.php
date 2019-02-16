@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Infrastructure\UserBundle\Repository;
 
 use App\Domain\User\Exceptions\UserDoesntExists;
@@ -15,7 +14,9 @@ class InMemoryUserRepository implements UserRepository
     {
         if (isset($this->users[$username])) {
             return $this->users[$username];
-        } return null;
+        }
+
+        return null;
     }
 
     public function save(User $user)
@@ -25,9 +26,10 @@ class InMemoryUserRepository implements UserRepository
 
     public function ofIdOrFail(int $userId): User
     {
-        if ($userId === 0) throw new UserDoesntExists();
+        if (0 === $userId) {
+            throw new UserDoesntExists();
+        }
+
         return User::byId($userId);
     }
-
-
 }

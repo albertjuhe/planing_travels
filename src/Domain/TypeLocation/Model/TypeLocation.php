@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Domain\TypeLocation\Model;
-
 
 class TypeLocation
 {
@@ -20,18 +18,18 @@ class TypeLocation
     private $description;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
-        $this->updatedAt = new \DateTime;
-        $this->createdAt = new \DateTime;
+        $this->updatedAt = new \DateTime();
+        $this->createdAt = new \DateTime();
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -39,9 +37,10 @@ class TypeLocation
     }
 
     /**
-     * Set createdAt
+     * Set createdAt.
      *
      * @param \DateTime $createdAt
+     *
      * @return Mark
      */
     public function setCreatedAt($createdAt)
@@ -52,7 +51,7 @@ class TypeLocation
     }
 
     /**
-     * Get createdAt
+     * Get createdAt.
      *
      * @return \DateTime
      */
@@ -62,9 +61,10 @@ class TypeLocation
     }
 
     /**
-     * Set updatedAt
+     * Set updatedAt.
      *
      * @param \DateTime $updatedAt
+     *
      * @return Mark
      */
     public function setUpdatedAt($updatedAt)
@@ -75,7 +75,7 @@ class TypeLocation
     }
 
     /**
-     * Get updatedAt
+     * Get updatedAt.
      *
      * @return \DateTime
      */
@@ -85,9 +85,10 @@ class TypeLocation
     }
 
     /**
-     * Set description
+     * Set description.
      *
      * @param string $description
+     *
      * @return Mark
      */
     public function setDescription($description)
@@ -98,7 +99,7 @@ class TypeLocation
     }
 
     /**
-     * Get description
+     * Get description.
      *
      * @return string
      */
@@ -108,9 +109,10 @@ class TypeLocation
     }
 
     /**
-     * Set title
+     * Set title.
      *
      * @param string $title
+     *
      * @return Mark
      */
     public function setTitle($title)
@@ -121,7 +123,7 @@ class TypeLocation
     }
 
     /**
-     * Get title
+     * Get title.
      *
      * @return string
      */
@@ -131,9 +133,10 @@ class TypeLocation
     }
 
     /**
-     * Set icon
+     * Set icon.
      *
      * @param string $icon
+     *
      * @return TypeLoctation
      */
     public function setIcon($icon)
@@ -144,7 +147,7 @@ class TypeLocation
     }
 
     /**
-     * Get icon
+     * Get icon.
      *
      * @return string
      */

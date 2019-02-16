@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Infrastructure\EventBundle\Repository;
-
 
 use App\Domain\Event\DomainEvent;
 use App\Domain\Event\Model\StoredEvent;
@@ -10,7 +8,6 @@ use App\Domain\Event\Repository\EventStore;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use JMS\Serializer\SerializerInterface;
-use JMS\Serializer\SerializationContext;
 
 class DoctrineEventStore extends ServiceEntityRepository implements EventStore
 {
@@ -22,8 +19,9 @@ class DoctrineEventStore extends ServiceEntityRepository implements EventStore
 
     /**
      * DoctrineEventStore constructor.
+     *
      * @param ManagerRegistry $registry
-     * @param Serializer $serializer
+     * @param Serializer      $serializer
      */
     public function __construct(ManagerRegistry $registry, SerializerInterface $serializer)
     {
@@ -33,7 +31,7 @@ class DoctrineEventStore extends ServiceEntityRepository implements EventStore
 
     public function append(DomainEvent $aDomainEvent)
     {
-       $storedEvent = new StoredEvent(
+        $storedEvent = new StoredEvent(
             get_class($aDomainEvent),
             $aDomainEvent->occurredOn(),
             $this->serializer->serialize($aDomainEvent, self::SERIALIZE_JSON)
@@ -43,16 +41,16 @@ class DoctrineEventStore extends ServiceEntityRepository implements EventStore
 
     public function allStoredEventsSince($anEventId)
     {
-       $query =$this->createQueryBuilder('e');
-       if ($anEventId) {
-           $query->where('e.id > :eventId')
-               ->setParameter('eventId',$anEventId);
-       }
-       $query->orderBy('e.id');
+        $query = $this->createQueryBuilder('e');
+        if ($anEventId) {
+            $query->where('e.id > :eventId')
+               ->setParameter('eventId', $anEventId);
+        }
+        $query->orderBy('e.id');
     }
 
-    public function save(StoredEvent $storedEvent) {
+    public function save(StoredEvent $storedEvent)
+    {
         $this->_em->persist($storedEvent);
     }
-
 }

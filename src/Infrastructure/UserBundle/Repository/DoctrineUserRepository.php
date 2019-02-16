@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Infrastructure\UserBundle\Repository;
 
 use App\Domain\User\Exceptions\UserDoesntExists;
@@ -14,6 +13,7 @@ class DoctrineUserRepository extends ServiceEntityRepository implements UserRepo
 {
     /**
      * DoctrineUserRepository constructor.
+     *
      * @param ManagerRegistry $registry
      */
     public function __construct(ManagerRegistry $registry)
@@ -21,7 +21,8 @@ class DoctrineUserRepository extends ServiceEntityRepository implements UserRepo
         parent::__construct($registry, User::class);
     }
 
-    public function ofIdOrFail(int $userId): User {
+    public function ofIdOrFail(int $userId): User
+    {
         $user = $this->find($userId);
         if (null === $user) {
             throw new UserDoesntExists();
@@ -31,20 +32,24 @@ class DoctrineUserRepository extends ServiceEntityRepository implements UserRepo
     }
 
     /**
-     * Get user by username
+     * Get user by username.
+     *
      * @param string $username
+     *
      * @return User|null
      */
     public function UserByUsername(string $username): ?User
     {
         return $this->findOneBy([
-            'username' => $username
+            'username' => $username,
         ]);
     }
 
     /**
-     * Save user in the database
+     * Save user in the database.
+     *
      * @param User $user
+     *
      * @throws UserSavingError
      */
     public function save(User $user)
@@ -56,5 +61,4 @@ class DoctrineUserRepository extends ServiceEntityRepository implements UserRepo
             throw new UserSavingError('Error saving user: '.$e->getMessage());
         }
     }
-
 }

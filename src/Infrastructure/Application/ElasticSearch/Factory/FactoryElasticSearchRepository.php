@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: ajuhe
  * Date: 22/12/18
- * Time: 18:29
+ * Time: 18:29.
  */
 
 namespace App\Infrastructure\Application\ElasticSearch\Factory;
@@ -13,9 +13,7 @@ use App\Infrastructure\TravelBundle\Repository\ElasticSearchTravelRepository;
 
 /**
  * ElasticSearch manager
- * Class FactoryElasticSearchRepository
- * @package App\Infrastructure\Application\ElasticSearch\Factory
- *
+ * Class FactoryElasticSearchRepository.
  */
 class FactoryElasticSearchRepository
 {
@@ -27,11 +25,13 @@ class FactoryElasticSearchRepository
     }
 
     /**
-     * Returns elasticsearch repository
-     * @param String $entity
+     * Returns elasticsearch repository.
+     *
+     * @param string $entity
+     *
      * @return ElasticSearchRepository
      */
-    public function Build(String $entity):? ElasticSearchRepository
+    public function Build(String $entity): ? ElasticSearchRepository
     {
         switch ($entity) {
             case 'Travel':

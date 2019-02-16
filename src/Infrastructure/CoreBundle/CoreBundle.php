@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: albert.juhe
  * Date: 17/07/2018
- * Time: 08:10
+ * Time: 08:10.
  */
 
 namespace App\Infrastructure\CoreBundle;

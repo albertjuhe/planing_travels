@@ -7,7 +7,6 @@ use App\Domain\Travel\ValueObject\GeoLocation;
 
 class Mark
 {
-
     /** @var string */
     private $id;
 
@@ -30,22 +29,20 @@ class Mark
     private $location;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
         $this->location = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->updatedAt = new \DateTime;
-        $this->createdAt = new \DateTime;
-        $this->geoLocation = new GeoLocation(0,0,0,0,0,0);
-
+        $this->updatedAt = new \DateTime();
+        $this->createdAt = new \DateTime();
+        $this->geoLocation = new GeoLocation(0, 0, 0, 0, 0, 0);
     }
 
-    static function fromGeolocationAndId(
+    public static function fromGeolocationAndId(
         GeoLocation $geoLocation,
         string $id
-    )
-    {
+    ) {
         $mark = new self();
         $mark->setId($id);
         $mark->setGeoLocation($geoLocation);
@@ -53,7 +50,8 @@ class Mark
         return $mark;
     }
 
-    public function equals(Mark $mark) {
+    public function equals(Mark $mark)
+    {
         return $this->id === $mark->getId();
     }
 
@@ -74,7 +72,7 @@ class Mark
     }
 
     /**
-     * Get id
+     * Get id.
      *
      * @return string
      */
@@ -84,7 +82,7 @@ class Mark
     }
 
     /**
-     * Set id
+     * Set id.
      *
      * @return string
      */
@@ -94,9 +92,10 @@ class Mark
     }
 
     /**
-     * Set createdAt
+     * Set createdAt.
      *
      * @param \DateTime $createdAt
+     *
      * @return Mark
      */
     public function setCreatedAt($createdAt)
@@ -107,7 +106,7 @@ class Mark
     }
 
     /**
-     * Get createdAt
+     * Get createdAt.
      *
      * @return \DateTime
      */
@@ -117,9 +116,10 @@ class Mark
     }
 
     /**
-     * Set updatedAt
+     * Set updatedAt.
      *
      * @param \DateTime $updatedAt
+     *
      * @return Mark
      */
     public function setUpdatedAt($updatedAt)
@@ -130,7 +130,7 @@ class Mark
     }
 
     /**
-     * Get updatedAt
+     * Get updatedAt.
      *
      * @return \DateTime
      */
@@ -140,9 +140,10 @@ class Mark
     }
 
     /**
-     * Set json
+     * Set json.
      *
      * @param string $json
+     *
      * @return Mark
      */
     public function setJson($json)
@@ -153,7 +154,7 @@ class Mark
     }
 
     /**
-     * Get json
+     * Get json.
      *
      * @return string
      */
@@ -163,9 +164,10 @@ class Mark
     }
 
     /**
-     * Add location
+     * Add location.
      *
      * @param Location $location
+     *
      * @return Mark
      */
     public function addLocation(Location $location)
@@ -176,7 +178,7 @@ class Mark
     }
 
     /**
-     * Remove location
+     * Remove location.
      *
      * @param Location $location
      */
@@ -186,7 +188,7 @@ class Mark
     }
 
     /**
-     * Get location
+     * Get location.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -196,9 +198,10 @@ class Mark
     }
 
     /**
-     * Set title
+     * Set title.
      *
      * @param string $title
+     *
      * @return Mark
      */
     public function setTitle($title)
@@ -209,7 +212,7 @@ class Mark
     }
 
     /**
-     * Get title
+     * Get title.
      *
      * @return string
      */
@@ -222,6 +225,4 @@ class Mark
     {
         return $this->title;
     }
-
-
 }

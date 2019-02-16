@@ -2,22 +2,15 @@
 
 namespace App\UI\Controller\API;
 
-use App\Application\Command\Travel\AddTravelCommand;
 use App\Domain\Travel\Model\Travel;
-use App\Infrastructure\TravelBundle\Form\TravelType;
 use App\UI\Controller\http\BaseController;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use App\Domain\User\Exceptions\UserDoesntExists;
 use League\Tactician\CommandBus;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 class AddNewTravelAPIController extends BaseController
 {
-
-
     public function __construct(CommandBus $commandBus)
     {
         parent::__construct($commandBus);
@@ -29,6 +22,6 @@ class AddNewTravelAPIController extends BaseController
      */
     public function newTravel($userId)
     {
-      return new JsonResponse(array('data' => $userId));
+        return new JsonResponse(['data' => $userId]);
     }
 }

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\UI\Controller\http;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -10,15 +9,16 @@ use App\Application\UseCases\User\SignInUserService;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Class SignInController
- * @package App\Controller
+ * Class SignInController.
  */
 class SignInController extends Controller
 {
     /**
      * @Route("/{_locale}/login", name="private_login")
-     * @param Request $request
+     *
+     * @param Request             $request
      * @param AuthenticationUtils $authUtils
+     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function login(Request $request, AuthenticationUtils $authUtils)
@@ -26,11 +26,9 @@ class SignInController extends Controller
         $signInService = new SignInUserService($authUtils);
         $signInService->execute();
 
-        return $this->render('security/login.html.twig', array(
+        return $this->render('security/login.html.twig', [
             'last_username' => $signInService->getLastUsername(),
             'error' => $signInService->getError(),
-        ));
+        ]);
     }
-
-
 }

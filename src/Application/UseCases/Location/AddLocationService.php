@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Application\UseCases\Location;
-
 
 use App\Application\Command\Location\AddLocationCommand;
 use App\Application\UseCases\UsesCasesService;
@@ -51,16 +49,13 @@ class AddLocationService implements UsesCasesService
         MarkRepository $markRepository,
         LocationRepository $locationRepository,
         TypeLocationRepository $typeLocationRepository
-
-    )
-    {
+    ) {
         $this->travelRepository = $travelRepository;
         $this->userRepository = $userRepository;
         $this->markRepository = $markRepository;
         $this->locationRepository = $locationRepository;
         $this->typeLocationRepository = $typeLocationRepository;
     }
-
 
     public function handle(AddLocationCommand $addLocationCommand)
     {
@@ -70,22 +65,21 @@ class AddLocationService implements UsesCasesService
         $mark = $addLocationCommand->getMark();
         $locationType = $addLocationCommand->getLocationType();
 
-
         $user = $this->userRepository->ofIdOrFail($userId);
-        if (!$user instanceof User)
+        if (!$user instanceof User) {
             throw new UserDoesntExists('User doesnt exists');
-
+        }
         $travel = $this->travelRepository->ofIdOrFail($travelId);
-        if (!$travel instanceof Travel)
+        if (!$travel instanceof Travel) {
             throw new TravelDoesntExists('Travel doesnt exists');
-
-        if ($travel->getUser()->getUserId() != $user->getUserId())
+        }
+        if ($travel->getUser()->getUserId() != $user->getUserId()) {
             throw new InvalidTravelUser('This user is not allowed to modify the travel');
-
+        }
         $locationType = $this->typeLocationRepository->find($locationType);
-        if (!$locationType instanceof TypeLocation)
+        if (!$locationType instanceof TypeLocation) {
             throw new TypeLocationDoesntExists();
-
+        }
         //find the mark if not exists create it
         $mark = $this->markRepository->ofIdOrSave($mark);
 
@@ -97,6 +91,4 @@ class AddLocationService implements UsesCasesService
         DomainEventPublisher::instance()->publish(new LocationWasAdded($location->toArray()));
         $this->locationRepository->save($location);
     }
-
-
 }

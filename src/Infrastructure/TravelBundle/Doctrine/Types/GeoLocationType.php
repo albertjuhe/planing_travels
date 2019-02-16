@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Infrastructure\TravelBundle\Doctrine\Types;
 
 use Symfony\Component\Form\AbstractType;
@@ -23,9 +22,8 @@ class GeoLocationType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'data_class' => 'App\Domain\Travel\ValueObject\GeoLocation',
-        ));
+        ]);
     }
-
 }

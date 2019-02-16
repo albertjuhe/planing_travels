@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Infrastructure\TravelBundle\Form;
 
 use App\Domain\Travel\Model\Travel;
@@ -16,16 +15,16 @@ class UpdateTravelType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('title',TextType::class)
-            ->add('startAt',DateType::class)
+            ->add('title', TextType::class)
+            ->add('startAt', DateType::class)
             ->add('endAt', DateType::class)
-            ->add('description',TextareaType::class);
+            ->add('description', TextareaType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'data_class' => Travel::class,
-        ));
+        ]);
     }
 }

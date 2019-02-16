@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Infrastructure\Application\ElasticSearch\Services;
 
 use FOS\ElasticaBundle\Elastica\Index;

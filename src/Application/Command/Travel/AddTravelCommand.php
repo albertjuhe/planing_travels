@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: albert.juhe
- * Date: 12/10/2018
- * Time: 21:12
- */
+
 
 namespace App\Application\Command\Travel;
 
@@ -21,6 +16,7 @@ class AddTravelCommand extends Command
 
     /**
      * UpdateTravelCommand constructor.
+     *
      * @param Travel $travel
      */
     public function __construct(Travel $travel, User $user)
@@ -60,6 +56,4 @@ class AddTravelCommand extends Command
     {
         $this->user = $user;
     }
-
-
 }

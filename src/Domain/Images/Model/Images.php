@@ -2,10 +2,8 @@
 
 namespace App\Domain\Images\Model;
 
-
 class Images
 {
-
     private $id;
 
     private $original;
@@ -20,9 +18,10 @@ class Images
 
     public function __construct()
     {
-        $this->updatedAt = new \DateTime;
-        $this->createdAt = new \DateTime;
+        $this->updatedAt = new \DateTime();
+        $this->createdAt = new \DateTime();
     }
+
     /**
      * Pre Persist method.
      */
@@ -31,6 +30,7 @@ class Images
         $this->createdAt = new \DateTime();
         $this->updatedAt = new \DateTime();
     }
+
     /**
      * Pre Update method.
      */
@@ -40,9 +40,9 @@ class Images
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer 
+     * @return int
      */
     public function getId()
     {
@@ -50,9 +50,10 @@ class Images
     }
 
     /**
-     * Set original
+     * Set original.
      *
      * @param string $original
+     *
      * @return Images
      */
     public function setOriginal($original)
@@ -63,9 +64,9 @@ class Images
     }
 
     /**
-     * Get original
+     * Get original.
      *
-     * @return string 
+     * @return string
      */
     public function getOriginal()
     {
@@ -73,9 +74,10 @@ class Images
     }
 
     /**
-     * Set filename
+     * Set filename.
      *
      * @param string $filename
+     *
      * @return Images
      */
     public function setFilename($filename)
@@ -86,9 +88,9 @@ class Images
     }
 
     /**
-     * Get filename
+     * Get filename.
      *
-     * @return string 
+     * @return string
      */
     public function getFilename()
     {
@@ -96,9 +98,10 @@ class Images
     }
 
     /**
-     * Set createdAt
+     * Set createdAt.
      *
      * @param \DateTime $createdAt
+     *
      * @return Images
      */
     public function setCreatedAt($createdAt)
@@ -109,9 +112,9 @@ class Images
     }
 
     /**
-     * Get createdAt
+     * Get createdAt.
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getCreatedAt()
     {
@@ -119,9 +122,10 @@ class Images
     }
 
     /**
-     * Set updatedAt
+     * Set updatedAt.
      *
      * @param \DateTime $updatedAt
+     *
      * @return Images
      */
     public function setUpdatedAt($updatedAt)
@@ -132,9 +136,9 @@ class Images
     }
 
     /**
-     * Get updatedAt
+     * Get updatedAt.
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getUpdatedAt()
     {
@@ -142,8 +146,7 @@ class Images
     }
 
     /**
-     * Get location
-     *
+     * Get location.
      */
     public function getLocation()
     {
@@ -151,19 +154,21 @@ class Images
     }
 
     /**
-     * Set location
+     * Set location.
      *
      * @param \App\Domain\Location\Model\Location $location
+     *
      * @return Images
      */
-    public function setLocation( $location = null)
+    public function setLocation($location = null)
     {
         $this->location = $location;
 
         return $this;
     }
 
-    public function __toString() {
+    public function __toString()
+    {
         return $this->filename;
     }
 }

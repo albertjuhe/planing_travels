@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Application\UseCases\Travel;
 
 use App\Application\Command\Travel\ShowTravelBySlugCommand;
@@ -13,6 +14,7 @@ class ShowTravelService implements UsesCasesService
 
     /**
      * ShowTravelService constructor.
+     *
      * @param TravelRepository $travelRepository
      */
     public function __construct(TravelRepository $travelRepository)
@@ -22,13 +24,17 @@ class ShowTravelService implements UsesCasesService
 
     /**
      * @param ShowTravelBySlugCommand $command
+     *
      * @return \App\Domain\Travel\Model\Travel
+     *
      * @throws TravelDoesntExists
      */
     public function handle(ShowTravelBySlugCommand $command)
     {
-        if ($command->getSlug() === null) throw new TravelDoesntExists();
+        if (null === $command->getSlug()) {
+            throw new TravelDoesntExists();
+        }
+
         return $this->travelRepository->ofSlugOrFail($command->getSlug());
     }
-
 }

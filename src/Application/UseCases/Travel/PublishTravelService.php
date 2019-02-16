@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: albert.juhe
  * Date: 24/10/2018
- * Time: 08:09
+ * Time: 08:09.
  */
 
 namespace App\Application\UseCases\Travel;
@@ -25,20 +25,22 @@ class PublishTravelService implements usesCasesService
 
     /**
      * AddTravelService constructor.
+     *
      * @param TravelRepository $travelRepository
-     * @param UserRepository $userRepository
+     * @param UserRepository   $userRepository
      */
     public function __construct(TravelRepository $travelRepository,
                                 UserRepository $userRepository
-    )
-    {
+    ) {
         $this->travelRepository = $travelRepository;
         $this->userRepository = $userRepository;
     }
 
     /**
      * @param PublishTravelCommand $command
+     *
      * @return Travel
+     *
      * @throws \Exception
      */
     public function handle(PublishTravelCommand $command)
@@ -51,14 +53,13 @@ class PublishTravelService implements usesCasesService
         /** @var Travel $travel */
         $travel = $this->travelRepository->ofSlugOrFail($travelSlug);
 
-        /** var only the owner can publish it */
-        if ($user->getUserId() != $travel->getUser()->getUserId()) throw new NotAllowedToPublishTravel();
-
+        /* var only the owner can publish it */
+        if ($user->getUserId() != $travel->getUser()->getUserId()) {
+            throw new NotAllowedToPublishTravel();
+        }
         $travel->publish();
         $this->travelRepository->save($travel);
 
         return $travel;
-
     }
-
 }

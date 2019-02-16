@@ -3,18 +3,16 @@
  * Created by PhpStorm.
  * User: ajuhe
  * Date: 27/12/18
- * Time: 10:45
+ * Time: 10:45.
  */
 
 namespace App\Application\DataTransformers\Travel;
-
 
 use App\Domain\Travel\Model\Travel;
 
 /**
  * DataTransformer for publish data events
- * Class TravelPublishDataTransformer
- * @package App\Application\DataTransformers\Travel
+ * Class TravelPublishDataTransformer.
  */
 class TravelPublishDataTransformer implements TravelDataTransformer
 {
@@ -33,11 +31,10 @@ class TravelPublishDataTransformer implements TravelDataTransformer
 
     public function read()
     {
-       return [
+        return [
            'id' => $this->travel->getId(),
            'publishedAt' => $this->travel->getPublishedAt(),
-           'status' => $this->travel->getStatus()
+           'status' => $this->travel->getStatus(),
        ];
     }
-
 }

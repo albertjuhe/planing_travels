@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Application\Command\User;
 
 use App\Application\Command\Command;
@@ -13,6 +12,7 @@ class SignUpUserCommand extends Command
 
     /**
      * SignUpCommand constructor.
+     *
      * @param User $user
      */
     public function __construct(User $user)
@@ -27,6 +27,4 @@ class SignUpUserCommand extends Command
     {
         return $this->user;
     }
-
-
 }

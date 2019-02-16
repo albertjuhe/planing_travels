@@ -7,9 +7,9 @@ use League\Tactician\CommandBus;
 
 class BestTravelsListController extends BaseController
 {
-
     /**
      * BestTravelsListController constructor.
+     *
      * @param CommandBus $commandBus
      */
     public function __construct(CommandBus $commandBus)
@@ -18,16 +18,17 @@ class BestTravelsListController extends BaseController
     }
 
     /**
-     * List travels
+     * List travels.
+     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function listBestTravels($maxtravels) {
-        $command = new BestTravelsListCommand($maxtravels,'stars');
+    public function listBestTravels($maxtravels)
+    {
+        $command = new BestTravelsListCommand($maxtravels, 'stars');
         $travels = $this->commandBus->handle($command);
 
-        return $this->render('default/bestTravels.html.twig',[
-            'travels' => $travels
+        return $this->render('default/bestTravels.html.twig', [
+            'travels' => $travels,
         ]);
     }
-
 }

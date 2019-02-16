@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Domain\Common\Model;
 
 abstract class IdentifiableDomainObject
@@ -11,6 +10,7 @@ abstract class IdentifiableDomainObject
     {
         return $this->id;
     }
+
     protected function setId($anId)
     {
         $this->id = $anId;

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Infrastructure\EventBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -12,6 +13,5 @@ class EventExtension extends Extension
     {
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yaml');
-
     }
 }

@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Application\UseCases\TypeLocation;
-
 
 use App\Domain\TypeLocation\Repository\TypeLocationRepository;
 
@@ -13,6 +11,7 @@ class GetAllTypeLocationService
 
     /**
      * GetAllTypeLocationService constructor.
+     *
      * @param TypeLocationRepository $typeLocationRepository
      */
     public function __construct(TypeLocationRepository $typeLocationRepository)
@@ -20,9 +19,8 @@ class GetAllTypeLocationService
         $this->typeLocationRepository = $typeLocationRepository;
     }
 
-    public function execute() {
+    public function execute()
+    {
         return $this->typeLocationRepository->getAllTypeLocations();
     }
-
-
 }

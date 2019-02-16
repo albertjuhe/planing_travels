@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Infrastructure\Middleware;
-
 
 use App\Domain\Event\DomainEventPublisher;
 use App\Domain\Event\PersistDomainEventSubscriber;
@@ -25,7 +23,5 @@ class DomainEventsMiddleware implements Middleware
         $returnValue = $next($command);
 
         return $returnValue;
-
     }
-
 }

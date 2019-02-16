@@ -1,17 +1,13 @@
 <?php
 
-
 namespace App\Application\Command\Location;
-
 
 use App\Application\Command\Command;
 use App\Domain\Location\Model\Location;
 use App\Domain\Mark\Model\Mark;
-use App\Domain\User\Model\User;
 
 class AddLocationCommand extends Command
 {
-
     /**
      * @var int
      */
@@ -40,8 +36,7 @@ class AddLocationCommand extends Command
         int $user,
         Mark $mark,
         int $locationType
-    )
-    {
+    ) {
         $this->travelId = $travelId;
         $this->location = $location;
         $this->user = $user;
@@ -88,6 +83,4 @@ class AddLocationCommand extends Command
     {
         return $this->locationType;
     }
-
-
 }

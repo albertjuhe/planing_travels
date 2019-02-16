@@ -1,10 +1,7 @@
 <?php
 
-
 namespace App\Domain\User\Exceptions;
 
-
-class UserDoesntExistsException  extends \Exception
+class UserDoesntExistsException extends \Exception
 {
-
 }

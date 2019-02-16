@@ -48,8 +48,8 @@ class User extends IdentifiableDomainObject implements UserInterface
     public function __construct()
     {
         $this->isActive = true;
-        $this->updatedAt = new \DateTime;
-        $this->createdAt = new \DateTime;
+        $this->updatedAt = new \DateTime();
+        $this->createdAt = new \DateTime();
         $this->locale = 'en';
 
         $this->travel = new \Doctrine\Common\Collections\ArrayCollection();
@@ -61,12 +61,13 @@ class User extends IdentifiableDomainObject implements UserInterface
 
     public function publishEvent()
     {
-
     }
 
     /**
-     * Check user equals
+     * Check user equals.
+     *
      * @param User $user
+     *
      * @return bool
      */
     public function equalsTo(User $user): bool
@@ -75,8 +76,10 @@ class User extends IdentifiableDomainObject implements UserInterface
     }
 
     /**
-     * Create from Id
+     * Create from Id.
+     *
      * @param int $anId
+     *
      * @return User
      */
     public static function fromId(int $anId)
@@ -89,8 +92,10 @@ class User extends IdentifiableDomainObject implements UserInterface
     }
 
     /**
-     * Create from int Id
+     * Create from int Id.
+     *
      * @param int $anId
+     *
      * @return User
      */
     public static function byId(int $anId)
@@ -106,6 +111,7 @@ class User extends IdentifiableDomainObject implements UserInterface
         if (null === $this->userId) {
             $this->userId = new UserId($this->id());
         }
+
         return $this->userId;
     }
 
@@ -114,16 +120,18 @@ class User extends IdentifiableDomainObject implements UserInterface
         if (null === $this->userId) {
             $this->userId = new UserId($this->id());
         }
+
         return $this->userId;
     }
 
     /**
-     * Check the password correct value, cannot be equal to the username and password
+     * Check the password correct value, cannot be equal to the username and password.
+     *
      * @return bool
      */
     public function isPasswordCorrect(): bool
     {
-        return ($this->firstName !== $this->plainPassword && $this->username !== $this->plainPassword);
+        return $this->firstName !== $this->plainPassword && $this->username !== $this->plainPassword;
     }
 
     public function getUsername()
@@ -145,7 +153,7 @@ class User extends IdentifiableDomainObject implements UserInterface
 
     public function getRoles()
     {
-        return array('ROLE_USER');
+        return ['ROLE_USER'];
     }
 
     public function eraseCredentials()
@@ -155,25 +163,24 @@ class User extends IdentifiableDomainObject implements UserInterface
     /** @see \Serializable::serialize() */
     public function serialize()
     {
-        return serialize(array(
+        return serialize([
             $this->email,
             $this->username,
             $this->password,
-        ));
+        ]);
     }
 
     /** @see \Serializable::unserialize() */
     public function unserialize($serialized)
     {
-        list (
+        list(
             $this->userId,
             $this->username,
-            $this->password,
-            ) = unserialize($serialized);
+            $this->password) = unserialize($serialized);
     }
 
     /**
-     * Set username
+     * Set username.
      *
      * @param string $username
      *
@@ -182,11 +189,12 @@ class User extends IdentifiableDomainObject implements UserInterface
     public function setUsername($username)
     {
         $this->username = $username;
+
         return $this;
     }
 
     /**
-     * Set password
+     * Set password.
      *
      * @param string $password
      *
@@ -195,11 +203,12 @@ class User extends IdentifiableDomainObject implements UserInterface
     public function setPassword($password)
     {
         $this->password = $password;
+
         return $this;
     }
 
     /**
-     * Set email
+     * Set email.
      *
      * @param string $email
      *
@@ -208,11 +217,12 @@ class User extends IdentifiableDomainObject implements UserInterface
     public function setEmail($email)
     {
         $this->email = $email;
+
         return $this;
     }
 
     /**
-     * Get email
+     * Get email.
      *
      * @return string
      */
@@ -222,22 +232,23 @@ class User extends IdentifiableDomainObject implements UserInterface
     }
 
     /**
-     * Set isActive
+     * Set isActive.
      *
-     * @param boolean $isActive
+     * @param bool $isActive
      *
      * @return User
      */
     public function setIsActive($isActive)
     {
         $this->isActive = $isActive;
+
         return $this;
     }
 
     /**
-     * Get isActive
+     * Get isActive.
      *
-     * @return boolean
+     * @return bool
      */
     public function getIsActive()
     {
@@ -245,7 +256,7 @@ class User extends IdentifiableDomainObject implements UserInterface
     }
 
     /**
-     * Set createdAt
+     * Set createdAt.
      *
      * @param \DateTime $createdAt
      *
@@ -254,11 +265,12 @@ class User extends IdentifiableDomainObject implements UserInterface
     public function setCreatedAt($createdAt)
     {
         $this->createdAt = $createdAt;
+
         return $this;
     }
 
     /**
-     * Get createdAt
+     * Get createdAt.
      *
      * @return \DateTime
      */
@@ -268,7 +280,7 @@ class User extends IdentifiableDomainObject implements UserInterface
     }
 
     /**
-     * Set updatedAt
+     * Set updatedAt.
      *
      * @param \DateTime $updatedAt
      *
@@ -277,11 +289,12 @@ class User extends IdentifiableDomainObject implements UserInterface
     public function setUpdatedAt($updatedAt)
     {
         $this->updatedAt = $updatedAt;
+
         return $this;
     }
 
     /**
-     * Get updatedAt
+     * Get updatedAt.
      *
      * @return \DateTime
      */
@@ -291,7 +304,7 @@ class User extends IdentifiableDomainObject implements UserInterface
     }
 
     /**
-     * Set lastLogin
+     * Set lastLogin.
      *
      * @param \DateTime $lastLogin
      *
@@ -300,11 +313,12 @@ class User extends IdentifiableDomainObject implements UserInterface
     public function setLastLogin($lastLogin)
     {
         $this->lastLogin = $lastLogin;
+
         return $this;
     }
 
     /**
-     * Get lastLogin
+     * Get lastLogin.
      *
      * @return \DateTime
      */
@@ -314,7 +328,7 @@ class User extends IdentifiableDomainObject implements UserInterface
     }
 
     /**
-     * Set locale
+     * Set locale.
      *
      * @param string $locale
      *
@@ -323,11 +337,12 @@ class User extends IdentifiableDomainObject implements UserInterface
     public function setLocale($locale)
     {
         $this->locale = $locale;
+
         return $this;
     }
 
     /**
-     * Get locale
+     * Get locale.
      *
      * @return string
      */
@@ -347,7 +362,7 @@ class User extends IdentifiableDomainObject implements UserInterface
     }
 
     /**
-     * Set firstName
+     * Set firstName.
      *
      * @param string $firstName
      *
@@ -356,11 +371,12 @@ class User extends IdentifiableDomainObject implements UserInterface
     public function setFirstName($firstName)
     {
         $this->firstName = $firstName;
+
         return $this;
     }
 
     /**
-     * Get firstName
+     * Get firstName.
      *
      * @return string
      */
@@ -370,7 +386,7 @@ class User extends IdentifiableDomainObject implements UserInterface
     }
 
     /**
-     * Set lastName
+     * Set lastName.
      *
      * @param string $lastName
      *
@@ -379,11 +395,12 @@ class User extends IdentifiableDomainObject implements UserInterface
     public function setLastName($lastName)
     {
         $this->lastName = $lastName;
+
         return $this;
     }
 
     /**
-     * Get lastName
+     * Get lastName.
      *
      * @return string
      */
@@ -392,11 +409,11 @@ class User extends IdentifiableDomainObject implements UserInterface
         return $this->lastName;
     }
 
-
     /**
-     * Add travel
+     * Add travel.
      *
      * @param Travel $travel
+     *
      * @return User
      */
     public function addTravel(Travel $travel)
@@ -406,9 +423,8 @@ class User extends IdentifiableDomainObject implements UserInterface
         return $this;
     }
 
-
     /**
-     * Get travel
+     * Get travel.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -417,9 +433,8 @@ class User extends IdentifiableDomainObject implements UserInterface
         return $this->travel;
     }
 
-
     /**
-     * Remove travel
+     * Remove travel.
      *
      * @param \App\Entity\Travel $travel
      */
@@ -429,9 +444,10 @@ class User extends IdentifiableDomainObject implements UserInterface
     }
 
     /**
-     * Add travelsshared
+     * Add travelsshared.
      *
      * @param \App\Entity\Travel $travelsshared
+     *
      * @return User
      */
     public function addTravelsshared(Travel $travelsshared)
@@ -442,7 +458,7 @@ class User extends IdentifiableDomainObject implements UserInterface
     }
 
     /**
-     * Remove travelsshared
+     * Remove travelsshared.
      *
      * @param \App\Entity\Travel $travelsshared
      */
@@ -452,7 +468,7 @@ class User extends IdentifiableDomainObject implements UserInterface
     }
 
     /**
-     * Get travelsshared
+     * Get travelsshared.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -461,11 +477,11 @@ class User extends IdentifiableDomainObject implements UserInterface
         return $this->travelsshared;
     }
 
-
     /**
-     * Add Location
+     * Add Location.
      *
      * @param Location $location
+     *
      * @return User
      */
     public function addLocation(Travel $location)
@@ -475,9 +491,8 @@ class User extends IdentifiableDomainObject implements UserInterface
         return $this;
     }
 
-
     /**
-     * Get Location
+     * Get Location.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -486,9 +501,8 @@ class User extends IdentifiableDomainObject implements UserInterface
         return $this->location;
     }
 
-
     /**
-     * Remove Location
+     * Remove Location.
      *
      * @param \App\Domain\Location\Model\Location $location
      */

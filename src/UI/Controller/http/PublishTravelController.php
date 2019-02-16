@@ -1,10 +1,8 @@
 <?php
 
-
 namespace App\UI\Controller\http;
 
 use App\Application\Command\Travel\PublishTravelCommand;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -13,9 +11,9 @@ use League\Tactician\CommandBus;
 
 class PublishTravelController extends BaseController
 {
-
     /**
      * ShowMyTravelsController constructor.
+     *
      * @param $travelRepository
      * @param $commandBus
      */
@@ -26,16 +24,19 @@ class PublishTravelController extends BaseController
 
     /**
      * @Route("/travel/publish/{slug}",name="publishTravel")
+     *
      * @param Request $request
      * @param $slug
+     *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
+     *
      * @throws UserDoesntExists
      */
     public function publishTravel(Request $request, string $slug)
     {
-        if (!$this->getUser())
+        if (!$this->getUser()) {
             throw new UserDoesntExists();
-
+        }
         $publishTravelCommand = new PublishTravelCommand($slug, $this->getUser());
         $this->commandBus->handle($publishTravelCommand);
 

@@ -3,13 +3,12 @@
  * Created by PhpStorm.
  * User: albert.juhe
  * Date: 03/10/2018
- * Time: 07:10
+ * Time: 07:10.
  */
+
 namespace App\UI\Controller\http;
 
 use App\Domain\Travel\Model\Travel;
-use App\Domain\User\Model\User;
-use App\Infrastructure\UserBundle\Repository\DoctrineUserRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -26,8 +25,9 @@ class UpdateTravelController extends BaseController
 
     /**
      * UpdateTravelController constructor.
+     *
      * @param DoctrineTravelRepository $travelRepository
-     * @param CommandBus $commandBus
+     * @param CommandBus               $commandBus
      */
     public function __construct(DoctrineTravelRepository $travelRepository,
                                 CommandBus $commandBus)
@@ -38,17 +38,21 @@ class UpdateTravelController extends BaseController
 
     /**
      * @Route("/{_locale}/private/travel/{slug}/update",name="updateTravel")
+     *
      * @param Request $request
-     * @param String $slug
+     * @param string  $slug
      * @param $_locale
+     *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
+     *
      * @throws UserDoesntExists
      * @throws \App\Domain\Travel\Exceptions\TravelDoesntExists
      */
     public function updateTravel(Request $request, String $slug, $_locale)
     {
-
-        if (!$this->getUser()) throw new UserDoesntExists();
+        if (!$this->getUser()) {
+            throw new UserDoesntExists();
+        }
         /** @var Travel $travel */
         $travel = $this->travelRepository->ofSlugOrFail($slug);
 
@@ -56,7 +60,6 @@ class UpdateTravelController extends BaseController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $commandUpdate = new UpdateTravelCommand($travel, $this->getUser());
             $this->commandBus->handle($commandUpdate);
 
@@ -64,9 +67,7 @@ class UpdateTravelController extends BaseController
         }
 
         return $this->render('travel/updateTravel.html.twig', [
-            'travelForm' => $form->createView()
+            'travelForm' => $form->createView(),
         ]);
-
     }
-
 }

@@ -1,12 +1,9 @@
 <?php
 
-
 namespace App\Infrastructure\TravelBundle\Repository;
-
 
 use App\Domain\Travel\Model\Travel;
 use App\Domain\Travel\Repository\IndexerRepository;
-use App\Domain\User\Model\User;
 use Elastica\Document;
 use FOS\ElasticaBundle\Index\IndexManager;
 use FOS\ElasticaBundle\Elastica\Index;
@@ -26,14 +23,14 @@ class ElasticSearchTravelRepository extends ElasticSearchRepository implements I
 
     /**
      * ElasticSearchTravelRepository constructor.
-     * @param IndexManager $indexManager
+     *
+     * @param IndexManager       $indexManager
      * @param ElasticSearchIndex $elasticSearchIndex
      */
     public function __construct(
         IndexManager $indexManager,
         ElasticSearchIndex $elasticSearchIndex
-    )
-    {
+    ) {
         parent::__construct($elasticSearchIndex);
         $this->indexManager = $indexManager;
         $this->index = $this->elasticSearchIndex->getOne(self::TRAVEL_INDEX);
@@ -41,13 +38,15 @@ class ElasticSearchTravelRepository extends ElasticSearchRepository implements I
     }
 
     /**
-     * Add travel to elascticsearch
+     * Add travel to elascticsearch.
+     *
      * @param Travel $travel
+     *
      * @return mixed|void
      */
     public function save(Travel $travel)
     {
-        $travelDocument = new Document($travel->getId(),$travel->toArray());
+        $travelDocument = new Document($travel->getId(), $travel->toArray());
         $this->typeDocument->addDocument($travelDocument);
         $this->refresh();
     }
@@ -56,6 +55,4 @@ class ElasticSearchTravelRepository extends ElasticSearchRepository implements I
     {
         $this->typeDocument->getIndex()->refresh();
     }
-
-
 }

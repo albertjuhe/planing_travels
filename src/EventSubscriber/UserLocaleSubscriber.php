@@ -27,14 +27,14 @@ class UserLocaleSubscriber implements EventSubscriberInterface
 
         if (null !== $user->getLocale()) {
             $this->session->set('_locale', $user->getLocale());
-            $request->attributes->set('_locale',$user->getLocale());
+            $request->attributes->set('_locale', $user->getLocale());
         }
     }
 
     public static function getSubscribedEvents()
     {
-        return array(
-            SecurityEvents::INTERACTIVE_LOGIN => array(array('onInteractiveLogin', 15)),
-        );
+        return [
+            SecurityEvents::INTERACTIVE_LOGIN => [['onInteractiveLogin', 15]],
+        ];
     }
 }

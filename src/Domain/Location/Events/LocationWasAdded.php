@@ -1,11 +1,8 @@
 <?php
 
-
 namespace App\Domain\Location\Events;
 
-
 use App\Domain\Event\DomainEvent;
-use App\Domain\Location\Model\Location;
 
 class LocationWasAdded implements DomainEvent
 {

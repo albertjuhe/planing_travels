@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Infrastructure\LocationBundle\Repository;
-
 
 use App\Domain\Location\Model\Location;
 use App\Domain\Location\Repository\LocationRepository;
@@ -13,6 +11,7 @@ class DoctrineLocationRepository extends ServiceEntityRepository implements Loca
 {
     /**
      * DoctrineTravelRepository constructor.
+     *
      * @param ManagerRegistry $registry
      */
     public function __construct(ManagerRegistry $registry)
@@ -24,5 +23,4 @@ class DoctrineLocationRepository extends ServiceEntityRepository implements Loca
     {
         $this->_em->persist($location);
     }
-
 }

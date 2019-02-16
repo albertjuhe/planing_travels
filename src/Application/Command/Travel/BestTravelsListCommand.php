@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Application\Command\Travel;
 
 use App\Application\Command\Command;
@@ -14,6 +13,7 @@ class BestTravelsListCommand extends Command
 
     /**
      * BestTravelsListCommand constructor.
+     *
      * @param $numberMaxOfTravels
      * @param $orderedBy
      */
@@ -54,6 +54,4 @@ class BestTravelsListCommand extends Command
     {
         $this->orderedBy = $orderedBy;
     }
-
-
 }

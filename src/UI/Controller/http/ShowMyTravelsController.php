@@ -3,7 +3,6 @@
 namespace App\UI\Controller\http;
 
 use App\Domain\User\Exceptions\UserDoesntExists;
-use App\Domain\User\Model\User;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
@@ -16,6 +15,7 @@ class ShowMyTravelsController extends Controller
 
     /**
      * ShowMyTravelsController constructor.
+     *
      * @param $travelRepository
      */
     public function __construct(DoctrineTravelRepository $travelRepository)
@@ -31,11 +31,13 @@ class ShowMyTravelsController extends Controller
     public function showMyTravels()
     {
         $user = $this->getUser();
-        if(!$user) new UserDoesntExists();
+        if (!$user) {
+            new UserDoesntExists();
+        }
 
         $getAllMyTravelsService = new GetAllMyTravelsService($this->travelRepository);
         $travels = $getAllMyTravelsService->execute($user);
 
-        return $this->render('private/index.html.twig', array('travels' =>$travels));
+        return $this->render('private/index.html.twig', ['travels' => $travels]);
     }
 }

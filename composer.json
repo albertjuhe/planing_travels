@@ -4,6 +4,7 @@
     "require": {
         "php": "^7.1.3",
         "ext-iconv": "*",
+        "friendsofphp/php-cs-fixer": "3.0.x-dev",
         "friendsofsymfony/elastica-bundle": "^5.0",
         "gedmo/doctrine-extensions": "^2.4",
         "jms/serializer-bundle": "^2.3",
@@ -38,7 +39,8 @@
         "phpunit/phpunit": "^6.0",
         "symfony/dotenv": "^4.0",
         "symfony/phpunit-bridge": "^4.0",
-        "symfony/test-pack": "^1.0"
+        "symfony/test-pack": "^1.0",
+        "phpspec/phpspec": "^4.0"
     },
     "config": {
         "preferred-install": {

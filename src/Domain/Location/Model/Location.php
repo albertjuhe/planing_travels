@@ -5,13 +5,11 @@ namespace App\Domain\Location\Model;
 use App\Domain\Images\Model\Images;
 use App\Domain\Mark\Model\Mark;
 use App\Domain\Travel\Model\Travel;
-use App\Domain\Travel\ValueObject\GeoLocation;
 use App\Domain\TypeLocation\Model\TypeLocation;
 use App\Domain\User\Model\User;
 
 class Location
 {
-
     /** @var int */
     private $id;
 
@@ -56,11 +54,11 @@ class Location
     public function __construct()
     {
         $this->images = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->updatedAt = new \DateTime;
-        $this->createdAt = new \DateTime;
+        $this->updatedAt = new \DateTime();
+        $this->createdAt = new \DateTime();
     }
 
-    static public function fromCompleteAddress(
+    public static function fromCompleteAddress(
         string $placeAddress,
         string $IdType,
         string $link,
@@ -69,16 +67,13 @@ class Location
         string $longitude,
         string $placeId,
         string $address
-    )
-    {
-
+    ) {
     }
 
-    static public function fromIdAndTitle(
+    public static function fromIdAndTitle(
         int $id,
         string $title
-    )
-    {
+    ) {
         $location = new self();
         $location->setTitle($title);
         $location->id = $id;
@@ -86,7 +81,7 @@ class Location
         return $location;
     }
 
-    static public function fromArray(array $data): Location
+    public static function fromArray(array $data): Location
     {
         $location = new Location();
         $location->setDescription($data['comment']);
@@ -102,9 +97,9 @@ class Location
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -112,9 +107,10 @@ class Location
     }
 
     /**
-     * Set createdAt
+     * Set createdAt.
      *
      * @param \DateTime $createdAt
+     *
      * @return Location
      */
     public function setCreatedAt($createdAt)
@@ -125,7 +121,7 @@ class Location
     }
 
     /**
-     * Get createdAt
+     * Get createdAt.
      *
      * @return \DateTime
      */
@@ -135,9 +131,10 @@ class Location
     }
 
     /**
-     * Set updatedAt
+     * Set updatedAt.
      *
      * @param \DateTime $updatedAt
+     *
      * @return Location
      */
     public function setUpdatedAt($updatedAt)
@@ -148,7 +145,7 @@ class Location
     }
 
     /**
-     * Get updatedAt
+     * Get updatedAt.
      *
      * @return \DateTime
      */
@@ -158,9 +155,10 @@ class Location
     }
 
     /**
-     * Set title
+     * Set title.
      *
      * @param string $title
+     *
      * @return Location
      */
     public function setTitle($title)
@@ -171,7 +169,7 @@ class Location
     }
 
     /**
-     * Get title
+     * Get title.
      *
      * @return string
      */
@@ -181,9 +179,10 @@ class Location
     }
 
     /**
-     * Set slug
+     * Set slug.
      *
      * @param string $slug
+     *
      * @return Location
      */
     public function setSlug($slug)
@@ -194,7 +193,7 @@ class Location
     }
 
     /**
-     * Get slug
+     * Get slug.
      *
      * @return string
      */
@@ -204,9 +203,10 @@ class Location
     }
 
     /**
-     * Set description
+     * Set description.
      *
      * @param string $description
+     *
      * @return Location
      */
     public function setDescription($description)
@@ -217,7 +217,7 @@ class Location
     }
 
     /**
-     * Get description
+     * Get description.
      *
      * @return string
      */
@@ -227,9 +227,10 @@ class Location
     }
 
     /**
-     * Set user
+     * Set user.
      *
      * @param User $user
+     *
      * @return Location
      */
     public function setUser(User $user = null)
@@ -240,7 +241,7 @@ class Location
     }
 
     /**
-     * Get user
+     * Get user.
      *
      * @return User
      */
@@ -250,9 +251,10 @@ class Location
     }
 
     /**
-     * Set url
+     * Set url.
      *
      * @param string $url
+     *
      * @return Location
      */
     public function setUrl($url)
@@ -263,7 +265,7 @@ class Location
     }
 
     /**
-     * Get url
+     * Get url.
      *
      * @return string
      */
@@ -273,7 +275,7 @@ class Location
     }
 
     /**
-     * Get mark
+     * Get mark.
      *
      * @return Mark
      */
@@ -283,9 +285,10 @@ class Location
     }
 
     /**
-     * Set mark
+     * Set mark.
      *
      * @param Mark $mark
+     *
      * @return Location
      */
     public function setMark(Mark $mark = null)
@@ -295,9 +298,8 @@ class Location
         return $this;
     }
 
-
     /**
-     * Get travel
+     * Get travel.
      *
      * @return Travel
      */
@@ -307,9 +309,10 @@ class Location
     }
 
     /**
-     * Set travel
+     * Set travel.
      *
      * @param Travel $travel
+     *
      * @return Location
      */
     public function setTravel(Travel $travel)
@@ -320,7 +323,7 @@ class Location
     }
 
     /**
-     * Get typelocation
+     * Get typelocation.
      *
      * @return TypeLocation
      */
@@ -330,9 +333,10 @@ class Location
     }
 
     /**
-     * Set travel
+     * Set travel.
      *
      * @param TypeLocation $typeLocation
+     *
      * @return Location
      */
     public function setTypeLocation(TypeLocation $typeLocation)
@@ -343,9 +347,9 @@ class Location
     }
 
     /**
-     * Get starts
+     * Get starts.
      *
-     * @return integer
+     * @return int
      */
     public function getStarts()
     {
@@ -353,8 +357,7 @@ class Location
     }
 
     /**
-     * Set starts
-     *
+     * Set starts.
      */
     public function setStarts($starts)
     {
@@ -367,9 +370,10 @@ class Location
     }
 
     /**
-     * Add images
+     * Add images.
      *
      * @param Images $images
+     *
      * @return Images
      */
     public function addImages(Images $images): Location
@@ -380,7 +384,7 @@ class Location
     }
 
     /**
-     * Remove images
+     * Remove images.
      *
      * @param Images $images
      */
@@ -390,7 +394,8 @@ class Location
     }
 
     /**
-     * Get Location
+     * Get Location.
+     *
      * @return \Doctrine\Common\Collections\Collection
      */
     public function getImages()
@@ -412,9 +417,7 @@ class Location
             'mark' => $this->mark,
             'travel' => $this->travel,
             'typeLocation' => $this->typeLocation,
-            'stars' => $this->starts
+            'stars' => $this->starts,
         ];
     }
-
-
 }

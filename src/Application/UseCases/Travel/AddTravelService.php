@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Application\UseCases\Travel;
 
 use App\Application\Command\Travel\AddTravelCommand;
@@ -22,20 +21,22 @@ class AddTravelService implements UsesCasesService
 
     /**
      * AddTravelService constructor.
+     *
      * @param TravelRepository $travelRepository
-     * @param UserRepository $userRepository
+     * @param UserRepository   $userRepository
      */
     public function __construct(TravelRepository $travelRepository,
                                 UserRepository $userRepository
-    )
-    {
+    ) {
         $this->travelRepository = $travelRepository;
         $this->userRepository = $userRepository;
     }
 
     /**
      * @param AddTravelCommand $command
+     *
      * @return Travel
+     *
      * @throws \Exception
      */
     public function handle(AddTravelCommand $command)
@@ -48,11 +49,10 @@ class AddTravelService implements UsesCasesService
         $this->userRepository->ofIdOrFail($user->getUserId());
 
         $travel->setUser($user);
-        /** @var Index $index */
+        /* @var Index $index */
         DomainEventPublisher::instance()->publish(new TravelWasAdded($travel->toArray()));
         $this->travelRepository->save($travel);
 
         return $travel;
     }
-
 }

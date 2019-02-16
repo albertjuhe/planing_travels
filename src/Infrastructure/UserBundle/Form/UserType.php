@@ -16,21 +16,22 @@ class UserType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('firstName',TextType::class,array( 'attr' => array('class' => 'span3')))
-            ->add('lastName',TextType::class,array( 'attr' => array('class' => 'span3')))
-            ->add('email', EmailType::class,array( 'attr' => array('class' => 'span3')))
-            ->add('username', TextType::class,array( 'attr' => array('class' => 'span3')))
-            ->add('plainPassword', RepeatedType::class, array(
+            ->add('firstName', TextType::class, ['attr' => ['class' => 'span3']])
+            ->add('lastName', TextType::class, ['attr' => ['class' => 'span3']])
+            ->add('email', EmailType::class, ['attr' => ['class' => 'span3']])
+            ->add('username', TextType::class, ['attr' => ['class' => 'span3']])
+            ->add('plainPassword', RepeatedType::class, [
                 'type' => PasswordType::class,
-                'first_options'  => array('label' => 'Password'),
-                'second_options' => array('label' => 'Repeat Password'),
-            ))
+                'first_options' => ['label' => 'Password'],
+                'second_options' => ['label' => 'Repeat Password'],
+            ])
         ;
     }
+
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'data_class' => User::class,
-        ));
+        ]);
     }
 }

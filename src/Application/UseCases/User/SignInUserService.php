@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Application\UseCases\User;
 
 use App\Domain\User\Model\User;
@@ -14,7 +13,7 @@ class SignInUserService
     private $authUtils;
 
     /**
-     * @var String
+     * @var string
      */
     private $error;
 
@@ -25,6 +24,7 @@ class SignInUserService
 
     /**
      * SignInUserService constructor.
+     *
      * @param AuthenticationUtils $authUtils
      */
     public function __construct(AuthenticationUtils $authUtils)
@@ -33,7 +33,7 @@ class SignInUserService
     }
 
     /**
-     * Sign User
+     * Sign User.
      */
     public function execute()
     {
@@ -74,6 +74,4 @@ class SignInUserService
     {
         $this->lastUsername = $lastUsername;
     }
-
-
 }
