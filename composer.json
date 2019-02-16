@@ -7,6 +7,7 @@
         "friendsofphp/php-cs-fixer": "3.0.x-dev",
         "friendsofsymfony/elastica-bundle": "^5.0",
         "gedmo/doctrine-extensions": "^2.4",
+        "hanken/phpspec-code-coverage": "3.2.x-dev",
         "jms/serializer-bundle": "^2.3",
         "knplabs/knp-markdown-bundle": "^1.7",
         "league/tactician": "^1.0",

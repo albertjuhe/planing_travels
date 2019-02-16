@@ -23,6 +23,9 @@ class AddLocationCommand extends Command
      */
     private $user;
 
+    /**
+     * @var int
+     */
     private $locationType;
 
     /**

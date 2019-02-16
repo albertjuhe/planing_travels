@@ -9,6 +9,7 @@ use App\Domain\Common\Model\TriggerEventsTrait;
 use App\Domain\Event\DomainEvent;
 use App\Domain\Event\DomainEventPublisher;
 use App\Domain\Event\DomainEventSubscriber;
+use App\Domain\Travel\Exceptions\NotAllowedToPublishTravel;
 use App\Domain\Travel\Model\Travel;
 use App\Domain\User\Model\User;
 use App\Infrastructure\TravelBundle\Repository\InMemoryTravelRepository;
@@ -58,6 +59,30 @@ class PublishTravelServiceTest extends TestCase
         /** @var DomainEventAllSubscriber */
         $subscriber = DomainEventPublisher::instance()->ofId($this->idSubscriber);
         $this->assertCount(1, $subscriber->getEvents());
+    }
+
+    public function testPublishNotAllowedException()
+    {
+        $this->expectException(NotAllowedToPublishTravel::class);
+
+        /** @var Travel $travel */
+        $travel = new Travel();
+        $travel->setId(self::TRAVELID);
+        $travel->setSlug('test-travel');
+        /** @var User $user */
+        $user = User::byId(1);
+        $user2 = User::byId(2);
+
+        $travel->setUser($user2);
+        $this->travelRepository->save($travel);
+
+        $this->assertEquals($travel->getStatus(), Travel::TRAVEL_DRAFT);
+
+        /** @var PublishTravelCommand $updateTravelCommand */
+        $publishTravelCommand = new PublishTravelCommand($travel->getSlug(), $user);
+        /** @var UpdateTravelService */
+        $publishTravelService = new PublishTravelService($this->travelRepository, $this->userRepository);
+        $publishTravelService->handle($publishTravelCommand);
     }
 }
 
