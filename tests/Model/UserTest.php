@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Tests\Model;
 
 use PHPUnit\Framework\TestCase;
@@ -25,7 +24,9 @@ class UserTest extends TestCase
         $user->setPlainPassword('password');
         $this->assertTrue($user->isPasswordCorrect());
     }
-    public function testEqual() {
+
+    public function testEqual()
+    {
         $user = User::fromId(1);
         $newUser = User::fromId(1);
 
@@ -35,14 +36,15 @@ class UserTest extends TestCase
         $this->assertFalse($user->equalsTo($newUser));
     }
 
-    public function testSettersGetters() {
+    public function testSettersGetters()
+    {
         $user = User::fromId(1);
 
         $user->setEmail('email@email.com');
-        $this->assertEquals('email@email.com',$user->getEmail());
+        $this->assertEquals('email@email.com', $user->getEmail());
 
         $user->setFirstName('firstname');
-        $this->assertEquals('firstname',$user->getFirstName());
+        $this->assertEquals('firstname', $user->getFirstName());
 
         $user->setIsActive(true);
         $this->assertTrue($user->getIsActive());
@@ -51,68 +53,70 @@ class UserTest extends TestCase
         $this->assertFalse($user->getIsActive());
 
         $user->setLastLogin(new \DateTime('2018-01-01'));
-        $this->assertEquals(new \DateTime('2018-01-01'),$user->getLastLogin());
+        $this->assertEquals(new \DateTime('2018-01-01'), $user->getLastLogin());
 
         $user->setCreatedAt(new \DateTime('2018-01-01'));
-        $this->assertEquals(new \DateTime('2018-01-01'),$user->getCreatedAt());
+        $this->assertEquals(new \DateTime('2018-01-01'), $user->getCreatedAt());
 
         $user->setUpdatedAt(new \DateTime('2018-01-01'));
-        $this->assertEquals(new \DateTime('2018-01-01'),$user->getUpdatedAt());
+        $this->assertEquals(new \DateTime('2018-01-01'), $user->getUpdatedAt());
 
         $user->setLocale('en');
-        $this->assertEquals('en',$user->getLocale());
+        $this->assertEquals('en', $user->getLocale());
 
         $user->setLastName('lastname');
-        $this->assertEquals('lastname',$user->getLastName());
+        $this->assertEquals('lastname', $user->getLastName());
 
         $user->setPassword('xxxxx');
-        $this->assertEquals('xxxxx',$user->getPassword());
+        $this->assertEquals('xxxxx', $user->getPassword());
 
         $user->setPlainPassword('xxxxx');
-        $this->assertEquals('xxxxx',$user->getPlainPassword());
+        $this->assertEquals('xxxxx', $user->getPlainPassword());
 
         $user->setUsername('username');
-        $this->assertEquals('username',$user->getUsername());
+        $this->assertEquals('username', $user->getUsername());
 
-        $this->assertEquals(null,$user->getSalt());
-
+        $this->assertEquals(null, $user->getSalt());
     }
 
-    public function testSerialize()  {
+    public function testSerialize()
+    {
         $user = User::fromId(1);
         $user->setUsername('usernameTest');
         $user->setPassword('passwordTest');
-        $serialized = "a:3:{i:0;N;i:1;s:12:\"usernameTest\";i:2;s:12:\"passwordTest\";}";
+        $serialized = 'a:3:{i:0;N;i:1;s:12:"usernameTest";i:2;s:12:"passwordTest";}';
 
-        $this->assertSame($serialized,$user->serialize());
+        $this->assertSame($serialized, $user->serialize());
     }
 
-    public function testUnserialize() {
-        $serialized = "a:3:{i:0;N;i:1;s:12:\"usernameTest\";i:2;s:12:\"passwordTest\";}";
+    public function testUnserialize()
+    {
+        $serialized = 'a:3:{i:0;N;i:1;s:12:"usernameTest";i:2;s:12:"passwordTest";}';
 
         $user = User::fromId(1);
         $user->unserialize($serialized);
 
-        $this->assertEquals('usernameTest',$user->getUsername());
-        $this->assertEquals('passwordTest',$user->getPassword());
+        $this->assertEquals('usernameTest', $user->getUsername());
+        $this->assertEquals('passwordTest', $user->getPassword());
 
-        $this->assertEquals(1,$user->getUserId()->id());
-
+        $this->assertEquals(1, $user->getUserId()->id());
     }
 
-    public function testGetRoles() {
+    public function testGetRoles()
+    {
         $user = new User();
         $roles = $user->getRoles();
 
-        $this->assertCount(1,$roles);
-        $this->assertEquals('ROLE_USER',$roles[0]);
+        $this->assertCount(1, $roles);
+        $this->assertEquals('ROLE_USER', $roles[0]);
     }
 
-    public function testAddTravel() {
-        $geoLocation = new GeoLocation(10,20,30,40,50,60);
+    public function testAddTravel()
+    {
+        $geoLocation = new GeoLocation(10, 20, 30, 40, 50, 60);
         $user = User::fromId(1);
-        $travel = Travel::fromTitleAndGeolocationAndUser('dummyTravel',$geoLocation,$user);
+        $travel = Travel::fromTitleAndGeolocationAndUser('dummyTravel', $geoLocation, $user);
         $user->addTravel($travel);
-        $this->assertCount(1,$user->getTravel());
+        $this->assertCount(1, $user->getTravel());
     }
 }

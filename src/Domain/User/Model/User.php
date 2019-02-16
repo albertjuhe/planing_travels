@@ -1,5 +1,11 @@
 <?php
 
+/** @noinspection PhpUndefinedClassInspection */
+/** @noinspection PhpUndefinedClassInspection */
+/** @noinspection PhpUndefinedClassInspection */
+
+/** @noinspection PhpUndefinedClassInspection */
+
 namespace App\Domain\User\Model;
 
 use Symfony\Component\Security\Core\User\UserInterface;

@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Tests\UseCases;
-
 
 use App\Application\Command\Travel\PublishTravelCommand;
 use App\Application\UseCases\Travel\PublishTravelService;
@@ -46,30 +44,29 @@ class PublishTravelServiceTest extends TestCase
         $travel->setUser($user);
         $this->travelRepository->save($travel);
 
-        $this->assertEquals($travel->getStatus(),Travel::TRAVEL_DRAFT);
+        $this->assertEquals($travel->getStatus(), Travel::TRAVEL_DRAFT);
 
         /** @var PublishTravelCommand $updateTravelCommand */
-        $publishTravelCommand = new PublishTravelCommand($travel->getSlug(),$user);
+        $publishTravelCommand = new PublishTravelCommand($travel->getSlug(), $user);
         /** @var UpdateTravelService */
-        $publishTravelService = new PublishTravelService($this->travelRepository,$this->userRepository);
+        $publishTravelService = new PublishTravelService($this->travelRepository, $this->userRepository);
         $publishTravelService->handle($publishTravelCommand);
 
         $travelPublished = $this->travelRepository->getTravelById(1);
-        $this->assertEquals($travelPublished->getStatus(),Travel::TRAVEL_PUBLISHED);
+        $this->assertEquals($travelPublished->getStatus(), Travel::TRAVEL_PUBLISHED);
 
-        /** @var  DomainEventAllSubscriber */
+        /** @var DomainEventAllSubscriber */
         $subscriber = DomainEventPublisher::instance()->ofId($this->idSubscriber);
-        $this->assertCount(1,$subscriber->getEvents());
+        $this->assertCount(1, $subscriber->getEvents());
     }
 }
 
 /**
  * This subscriber is subscribed to all events
- * Class GeneralEventSubscriber
- * @package App\Tests\UseCases
+ * Class GeneralEventSubscriber.
  */
-class DomainEventAllSubscriber implements DomainEventSubscriber {
-
+class DomainEventAllSubscriber implements DomainEventSubscriber
+{
     use TriggerEventsTrait;
 
     public function handle(DomainEvent $domainEvent)
@@ -79,7 +76,6 @@ class DomainEventAllSubscriber implements DomainEventSubscriber {
 
     public function isSubscribedTo(DomainEvent $domainEvent)
     {
-       return true;
+        return true;
     }
-
 }

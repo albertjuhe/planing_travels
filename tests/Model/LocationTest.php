@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: albert.juhe
  * Date: 09/10/2018
- * Time: 06:48
+ * Time: 06:48.
  */
 
 namespace App\Tests\Model;
@@ -29,9 +29,7 @@ class LocationTest extends TestCase
         $this->location->setUrl('www.url.com');
         $user = User::fromId(1);
         $this->location->setUser($user);
-
     }
-
 
     public function testConstructors()
     {
@@ -40,7 +38,6 @@ class LocationTest extends TestCase
 
         $location2 = Location::fromIdAndTitle(1, 'location1');
         $this->assertTrue($location2->equals($this->location));
-
     }
 
     public function testSettersGetters()
@@ -62,15 +59,12 @@ class LocationTest extends TestCase
         $newUser = User::fromId(1);
         $this->assertTrue($user->equalsTo($newUser));
 
-        $geoLocation = new GeoLocation(1,20,50,8.0,1.23401,9);
+        $geoLocation = new GeoLocation(1, 20, 50, 8.0, 1.23401, 9);
         /** @var Mark $mark */
-        $mark = Mark::fromGeolocationAndId($geoLocation,1);
+        $mark = Mark::fromGeolocationAndId($geoLocation, 1);
         $this->location->setMark($mark);
         /** @var Mark $markNew */
         $markNew = $this->location->getMark();
         $this->assertTrue($mark->equals($markNew));
-
-
     }
-
 }

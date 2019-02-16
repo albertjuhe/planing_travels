@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Tests\ValueObject;
 
 use App\Domain\Travel\ValueObject\GeoLocation;
@@ -16,10 +15,10 @@ class GeoLocationTest extends TestCase
 
         $geoLocation3 = new GeoLocation(1, 2, 30, 40, 50, 60);
         $this->assertFalse($geoLocation->equal($geoLocation3));
-
     }
 
-    public function testSetGeolocationValues() {
+    public function testSetGeolocationValues()
+    {
         $geoLocation = new GeoLocation(10, 20, 30, 40, 50, 60);
         $geoLocation->setLat(45.99999999);
         $geoLocation->setLng(0);
@@ -28,9 +27,7 @@ class GeoLocationTest extends TestCase
         $geoLocation->setLat1(1.43423423);
         $geoLocation->setLng1(1.233);
 
-
-        $geoLocation1 = new GeoLocation(45.99999999, 0,23.4352452, 5.9892, 1.43423423,1.233 );
+        $geoLocation1 = new GeoLocation(45.99999999, 0, 23.4352452, 5.9892, 1.43423423, 1.233);
         $this->assertTrue($geoLocation1->equal($geoLocation));
-
     }
 }

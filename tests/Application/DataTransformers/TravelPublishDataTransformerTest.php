@@ -3,11 +3,10 @@
  * Created by PhpStorm.
  * User: ajuhe
  * Date: 27/12/18
- * Time: 20:28
+ * Time: 20:28.
  */
 
 namespace App\Tests\Application\DataTransformers;
-
 
 use PHPUnit\Framework\TestCase;
 use App\Application\DataTransformers\Travel\TravelPublishDataTransformer;
@@ -31,6 +30,6 @@ class TravelPublishDataTransformerTest extends TestCase
     public function testRead()
     {
         $travelPublishDataTransformer = new TravelPublishDataTransformer($this->travel);
-        $this->assertEquals($travelPublishDataTransformer->read(), ['id' => 1,'publishedAt' => new \DateTime('2018-01-01'),'status' => Travel::TRAVEL_DRAFT]);
+        $this->assertEquals($travelPublishDataTransformer->read(), ['id' => 1, 'publishedAt' => new \DateTime('2018-01-01'), 'status' => Travel::TRAVEL_DRAFT]);
     }
 }

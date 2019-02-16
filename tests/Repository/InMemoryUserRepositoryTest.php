@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Tests\Repository;
 
 use PHPUnit\Framework\TestCase;
@@ -12,7 +11,8 @@ class InMemoryUserRepositoryTest extends TestCase
     /** @var InMemoryUserRepository */
     private $inMemoryUserRepository;
 
-    public function setUp() {
+    public function setUp()
+    {
         $this->inMemoryUserRepository = new InMemoryUserRepository();
     }
 
@@ -21,14 +21,15 @@ class InMemoryUserRepositoryTest extends TestCase
         /** @var User $user */
         $user = User::byId(1);
         $userNew = $this->inMemoryUserRepository->ofIdOrFail(1);
-        $this->assertEquals($user->userId(),$userNew->userId());
+        $this->assertEquals($user->userId(), $userNew->userId());
     }
 
-    public function testSave() {
+    public function testSave()
+    {
         $user = User::byId(1);
         $user->setUsername('newusername');
         $this->inMemoryUserRepository->save($user);
         $newUser = $this->inMemoryUserRepository->UserByUsername('newusername');
-        $this->assertEquals($user->userId(),$newUser->userId());
+        $this->assertEquals($user->userId(), $newUser->userId());
     }
 }
