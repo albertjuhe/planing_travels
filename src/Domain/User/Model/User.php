@@ -1,13 +1,8 @@
 <?php
 
-/** @noinspection PhpUndefinedClassInspection */
-/** @noinspection PhpUndefinedClassInspection */
-/** @noinspection PhpUndefinedClassInspection */
-
-/** @noinspection PhpUndefinedClassInspection */
-
 namespace App\Domain\User\Model;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\User\UserInterface;
 use App\Domain\Common\Model\IdentifiableDomainObject;
 use App\Domain\Travel\Model\Travel;
@@ -20,35 +15,65 @@ class User extends IdentifiableDomainObject implements UserInterface
      * @var UserId
      */
     private $userId;
-
+    /**
+     * @var string
+     */
     private $username;
-
+    /**
+     * @var string
+     */
     private $plainPassword;
-
+    /**
+     * @var string
+     */
     private $password;
-
+    /**
+     * @var string
+     */
     private $email;
 
+    /**
+     * @var bool
+     */
     private $isActive;
 
-    /** @var \DateTime */
+    /**
+     * @var \DateTime
+     */
     protected $createdAt;
 
-    /** @var \DateTime */
+    /**
+     * @var \DateTime
+     */
     protected $updatedAt;
-
+    /**
+     * @var \DateTime
+     */
     protected $lastLogin;
-
+    /**
+     * @var string
+     */
     protected $locale;
 
+    /**
+     * @var string
+     */
     private $firstName;
-
+    /**
+     * @var string
+     */
     private $lastName;
-
+    /**
+     * @var ArrayCollection
+     */
     private $location;
-
+    /**
+     * @var ArrayCollection
+     */
     private $travel;
-
+    /**
+     * @var ArrayCollection
+     */
     private $travelsshared;
 
     public function __construct()
@@ -58,9 +83,9 @@ class User extends IdentifiableDomainObject implements UserInterface
         $this->createdAt = new \DateTime();
         $this->locale = 'en';
 
-        $this->travel = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->location = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->travelsshared = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->travel = new ArrayCollection();
+        $this->location = new ArrayCollection();
+        $this->travelsshared = new ArrayCollection();
 
         $this->publishEvent();
     }
@@ -316,7 +341,7 @@ class User extends IdentifiableDomainObject implements UserInterface
      *
      * @return User
      */
-    public function setLastLogin($lastLogin)
+    public function setLastLogin($lastLogin): User
     {
         $this->lastLogin = $lastLogin;
 
@@ -340,7 +365,7 @@ class User extends IdentifiableDomainObject implements UserInterface
      *
      * @return User
      */
-    public function setLocale($locale)
+    public function setLocale(string $locale): User
     {
         $this->locale = $locale;
 
@@ -352,19 +377,21 @@ class User extends IdentifiableDomainObject implements UserInterface
      *
      * @return string
      */
-    public function getLocale()
+    public function getLocale(): string
     {
         return $this->locale;
     }
 
-    public function getPlainPassword()
+    public function getPlainPassword(): string
     {
         return $this->plainPassword;
     }
 
-    public function setPlainPassword($password)
+    public function setPlainPassword(string $password): User
     {
         $this->plainPassword = $password;
+
+        return $this;
     }
 
     /**
@@ -422,7 +449,7 @@ class User extends IdentifiableDomainObject implements UserInterface
      *
      * @return User
      */
-    public function addTravel(Travel $travel)
+    public function addTravel(Travel $travel): User
     {
         $this->travel[] = $travel;
 
@@ -439,23 +466,11 @@ class User extends IdentifiableDomainObject implements UserInterface
         return $this->travel;
     }
 
-    /**
-     * Remove travel.
-     *
-     * @param \App\Entity\Travel $travel
-     */
     public function removeTravel(Travel $travel)
     {
         $this->travel->removeElement($travel);
     }
 
-    /**
-     * Add travelsshared.
-     *
-     * @param \App\Entity\Travel $travelsshared
-     *
-     * @return User
-     */
     public function addTravelsshared(Travel $travelsshared)
     {
         $this->travelsshared[] = $travelsshared;
@@ -463,11 +478,6 @@ class User extends IdentifiableDomainObject implements UserInterface
         return $this;
     }
 
-    /**
-     * Remove travelsshared.
-     *
-     * @param \App\Entity\Travel $travelsshared
-     */
     public function removeTravelsshared(Travel $travelsshared)
     {
         $this->travelsshared->removeElement($travelsshared);
@@ -490,7 +500,7 @@ class User extends IdentifiableDomainObject implements UserInterface
      *
      * @return User
      */
-    public function addLocation(Travel $location)
+    public function addLocation(Location $location)
     {
         $this->location[] = $location;
 
