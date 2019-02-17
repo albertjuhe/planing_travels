@@ -1,22 +1,16 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: albert.juhe
- * Date: 24/10/2018
- * Time: 08:09.
- */
 
 namespace App\Application\UseCases\Travel;
 
 use App\Application\Command\Travel\PublishTravelCommand;
-use App\Application\UseCases\usesCasesService;
+use App\Application\UseCases\UsesCasesService;
 use App\Domain\Travel\Exceptions\NotAllowedToPublishTravel;
 use App\Domain\Travel\Repository\TravelRepository;
 use App\Domain\Travel\Model\Travel;
 use App\Domain\User\Model\User;
 use App\Domain\User\Repository\UserRepository;
 
-class PublishTravelService implements usesCasesService
+class PublishTravelService implements UsesCasesService
 {
     /** @var TravelRepository; */
     private $travelRepository;
