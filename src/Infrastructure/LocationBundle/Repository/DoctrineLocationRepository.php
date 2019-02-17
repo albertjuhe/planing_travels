@@ -2,6 +2,7 @@
 
 namespace App\Infrastructure\LocationBundle\Repository;
 
+use App\Domain\Location\Exceptions\LocationDoesntExists;
 use App\Domain\Location\Model\Location;
 use App\Domain\Location\Repository\LocationRepository;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -19,8 +20,23 @@ class DoctrineLocationRepository extends ServiceEntityRepository implements Loca
         parent::__construct($registry, Location::class);
     }
 
-    public function save(Location $location)
+    public function save(Location $location): void
     {
         $this->_em->persist($location);
+    }
+
+    public function remove(Location $location): void
+    {
+        $this->_em->remove($location);
+    }
+
+    public function findById(int $locationId): Location
+    {
+        $location = $this->find($locationId);
+        if (null === $location) {
+            throw new LocationDoesntExists();
+        }
+
+        return $location;
     }
 }

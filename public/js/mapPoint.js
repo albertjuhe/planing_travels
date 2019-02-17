@@ -220,7 +220,7 @@ mapPoint.prototype.deleteMark = function(e) {
     var l = $('#' + placeToGo).data('location');
     map.removeLayer(l.currentMark);
     $('#layer_' + placeToGo).remove();
-    this.rest('DELETE', l.id);
+    this.rest('DELETE', null, l.id);
 };
 
 mapPoint.prototype.nota = function(e) {
@@ -342,7 +342,7 @@ mapPoint.prototype.rest = function(typeRest,data,locationPoint) {
     } else if (typeRest=='DELETE') {
         $.ajax({
             type:typeRest,
-            url: '../api/locations/' + data,
+            url: '../../api/location/' + locationPoint,
             success: function(result) {
                 console.log('Removing point ' + result);
             },

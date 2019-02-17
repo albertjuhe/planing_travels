@@ -68,6 +68,12 @@ services:
       tags:
         - { name: tactician.handler, command: App\Application\Command\Location\AddLocationCommand}
 
+    location.delete_handler:
+      class: App\Application\UseCases\Location\DeleteLocationService
+      arguments:  ['@doctrine.user.repository', '@doctrine.location.repository' ]
+      tags:
+        - { name: tactician.handler, command: App\Application\Command\Location\DeleteLocationCommand}
+
    # Tactician middleware Store domain events
     App\Application\Middleware\DomainEventsMiddleware:
         arguments: ['@doctrine.travel_event.repository']
