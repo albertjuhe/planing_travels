@@ -413,10 +413,10 @@ class Location
             'url' => $this->url,
             'slug' => $this->slug,
             'description' => $this->description,
-            'user' => $this->user->getUserId()->id(),
-            'mark' => $this->mark,
-            'travel' => $this->travel,
-            'typeLocation' => $this->typeLocation,
+            'user' => $this->user->getUserId(),
+            'mark' => $this->mark->getId(),
+            'travel' => $this->travel->getId(),
+            'typeLocation' => $this->typeLocation->getId(),
             'stars' => $this->starts,
         ];
     }

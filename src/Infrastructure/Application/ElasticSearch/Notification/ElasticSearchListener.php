@@ -36,7 +36,7 @@ class ElasticSearchListener
     public function updateElasticSearch($entity)
     {
         /** @var ElasticSearchRepository $elasticSearchRepository */
-        $elasticSearchRepository = $this->factoryElasticSearchRepository->Build((new \ReflectionClass($entity))->getShortName());
+        $elasticSearchRepository = $this->factoryElasticSearchRepository->build((new \ReflectionClass($entity))->getShortName());
 
         if ($elasticSearchRepository) {
             $elasticSearchRepository->save($entity);
