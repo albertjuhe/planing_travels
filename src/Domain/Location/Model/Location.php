@@ -364,7 +364,7 @@ class Location
         $this->starts = $starts;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->title;
     }
