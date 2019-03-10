@@ -2,10 +2,10 @@
 
 namespace App\UI\Controller\http;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use League\Tactician\CommandBus;
 
-class BaseController extends Controller
+class BaseController extends AbstractController
 {
     /** @var CommandBus */
     protected $commandBus;

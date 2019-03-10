@@ -74,6 +74,12 @@ services:
       tags:
         - { name: tactician.handler, command: App\Application\Command\Location\DeleteLocationCommand}
 
+    location.get_by_travel_handler:
+      class: App\Application\UseCases\Location\GetLocationsByTravelService
+      arguments:  ['@doctrine.travel.repository' ]
+      tags:
+        - { name: tactician.handler, command: App\Application\Command\Location\GetLocationsByTravelCommand}
+
    # Tactician middleware Store domain events
     App\Application\Middleware\DomainEventsMiddleware:
         arguments: ['@doctrine.travel_event.repository']

@@ -2,16 +2,16 @@
 
 namespace App\UI\Controller\API;
 
-use App\Application\Command\Location\DeleteLocationCommand;
+use App\Application\Command\Location\GetLocationsByTravelCommand;
 use App\UI\Controller\http\BaseController;
 use League\Tactician\CommandBus;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Symfony\Component\Security\Core\Security;
 
-class DeleteLocationAPIController extends BaseController
+class GetLocationsAPIController extends BaseController
 {
     /**
      * @var Security
@@ -25,10 +25,10 @@ class DeleteLocationAPIController extends BaseController
     }
 
     /**
-     * @Route("/api/location/{location}",name="deleteAPILocation")
-     * @Method({"DELETE"})
+     * @Route("api/travel/{travel}/locations", name="locations_by_travel")
+     * @Method({"GET"})
      */
-    public function deleteLocation(Request $request, $location)
+    public function getLocationsByTravel(Request $request, int $travel)
     {
         $user = $this->security->getUser();
         if (empty($user)) {
@@ -37,13 +37,13 @@ class DeleteLocationAPIController extends BaseController
             );
         }
 
-        $deleteLocationCommand = new DeleteLocationCommand($location);
-        $this->commandBus->handle($deleteLocationCommand);
+        $getLocationsByTravel = new GetLocationsByTravelCommand($travel);
 
         return new JsonResponse(
             $response['data'] = [
-                'type' => 'location',
-                'id' => $location,
+                'type' => 'travel',
+                'id' => $travel,
+                'locations' => $getLocationsByTravel,
             ]
         );
     }
