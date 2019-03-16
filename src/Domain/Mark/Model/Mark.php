@@ -225,4 +225,13 @@ class Mark
     {
         return $this->title;
     }
+
+    public function toArray()
+    {
+        return [
+            'id' => $this->getId(),
+            'title' => $this->getTitle(),
+            'geolocation' => $this->getGeoLocation()->toArray(),
+        ];
+    }
 }

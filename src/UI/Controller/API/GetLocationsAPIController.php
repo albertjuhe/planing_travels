@@ -30,20 +30,23 @@ class GetLocationsAPIController extends BaseController
      */
     public function getLocationsByTravel(Request $request, int $travel)
     {
+        /*
         $user = $this->security->getUser();
         if (empty($user)) {
             return new JsonResponse(
                 $response['error'] = 'Operation not allowed'
             );
         }
+        */
 
         $getLocationsByTravel = new GetLocationsByTravelCommand($travel);
+        $locations = $this->commandBus->handle($getLocationsByTravel);
 
         return new JsonResponse(
             $response['data'] = [
                 'type' => 'travel',
                 'id' => $travel,
-                'locations' => $getLocationsByTravel,
+                'locations' => $locations,
             ]
         );
     }

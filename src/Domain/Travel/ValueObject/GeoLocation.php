@@ -158,4 +158,16 @@ class GeoLocation
     {
         $this->lng1 = $lng1;
     }
+
+    public function toArray(): array
+    {
+        return [
+            'latitud' => $this->lat,
+            'longitud' => $this->lng,
+            'latitud_0' => $this->lat0,
+            'longitud_0' => $this->lng0,
+            'latitud_1' => $this->lat1,
+            'longitud_0' => $this->lng1,
+        ];
+    }
 }
