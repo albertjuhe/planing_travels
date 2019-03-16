@@ -24,6 +24,11 @@ services:
         resource: '../src/UI/Controller'
         tags: ['controller.service_arguments']
 
+    twig.extension.text:
+        class: Twig_Extensions_Extension_Text
+        tags:
+         - { name: twig.extension }
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
     # Command handler
@@ -57,6 +62,24 @@ services:
       tags:
       - { name: tactician.handler, command: App\Application\Command\Travel\ShowTravelBySlugCommand}
 
+    location.add_handler:
+      class: App\Application\UseCases\Location\AddLocationService
+      arguments:  ['@doctrine.travel.repository','@doctrine.user.repository', '@doctrine.mark.repository', '@doctrine.location.repository' ]
+      tags:
+        - { name: tactician.handler, command: App\Application\Command\Location\AddLocationCommand}
+
+    location.delete_handler:
+      class: App\Application\UseCases\Location\DeleteLocationService
+      arguments:  ['@doctrine.user.repository', '@doctrine.location.repository' ]
+      tags:
+        - { name: tactician.handler, command: App\Application\Command\Location\DeleteLocationCommand}
+
+    location.get_by_travel_handler:
+      class: App\Application\UseCases\Location\GetLocationsByTravelService
+      arguments:  ['@doctrine.travel.repository' ]
+      tags:
+        - { name: tactician.handler, command: App\Application\Command\Location\GetLocationsByTravelCommand}
+
    # Tactician middleware Store domain events
     App\Application\Middleware\DomainEventsMiddleware:
         arguments: ['@doctrine.travel_event.repository']
@@ -75,7 +98,20 @@ services:
 
     doctrine.user.repository: '@App\Infrastructure\UserBundle\Repository\DoctrineUserRepository'
 
-    # Event store repository
+    # Repository Location
+    App\Infrastructure\LocationBundle\Repository\DoctrineLocationRepository:
+        arguments: ['@doctrine']
+
+    doctrine.location.repository: '@App\Infrastructure\LocationBundle\Repository\DoctrineLocationRepository'
+
+    # Repository Mark
+    App\Infrastructure\MarkBundle\Repository\DoctrineMarkRepository:
+        arguments: ['@doctrine']
+
+    doctrine.mark.repository: '@App\Infrastructure\MarkBundle\Repository\DoctrineMarkRepository'
+
+
+      # Event store repository
     App\Infrastructure\EventBundle\Repository\DoctrineEventStore:
       arguments: ['@doctrine','@jms_serializer']
 

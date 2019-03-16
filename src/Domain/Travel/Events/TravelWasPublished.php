@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Domain\Travel\Events;
 
 use App\Domain\Event\DomainEvent;
@@ -18,8 +17,10 @@ class TravelWasPublished implements DomainEvent
 
     /**
      * travelWasAdded constructor.
+     *
      * @param array $travel
-     * @param int $user
+     * @param int   $user
+     *
      * @throws \Exception
      */
     public function __construct(array $travel, int $user)
@@ -76,5 +77,4 @@ class TravelWasPublished implements DomainEvent
     {
         $this->occuredOn = $occuredOn;
     }
-
 }

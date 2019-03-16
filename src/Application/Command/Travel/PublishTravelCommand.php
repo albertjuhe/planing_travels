@@ -3,14 +3,15 @@
  * Created by PhpStorm.
  * User: albert.juhe
  * Date: 24/10/2018
- * Time: 19:05
+ * Time: 19:05.
  */
 
 namespace App\Application\Command\Travel;
 
+use App\Application\Command\Command;
 use App\Domain\User\Model\User;
 
-class PublishTravelCommand
+class PublishTravelCommand extends Command
 {
     /** @var string */
     private $travelSlug;
@@ -19,8 +20,9 @@ class PublishTravelCommand
 
     /**
      * PublishTravelCommand constructor.
+     *
      * @param string $travelSlug
-     * @param User $user
+     * @param User   $user
      */
     public function __construct(string $travelSlug, User $user)
     {
@@ -43,7 +45,6 @@ class PublishTravelCommand
     {
         $this->travelSlug = $travelSlug;
     }
-
 
     /**
      * @return User

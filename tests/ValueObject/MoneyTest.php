@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: ajuhe
  * Date: 8/07/18
- * Time: 18:47
+ * Time: 18:47.
  */
 
 namespace App\Tests\Domain\ValueObject;
@@ -14,7 +14,6 @@ use PHPUnit\Framework\TestCase;
 
 class MoneyTest extends TestCase
 {
-
     public function testFromMoney()
     {
         $currency = new Currency('USD');
@@ -69,6 +68,6 @@ class MoneyTest extends TestCase
     {
         $currency = new Currency('USD');
         $money = new Money(100, $currency);
-        $this->assertEquals(100,$money->amount());
+        $this->assertEquals(100, $money->amount());
     }
 }

@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: albert.juhe
  * Date: 09/11/2018
- * Time: 17:07
+ * Time: 17:07.
  */
 
 namespace App\Tests\Events;
@@ -19,12 +19,14 @@ class TravelWasUpdatedTest extends TestCase
     /** @var Travel */
     private $travel;
 
-    public function setUp() {
-        $this->travel = Travel::fromGeoLocation( new GeoLocation(1,1,1,1,1,1));
+    public function setUp()
+    {
+        $this->travel = Travel::fromGeoLocation(new GeoLocation(1, 1, 1, 1, 1, 1));
         $this->travel->setId(45);
     }
 
-    public function testSettersGetters() {
+    public function testSettersGetters()
+    {
         $travelWasPublished = new TravelWasUpdated((new TravelPublishDataTransformer($this->travel))->read());
         $this->assertEquals($this->travel->getId(), $travelWasPublished->getTravel()['id']);
 

@@ -16,10 +16,9 @@ class CurrencyTest extends TestCase
         $this->assertFalse($currency1->equals($currency2));
     }
 
-    public function testExpectExceptionInvalidArgumentTest() {
+    public function testExpectExceptionInvalidArgumentTest()
+    {
         $this->expectException(\InvalidArgumentException::class);
         $currency1 = new Currency('EU');
-
     }
-
 }

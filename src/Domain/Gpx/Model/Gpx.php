@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Domain\Gpx\Model;
 
 use App\Domain\Travel\Model\Travel;
@@ -22,10 +21,10 @@ class Gpx
     /** @var string */
     private $color;
 
-    /** @var \DateTime  */
+    /** @var \DateTime */
     protected $createdAt;
 
-    /** @var \DateTime  */
+    /** @var \DateTime */
     protected $updatedAt;
 
     /** @var Travel */
@@ -33,12 +32,13 @@ class Gpx
 
     public function __construct()
     {
-        $this->updatedAt = new \DateTime;
-        $this->createdAt = new \DateTime;
+        $this->updatedAt = new \DateTime();
+        $this->createdAt = new \DateTime();
     }
 
     /**
      * @param Gpx $gpx
+     *
      * @return bool
      */
     public function equals(Gpx $gpx)
@@ -173,7 +173,4 @@ class Gpx
     {
         $this->travel = $travel;
     }
-
-
-
 }

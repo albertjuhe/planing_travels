@@ -1,20 +1,18 @@
 <?php
 
-
 namespace App\UI\Controller\http;
 
-
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use League\Tactician\CommandBus;
 
-class BaseController extends Controller
+class BaseController extends AbstractController
 {
-
-    /** @var CommandBus  */
+    /** @var CommandBus */
     protected $commandBus;
 
     /**
      * BaseController constructor.
+     *
      * @param CommandBus $commandBus
      */
     public function __construct(CommandBus $commandBus)
@@ -37,8 +35,4 @@ class BaseController extends Controller
     {
         $this->commandBus = $commandBus;
     }
-
-
-
-
 }

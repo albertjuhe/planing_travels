@@ -1,16 +1,17 @@
 <?php
 
-
 namespace App\Application\Command\Travel;
 
+use App\Application\Command\Command;
 
-class ShowTravelBySlugCommand
+class ShowTravelBySlugCommand extends Command
 {
-/** @var string */
+    /** @var string */
     private $slug;
 
     /**
      * ShowTravelBySlugCommand constructor.
+     *
      * @param string $slug
      */
     public function __construct(string $slug)
@@ -33,5 +34,4 @@ class ShowTravelBySlugCommand
     {
         $this->slug = $slug;
     }
-
 }

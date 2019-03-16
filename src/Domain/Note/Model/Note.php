@@ -4,7 +4,6 @@ namespace App\Domain\Note\Model;
 
 class Note
 {
-
     private $id;
 
     private $title;
@@ -13,11 +12,10 @@ class Note
 
     private $location;
 
-
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer 
+     * @return int
      */
     public function getId()
     {
@@ -25,9 +23,10 @@ class Note
     }
 
     /**
-     * Set title
+     * Set title.
      *
      * @param string $title
+     *
      * @return Note
      */
     public function setTitle($title)
@@ -38,9 +37,9 @@ class Note
     }
 
     /**
-     * Get title
+     * Get title.
      *
-     * @return string 
+     * @return string
      */
     public function getTitle()
     {
@@ -48,9 +47,10 @@ class Note
     }
 
     /**
-     * Set description
+     * Set description.
      *
      * @param string $description
+     *
      * @return Note
      */
     public function setDescription($description)
@@ -61,9 +61,9 @@ class Note
     }
 
     /**
-     * Get description
+     * Get description.
      *
-     * @return string 
+     * @return string
      */
     public function getDescription()
     {
@@ -71,9 +71,10 @@ class Note
     }
 
     /**
-     * Set location
+     * Set location.
      *
      * @param \App\Domain\Location\Model\Location $location
+     *
      * @return Note
      */
     public function setLocation($location = null)
@@ -84,7 +85,7 @@ class Note
     }
 
     /**
-     * Get location
+     * Get location.
      *
      * @return \App\Domain\Location\Model\Location
      */

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Application\UseCases\Travel;
 
 use App\Domain\Travel\Repository\TravelRepository;
@@ -15,6 +14,7 @@ class GetAllMyTravelsService
 
     /**
      * GetAllMyTravels constructor.
+     *
      * @param TravelRepository $travelRepository
      */
     public function __construct(TravelRepository $travelRepository)
@@ -22,9 +22,8 @@ class GetAllMyTravelsService
         $this->travelRepository = $travelRepository;
     }
 
-    public function execute(User $user) {
+    public function execute(User $user)
+    {
         return $this->travelRepository->getAllTravelsByUser($user);
     }
-
-
 }

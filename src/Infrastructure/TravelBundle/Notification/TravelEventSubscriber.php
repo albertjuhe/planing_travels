@@ -14,13 +14,15 @@ class TravelEventSubscriber implements DomainEventSubscriber
     }
 
     /**
-     * Check the domainEvent to treat
+     * Check the domainEvent to treat.
+     *
      * @param DomainEvent $domainEvent
+     *
      * @return bool|mixed
      */
     public function isSubscribedTo(DomainEvent $domainEvent)
     {
-       return ($domainEvent instanceof TravelWasPublished ||
-           $domainEvent instanceof TravelWasAdded);
+        return $domainEvent instanceof TravelWasPublished ||
+           $domainEvent instanceof TravelWasAdded;
     }
 }

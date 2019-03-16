@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: albert.juhe
  * Date: 01/10/2018
- * Time: 07:52
+ * Time: 07:52.
  */
 
 namespace App\Tests\UseCases;
@@ -24,17 +24,17 @@ class GetAllMyTravelsServiceTest extends TestCase
         $this->travelRepository->loadData();
     }
 
-    public function testGetAllMyTravels() {
+    public function testGetAllMyTravels()
+    {
         $user = User::byId(1);
 
         $getAllMyTravelsService = new GetAllMyTravelsService($this->travelRepository);
         $travels = $getAllMyTravelsService->execute($user);
 
-        foreach($travels as $travel) {
-            $this->assertEquals($travel->getUser()->userId(),$user->userId());
+        foreach ($travels as $travel) {
+            $this->assertEquals($travel->getUser()->userId(), $user->userId());
         }
 
-        $this->assertCount(3,$travels);
+        $this->assertCount(3, $travels);
     }
-
 }

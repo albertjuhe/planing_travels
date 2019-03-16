@@ -1,12 +1,9 @@
 <?php
 
-
 namespace App\Domain\Travel\ValueObject;
-
 
 class GeoLocation
 {
-
     /** @var float */
     private $lat;
 
@@ -27,6 +24,7 @@ class GeoLocation
 
     /**
      * GeoLocation constructor.
+     *
      * @param float $latitud
      * @param float $longitud
      * @param float $latitud0
@@ -41,11 +39,10 @@ class GeoLocation
         float $longitud0,
         float $latitud1,
         float $longitud1
-    )
-    {
+    ) {
         $this->lat = $latitud;
         $this->lng = $longitud;
-        $this->lat0= $latitud0;
+        $this->lat0 = $latitud0;
         $this->lng0 = $longitud0;
         $this->lat1 = $latitud1;
         $this->lng1 = $longitud1;
@@ -53,9 +50,11 @@ class GeoLocation
 
     /**
      * @param GeoLocation $geolocation
+     *
      * @return bool
      */
-    public function equal(GeoLocation $geolocation) {
+    public function equal(GeoLocation $geolocation)
+    {
         return $this->lng === $geolocation->lng() &&
             $this->lat === $geolocation->lat() &&
             $this->lng0 === $geolocation->lng0() &&
@@ -160,5 +159,15 @@ class GeoLocation
         $this->lng1 = $lng1;
     }
 
-
+    public function toArray(): array
+    {
+        return [
+            'latitud' => $this->lat,
+            'longitud' => $this->lng,
+            'latitud_0' => $this->lat0,
+            'longitud_0' => $this->lng0,
+            'latitud_1' => $this->lat1,
+            'longitud_0' => $this->lng1,
+        ];
+    }
 }

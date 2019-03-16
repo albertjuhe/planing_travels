@@ -1,11 +1,9 @@
 <?php
 
-
 namespace App\Domain\Event;
 
 /**
- * Class DomainEventPublisher
- * @package App\Domain\Event
+ * Class DomainEventPublisher.
  */
 class DomainEventPublisher
 {
@@ -44,7 +42,7 @@ class DomainEventPublisher
     {
         $id = $this->id;
         $this->subscribers[$id] = $aDomainEventSubscriber;
-        $this->id++;
+        ++$this->id;
 
         return $id;
     }

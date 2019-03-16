@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Infrastructure\Middleware;
 
 use App\Infrastructure\TravelBundle\Repository\ElasticSearchTravelRepository;
@@ -21,5 +20,4 @@ class ElasticSearchMiddleware implements Middleware
         //$this->elasticSearchTravelRepository->save($returnValue);
         return $returnValue;
     }
-
 }

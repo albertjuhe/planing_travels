@@ -1,32 +1,60 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: ajuhe
- * Date: 5/01/19
- * Time: 17:58
- */
 
 namespace App\UI\Controller\API;
 
+use App\Application\Command\Location\AddLocationCommand;
+use App\Domain\Mark\Model\Mark;
+use App\Domain\Travel\ValueObject\GeoLocation;
 use App\UI\Controller\http\BaseController;
+use App\Domain\Location\Model\Location;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Domain\User\Exceptions\UserDoesntExists;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use League\Tactician\CommandBus;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Security\Core\Security;
 
 class AddNewLocationAPIController extends BaseController
 {
     /**
-     * ShowMyTravelsController constructor.
-     * @param $commandBus
+     * @var Security
      */
-    public function __construct(CommandBus $commandBus)
+    private $security;
+
+    public function __construct(CommandBus $commandBus, Security $security)
     {
         parent::__construct($commandBus);
+        $this->security = $security;
     }
 
-    public function newLocation() {
+    /**
+     * @Route("/api/user/{userId}/location",name="newAPILocation")
+     * @Method({"POST"})
+     */
+    public function newLocation(Request $request, $userId)
+    {
+        $user = $this->security->getUser();
+        if (empty($user) || $userId != $user->getUserId()) {
+            return new JsonResponse(
+                $response['error'] = 'Operation not allowed'
+            );
+        }
 
+        $data = json_decode($request->getContent(), true);
+        $location = Location::fromArray($data);
+
+        $geolocation = new GeoLocation($data['latitude'], $data['longitude'], 0, 0, 0, 0);
+        $mark = Mark::fromGeolocationAndId($geolocation, $data['place_id']);
+        $mark->setJson($request->getContent());
+        $mark->setTitle($data['address']);
+
+        $location->setMark($mark);
+
+        $addLocationCommand = new AddLocationCommand($data['travel'], $location, $userId, $mark, $data['IdType']);
+        $this->commandBus->handle($addLocationCommand);
+
+        return new JsonResponse(
+            $response['data'] = $data
+        );
     }
 }

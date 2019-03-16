@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Infrastructure\TypeLocationBundle\Repository;
 
 use App\Domain\TypeLocation\Repository\TypeLocationRepository;
@@ -12,6 +11,7 @@ class DoctrineTypeLocation extends ServiceEntityRepository implements TypeLocati
 {
     /**
      * DoctrineTravelRepository constructor.
+     *
      * @param ManagerRegistry $registry
      */
     public function __construct(ManagerRegistry $registry)
@@ -20,12 +20,12 @@ class DoctrineTypeLocation extends ServiceEntityRepository implements TypeLocati
     }
 
     /**
-     * Get all type of locations
+     * Get all type of locations.
+     *
      * @return array|mixed
      */
     public function getAllTypeLocations()
     {
         return $this->findAll();
     }
-
 }

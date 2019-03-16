@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Domain\Travel\Events;
 
 use App\Domain\Event\DomainEvent;
@@ -10,17 +9,13 @@ class TravelWasAdded implements DomainEvent
 {
     const ADD_TRAVEL_EVENT_REQUEST = 'add_travel_request_event';
 
-    /** @var Travel */
+    /** @var array */
     private $travel;
+
     /** @var \DateTime */
     private $occuredOn;
 
-    /**
-     * travelWasAdded constructor.
-     * @param Travel $travel
-     * @throws \Exception
-     */
-    public function __construct(Travel $travel)
+    public function __construct(array $travel)
     {
         $this->travel = $travel;
         $this->occuredOn = new \DateTime();
@@ -29,7 +24,7 @@ class TravelWasAdded implements DomainEvent
     /**
      * @return Travel
      */
-    public function getTravel(): Travel
+    public function getTravel(): array
     {
         return $this->travel;
     }
@@ -57,5 +52,4 @@ class TravelWasAdded implements DomainEvent
     {
         return $this->occuredOn;
     }
-
 }

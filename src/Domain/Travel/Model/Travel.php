@@ -1,5 +1,6 @@
 <?php
 
+/** @noinspection PhpInconsistentReturnPointsInspection */
 
 namespace App\Domain\Travel\Model;
 
@@ -57,7 +58,7 @@ class Travel
     /** @var User */
     private $user;
 
-    /** @var Array */
+    /** @var array */
     private $sharedusers;
 
     /** @var Location */
@@ -74,8 +75,8 @@ class Travel
      */
     public function __construct()
     {
-        $this->updatedAt = new \DateTime;
-        $this->createdAt = new \DateTime;
+        $this->updatedAt = new \DateTime();
+        $this->createdAt = new \DateTime();
         $this->setStarts(0);
         $this->setWatch(0);
         $this->geoLocation = new GeoLocation(0, 0, 0, 0, 0, 0);
@@ -92,17 +93,20 @@ class Travel
     {
         $travel = new self();
         $travel->setUser($user);
+
         return $travel;
     }
 
     /**
      * @param GeoLocation $geolocation
+     *
      * @return Travel
      */
     public static function fromGeoLocation(GeoLocation $geolocation): Travel
     {
         $travel = new self();
         $travel->setGeoLocation($geolocation);
+
         return $travel;
     }
 
@@ -111,6 +115,7 @@ class Travel
         $travel = self::fromGeoLocation($geolocation);
         $travel->setTitle($title);
         $travel->setUser($user);
+
         return $travel;
     }
 
@@ -218,10 +223,8 @@ class Travel
         return $this->photo;
     }
 
-
     /**
      * @param $photo
-     * @return string
      */
     public function setPhoto(string $photo)
     {
@@ -381,7 +384,7 @@ class Travel
     }
 
     /**
-     * Publish the travel, is visible for all
+     * Publish the travel, is visible for all.
      */
     public function publish()
     {
@@ -422,7 +425,8 @@ class Travel
     }
 
     /**
-     * info
+     * info.
+     *
      * @return array
      */
     public function toArray()
@@ -440,8 +444,7 @@ class Travel
             'userId' => $this->getUser()->getUserId(),
             'username' => $this->getUser()->getUsername(),
             'publishedAt' => $this->getPublishedAt(),
-            'status' => $this->getStatus()
+            'status' => $this->getStatus(),
         ];
     }
-
 }

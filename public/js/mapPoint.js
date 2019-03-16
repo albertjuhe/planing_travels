@@ -220,7 +220,7 @@ mapPoint.prototype.deleteMark = function(e) {
     var l = $('#' + placeToGo).data('location');
     map.removeLayer(l.currentMark);
     $('#layer_' + placeToGo).remove();
-    this.rest('DELETE', l.id);
+    this.rest('DELETE', null, l.id);
 };
 
 mapPoint.prototype.nota = function(e) {
@@ -323,7 +323,7 @@ mapPoint.prototype.rest = function(typeRest,data,locationPoint) {
     $.ajax({
         type:typeRest,
         contentType: 'application/json',
-        url: '../api/locations',
+        url: '../../api/user/' + locationPoint.user +'/location',
         dataType:'json',
         data: data,
         success: function(data,testStatus,jqXHR) {
@@ -342,7 +342,7 @@ mapPoint.prototype.rest = function(typeRest,data,locationPoint) {
     } else if (typeRest=='DELETE') {
         $.ajax({
             type:typeRest,
-            url: '../api/locations/' + data,
+            url: '../../api/location/' + locationPoint,
             success: function(result) {
                 console.log('Removing point ' + result);
             },
@@ -457,6 +457,7 @@ mapPoint.prototype.codeAddress = function() {
     var link = document.getElementById("link").value;
     var comment = document.getElementById("comment").value;
     var travel = document.getElementById("travel").value;
+    var user = document.getElementById("user").value;
     geocoder.geocode( { 'address': address}, function(results, status) {
         if (status == google.maps.GeocoderStatus.OK) {
             var e = document.getElementById("pointtype");
@@ -486,6 +487,7 @@ mapPoint.prototype.codeAddress = function() {
             location.place_id = place_id;
             location.address = title; //Our title
             location.travel = travel;
+            location.user = user;
             location.currentMark = null; //No podem serialitzar aquest objecte, el serialitzem desprès
 
             _self.save(location,point.currentMark); //Addind this point to map

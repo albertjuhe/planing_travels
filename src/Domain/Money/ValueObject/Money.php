@@ -1,13 +1,10 @@
 <?php
 
-
 namespace App\Domain\Money\ValueObject;
-
 
 /**
  * ValueObject MOney
- * Class Money
- * @package App\Domain\Model
+ * Class Money.
  */
 class Money
 {
@@ -27,6 +24,7 @@ class Money
             $aMoney->currency()
         );
     }
+
     public static function ofCurrency(Currency $aCurrency)
     {
         return new self(0, $aCurrency);
@@ -36,38 +34,46 @@ class Money
     {
         $this->amount = (int) $anAmount;
     }
+
     private function setCurrency(Currency $aCurrency)
     {
         $this->currency = $aCurrency;
     }
+
     public function amount(): int
     {
         return $this->amount;
     }
+
     public function currency(): Currency
     {
         return $this->currency;
     }
 
     /**
-     * Adding ammount to the money
-     * @param integer $amount
+     * Adding ammount to the money.
+     *
+     * @param int $amount
+     *
      * @return Money
      */
-    public function increaseAmountBy(int $amount): Money {
+    public function increaseAmountBy(int $amount): Money
+    {
         return new self(
             $this->amount() + $amount,
             $this->currency()
         );
     }
 
-    public function equal(Money $money): bool {
+    public function equal(Money $money): bool
+    {
         return
             $this->amount() === $money->amount() &&
             $this->currency()->equals($money->currency());
     }
 
-    public function add(Money $money): Money {
+    public function add(Money $money): Money
+    {
         if (!$this->currency()->equals($money->currency())) {
             throw new \InvalidArgumentException();
         }

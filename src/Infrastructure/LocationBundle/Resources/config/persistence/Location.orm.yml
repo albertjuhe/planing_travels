@@ -45,11 +45,13 @@ App\Domain\Location\Model\Location:
             precision: 0
         slug:
             type: string
-            scale: 0
-            length: 128
-            unique: true
-            nullable: false
-            precision: 0
+            length: 500
+            gedmo:
+                translatable: {}
+                slug:
+                    separator: -
+                    fields:
+                        - title
         description:
             type: text
             scale: 0

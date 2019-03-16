@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\UI\Controller\http;
 
 use App\Application\Command\Travel\ShowTravelBySlugCommand;
@@ -11,6 +10,7 @@ class ShowTravelController extends BaseController
 {
     /**
      * ShowTravelController constructor.
+     *
      * @param DoctrineTravelRepository $travelRepository
      */
     public function __construct(CommandBus $commandBus)
@@ -21,6 +21,7 @@ class ShowTravelController extends BaseController
     /**
      * @param string $slug
      * @Route("/{_locale}/travel/{slug}",name="show_travel")
+     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function showTravel(string $slug)
@@ -29,6 +30,6 @@ class ShowTravelController extends BaseController
         $travel = $this->commandBus->handle($commandShow);
 
         return $this->render('travel/showTravel.html.twig',
-            array('travel' => $travel ));
+            ['travel' => $travel]);
     }
 }

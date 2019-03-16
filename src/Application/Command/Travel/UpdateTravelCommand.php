@@ -3,15 +3,16 @@
  * Created by PhpStorm.
  * User: albert.juhe
  * Date: 08/10/2018
- * Time: 07:36
+ * Time: 07:36.
  */
 
 namespace App\Application\Command\Travel;
 
+use App\Application\Command\Command;
 use App\Domain\Travel\Model\Travel;
 use App\Domain\User\Model\User;
 
-class UpdateTravelCommand
+class UpdateTravelCommand extends Command
 {
     /** @var Travel */
     private $travel;
@@ -20,8 +21,9 @@ class UpdateTravelCommand
 
     /**
      * UpdateTravelCommand constructor.
+     *
      * @param Travel $travel
-     * @param User $user
+     * @param User   $user
      */
     public function __construct(Travel $travel, User $user)
     {
@@ -44,6 +46,4 @@ class UpdateTravelCommand
     {
         return $this->user;
     }
-
-
 }

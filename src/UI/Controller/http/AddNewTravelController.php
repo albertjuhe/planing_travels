@@ -1,4 +1,5 @@
 <?php
+
 namespace App\UI\Controller\http;
 
 use App\Application\Command\Travel\AddTravelCommand;
@@ -10,13 +11,11 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Domain\User\Exceptions\UserDoesntExists;
 use League\Tactician\CommandBus;
 
-
-
 class AddNewTravelController extends BaseController
 {
-
     /**
      * ShowMyTravelsController constructor.
+     *
      * @param $commandBus
      */
     public function __construct(CommandBus $commandBus)
@@ -26,30 +25,33 @@ class AddNewTravelController extends BaseController
 
     /**
      * @Route("/{_locale}/private/new",name="newTravel")
+     *
      * @param Request $request
      * @param $_locale
+     *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
+     *
      * @throws UserDoesntExists
      */
-    public function newTravel(Request $request,$_locale)
+    public function newTravel(Request $request, $_locale)
     {
-        if(!$this->getUser())
+        if (!$this->getUser()) {
             throw new UserDoesntExists();
-
+        }
         $travel = new Travel();
 
-        $form = $this->createForm(TravelType::class,$travel);
+        $form = $this->createForm(TravelType::class, $travel);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $addTravelCommand = new AddTravelCommand($travel,$this->getUser());
+            $addTravelCommand = new AddTravelCommand($travel, $this->getUser());
             $this->commandBus->handle($addTravelCommand);
 
             return $this->redirectToRoute('main_private');
         }
 
-        return $this->render('travel/new.html.twig',[
-            'travelForm' => $form->createView()
+        return $this->render('travel/new.html.twig', [
+            'travelForm' => $form->createView(),
         ]);
     }
 }

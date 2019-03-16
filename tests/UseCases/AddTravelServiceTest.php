@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Tests\UseCases;
 
 use App\Domain\User\Exceptions\UserDoesntExists;
@@ -22,34 +21,35 @@ class AddTravelServiceTest extends TestCase
 
     public function setUp()
     {
-     $this->travelRepository = new InMemoryTravelRepository();
-     $this->userRepository = new InMemoryUserRepository();
+        $this->travelRepository = new InMemoryTravelRepository();
+        $this->userRepository = new InMemoryUserRepository();
     }
 
     /**
-     * Add new travel
+     * Add new travel.
      */
-    public function testAddTravel() {
+    public function testAddTravel()
+    {
         $travel = new Travel();
         $travel->setId(self::TRAVELID);
         $user = User::byId(1);
 
-        $addTravelService = new AddTravelService($this->travelRepository,$this->userRepository);
-        $command = new AddTravelCommand($travel,$user);
+        $addTravelService = new AddTravelService($this->travelRepository, $this->userRepository);
+        $command = new AddTravelCommand($travel, $user);
         $addTravelService->handle($command);
 
         $newTravel = $this->travelRepository->getTravelById(self::TRAVELID);
         $this->assertEquals($newTravel->getId(), $travel->getId());
     }
 
-    public function testAddTravelWithInvalidUser() {
-        $this->expectExceptionObject(new UserDoesntExists);
+    public function testAddTravelWithInvalidUser()
+    {
+        $this->expectExceptionObject(new UserDoesntExists());
         $travel = new Travel();
         $user = User::byId(0);
 
-        $addTravelService = new AddTravelService($this->travelRepository,$this->userRepository);
-        $command = new AddTravelCommand($travel,$user);
+        $addTravelService = new AddTravelService($this->travelRepository, $this->userRepository);
+        $command = new AddTravelCommand($travel, $user);
         $addTravelService->handle($command);
     }
-
 }

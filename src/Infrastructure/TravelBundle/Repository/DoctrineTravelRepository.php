@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Infrastructure\TravelBundle\Repository;
 
 use App\Domain\Travel\Exceptions\TravelDoesntExists;
@@ -12,6 +13,7 @@ class DoctrineTravelRepository extends ServiceEntityRepository implements Travel
 {
     /**
      * DoctrineTravelRepository constructor.
+     *
      * @param ManagerRegistry $registry
      */
     public function __construct(ManagerRegistry $registry)
@@ -32,49 +34,72 @@ class DoctrineTravelRepository extends ServiceEntityRepository implements Travel
 
     /**
      * @param int $maximResults
+     *
      * @return mixed|void
      */
     public function TravelsAllOrderedBy($maximResults = 10)
     {
         $q = $this->createQueryBuilder('t')
-            ->leftJoin('t.user','user')
+            ->leftJoin('t.user', 'user')
             ->addOrderBy('t.starts')
             ->setMaxResults($maximResults)
             ->getQuery();
-            return $q->getResult();
+
+        return $q->getResult();
     }
 
     /**
      * @param User $user
+     *
      * @return mixed
      */
     public function getAllTravelsByUser(User $user)
     {
         $q = $this->createQueryBuilder('t')
-            ->leftJoin('t.user','user')
+            ->leftJoin('t.user', 'user')
             ->where('user = :user')
-            ->setParameter('user',$user)->getQuery();
-        return $q->getResult();
+            ->setParameter('user', $user)->getQuery();
 
+        return $q->getResult();
     }
 
     /**
-     * Find travel by Id
+     * Find travel by Id.
+     *
      * @param int $id
+     *
      * @return Travel
      */
     public function getTravelById(int $id): Travel
     {
-         return $this->findById($id);
+        return $this->findById($id);
+    }
+
+    /**
+     * @param int $travelId
+     *
+     * @return Travel
+     *
+     * @throws TravelDoesntExists
+     */
+    public function ofIdOrFail(int $travelId): Travel
+    {
+        $travel = $this->find($travelId);
+        if (null === $travel) {
+            throw new TravelDoesntExists();
+        }
+
+        return $travel;
     }
 
     /**
      * @param Travel $travel
+     *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function save(Travel $travel) {
+    public function save(Travel $travel)
+    {
         $this->_em->persist($travel);
     }
-
 }

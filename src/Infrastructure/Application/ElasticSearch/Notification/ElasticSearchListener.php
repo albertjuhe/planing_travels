@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Infrastructure\Application\ElasticSearch\Notification;
 
 use Doctrine\ORM\Event\LifecycleEventArgs;
@@ -17,9 +16,9 @@ class ElasticSearchListener
         $this->factoryElasticSearchRepository = $factoryElasticSearchRepository;
     }
 
-
     /**
      * @param LifecycleEventArgs $args
+     *
      * @throws \ReflectionException
      */
     public function postPersist(LifecycleEventArgs $args)
@@ -28,14 +27,16 @@ class ElasticSearchListener
         $this->updateElasticSearch($entity);
     }
 
-    public function postUpdate(LifecycleEventArgs $args) {
+    public function postUpdate(LifecycleEventArgs $args)
+    {
         $entity = $args->getEntity();
         $this->updateElasticSearch($entity);
     }
 
-    public function updateElasticSearch($entity) {
+    public function updateElasticSearch($entity)
+    {
         /** @var ElasticSearchRepository $elasticSearchRepository */
-        $elasticSearchRepository = $this->factoryElasticSearchRepository->Build((new \ReflectionClass($entity))->getShortName());
+        $elasticSearchRepository = $this->factoryElasticSearchRepository->build((new \ReflectionClass($entity))->getShortName());
 
         if ($elasticSearchRepository) {
             $elasticSearchRepository->save($entity);

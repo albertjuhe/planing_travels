@@ -1,21 +1,16 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: albert.juhe
- * Date: 24/10/2018
- * Time: 08:09
- */
 
 namespace App\Application\UseCases\Travel;
 
 use App\Application\Command\Travel\PublishTravelCommand;
+use App\Application\UseCases\UsesCasesService;
 use App\Domain\Travel\Exceptions\NotAllowedToPublishTravel;
 use App\Domain\Travel\Repository\TravelRepository;
 use App\Domain\Travel\Model\Travel;
 use App\Domain\User\Model\User;
 use App\Domain\User\Repository\UserRepository;
 
-class PublishTravelService
+class PublishTravelService implements UsesCasesService
 {
     /** @var TravelRepository; */
     private $travelRepository;
@@ -24,20 +19,23 @@ class PublishTravelService
 
     /**
      * AddTravelService constructor.
+     *
      * @param TravelRepository $travelRepository
-     * @param UserRepository $userRepository
+     * @param UserRepository   $userRepository
      */
-    public function __construct(TravelRepository $travelRepository,
-                                UserRepository $userRepository
-    )
-    {
+    public function __construct(
+        TravelRepository $travelRepository,
+        UserRepository $userRepository
+    ) {
         $this->travelRepository = $travelRepository;
         $this->userRepository = $userRepository;
     }
 
     /**
      * @param PublishTravelCommand $command
+     *
      * @return Travel
+     *
      * @throws \Exception
      */
     public function handle(PublishTravelCommand $command)
@@ -50,14 +48,13 @@ class PublishTravelService
         /** @var Travel $travel */
         $travel = $this->travelRepository->ofSlugOrFail($travelSlug);
 
-        /** var only the owner can publish it */
-        if ($user->getUserId() != $travel->getUser()->getUserId()) throw new NotAllowedToPublishTravel();
-
+        /* var only the owner can publish it */
+        if ($user->getUserId() != $travel->getUser()->getUserId()) {
+            throw new NotAllowedToPublishTravel();
+        }
         $travel->publish();
         $this->travelRepository->save($travel);
 
         return $travel;
-
     }
-
 }
