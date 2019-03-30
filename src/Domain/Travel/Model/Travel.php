@@ -1,6 +1,5 @@
 <?php
 
-/** @noinspection PhpInconsistentReturnPointsInspection */
 
 namespace App\Domain\Travel\Model;
 

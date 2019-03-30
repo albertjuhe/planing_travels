@@ -22,7 +22,7 @@ doctrine:
             Travel:
                type: yml
                prefix: App\Domain\Travel\Model
-               dir: '%kernel.root_dir%/../src/Infrastructure/TravelBundle/Resources/config/persistence'
+               dir: '%kernel.root_dir%/../src/Infrastructure/TravelBundle/Resources/config/persistence/Model'
                is_bundle: false
             Gpx:
                 type: yml
