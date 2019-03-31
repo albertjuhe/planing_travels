@@ -31,9 +31,6 @@ class Location
     /** @var string */
     private $description;
 
-    /** @var User */
-    private $user;
-
     /** @var Mark */
     protected $mark;
 
@@ -227,30 +224,6 @@ class Location
     }
 
     /**
-     * Set user.
-     *
-     * @param User $user
-     *
-     * @return Location
-     */
-    public function setUser(User $user = null)
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
-    /**
-     * Get user.
-     *
-     * @return User
-     */
-    public function getUser(): User
-    {
-        return $this->user;
-    }
-
-    /**
      * Set url.
      *
      * @param string $url
@@ -413,7 +386,6 @@ class Location
             'url' => $this->url,
             'slug' => $this->slug,
             'description' => $this->description,
-            'user' => $this->user->getUserId(),
             'mark' => $this->mark->getId(),
             'travel' => $this->travel->getId(),
             'typeLocation' => $this->typeLocation->getId(),

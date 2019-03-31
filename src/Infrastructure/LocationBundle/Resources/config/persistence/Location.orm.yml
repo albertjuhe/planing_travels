@@ -67,16 +67,6 @@ App\Domain\Location\Model\Location:
             nullable: true
             precision: 0
     manyToOne:
-        user:
-            targetEntity: App\Domain\User\Model\User
-            cascade: {  }
-            fetch: LAZY
-            mappedBy: null
-            inversedBy: location
-            joinColumns:
-                user_id:
-                    referencedColumnName: id
-            orphanRemoval: false
         mark:
             targetEntity: App\Domain\Mark\Model\Mark
             cascade: {  }

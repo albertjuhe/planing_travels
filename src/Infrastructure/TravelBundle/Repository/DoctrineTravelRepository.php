@@ -82,7 +82,7 @@ class DoctrineTravelRepository extends ServiceEntityRepository implements Travel
      *
      * @throws TravelDoesntExists
      */
-    public function ofIdOrFail(int $travelId): Travel
+    public function ofIdOrFail(string $travelId): Travel
     {
         $travel = $this->find($travelId);
         if (null === $travel) {

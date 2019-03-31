@@ -34,7 +34,7 @@ class AddLocationCommand extends Command
     private $mark;
 
     public function __construct(
-        int $travelId,
+        string $travelId,
         Location $location,
         int $user,
         Mark $mark,
@@ -50,7 +50,7 @@ class AddLocationCommand extends Command
     /**
      * @return int
      */
-    public function getTravelId(): int
+    public function getTravelId(): string
     {
         return $this->travelId;
     }
