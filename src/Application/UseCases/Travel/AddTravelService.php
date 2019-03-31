@@ -19,14 +19,9 @@ class AddTravelService implements UsesCasesService
     /** @var UserRepository */
     private $userRepository;
 
-    /**
-     * AddTravelService constructor.
-     *
-     * @param TravelRepository $travelRepository
-     * @param UserRepository   $userRepository
-     */
-    public function __construct(TravelRepository $travelRepository,
-                                UserRepository $userRepository
+    public function __construct(
+        TravelRepository $travelRepository,
+        UserRepository $userRepository
     ) {
         $this->travelRepository = $travelRepository;
         $this->userRepository = $userRepository;
