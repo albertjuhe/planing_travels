@@ -91,25 +91,6 @@ App\Domain\User\Model\User:
             nullable: false
             precision: 0
             column: last_name
-    oneToMany:
-        location:
-            targetEntity: App\Domain\Location\Model\Location
-            cascade:
-                - persist
-            fetch: LAZY
-            mappedBy: user
-            inversedBy: null
-            orphanRemoval: false
-            orderBy: null
-        travel:
-            targetEntity: App\Domain\Travel\Model\Travel
-            cascade:
-                - persist
-            fetch: LAZY
-            mappedBy: user
-            inversedBy: null
-            orphanRemoval: false
-            orderBy: null
     manyToMany:
         travelsshared:
             targetEntity: App\Domain\Travel\Model\Travel

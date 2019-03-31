@@ -63,14 +63,7 @@ class User extends IdentifiableDomainObject implements UserInterface
      * @var string
      */
     private $lastName;
-    /**
-     * @var ArrayCollection
-     */
-    private $location;
-    /**
-     * @var ArrayCollection
-     */
-    private $travel;
+
     /**
      * @var ArrayCollection
      */
@@ -83,8 +76,6 @@ class User extends IdentifiableDomainObject implements UserInterface
         $this->createdAt = new \DateTime();
         $this->locale = 'en';
 
-        $this->travel = new ArrayCollection();
-        $this->location = new ArrayCollection();
         $this->travelsshared = new ArrayCollection();
 
         $this->publishEvent();
@@ -382,7 +373,7 @@ class User extends IdentifiableDomainObject implements UserInterface
         return $this->locale;
     }
 
-    public function getPlainPassword(): string
+    public function getPlainPassword(): ?string
     {
         return $this->plainPassword;
     }
@@ -442,34 +433,6 @@ class User extends IdentifiableDomainObject implements UserInterface
         return $this->lastName;
     }
 
-    /**
-     * Add travel.
-     *
-     * @param Travel $travel
-     *
-     * @return User
-     */
-    public function addTravel(Travel $travel): User
-    {
-        $this->travel[] = $travel;
-
-        return $this;
-    }
-
-    /**
-     * Get travel.
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getTravel()
-    {
-        return $this->travel;
-    }
-
-    public function removeTravel(Travel $travel)
-    {
-        $this->travel->removeElement($travel);
-    }
 
     public function addTravelsshared(Travel $travelsshared)
     {
@@ -493,37 +456,5 @@ class User extends IdentifiableDomainObject implements UserInterface
         return $this->travelsshared;
     }
 
-    /**
-     * Add Location.
-     *
-     * @param Location $location
-     *
-     * @return User
-     */
-    public function addLocation(Location $location)
-    {
-        $this->location[] = $location;
 
-        return $this;
-    }
-
-    /**
-     * Get Location.
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getLocation()
-    {
-        return $this->location;
-    }
-
-    /**
-     * Remove Location.
-     *
-     * @param \App\Domain\Location\Model\Location $location
-     */
-    public function removeLocation(Location $location)
-    {
-        $this->location->removeElement($location);
-    }
 }
