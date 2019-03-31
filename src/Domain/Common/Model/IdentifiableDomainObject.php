@@ -4,9 +4,9 @@ namespace App\Domain\Common\Model;
 
 abstract class IdentifiableDomainObject
 {
-    private $id;
+    protected $id;
 
-    protected function id()
+    public function id()
     {
         return $this->id;
     }

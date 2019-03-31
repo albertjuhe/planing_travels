@@ -4,6 +4,7 @@ namespace App\Infrastructure\TravelBundle\Repository;
 
 use App\Domain\Travel\Exceptions\TravelDoesntExists;
 use App\Domain\Travel\Model\Travel;
+use App\Domain\Travel\ValueObject\TravelId;
 use App\Domain\User\Model\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
@@ -41,7 +42,7 @@ class DoctrineTravelRepository extends ServiceEntityRepository implements Travel
     {
         $q = $this->createQueryBuilder('t')
             ->leftJoin('t.user', 'user')
-            ->addOrderBy('t.starts')
+            ->addOrderBy('t.stars')
             ->setMaxResults($maximResults)
             ->getQuery();
 
@@ -82,9 +83,9 @@ class DoctrineTravelRepository extends ServiceEntityRepository implements Travel
      *
      * @throws TravelDoesntExists
      */
-    public function ofIdOrFail(int $travelId): Travel
+    public function ofIdOrFail(string $travelId): Travel
     {
-        $travel = $this->find($travelId);
+        $travel = $this->find(new TravelId($travelId));
         if (null === $travel) {
             throw new TravelDoesntExists();
         }

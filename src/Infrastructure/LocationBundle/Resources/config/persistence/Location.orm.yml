@@ -3,15 +3,7 @@ App\Domain\Location\Model\Location:
     table: location
     id:
         id:
-            type: integer
-            scale: 0
-            length: null
-            unique: false
-            nullable: false
-            precision: 0
-            id: true
-            generator:
-                strategy: IDENTITY
+            type: LocationId
     fields:
         createdAt:
             type: datetime
@@ -59,7 +51,7 @@ App\Domain\Location\Model\Location:
             unique: false
             nullable: true
             precision: 0
-        starts:
+        stars:
             type: integer
             scale: 0
             length: null
@@ -67,16 +59,6 @@ App\Domain\Location\Model\Location:
             nullable: true
             precision: 0
     manyToOne:
-        user:
-            targetEntity: App\Domain\User\Model\User
-            cascade: {  }
-            fetch: LAZY
-            mappedBy: null
-            inversedBy: location
-            joinColumns:
-                user_id:
-                    referencedColumnName: id
-            orphanRemoval: false
         mark:
             targetEntity: App\Domain\Mark\Model\Mark
             cascade: {  }

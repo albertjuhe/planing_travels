@@ -83,7 +83,6 @@ class AddLocationService implements UsesCasesService
         //find the mark if not exists create it
         $mark = $this->markRepository->ofIdOrSave($mark);
 
-        $location->setUser($user);
         $location->setTravel($travel);
         $location->setMark($mark);
         $location->setTypeLocation($locationType);
