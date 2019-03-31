@@ -434,6 +434,7 @@ class Travel
     public function toArray()
     {
         return [
+            'id' => $this->id,
             'title' => $this->getTitle(),
             'description' => $this->getDescription(),
             'createdAt' => $this->getCreatedAt(),
