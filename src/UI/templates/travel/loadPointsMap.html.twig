@@ -13,7 +13,7 @@ var objLocation;
         popup += "<br/><img style='width:80%' src='{{ asset('uploads/gallery/') }}{{ location.images  | first}}'/>";
     {% endif %}
     var currentMark = L.marker([{{ location.mark.geolocation.lat }},{{ location.mark.geolocation.lng }} ],{icon: {{  location.typeLocation.title }}Marker,title: "{{ location.title}}" }).bindPopup(popup).addTo(map);
-    objLocation = mPoint.createLocation({{ location.id }},{{ location.mark.geolocation.lat }},
+    objLocation = mPoint.createLocation('{{ location.id }}',{{ location.mark.geolocation.lat }},
     {{ location.mark.geolocation.lng }},
     '{{ location.mark.title }}',
     '{{ location.mark.id }}',

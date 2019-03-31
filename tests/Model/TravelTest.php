@@ -14,7 +14,7 @@ class TravelTest extends TestCase
     public function testTravelCreationStarsAndWatchInitialValue()
     {
         $travel = new Travel();
-        $this->assertEquals($travel->getStarts(), 0);
+        $this->assertEquals($travel->getStars(), 0);
         $this->assertEquals($travel->getWatch(), 0);
     }
 

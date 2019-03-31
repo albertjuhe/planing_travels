@@ -42,7 +42,7 @@ class DoctrineTravelRepository extends ServiceEntityRepository implements Travel
     {
         $q = $this->createQueryBuilder('t')
             ->leftJoin('t.user', 'user')
-            ->addOrderBy('t.starts')
+            ->addOrderBy('t.stars')
             ->setMaxResults($maximResults)
             ->getQuery();
 

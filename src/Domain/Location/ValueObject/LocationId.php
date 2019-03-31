@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Domain\Travel\ValueObject;
+namespace App\Domain\Location\ValueObject;
 
 use App\Domain\Common\Model\IdentifiableDomainObject;
 use Ramsey\Uuid\Uuid;
 
-class TravelId extends IdentifiableDomainObject
+class LocationId extends IdentifiableDomainObject
 {
     public function __construct($anId = null)
     {
@@ -22,8 +22,8 @@ class TravelId extends IdentifiableDomainObject
         return $this->id;
     }
 
-    public function equalsTo(TravelId $travelId)
+    public function equalsTo(LocationId $locationId)
     {
-        return $travelId->id === $this->id;
+        return $locationId->id === $this->id;
     }
 }

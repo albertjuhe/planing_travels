@@ -76,7 +76,7 @@ App\Domain\Travel\Model\Travel:
             nullable: true
             groups: ['elastica']
             precision: 0
-        starts:
+        stars:
             type: integer
             scale: 0
             length: null

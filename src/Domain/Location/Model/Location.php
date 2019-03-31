@@ -3,13 +3,15 @@
 namespace App\Domain\Location\Model;
 
 use App\Domain\Images\Model\Images;
+use App\Domain\Location\ValueObject\LocationId;
 use App\Domain\Mark\Model\Mark;
 use App\Domain\Travel\Model\Travel;
 use App\Domain\TypeLocation\Model\TypeLocation;
+use Doctrine\Common\Collections\ArrayCollection;
 
 class Location
 {
-    /** @var int */
+    /** @var LocationId */
     private $id;
 
     /** @var \DateTime */
@@ -35,7 +37,6 @@ class Location
 
     private $notas;
 
-    /** @var \Doctrine\Common\Collections\ArrayCollection */
     protected $images;
 
     /** @var Travel */
@@ -45,11 +46,12 @@ class Location
     protected $typeLocation;
 
     /** @var int */
-    private $starts;
+    private $stars;
 
     public function __construct()
     {
-        $this->images = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->id = new LocationId();
+        $this->images = new  ArrayCollection();
         $this->updatedAt = new \DateTime();
         $this->createdAt = new \DateTime();
     }
@@ -67,12 +69,12 @@ class Location
     }
 
     public static function fromIdAndTitle(
-        int $id,
+        string $id,
         string $title
     ) {
         $location = new self();
         $location->setTitle($title);
-        $location->id = $id;
+        $location->id = new LocationId($id);
 
         return $location;
     }
@@ -87,16 +89,11 @@ class Location
         return $location;
     }
 
-    public function equals(Location $location)
+    public function equalTo(Location $location)
     {
-        return $this->id === $location->getId();
+        return $this->id->equalsTo($location->getId());
     }
 
-    /**
-     * Get id.
-     *
-     * @return int
-     */
     public function getId()
     {
         return $this->id;
@@ -323,17 +320,17 @@ class Location
      *
      * @return int
      */
-    public function getStarts()
+    public function getStars()
     {
-        return $this->starts;
+        return $this->stars;
     }
 
     /**
      * Set starts.
      */
-    public function setStarts($starts)
+    public function setStars($stars)
     {
-        $this->starts = $starts;
+        $this->stars = $stars;
     }
 
     public function __toString(): string
@@ -388,7 +385,7 @@ class Location
             'mark' => $this->mark->getId(),
             'travel' => $this->travel->getId(),
             'typeLocation' => $this->typeLocation->getId(),
-            'stars' => $this->starts,
+            'stars' => $this->stars,
         ];
     }
 }

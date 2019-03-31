@@ -48,7 +48,7 @@ class Travel
     protected $endAt;
 
     /** @var int */
-    private $starts;
+    private $stars;
 
     /** @var int */
     private $watch;
@@ -79,7 +79,7 @@ class Travel
         $this->id = new TravelId();
         $this->updatedAt = new \DateTime();
         $this->createdAt = new \DateTime();
-        $this->setStarts(0);
+        $this->setStars(0);
         $this->setWatch(0);
         $this->geoLocation = new GeoLocation(0, 0, 0, 0, 0, 0);
         $this->sharedusers = new ArrayCollection();
@@ -268,17 +268,17 @@ class Travel
     /**
      * @return mixed
      */
-    public function getStarts(): ?int
+    public function getStars(): ?int
     {
-        return $this->starts;
+        return $this->stars;
     }
 
     /**
-     * @param mixed $starts
+     * @param mixed $stars
      */
-    public function setStarts(int $starts)
+    public function setStars(int $stars)
     {
-        $this->starts = $starts;
+        $this->stars = $stars;
     }
 
     /**

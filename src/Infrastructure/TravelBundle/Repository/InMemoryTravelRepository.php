@@ -23,21 +23,21 @@ class InMemoryTravelRepository implements TravelRepository
             new GeoLocation(7, 8, 9, 10, 11, 12),
             User::byId(2));
         $travel->setId(2);
-        $travel->setStarts(5);
+        $travel->setStars(5);
         $this->save($travel);
 
         $travel = Travel::fromTitleAndGeolocationAndUser('Dummy3',
             new GeoLocation(13, 21, 31, 41, 51, 61),
             User::byId(1));
         $travel->setId(3);
-        $travel->setStarts(25);
+        $travel->setStars(25);
         $this->save($travel);
 
         $travel = Travel::fromTitleAndGeolocationAndUser('Dummy4',
             new GeoLocation(12, 22, 32, 42, 52, 62),
             User::byId(1));
         $travel->setId(4);
-        $travel->setStarts(91);
+        $travel->setStars(91);
         $this->save($travel);
     }
 
