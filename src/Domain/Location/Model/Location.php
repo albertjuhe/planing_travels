@@ -3,14 +3,15 @@
 namespace App\Domain\Location\Model;
 
 use App\Domain\Images\Model\Images;
+use App\Domain\Location\ValueObject\LocationId;
 use App\Domain\Mark\Model\Mark;
 use App\Domain\Travel\Model\Travel;
 use App\Domain\TypeLocation\Model\TypeLocation;
-use App\Domain\User\Model\User;
+use Doctrine\Common\Collections\ArrayCollection;
 
 class Location
 {
-    /** @var int */
+    /** @var LocationId */
     private $id;
 
     /** @var \DateTime */
@@ -31,15 +32,11 @@ class Location
     /** @var string */
     private $description;
 
-    /** @var User */
-    private $user;
-
     /** @var Mark */
     protected $mark;
 
     private $notas;
 
-    /** @var \Doctrine\Common\Collections\ArrayCollection */
     protected $images;
 
     /** @var Travel */
@@ -49,11 +46,12 @@ class Location
     protected $typeLocation;
 
     /** @var int */
-    private $starts;
+    private $stars;
 
     public function __construct()
     {
-        $this->images = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->id = new LocationId();
+        $this->images = new  ArrayCollection();
         $this->updatedAt = new \DateTime();
         $this->createdAt = new \DateTime();
     }
@@ -71,12 +69,12 @@ class Location
     }
 
     public static function fromIdAndTitle(
-        int $id,
+        string $id,
         string $title
     ) {
         $location = new self();
         $location->setTitle($title);
-        $location->id = $id;
+        $location->id = new LocationId($id);
 
         return $location;
     }
@@ -91,16 +89,11 @@ class Location
         return $location;
     }
 
-    public function equals(Location $location)
+    public function equalTo(Location $location)
     {
-        return $this->id === $location->getId();
+        return $this->id->equalsTo($location->getId());
     }
 
-    /**
-     * Get id.
-     *
-     * @return int
-     */
     public function getId()
     {
         return $this->id;
@@ -227,30 +220,6 @@ class Location
     }
 
     /**
-     * Set user.
-     *
-     * @param User $user
-     *
-     * @return Location
-     */
-    public function setUser(User $user = null)
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
-    /**
-     * Get user.
-     *
-     * @return User
-     */
-    public function getUser(): User
-    {
-        return $this->user;
-    }
-
-    /**
      * Set url.
      *
      * @param string $url
@@ -351,17 +320,17 @@ class Location
      *
      * @return int
      */
-    public function getStarts()
+    public function getStars()
     {
-        return $this->starts;
+        return $this->stars;
     }
 
     /**
      * Set starts.
      */
-    public function setStarts($starts)
+    public function setStars($stars)
     {
-        $this->starts = $starts;
+        $this->stars = $stars;
     }
 
     public function __toString(): string
@@ -413,11 +382,10 @@ class Location
             'url' => $this->url,
             'slug' => $this->slug,
             'description' => $this->description,
-            'user' => $this->user->getUserId(),
             'mark' => $this->mark->getId(),
             'travel' => $this->travel->getId(),
             'typeLocation' => $this->typeLocation->getId(),
-            'stars' => $this->starts,
+            'stars' => $this->stars,
         ];
     }
 }

@@ -1,22 +1,23 @@
 <?php
 
-/** @noinspection PhpInconsistentReturnPointsInspection */
-
 namespace App\Domain\Travel\Model;
 
 use App\Domain\Event\DomainEventPublisher;
 use App\Domain\Gpx\Model\Gpx;
 use App\Domain\Location\Model\Location;
+use App\Domain\Travel\ValueObject\TravelId;
 use App\Domain\User\Model\User;
 use App\Domain\Travel\ValueObject\GeoLocation;
 use App\Domain\Travel\Events\TravelWasPublished;
 use App\Application\DataTransformers\Travel\TravelPublishDataTransformer;
+use Doctrine\Common\Collections\ArrayCollection;
 
 class Travel
 {
     const TRAVEL_DRAFT = 10;
     const TRAVEL_PUBLISHED = 20;
 
+    /** @var TravelId */
     protected $id;
 
     /** @var string */
@@ -47,7 +48,7 @@ class Travel
     protected $endAt;
 
     /** @var int */
-    private $starts;
+    private $stars;
 
     /** @var int */
     private $watch;
@@ -75,18 +76,19 @@ class Travel
      */
     public function __construct()
     {
+        $this->id = new TravelId();
         $this->updatedAt = new \DateTime();
         $this->createdAt = new \DateTime();
-        $this->setStarts(0);
+        $this->setStars(0);
         $this->setWatch(0);
         $this->geoLocation = new GeoLocation(0, 0, 0, 0, 0, 0);
-        $this->sharedusers = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->sharedusers = new ArrayCollection();
         $this->status = self::TRAVEL_DRAFT;
     }
 
     public function equals(Travel $travel)
     {
-        return $this->id === $travel->getId();
+        return $this->id->equalsTo($travel->id);
     }
 
     public static function fromUser(User $user): Travel
@@ -122,7 +124,7 @@ class Travel
     /**
      * @return mixed
      */
-    public function getId()
+    public function getId(): TravelId
     {
         return $this->id;
     }
@@ -130,7 +132,7 @@ class Travel
     /**
      * @param mixed $id
      */
-    public function setId($id)
+    public function setId(TravelId $id): void
     {
         $this->id = $id;
     }
@@ -138,7 +140,7 @@ class Travel
     /**
      * @return mixed
      */
-    public function getTitle()
+    public function getTitle(): ?string
     {
         return $this->title;
     }
@@ -154,7 +156,7 @@ class Travel
     /**
      * @return mixed
      */
-    public function getDescription()
+    public function getDescription(): ?string
     {
         return $this->description;
     }
@@ -266,17 +268,17 @@ class Travel
     /**
      * @return mixed
      */
-    public function getStarts(): ?int
+    public function getStars(): ?int
     {
-        return $this->starts;
+        return $this->stars;
     }
 
     /**
-     * @param mixed $starts
+     * @param mixed $stars
      */
-    public function setStarts(int $starts)
+    public function setStars(int $stars)
     {
-        $this->starts = $starts;
+        $this->stars = $stars;
     }
 
     /**

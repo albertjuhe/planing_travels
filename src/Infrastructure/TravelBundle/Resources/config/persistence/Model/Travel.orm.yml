@@ -3,16 +3,8 @@ App\Domain\Travel\Model\Travel:
     table: travel
     id:
         id:
-            type: integer
-            scale: 0
-            length: null
-            unique: false
-            nullable: false
-            precision: 0
-            groups: ['elastica']
-            id: true
-            generator:
-                strategy: IDENTITY
+            type: TravelId
+
     fields:
         createdAt:
             type: datetime
@@ -84,7 +76,7 @@ App\Domain\Travel\Model\Travel:
             nullable: true
             groups: ['elastica']
             precision: 0
-        starts:
+        stars:
             type: integer
             scale: 0
             length: null
