@@ -4,6 +4,7 @@ namespace App\Infrastructure\TravelBundle\Repository;
 
 use App\Domain\Travel\Exceptions\TravelDoesntExists;
 use App\Domain\Travel\Model\Travel;
+use App\Domain\Travel\ValueObject\TravelId;
 use App\Domain\User\Model\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
@@ -84,7 +85,7 @@ class DoctrineTravelRepository extends ServiceEntityRepository implements Travel
      */
     public function ofIdOrFail(string $travelId): Travel
     {
-        $travel = $this->find($travelId);
+        $travel = $this->find(new TravelId($travelId));
         if (null === $travel) {
             throw new TravelDoesntExists();
         }

@@ -57,7 +57,7 @@ class InMemoryTravelRepository implements TravelRepository
         // TODO: Implement TravelsAllOrderedByStarts() method.
     }
 
-    public function ofIdOrFail(int $travelId): Travel
+    public function ofIdOrFail(string $travelId): Travel
     {
         return array_search($travelId, array_column($this->travel, 'travelId'));
     }

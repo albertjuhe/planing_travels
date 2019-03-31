@@ -6,7 +6,6 @@ use App\Domain\Images\Model\Images;
 use App\Domain\Mark\Model\Mark;
 use App\Domain\Travel\Model\Travel;
 use App\Domain\TypeLocation\Model\TypeLocation;
-use App\Domain\User\Model\User;
 
 class Location
 {
