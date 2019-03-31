@@ -1,14 +1,11 @@
 <?php
 
-
 namespace App\Domain\Travel\ValueObject;
-
 
 use Ramsey\Uuid\Uuid;
 
 class TravelId
 {
-
     private $id;
 
     public function __construct($anId = null)

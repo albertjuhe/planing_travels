@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Domain\Travel\Model;
 
 use App\Domain\Event\DomainEventPublisher;

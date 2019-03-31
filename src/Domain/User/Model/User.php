@@ -6,7 +6,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\User\UserInterface;
 use App\Domain\Common\Model\IdentifiableDomainObject;
 use App\Domain\Travel\Model\Travel;
-use App\Domain\Location\Model\Location;
 use App\Domain\User\ValueObject\UserId;
 
 class User extends IdentifiableDomainObject implements UserInterface
@@ -433,7 +432,6 @@ class User extends IdentifiableDomainObject implements UserInterface
         return $this->lastName;
     }
 
-
     public function addTravelsshared(Travel $travelsshared)
     {
         $this->travelsshared[] = $travelsshared;
@@ -455,6 +453,4 @@ class User extends IdentifiableDomainObject implements UserInterface
     {
         return $this->travelsshared;
     }
-
-
 }

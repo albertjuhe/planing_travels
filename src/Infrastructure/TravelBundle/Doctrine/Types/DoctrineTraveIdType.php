@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Infrastructure\TravelBundle\Doctrine\Types;
-
 
 use App\Domain\Travel\ValueObject\TravelId;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
@@ -14,10 +12,12 @@ class DoctrineTraveIdType extends GuidType
     {
         return 'TravelId';
     }
+
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
         return $value->id();
     }
+
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
         return new TravelId($value);
