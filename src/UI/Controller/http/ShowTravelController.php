@@ -2,22 +2,11 @@
 
 namespace App\UI\Controller\http;
 
-use App\Application\Command\Travel\ShowTravelBySlugCommand;
+use App\Application\Query\Travel\ShowTravelBySlugQuery;
 use Symfony\Component\Routing\Annotation\Route;
-use League\Tactician\CommandBus;
 
-class ShowTravelController extends BaseController
+class ShowTravelController extends QueryController
 {
-    /**
-     * ShowTravelController constructor.
-     *
-     * @param DoctrineTravelRepository $travelRepository
-     */
-    public function __construct(CommandBus $commandBus)
-    {
-        parent::__construct($commandBus);
-    }
-
     /**
      * @param string $slug
      * @Route("/{_locale}/travel/{slug}",name="show_travel")
@@ -26,8 +15,8 @@ class ShowTravelController extends BaseController
      */
     public function showTravel(string $slug)
     {
-        $commandShow = new ShowTravelBySlugCommand($slug);
-        $travel = $this->commandBus->handle($commandShow);
+        $query = new ShowTravelBySlugQuery($slug);
+        $travel = $this->ask($query);
 
         return $this->render('travel/showTravel.html.twig',
             ['travel' => $travel]);

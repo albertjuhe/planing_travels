@@ -20,14 +20,14 @@ Create a map and add Locations, Routes, GPS tracks.
 [Travel Planing](http://35.167.24.186/travelexperience/web/app.php/)
 
 ## TODO
-1) GraphQL Integration
-1) Angular as a FrontEnd
-1) RabitMQ Messaging
+1) CQRS (CommandBus tactician, QueryBus Symfony Messenger)
+1) Reactjs as a FrontEnd
+1) Redis
 1) ElasticSearch
-1) RabbitMQ
 1) Comments travels and descriptions with markdown
 1) OERPUB Blob travel
 1) Docker
+1) GraphQL Integration
 
 
 

@@ -9,7 +9,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Domain\User\Exceptions\UserDoesntExists;
 use League\Tactician\CommandBus;
 
-class PublishTravelController extends BaseController
+class PublishTravelController extends CommandController
 {
     /**
      * ShowMyTravelsController constructor.

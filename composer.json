@@ -27,6 +27,7 @@
         "symfony/framework-bundle": "^4.0",
         "symfony/lts": "^4@dev",
         "symfony/maker-bundle": "^1.0",
+        "symfony/messenger": "^4.0",
         "symfony/monolog-bundle": "^3.3",
         "symfony/orm-pack": "^1.0",
         "symfony/profiler-pack": "^1.0",

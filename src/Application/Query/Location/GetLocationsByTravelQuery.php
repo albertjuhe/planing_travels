@@ -1,16 +1,11 @@
 <?php
 
-namespace App\Application\Command\Location;
+namespace App\Application\Query\Location;
 
-class GetLocationsByTravelCommand
+class GetLocationsByTravelQuery
 {
     private $travel;
 
-    /**
-     * GetLocationsByTravelCommand constructor.
-     *
-     * @param $travel
-     */
     public function __construct($travel)
     {
         $this->travel = $travel;

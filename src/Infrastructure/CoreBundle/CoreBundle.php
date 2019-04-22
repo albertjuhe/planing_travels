@@ -1,15 +1,14 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: albert.juhe
- * Date: 17/07/2018
- * Time: 08:10.
- */
 
 namespace App\Infrastructure\CoreBundle;
 
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class CoreBundle extends Bundle
 {
+    public function build(ContainerBuilder $container)
+    {
+        parent::build($container);
+    }
 }

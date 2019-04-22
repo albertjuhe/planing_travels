@@ -1,16 +1,10 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: albert.juhe
- * Date: 01/10/2018
- * Time: 07:13.
- */
 
 namespace App\Application\UseCases\Travel;
 
+use App\Application\Query\Travel\BestTravelsListQuery;
 use App\Application\UseCases\usesCasesService;
 use App\Domain\Travel\Repository\TravelRepository;
-use App\Application\Command\Travel\BestTravelsListCommand;
 
 class GetBestTravelsOrderedByService implements usesCasesService
 {
@@ -29,15 +23,10 @@ class GetBestTravelsOrderedByService implements usesCasesService
         $this->travelRepository = $travelRepository;
     }
 
-    /**
-     * @param BestTravelsListCommand $command
-     *
-     * @return mixed
-     */
-    public function handle(BestTravelsListCommand $command)
+    public function __invoke(BestTravelsListQuery $query)
     {
-        $numberMaxOfTravels = $command->getNumberMaxOfTravels();
-        $orderedBy = $command->getOrderedBy();
+        $numberMaxOfTravels = $query->getNumberMaxOfTravels();
+        $orderedBy = $query->getOrderedBy();
 
         return $this->travelRepository->TravelsAllOrderedBy($numberMaxOfTravels);
     }

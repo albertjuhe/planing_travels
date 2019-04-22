@@ -2,7 +2,7 @@
 
 namespace App\UI\Controller\http;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use App\Application\UseCases\User\SignInUserService;
@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * Class SignInController.
  */
-class SignInController extends Controller
+class SignInController extends AbstractController
 {
     /**
      * @Route("/{_locale}/login", name="private_login")
