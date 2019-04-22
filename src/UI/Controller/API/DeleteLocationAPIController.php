@@ -3,7 +3,7 @@
 namespace App\UI\Controller\API;
 
 use App\Application\Command\Location\DeleteLocationCommand;
-use App\UI\Controller\http\BaseController;
+use App\UI\Controller\http\CommandController;
 use League\Tactician\CommandBus;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\Security\Core\Security;
 
-class DeleteLocationAPIController extends BaseController
+class DeleteLocationAPIController extends CommandController
 {
     /**
      * @var Security

@@ -3,13 +3,13 @@
 namespace App\UI\Controller\http;
 
 use App\Domain\User\Exceptions\UserDoesntExists;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Application\UseCases\Travel\GetAllMyTravelsService;
 use App\Infrastructure\TravelBundle\Repository\DoctrineTravelRepository;
 
-class ShowMyTravelsController extends Controller
+class ShowMyTravelsController extends AbstractController
 {
     private $travelRepository;
 

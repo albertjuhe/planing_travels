@@ -5,7 +5,7 @@ namespace App\UI\Controller\http;
 use App\Infrastructure\TypeLocationBundle\Repository\DoctrineTypeLocation;
 use App\Application\UseCases\TypeLocation\GetAllTypeLocationService;
 
-class GetAllLocationsTypeController extends BaseController
+class GetAllLocationsTypeController extends CommandController
 {
     /** @var DoctrineTypeLocation */
     private $typeLocationRepository;

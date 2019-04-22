@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: albert.juhe
- * Date: 03/10/2018
- * Time: 07:10.
- */
 
 namespace App\UI\Controller\http;
 
@@ -18,20 +12,15 @@ use App\Infrastructure\TravelBundle\Form\UpdateTravelType;
 use App\Application\Command\Travel\UpdateTravelCommand;
 use League\Tactician\CommandBus;
 
-class UpdateTravelController extends BaseController
+class UpdateTravelController extends CommandController
 {
     /** @var DoctrineTravelRepository */
     private $travelRepository;
 
-    /**
-     * UpdateTravelController constructor.
-     *
-     * @param DoctrineTravelRepository $travelRepository
-     * @param CommandBus               $commandBus
-     */
-    public function __construct(DoctrineTravelRepository $travelRepository,
-                                CommandBus $commandBus)
-    {
+    public function __construct(
+        DoctrineTravelRepository $travelRepository,
+        CommandBus $commandBus
+    ) {
         parent::__construct($commandBus);
         $this->travelRepository = $travelRepository;
     }

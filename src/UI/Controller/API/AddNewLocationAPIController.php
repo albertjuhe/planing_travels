@@ -5,8 +5,8 @@ namespace App\UI\Controller\API;
 use App\Application\Command\Location\AddLocationCommand;
 use App\Domain\Mark\Model\Mark;
 use App\Domain\Travel\ValueObject\GeoLocation;
-use App\UI\Controller\http\BaseController;
 use App\Domain\Location\Model\Location;
+use App\UI\Controller\http\CommandController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -14,7 +14,7 @@ use League\Tactician\CommandBus;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\Security;
 
-class AddNewLocationAPIController extends BaseController
+class AddNewLocationAPIController extends CommandController
 {
     /**
      * @var Security

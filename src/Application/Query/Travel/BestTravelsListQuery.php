@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Application\Command\Travel;
+namespace App\Application\Query\Travel;
 
-use App\Application\Command\Command;
+use App\Application\Query\Query;
 
-class BestTravelsListCommand extends Command
+class BestTravelsListQuery implements Query
 {
     /** @var int */
     private $numberMaxOfTravels;
@@ -32,26 +32,10 @@ class BestTravelsListCommand extends Command
     }
 
     /**
-     * @param mixed $numberMaxOfTravels
-     */
-    public function setNumberMaxOfTravels($numberMaxOfTravels): void
-    {
-        $this->numberMaxOfTravels = $numberMaxOfTravels;
-    }
-
-    /**
      * @return mixed
      */
     public function getOrderedBy()
     {
         return $this->orderedBy;
-    }
-
-    /**
-     * @param mixed $orderedBy
-     */
-    public function setOrderedBy($orderedBy): void
-    {
-        $this->orderedBy = $orderedBy;
     }
 }

@@ -2,7 +2,7 @@
 
 namespace App\Application\UseCases\Location;
 
-use App\Application\Command\Location\GetLocationsByTravelCommand;
+use App\Application\Query\Location\GetLocationsByTravelQuery;
 use App\Application\UseCases\UsesCasesService;
 use App\Domain\Travel\DataTransformer\LocationsTravelArrayDataTransformer;
 use App\Domain\Travel\Model\Travel;
@@ -28,9 +28,9 @@ class GetLocationsByTravelService implements usesCasesService
     /**
      * @return mixed
      */
-    public function handle(GetLocationsByTravelCommand $command)
+    public function __invoke(GetLocationsByTravelQuery $query)
     {
-        $travelId = $command->getTravel();
+        $travelId = $query->getTravel();
         /** @var Travel $travel */
         $travel = $this->travelRepository->ofIdOrFail($travelId);
 

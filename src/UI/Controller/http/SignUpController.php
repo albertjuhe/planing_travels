@@ -4,7 +4,7 @@ namespace App\UI\Controller\http;
 
 use App\Domain\User\Model\User;
 use App\Infrastructure\UserBundle\Form\UserType;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -13,7 +13,7 @@ use App\Domain\User\Repository\UserRepository;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Application\UseCases\User\SignUpUserService;
 
-class SignUpController extends Controller
+class SignUpController extends AbstractController
 {
     /** @var DoctrineUserRepository */
     private $userRepository;

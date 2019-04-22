@@ -2,25 +2,25 @@
 
 namespace App\UI\Controller\API;
 
-use App\Application\Command\Location\GetLocationsByTravelCommand;
-use App\UI\Controller\http\BaseController;
-use League\Tactician\CommandBus;
+use App\Application\Query\Location\GetLocationsByTravelQuery;
+use App\Infrastructure\Application\QueryBus\QueryBus;
+use App\UI\Controller\http\QueryController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
-class GetLocationsAPIController extends BaseController
+class GetLocationsAPIController extends QueryController
 {
     /**
      * @var Security
      */
     private $security;
 
-    public function __construct(CommandBus $commandBus, Security $security)
+    public function __construct(QueryBus $queryBus, Security $security)
     {
-        parent::__construct($commandBus);
+        parent::__construct($queryBus);
         $this->security = $security;
     }
 
@@ -37,8 +37,8 @@ class GetLocationsAPIController extends BaseController
             );
         }
 
-        $getLocationsByTravel = new GetLocationsByTravelCommand($travel);
-        $locations = $this->commandBus->handle($getLocationsByTravel);
+        $query = new GetLocationsByTravelQuery($travel);
+        $locations = $this->ask($query);
 
         return new JsonResponse(
             $response['data'] = [

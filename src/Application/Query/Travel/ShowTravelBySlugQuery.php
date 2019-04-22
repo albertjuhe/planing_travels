@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Application\Command\Travel;
+namespace App\Application\Query\Travel;
 
-use App\Application\Command\Command;
+use App\Application\Query\Query;
 
-class ShowTravelBySlugCommand extends Command
+class ShowTravelBySlugQuery implements Query
 {
     /** @var string */
     private $slug;
@@ -25,13 +25,5 @@ class ShowTravelBySlugCommand extends Command
     public function getSlug(): string
     {
         return $this->slug;
-    }
-
-    /**
-     * @param string $slug
-     */
-    public function setSlug(string $slug): void
-    {
-        $this->slug = $slug;
     }
 }

@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Domain\User\Exceptions\UserDoesntExists;
 use League\Tactician\CommandBus;
 
-class AddNewTravelController extends BaseController
+class AddNewTravelController extends CommandController
 {
     /**
      * ShowMyTravelsController constructor.

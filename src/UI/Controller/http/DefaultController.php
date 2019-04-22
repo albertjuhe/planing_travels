@@ -2,12 +2,12 @@
 
 namespace App\UI\Controller\http;
 
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Infrastructure\TravelBundle\Repository\DoctrineTravelRepository;
 
-class DefaultController extends Controller
+class DefaultController extends AbstractController
 {
     /** @var DoctrineTravelRepository */
     private $travelRepository;

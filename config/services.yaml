@@ -6,61 +6,50 @@ parameters:
 services:
     # default configuration for services in *this* file
     _defaults:
-        autowire: true      # Automatically injects dependencies in your services.
-        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
-        public: false       # Allows optimizing the container by removing unused services; this also means
-                            # fetching services directly from the container via $container->get() won't work.
-                            # The best practice is to be explicit about your dependencies anyway.
+      autowire: true      # Automatically injects dependencies in your services.
+      autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+      public: false       # Allows optimizing the container by removing unused services; this also means
+      # fetching services directly from the container via $container->get() won't work.
+      # The best practice is to be explicit about your dependencies anyway.
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
     App\:
-        resource: '../src/*'
-        exclude: '../src/{Entity,Migrations,Tests}'
+      resource: '../src/*'
+      exclude: '../src/{Entity,Migrations,Tests}'
 
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class
     App\UI\Controller\:
-        resource: '../src/UI/Controller'
-        tags: ['controller.service_arguments']
+      resource: '../src/UI/Controller'
+      tags: ['controller.service_arguments']
 
     twig.extension.text:
-        class: Twig_Extensions_Extension_Text
-        tags:
-         - { name: twig.extension }
+      class: Twig_Extensions_Extension_Text
+      tags:
+        - { name: twig.extension }
 
-    # add more service definitions when explicit configuration is needed
-    # please note that last definitions always *replace* previous ones
-    # Command handler
+    queryBus:
+      class: App\Infrastructure\Application\QueryBus\QueryBus
+
+    # Command bus handler
     travel.publish_handler:
-        class: App\Application\UseCases\Travel\PublishTravelService
-        arguments: ['@doctrine.travel.repository','@doctrine.user.repository']
-        tags:
-          - { name: tactician.handler, command: App\Application\Command\Travel\PublishTravelCommand}
+      class: App\Application\UseCases\Travel\PublishTravelService
+      arguments: ['@doctrine.travel.repository','@doctrine.user.repository']
+      tags:
+        - { name: tactician.handler, command: App\Application\Command\Travel\PublishTravelCommand}
 
     travel.update_handler:
       class: App\Application\UseCases\Travel\UpdateTravelService
       arguments: ['@doctrine.travel.repository']
       tags:
-      - { name: tactician.handler, command: App\Application\Command\Travel\UpdateTravelCommand}
+        - { name: tactician.handler, command: App\Application\Command\Travel\UpdateTravelCommand}
 
     travel.add_handler:
       class: App\Application\UseCases\Travel\AddTravelService
       arguments: ['@doctrine.travel.repository','@doctrine.user.repository','@elasticsearch.travel.repository']
       tags:
-      - { name: tactician.handler, command: App\Application\Command\Travel\AddTravelCommand}
-
-    travel.best_travels_handler:
-      class: App\Application\UseCases\Travel\GetBestTravelsOrderedByService
-      arguments: ['@doctrine.travel.repository']
-      tags:
-      - { name: tactician.handler, command: App\Application\Command\Travel\BestTravelsListCommand}
-
-    travel.show_handler:
-      class: App\Application\UseCases\Travel\ShowTravelService
-      arguments: ['@doctrine.travel.repository']
-      tags:
-      - { name: tactician.handler, command: App\Application\Command\Travel\ShowTravelBySlugCommand}
+        - { name: tactician.handler, command: App\Application\Command\Travel\AddTravelCommand}
 
     location.add_handler:
       class: App\Application\UseCases\Location\AddLocationService
@@ -74,44 +63,53 @@ services:
       tags:
         - { name: tactician.handler, command: App\Application\Command\Location\DeleteLocationCommand}
 
+    # Query Bus
+    App\Application\UseCases\Travel\GetBestTravelsOrderedByService:
+      arguments: ['@doctrine.travel.repository']
+      tags: [messenger.message_handler]
+
+    travel.show_handler:
+      class: App\Application\UseCases\Travel\ShowTravelService
+      arguments: ['@doctrine.travel.repository']
+      tags: [messenger.message_handler]
+
     location.get_by_travel_handler:
       class: App\Application\UseCases\Location\GetLocationsByTravelService
       arguments:  ['@doctrine.travel.repository' ]
-      tags:
-        - { name: tactician.handler, command: App\Application\Command\Location\GetLocationsByTravelCommand}
+      tags: [messenger.message_handler]
 
-   # Tactician middleware Store domain events
+    # Tactician middleware Store domain events
     App\Application\Middleware\DomainEventsMiddleware:
-        arguments: ['@doctrine.travel_event.repository']
+      arguments: ['@doctrine.travel_event.repository']
 
     tactician.middleware.domainEventStore: '@App\Infrastructure\Middleware\DomainEventsMiddleware'
 
-   # Repository travel
+    # Repository travel
     App\Infrastructure\TravelBundle\Repository\DoctrineTravelRepository:
-        arguments: ['@doctrine']
+      arguments: ['@doctrine']
 
     doctrine.travel.repository: '@App\Infrastructure\TravelBundle\Repository\DoctrineTravelRepository'
 
     # Repository User
     App\Infrastructure\UserBundle\Repository\DoctrineUserRepository:
-        arguments: ['@doctrine']
+      arguments: ['@doctrine']
 
     doctrine.user.repository: '@App\Infrastructure\UserBundle\Repository\DoctrineUserRepository'
 
     # Repository Location
     App\Infrastructure\LocationBundle\Repository\DoctrineLocationRepository:
-        arguments: ['@doctrine']
+      arguments: ['@doctrine']
 
     doctrine.location.repository: '@App\Infrastructure\LocationBundle\Repository\DoctrineLocationRepository'
 
     # Repository Mark
     App\Infrastructure\MarkBundle\Repository\DoctrineMarkRepository:
-        arguments: ['@doctrine']
+      arguments: ['@doctrine']
 
     doctrine.mark.repository: '@App\Infrastructure\MarkBundle\Repository\DoctrineMarkRepository'
 
 
-      # Event store repository
+    # Event store repository
     App\Infrastructure\EventBundle\Repository\DoctrineEventStore:
       arguments: ['@doctrine','@jms_serializer']
 
@@ -119,16 +117,16 @@ services:
 
     # Tactician middleware Store elasticsearch
     App\Application\Middleware\ElasticSearchMiddleware:
-        arguments: ['@elasticsearch.travel.repository']
+      arguments: ['@elasticsearch.travel.repository']
 
     tactician.middleware.elasticSearchTravel: '@App\Infrastructure\Middleware\ElasticSearchMiddleware'
 
     # Elasticsearch Repository
     elasticsearch.travel.repository: '@App\Infrastructure\TravelBundle\Repository\ElasticSearchTravelRepository'
 
-   # Listener postpersist
+    # Listener postpersist
     elasticsearch.listener:
       class: App\Infrastructure\Application\ElasticSearch\Notification\ElasticSearchListener
       tags:
-      - { name: doctrine.event_listener, event: postPersist }
-      - { name: doctrine.event_listener, event: postUpdate }
+        - { name: doctrine.event_listener, event: postPersist }
+        - { name: doctrine.event_listener, event: postUpdate }
