@@ -20,6 +20,7 @@ class TravelTest extends TestCase
 
     public function testFromUSer()
     {
+
         $user = User::fromId(1);
         $travel = Travel::fromUser($user);
         $newUser = $travel->getUser();
@@ -41,8 +42,9 @@ class TravelTest extends TestCase
 
     public function testSettersGetters()
     {
+        $userId = mt_rand();
         $geoLocation = new GeoLocation(10, 20, 30, 40, 50, 60);
-        $user = User::fromId(2);
+        $user = User::fromId($userId);
 
         $travel = Travel::fromGeoLocation($geoLocation);
         $travel->setUser($user);
@@ -77,13 +79,33 @@ class TravelTest extends TestCase
         $location = Location::fromIdAndTitle(1, 'Barcelona');
 
         $travel->setLocation($location);
-        $this->assertTrue($travel->getLocation()->equals($location));
+        $this->assertTrue($travel->getLocation()->equalTo($location));
 
         $gpx = new Gpx();
         $gpx->setId(1);
         $travel->setGpx($gpx);
         $gpx2 = $travel->getGpx();
         $this->assertTrue($gpx->equals($gpx2));
+
+        $this->assertEquals(
+            $travel->toArray(),
+            [
+                'id' => $travel->getId()->id(),
+                'title' => 'title',
+                'description' => 'description',
+                'createdAt' => new \DateTime('2018-01-01'),
+                'updatedAt' => new \DateTime('2018-01-01'),
+                'slug' => 'travel-slug',
+                'latitude' => $geoLocation->lat(),
+                'longitud' => $geoLocation->lng(),
+                'startAt' => new \DateTime('2018-01-01'),
+                'endAt' => new \DateTime('2018-01-01'),
+                'userId' => $userId,
+                'username' => null,
+                'publishedAt' => new \DateTime('2018-01-01'),
+                'status' => Travel::TRAVEL_DRAFT,
+            ]
+            );
     }
 
     public function testPublishTravel()

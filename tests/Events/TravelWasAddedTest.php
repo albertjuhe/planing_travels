@@ -25,7 +25,6 @@ class TravelWasAddedTest extends TestCase
         $user = User::byId(1);
         $user->setUsername('username');
         $this->travel = Travel::fromGeoLocation(new GeoLocation(1, 1, 1, 1, 1, 1));
-        $this->travel->setId(45);
         $this->travel->setUser($user);
     }
 
@@ -35,6 +34,7 @@ class TravelWasAddedTest extends TestCase
 
         $now = new \DateTime();
         $travelWasAdded->setOccuredOn($now);
+
         $this->assertEquals($now, $travelWasAdded->occurredOn());
     }
 }

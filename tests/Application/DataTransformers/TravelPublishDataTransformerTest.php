@@ -24,12 +24,19 @@ class TravelPublishDataTransformerTest extends TestCase
             new GeoLocation(1, 2, 3, 4, 5, 6),
             User::byId(1));
         $this->travel->setPublishedAt(new \DateTime('2018-01-01'));
-        $this->travel->setId(1);
     }
 
     public function testRead()
     {
+        $id = $this->travel->getId()->id();
         $travelPublishDataTransformer = new TravelPublishDataTransformer($this->travel);
-        $this->assertEquals($travelPublishDataTransformer->read(), ['id' => 1, 'publishedAt' => new \DateTime('2018-01-01'), 'status' => Travel::TRAVEL_DRAFT]);
+        $this->assertEquals(
+            $travelPublishDataTransformer->read(),
+            [
+                'id' => $id,
+                'publishedAt' => new \DateTime('2018-01-01'),
+                'status' => Travel::TRAVEL_DRAFT
+            ]
+        );
     }
 }
