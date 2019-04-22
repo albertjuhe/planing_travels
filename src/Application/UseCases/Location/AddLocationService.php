@@ -18,6 +18,7 @@ use App\Domain\TypeLocation\Repository\TypeLocationRepository;
 use App\Domain\User\Exceptions\UserDoesntExists;
 use App\Domain\User\Model\User;
 use App\Domain\User\Repository\UserRepository;
+use App\Domain\User\ValueObject\UserId;
 
 class AddLocationService implements UsesCasesService
 {
@@ -65,7 +66,7 @@ class AddLocationService implements UsesCasesService
         $mark = $addLocationCommand->getMark();
         $locationType = $addLocationCommand->getLocationType();
 
-        $user = $this->userRepository->ofIdOrFail($userId);
+        $user = $this->userRepository->ofIdOrFail(new UserId($userId));
         if (!$user instanceof User) {
             throw new UserDoesntExists('User doesnt exists');
         }
