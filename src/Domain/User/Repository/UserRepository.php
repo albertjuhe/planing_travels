@@ -3,6 +3,7 @@
 namespace App\Domain\User\Repository;
 
 use App\Domain\User\Model\User;
+use App\Domain\User\ValueObject\UserId;
 
 interface UserRepository
 {
@@ -10,5 +11,5 @@ interface UserRepository
 
     public function save(User $user);
 
-    public function ofIdOrFail(int $userId): ?User;
+    public function ofIdOrFail(UserId $userId): ?User;
 }

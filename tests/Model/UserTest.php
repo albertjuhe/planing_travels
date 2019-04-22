@@ -2,6 +2,7 @@
 
 namespace App\Tests\Model;
 
+use App\Domain\User\ValueObject\UserId;
 use PHPUnit\Framework\TestCase;
 use App\Domain\User\Model\User;
 use App\Domain\Travel\Model\Travel;
@@ -27,12 +28,13 @@ class UserTest extends TestCase
 
     public function testEqual()
     {
-        $user = User::fromId(1);
-        $newUser = User::fromId(1);
+        $id = mt_rand();
+        $user = User::fromId($id);
+        $newUser = User::fromId($id);
 
         $this->assertTrue($user->equalsTo($newUser));
 
-        $newUser = User::fromId(4);
+        $newUser = User::fromId($id + 1);
         $this->assertFalse($user->equalsTo($newUser));
     }
 
@@ -99,7 +101,7 @@ class UserTest extends TestCase
         $this->assertEquals('usernameTest', $user->getUsername());
         $this->assertEquals('passwordTest', $user->getPassword());
 
-        $this->assertEquals(1, $user->getUserId()->id());
+        $this->assertEquals(1, $user->getId()->id());
     }
 
     public function testGetRoles()
@@ -116,7 +118,7 @@ class UserTest extends TestCase
         $geoLocation = new GeoLocation(10, 20, 30, 40, 50, 60);
         $user = User::fromId(1);
         $travel = Travel::fromTitleAndGeolocationAndUser('dummyTravel', $geoLocation, $user);
-        $user->addTravel($travel);
-        $this->assertCount(1, $user->getTravel());
+        $user2 = $travel->getUser();
+        $this->assertTrue($user2->equalsTo($user));
     }
 }

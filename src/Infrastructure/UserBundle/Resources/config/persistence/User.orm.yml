@@ -3,8 +3,8 @@ App\Domain\User\Model\User:
     table: users
     repositoryClass: App\Infrastructure\UserBundle\Repository\DoctrineUserRepository
     id:
-        userId:
-            type: integer
+        id:
+            type: UserId
             scale: 0
             length: null
             unique: false

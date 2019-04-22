@@ -69,7 +69,7 @@ class InMemoryTravelRepository implements TravelRepository
      */
     public function getAllTravelsByUser(User $user)
     {
-        return $this->findByKeyValue('userId', $user->getUserId());
+        return $this->findByKeyValue('userId', $user->getId());
     }
 
     public function getTravelById(int $id): Travel

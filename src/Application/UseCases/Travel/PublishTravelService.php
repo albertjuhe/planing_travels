@@ -44,12 +44,12 @@ class PublishTravelService implements UsesCasesService
         $user = $command->getUser();
 
         /** @var User $user */
-        $user = $this->userRepository->ofIdOrFail($user->getUserId());
+        $user = $this->userRepository->ofIdOrFail($user->getId());
         /** @var Travel $travel */
         $travel = $this->travelRepository->ofSlugOrFail($travelSlug);
 
         /* var only the owner can publish it */
-        if ($user->getUserId() != $travel->getUser()->getUserId()) {
+        if (!$user->getId()->equalsTo($travel->getUser()->getId())) {
             throw new NotAllowedToPublishTravel();
         }
         $travel->publish();

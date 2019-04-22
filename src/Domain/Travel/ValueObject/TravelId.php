@@ -12,15 +12,6 @@ class TravelId extends IdentifiableDomainObject
         $this->id = $anId ?: Uuid::uuid4()->toString();
     }
 
-    public static function create($anId = null)
-    {
-        return new static($anId);
-    }
-
-    public function __toString()
-    {
-        return $this->id;
-    }
 
     public function equalsTo(TravelId $travelId)
     {

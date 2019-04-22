@@ -21,13 +21,13 @@ class PublishTravelCommandTest extends TestCase
 
         $this->assertEquals($publishTravelCommand->getTravelSlug(), 'slug');
 
-        $this->assertEquals($publishTravelCommand->getUser()->userId(), 1);
+        $this->assertEquals($publishTravelCommand->getUser()->userId()->id(), 1);
 
         $publishTravelCommand->setTravelSlug('travel-slug');
         $this->assertEquals($publishTravelCommand->getTravelSlug(), 'travel-slug');
 
         $user1 = User::byId(2);
         $publishTravelCommand->setUser($user1);
-        $this->assertEquals($publishTravelCommand->getUser()->userId(), 2);
+        $this->assertEquals($publishTravelCommand->getUser()->userId()->id(), 2);
     }
 }

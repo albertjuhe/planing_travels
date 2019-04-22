@@ -20,21 +20,9 @@ class AddTravelCommandTest extends TestCase
     {
         $user = User::byId(1);
         $travel = Travel::fromGeoLocation(new GeoLocation(1, 1, 1, 1, 1, 1));
-        $travel->setId(45);
         $addCommandTravel = new AddTravelCommand($travel, $user);
 
-        $this->assertEquals($addCommandTravel->getUser()->userId(), 1);
-
-        $this->assertEquals($addCommandTravel->getTravel()->getId(), 45);
-
-        $user1 = User::byId(2);
-        $travel1 = Travel::fromGeoLocation(new GeoLocation(1, 1, 1, 1, 1, 1));
-        $travel1->setId(80);
-        $addCommandTravel->setUser($user1);
-        $addCommandTravel->setTravel($travel1);
-
-        $this->assertEquals($addCommandTravel->getUser()->userId(), 2);
-
-        $this->assertEquals($addCommandTravel->getTravel()->getId(), 80);
+        $this->assertEquals($addCommandTravel->getUser()->userId()->id(), 1);
+        $this->assertTrue($addCommandTravel->getTravel()->getId()->equalsTo($travel->getId()));
     }
 }

@@ -9,6 +9,7 @@
 namespace App\Tests\Model;
 
 use App\Domain\Gpx\Model\Gpx;
+use App\Domain\Travel\ValueObject\TravelId;
 use PHPUnit\Framework\TestCase;
 use App\Domain\Travel\Model\Travel;
 
@@ -30,7 +31,7 @@ class GpxTest extends TestCase
         $this->gpx->setCreatedAt(new \DateTime('2018-01-01'));
         $this->gpx->setUpdatedAt(new \DateTime('2018-01-01'));
         $this->travel = new Travel();
-        $this->travel->setId(1234);
+        $this->travel->setId(new TravelId());
         $this->gpx->setTravel($this->travel);
     }
 

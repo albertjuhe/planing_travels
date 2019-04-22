@@ -18,6 +18,7 @@ use App\Domain\TypeLocation\Repository\TypeLocationRepository;
 use App\Domain\User\Exceptions\UserDoesntExists;
 use App\Domain\User\Model\User;
 use App\Domain\User\Repository\UserRepository;
+use App\Domain\User\ValueObject\UserId;
 
 class AddLocationService implements UsesCasesService
 {
@@ -65,7 +66,7 @@ class AddLocationService implements UsesCasesService
         $mark = $addLocationCommand->getMark();
         $locationType = $addLocationCommand->getLocationType();
 
-        $user = $this->userRepository->ofIdOrFail($userId);
+        $user = $this->userRepository->ofIdOrFail(new UserId($userId));
         if (!$user instanceof User) {
             throw new UserDoesntExists('User doesnt exists');
         }
@@ -73,7 +74,7 @@ class AddLocationService implements UsesCasesService
         if (!$travel instanceof Travel) {
             throw new TravelDoesntExists('Travel doesnt exists');
         }
-        if ($travel->getUser()->getUserId() != $user->getUserId()) {
+        if (!$travel->getUser()->getId()->equalsTo($user->getId())) {
             throw new InvalidTravelUser('This user is not allowed to modify the travel');
         }
         $locationType = $this->typeLocationRepository->find($locationType);
