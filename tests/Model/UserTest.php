@@ -99,7 +99,7 @@ class UserTest extends TestCase
         $this->assertEquals('usernameTest', $user->getUsername());
         $this->assertEquals('passwordTest', $user->getPassword());
 
-        $this->assertEquals(1, $user->getUserId()->id());
+        $this->assertEquals(1, $user->getId()->id());
     }
 
     public function testGetRoles()

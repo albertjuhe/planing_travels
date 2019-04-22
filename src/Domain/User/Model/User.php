@@ -8,12 +8,12 @@ use App\Domain\Common\Model\IdentifiableDomainObject;
 use App\Domain\Travel\Model\Travel;
 use App\Domain\User\ValueObject\UserId;
 
-class User extends IdentifiableDomainObject implements UserInterface
+class User implements UserInterface
 {
     /**
      * @var UserId
      */
-    private $userId;
+    private $id;
     /**
      * @var string
      */
@@ -93,7 +93,7 @@ class User extends IdentifiableDomainObject implements UserInterface
      */
     public function equalsTo(User $user): bool
     {
-        return $this->userId->equalsTo($user->userId);
+        return $this->id->equalsTo($user->id);
     }
 
     /**
@@ -107,7 +107,7 @@ class User extends IdentifiableDomainObject implements UserInterface
     {
         $user = new self();
         $user->setId($anId);
-        $user->userId = new UserId($user->id());
+        $user->id = new UserId($user->id());
 
         return $user;
     }
@@ -122,27 +122,27 @@ class User extends IdentifiableDomainObject implements UserInterface
     public static function byId(int $anId)
     {
         $user = new self();
-        $user->userId = $anId;
+        $user->id = $anId;
 
         return $user;
     }
 
-    public function getUserId()
+    public function getId()
     {
-        if (null === $this->userId) {
-            $this->userId = new UserId($this->id());
+        if (null === $this->id) {
+            $this->id = new UserId($this->id());
         }
 
-        return $this->userId;
+        return $this->id;
     }
 
     public function userId()
     {
-        if (null === $this->userId) {
-            $this->userId = new UserId($this->id());
+        if (null === $this->id) {
+            $this->id = new UserId($this->id());
         }
 
-        return $this->userId;
+        return $this->id;
     }
 
     /**
@@ -195,7 +195,7 @@ class User extends IdentifiableDomainObject implements UserInterface
     public function unserialize($serialized)
     {
         list(
-            $this->userId,
+            $this->id,
             $this->username,
             $this->password) = unserialize($serialized);
     }

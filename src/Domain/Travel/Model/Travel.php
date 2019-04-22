@@ -396,7 +396,7 @@ class Travel
         DomainEventPublisher::instance()->publish(
             new TravelWasPublished(
                 (new TravelPublishDataTransformer($this))->read(),
-                $this->getUser()->getUserId())
+                $this->getUser()->getId()->id())
         );
 
         return $this;
@@ -444,7 +444,7 @@ class Travel
             'longitud' => $this->getGeoLocation()->lng(),
             'startAt' => $this->getStartAt(),
             'endAt' => $this->getEndAt(),
-            'userId' => $this->getUser()->getUserId(),
+            'userId' => $this->getUser()->getId()->id(),
             'username' => $this->getUser()->getUsername(),
             'publishedAt' => $this->getPublishedAt(),
             'status' => $this->getStatus(),

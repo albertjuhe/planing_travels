@@ -41,7 +41,7 @@ class AddTravelService implements UsesCasesService
         /** @var User $user */
         $user = $command->getUser();
 
-        $this->userRepository->ofIdOrFail($user->getUserId());
+        $this->userRepository->ofIdOrFail($user->getId());
 
         $travel->setUser($user);
         /* @var Index $index */

@@ -31,7 +31,7 @@ class TravelWasPublishedTest extends TestCase
 
     public function testSettersGetters()
     {
-        $travelWasPublished = new TravelWasPublished((new TravelPublishDataTransformer($this->travel))->read(), $this->user->getUserId());
+        $travelWasPublished = new TravelWasPublished((new TravelPublishDataTransformer($this->travel))->read(), $this->user->getId());
         $this->assertEquals($this->travel->getId(), $travelWasPublished->getTravel()['id']);
 
         $now = new \DateTime();

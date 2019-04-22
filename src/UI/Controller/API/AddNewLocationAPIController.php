@@ -34,7 +34,7 @@ class AddNewLocationAPIController extends CommandController
     public function newLocation(Request $request, $userId)
     {
         $user = $this->security->getUser();
-        if (empty($user) || $userId != $user->getUserId()) {
+        if (empty($user) || $userId != $user->getId()->id()) {
             return new JsonResponse(
                 $response['error'] = 'Operation not allowed'
             );
