@@ -106,8 +106,7 @@ class User implements UserInterface
     public static function fromId(int $anId)
     {
         $user = new self();
-        $user->setId($anId);
-        $user->id = new UserId($user->id());
+        $user->id = new UserId($anId);
 
         return $user;
     }
@@ -122,17 +121,13 @@ class User implements UserInterface
     public static function byId(int $anId)
     {
         $user = new self();
-        $user->id = $anId;
+        $user->id = new UserId($anId);
 
         return $user;
     }
 
     public function getId()
     {
-        if (null === $this->id) {
-            $this->id = new UserId($this->id());
-        }
-
         return $this->id;
     }
 
@@ -195,7 +190,7 @@ class User implements UserInterface
     public function unserialize($serialized)
     {
         list(
-            $this->id,
+            $this->email,
             $this->username,
             $this->password) = unserialize($serialized);
     }
