@@ -11,7 +11,7 @@ namespace App\Application\Command\Travel;
 use App\Application\Command\Command;
 use App\Domain\User\Model\User;
 
-class PublishTravelCommand extends Command
+class PublishTravelCommand implements Command
 {
     /** @var string */
     private $travelSlug;

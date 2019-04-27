@@ -6,7 +6,7 @@ use App\Application\Command\Command;
 use App\Domain\Location\Model\Location;
 use App\Domain\Mark\Model\Mark;
 
-class AddLocationCommand extends Command
+class AddLocationCommand implements Command
 {
     /**
      * @var int

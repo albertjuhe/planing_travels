@@ -12,7 +12,7 @@ use App\Application\Command\Command;
 use App\Domain\Travel\Model\Travel;
 use App\Domain\User\Model\User;
 
-class UpdateTravelCommand extends Command
+class UpdateTravelCommand implements Command
 {
     /** @var Travel */
     private $travel;

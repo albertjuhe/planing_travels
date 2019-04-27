@@ -2,11 +2,13 @@
 
 namespace App\Application\Query\Location;
 
+use App\Domain\Travel\Model\Travel;
+
 class GetLocationsByTravelQuery
 {
     private $travel;
 
-    public function __construct($travel)
+    public function __construct(Travel $travel)
     {
         $this->travel = $travel;
     }
@@ -14,7 +16,7 @@ class GetLocationsByTravelQuery
     /**
      * @return mixed
      */
-    public function getTravel()
+    public function getTravel(): Travel
     {
         return $this->travel;
     }
