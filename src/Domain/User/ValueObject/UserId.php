@@ -6,7 +6,6 @@ use App\Domain\Common\Model\IdentifiableDomainObject;
 
 class UserId extends IdentifiableDomainObject
 {
-
     public function __construct($anId)
     {
         $this->id = $anId;

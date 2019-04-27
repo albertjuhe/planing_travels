@@ -35,7 +35,7 @@ class TravelPublishDataTransformerTest extends TestCase
             [
                 'id' => $id,
                 'publishedAt' => new \DateTime('2018-01-01'),
-                'status' => Travel::TRAVEL_DRAFT
+                'status' => Travel::TRAVEL_DRAFT,
             ]
         );
     }

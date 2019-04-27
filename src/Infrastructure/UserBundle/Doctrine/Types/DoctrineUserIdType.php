@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Infrastructure\UserBundle\Doctrine\Types;
-
 
 use App\Domain\User\ValueObject\UserId;
 use Doctrine\DBAL\Platforms\AbstractPlatform;

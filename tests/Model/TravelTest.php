@@ -20,7 +20,6 @@ class TravelTest extends TestCase
 
     public function testFromUSer()
     {
-
         $user = User::fromId(1);
         $travel = Travel::fromUser($user);
         $newUser = $travel->getUser();

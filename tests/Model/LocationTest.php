@@ -53,7 +53,6 @@ class LocationTest extends TestCase
 
         $this->assertEquals($this->location->getUrl(), 'www.url.com');
 
-
         $geoLocation = new GeoLocation(1, 20, 50, 8.0, 1.23401, 9);
         /** @var Mark $mark */
         $mark = Mark::fromGeolocationAndId($geoLocation, 1);

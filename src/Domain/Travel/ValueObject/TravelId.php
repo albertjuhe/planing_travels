@@ -12,7 +12,6 @@ class TravelId extends IdentifiableDomainObject
         $this->id = $anId ?: Uuid::uuid4()->toString();
     }
 
-
     public function equalsTo(TravelId $travelId)
     {
         return $travelId->id === $this->id;

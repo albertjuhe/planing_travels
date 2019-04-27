@@ -4,7 +4,6 @@ namespace App\Domain\User\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\User\UserInterface;
-use App\Domain\Common\Model\IdentifiableDomainObject;
 use App\Domain\Travel\Model\Travel;
 use App\Domain\User\ValueObject\UserId;
 

@@ -2,7 +2,6 @@
 
 namespace App\Tests\Model;
 
-use App\Domain\User\ValueObject\UserId;
 use PHPUnit\Framework\TestCase;
 use App\Domain\User\Model\User;
 use App\Domain\Travel\Model\Travel;

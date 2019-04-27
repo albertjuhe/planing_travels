@@ -26,13 +26,15 @@ class TravelWasPublishedTest extends TestCase
     {
         $this->user = User::byId(1);
         $this->travel = Travel::fromGeoLocation(new GeoLocation(1, 1, 1, 1, 1, 1));
-        $this->travel->setId(45);
     }
 
     public function testSettersGetters()
     {
-        $travelWasPublished = new TravelWasPublished((new TravelPublishDataTransformer($this->travel))->read(), $this->user->getId());
-        $this->assertEquals($this->travel->getId(), $travelWasPublished->getTravel()['id']);
+        $travelWasPublished = new TravelWasPublished(
+            (new TravelPublishDataTransformer($this->travel))->read(),
+            $this->user->getId()->id()
+        );
+        $this->assertEquals($this->travel->getId()->id(), $travelWasPublished->getTravel()['id']);
 
         $now = new \DateTime();
         $travelWasPublished->setOccuredOn($now);

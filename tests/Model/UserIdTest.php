@@ -13,17 +13,19 @@ class UserIdTest extends TestCAse
         $this->assertEquals(12, $userId->id());
     }
 
-    public function testEqualsTo() {
+    public function testEqualsTo()
+    {
         $id = mt_rand();
         $userId = new UserId($id);
         $userId2 = new UserId($id);
         $this->assertTrue($userId->equalsTo($userId2));
     }
 
-    public function testNotEqualsTo() {
+    public function testNotEqualsTo()
+    {
         $id = mt_rand();
         $userId = new UserId($id);
-        $userId2 = new UserId($id +1);
+        $userId2 = new UserId($id + 1);
         $this->assertFalse($userId->equalsTo($userId2));
     }
 }
