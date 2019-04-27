@@ -33,14 +33,6 @@ class AddTravelCommand implements Command
     }
 
     /**
-     * @param Travel $travel
-     */
-    public function setTravel(Travel $travel): void
-    {
-        $this->travel = $travel;
-    }
-
-    /**
      * @return User
      */
     public function getUser(): User
@@ -48,11 +40,4 @@ class AddTravelCommand implements Command
         return $this->user;
     }
 
-    /**
-     * @param User $user
-     */
-    public function setUser(User $user): void
-    {
-        $this->user = $user;
-    }
 }
