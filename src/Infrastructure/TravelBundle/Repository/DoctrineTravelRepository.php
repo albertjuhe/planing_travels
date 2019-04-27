@@ -71,7 +71,7 @@ class DoctrineTravelRepository extends ServiceEntityRepository implements Travel
      *
      * @return Travel
      */
-    public function getTravelById(int $id): Travel
+    public function getTravelById(string $id): Travel
     {
         return $this->findById($id);
     }

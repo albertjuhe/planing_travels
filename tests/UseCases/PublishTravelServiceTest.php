@@ -5,21 +5,17 @@ namespace App\Tests\UseCases;
 use App\Application\Command\Travel\PublishTravelCommand;
 use App\Application\UseCases\Travel\PublishTravelService;
 use App\Application\UseCases\Travel\UpdateTravelService;
-use App\Domain\Common\Model\TriggerEventsTrait;
-use App\Domain\Event\DomainEvent;
 use App\Domain\Event\DomainEventPublisher;
-use App\Domain\Event\DomainEventSubscriber;
 use App\Domain\Travel\Exceptions\NotAllowedToPublishTravel;
 use App\Domain\Travel\Model\Travel;
 use App\Domain\User\Model\User;
 use App\Infrastructure\TravelBundle\Repository\InMemoryTravelRepository;
+use App\Tests\Subscriber\DomainEventAllSubscriber;
 use PHPUnit\Framework\TestCase;
 use App\Infrastructure\UserBundle\Repository\InMemoryUserRepository;
 
 class PublishTravelServiceTest extends TestCase
 {
-    const TRAVELID = 1;
-
     /** @var InMemoryTravelRepository */
     private $travelRepository;
     /** @var InMemoryUserRepository */
@@ -38,7 +34,6 @@ class PublishTravelServiceTest extends TestCase
     {
         /** @var Travel $travel */
         $travel = new Travel();
-        $travel->setId(self::TRAVELID);
         $travel->setSlug('test-travel');
         /** @var User $user */
         $user = User::byId(1);
@@ -67,7 +62,6 @@ class PublishTravelServiceTest extends TestCase
 
         /** @var Travel $travel */
         $travel = new Travel();
-        $travel->setId(self::TRAVELID);
         $travel->setSlug('test-travel');
         /** @var User $user */
         $user = User::byId(1);
@@ -83,24 +77,5 @@ class PublishTravelServiceTest extends TestCase
         /** @var UpdateTravelService */
         $publishTravelService = new PublishTravelService($this->travelRepository, $this->userRepository);
         $publishTravelService->handle($publishTravelCommand);
-    }
-}
-
-/**
- * This subscriber is subscribed to all events
- * Class GeneralEventSubscriber.
- */
-class DomainEventAllSubscriber implements DomainEventSubscriber
-{
-    use TriggerEventsTrait;
-
-    public function handle(DomainEvent $domainEvent)
-    {
-        $this->trigger($domainEvent);
-    }
-
-    public function isSubscribedTo(DomainEvent $domainEvent)
-    {
-        return true;
     }
 }

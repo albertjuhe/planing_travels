@@ -18,8 +18,6 @@ class TravelWasUpdated implements DomainEvent
      * travelWasAdded constructor.
      *
      * @param array $travel
-     *
-     * @throws \Exception
      */
     public function __construct(array $travel)
     {
