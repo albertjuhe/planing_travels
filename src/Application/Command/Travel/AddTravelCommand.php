@@ -6,7 +6,7 @@ use App\Application\Command\Command;
 use App\Domain\Travel\Model\Travel;
 use App\Domain\User\Model\User;
 
-class AddTravelCommand extends Command
+class AddTravelCommand implements Command
 {
     /** @var Travel */
     private $travel;
@@ -33,14 +33,6 @@ class AddTravelCommand extends Command
     }
 
     /**
-     * @param Travel $travel
-     */
-    public function setTravel(Travel $travel): void
-    {
-        $this->travel = $travel;
-    }
-
-    /**
      * @return User
      */
     public function getUser(): User
@@ -48,11 +40,4 @@ class AddTravelCommand extends Command
         return $this->user;
     }
 
-    /**
-     * @param User $user
-     */
-    public function setUser(User $user): void
-    {
-        $this->user = $user;
-    }
 }

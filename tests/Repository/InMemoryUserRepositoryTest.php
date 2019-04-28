@@ -2,6 +2,8 @@
 
 namespace App\Tests\Repository;
 
+use App\Domain\User\Exceptions\UserDoesntExists;
+use App\Domain\User\ValueObject\UserId;
 use PHPUnit\Framework\TestCase;
 use App\Infrastructure\UserBundle\Repository\InMemoryUserRepository;
 use App\Domain\User\Model\User;
@@ -18,10 +20,18 @@ class InMemoryUserRepositoryTest extends TestCase
 
     public function testOfIdOrFail()
     {
+        $userId = mt_rand();
         /** @var User $user */
-        $user = User::byId(1);
-        $userNew = $this->inMemoryUserRepository->ofIdOrFail(1);
+        $user = User::byId($userId);
+        $userNew = $this->inMemoryUserRepository->ofIdOrFail(new UserId($userId));
         $this->assertEquals($user->userId(), $userNew->userId());
+    }
+
+    public function testOfFailUser()
+    {
+        $userId = 0;
+        $this->expectException(UserDoesntExists::class);
+        $this->inMemoryUserRepository->ofIdOrFail(new UserId($userId));
     }
 
     public function testSave()

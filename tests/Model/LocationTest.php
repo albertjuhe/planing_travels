@@ -8,6 +8,9 @@
 
 namespace App\Tests\Model;
 
+use App\Domain\Travel\Model\Travel;
+use App\Domain\Travel\ValueObject\TravelId;
+use App\Domain\TypeLocation\Model\TypeLocation;
 use PHPUnit\Framework\TestCase;
 use App\Domain\Location\Model\Location;
 use App\Domain\Mark\Model\Mark;
@@ -60,5 +63,72 @@ class LocationTest extends TestCase
         /** @var Mark $markNew */
         $markNew = $this->location->getMark();
         $this->assertTrue($mark->equals($markNew));
+    }
+
+    public function testCreateFromArray()
+    {
+        $data = [
+            'comment' => 'comment',
+            'link' => 'link',
+            'placeAddress' => 'placeAddress',
+        ];
+
+        $location = Location::fromArray($data);
+        $this->assertEquals($location->getDescription(), $data['comment']);
+        $this->assertEquals($location->getUrl(), $data['link']);
+        $this->assertEquals($location->getTitle(), $data['placeAddress']);
+    }
+
+    public function testToArray()
+    {
+        $id = uniqid();
+        $createdAt = new \DateTime();
+        $updatedAt = new \DateTime();
+        $title = uniqid();
+        $url = uniqid();
+        $slug = uniqid();
+        $description = uniqid();
+        $markId = uniqid();
+        $travelid1 = uniqid();
+        $typeLocationId = mt_rand();
+        $stars = mt_rand();
+
+        $location = Location::fromIdAndTitle($id, $title);
+        $location->setTitle($title);
+        $location->setUrl($url);
+        $location->setSlug($slug);
+        $location->setDescription($description);
+        $location->setStars($stars);
+
+        $mark = $this->createMock(Mark::class);
+        $mark->method('getId')->willReturn($markId);
+        $location->setMark($mark);
+
+        $travelId = TravelId::create($travelid1);
+        $travel = $this->createMock(Travel::class);
+        $travel->method('getId')->willReturn($travelId);
+        $location->setTravel($travel);
+
+        $typeLocation = $this->createMock(TypeLocation::class);
+        $typeLocation->method('getId')->willReturn($typeLocationId);
+        $location->setTypeLocation($typeLocation);
+
+        $location->setCreatedAt($createdAt);
+        $location->setUpdatedAt($updatedAt);
+
+        $data = [
+            'id' => $id,
+            'createdAt' => $createdAt,
+            'updatedAt' => $updatedAt,
+            'title' => $title,
+            'url' => $url,
+            'slug' => $slug,
+            'description' => $description,
+            'mark' => $markId,
+            'travel' => $travelid1,
+            'typeLocation' => $typeLocationId,
+            'stars' => $stars,
+        ];
+        $this->assertEquals($data, $location->toArray());
     }
 }

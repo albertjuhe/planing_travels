@@ -4,7 +4,7 @@ namespace App\Application\Command\Location;
 
 use App\Application\Command\Command;
 
-class DeleteLocationCommand extends Command
+class DeleteLocationCommand implements Command
 {
     /**
      * @var int

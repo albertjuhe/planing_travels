@@ -32,7 +32,7 @@ class TravelPublishDataTransformer implements TravelDataTransformer
     public function read()
     {
         return [
-           'id' => $this->travel->getId(),
+           'id' => $this->travel->getId()->id(),
            'publishedAt' => $this->travel->getPublishedAt(),
            'status' => $this->travel->getStatus(),
        ];

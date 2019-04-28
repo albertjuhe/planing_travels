@@ -13,7 +13,6 @@ use App\Application\Command\Travel\AddTravelCommand;
 
 class AddTravelServiceTest extends TestCase
 {
-    const TRAVELID = 3;
     /** @var InMemoryTravelRepository */
     private $travelRepository;
     /** @var InMemoryUserRepository */
@@ -30,15 +29,18 @@ class AddTravelServiceTest extends TestCase
      */
     public function testAddTravel()
     {
+        $userId = mt_rand();
+
         $travel = new Travel();
-        $travel->setId(self::TRAVELID);
-        $user = User::byId(1);
+        $travelId = $travel->getId()->id();
+
+        $user = User::byId($userId);
 
         $addTravelService = new AddTravelService($this->travelRepository, $this->userRepository);
         $command = new AddTravelCommand($travel, $user);
         $addTravelService->handle($command);
 
-        $newTravel = $this->travelRepository->getTravelById(self::TRAVELID);
+        $newTravel = $this->travelRepository->getTravelById($travelId);
         $this->assertEquals($newTravel->getId(), $travel->getId());
     }
 

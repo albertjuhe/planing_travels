@@ -2,6 +2,6 @@
 
 namespace App\Application\Command;
 
-class Command
+interface Command
 {
 }

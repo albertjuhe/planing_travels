@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: ajuhe
- * Date: 27/12/18
- * Time: 20:28.
- */
 
 namespace App\Tests\Application\DataTransformers;
 
@@ -20,9 +14,11 @@ class TravelPublishDataTransformerTest extends TestCase
 
     public function setUp()
     {
-        $this->travel = Travel::fromTitleAndGeolocationAndUser('Dummy1',
+        $this->travel = Travel::fromTitleAndGeolocationAndUser(
+            'Dummy1',
             new GeoLocation(1, 2, 3, 4, 5, 6),
-            User::byId(1));
+            User::byId(1)
+        );
         $this->travel->setPublishedAt(new \DateTime('2018-01-01'));
     }
 

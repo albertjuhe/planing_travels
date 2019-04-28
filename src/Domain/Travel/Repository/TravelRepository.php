@@ -49,7 +49,7 @@ interface TravelRepository
      *
      * @return mixed
      */
-    public function getTravelById(int $id): Travel;
+    public function getTravelById(string $id): Travel;
 
     /**
      * @param array $criteria

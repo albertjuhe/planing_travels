@@ -375,7 +375,7 @@ class Location
     public function toArray()
     {
         return [
-            'id' => $this->id,
+            'id' => $this->getId()->id(),
             'createdAt' => $this->createdAt,
             'updatedAt' => $this->updatedAt,
             'title' => $this->title,
@@ -383,7 +383,7 @@ class Location
             'slug' => $this->slug,
             'description' => $this->description,
             'mark' => $this->mark->getId(),
-            'travel' => $this->travel->getId(),
+            'travel' => $this->travel->getId()->id(),
             'typeLocation' => $this->typeLocation->getId(),
             'stars' => $this->stars,
         ];

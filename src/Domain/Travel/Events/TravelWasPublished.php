@@ -20,8 +20,6 @@ class TravelWasPublished implements DomainEvent
      *
      * @param array $travel
      * @param int   $user
-     *
-     * @throws \Exception
      */
     public function __construct(array $travel, int $user)
     {

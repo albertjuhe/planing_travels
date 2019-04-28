@@ -22,13 +22,12 @@ class TravelWasUpdatedTest extends TestCase
     public function setUp()
     {
         $this->travel = Travel::fromGeoLocation(new GeoLocation(1, 1, 1, 1, 1, 1));
-        $this->travel->setId(45);
     }
 
     public function testSettersGetters()
     {
         $travelWasPublished = new TravelWasUpdated((new TravelPublishDataTransformer($this->travel))->read());
-        $this->assertEquals($this->travel->getId(), $travelWasPublished->getTravel()['id']);
+        $this->assertEquals($this->travel->getId()->id(), $travelWasPublished->getTravel()['id']);
 
         $now = new \DateTime();
         $travelWasPublished->setOccuredOn($now);
