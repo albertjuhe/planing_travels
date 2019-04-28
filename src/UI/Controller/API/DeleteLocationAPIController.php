@@ -3,6 +3,7 @@
 namespace App\UI\Controller\API;
 
 use App\Application\Command\Location\DeleteLocationCommand;
+use App\Domain\User\Model\User;
 use App\UI\Controller\http\CommandController;
 use League\Tactician\CommandBus;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -25,11 +26,12 @@ class DeleteLocationAPIController extends CommandController
     }
 
     /**
-     * @Route("/api/location/{location}",name="deleteAPILocation")
+     * @Route("/api/travel/{travel}/location/{location}",name="deleteAPILocation")
      * @Method({"DELETE"})
      */
-    public function deleteLocation(Request $request, $location)
+    public function deleteLocation(Request $request, string $travel, string $location)
     {
+        /** @var User $user */
         $user = $this->security->getUser();
         if (empty($user)) {
             return new JsonResponse(
@@ -37,13 +39,12 @@ class DeleteLocationAPIController extends CommandController
             );
         }
 
-        $deleteLocationCommand = new DeleteLocationCommand($location);
+        $deleteLocationCommand = new DeleteLocationCommand($location, $travel, $user->userId());
         $this->commandBus->handle($deleteLocationCommand);
 
         return new JsonResponse(
             $response['data'] = [
-                'type' => 'location',
-                'id' => $location,
+                'location' => $location,
             ]
         );
     }

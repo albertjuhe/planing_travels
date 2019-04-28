@@ -9,11 +9,10 @@ class BestTravelsListQuery implements Query
     private $numberMaxOfTravels;
     private $orderedBy;
 
-      public function __construct(
+    public function __construct(
           int $numberMaxOfTravels,
           string $orderedBy
-      )
-    {
+      ) {
         $this->numberMaxOfTravels = $numberMaxOfTravels;
         $this->orderedBy = $orderedBy;
     }
@@ -22,7 +21,8 @@ class BestTravelsListQuery implements Query
     {
         return $this->numberMaxOfTravels;
     }
-  public function getOrderedBy(): string
+
+    public function getOrderedBy(): string
     {
         return $this->orderedBy;
     }

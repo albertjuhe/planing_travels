@@ -39,5 +39,4 @@ class AddTravelCommand implements Command
     {
         return $this->user;
     }
-
 }

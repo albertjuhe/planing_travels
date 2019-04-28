@@ -10,5 +10,5 @@ interface LocationRepository
 
     public function remove(Location $location);
 
-    public function findById(int $locationId);
+    public function findById(string $locationId);
 }

@@ -9,6 +9,7 @@
 {% block content %}
     <div class="container" ng-app="ManageMaps" ng-controller="mapsCtrl">
         {% include 'travel/travelInfoHeader.html.twig' with {'travel': travel,'mode':'Edit'} %}
+        <div id="infoTravel"></div>
         <div class="row">
             <div class="col-sm-4">
                 {% include 'travel/locationsPanel.html.twig' %}
@@ -61,7 +62,7 @@
     <script src="{{ asset('js/locationGallery.js') }}"></script>
 
     <script>
-        var mPoint = new mapPoint();
+        var mPoint = new mapPoint('{{ travel.id }}');
         mPoint.addPlugin('locationGallery',new locationGallery('{{ asset('uploads/gallery/') }}'));
 
         var map = L.map('map',{
