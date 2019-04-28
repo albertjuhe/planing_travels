@@ -5,6 +5,7 @@ namespace App\Infrastructure\LocationBundle\Repository;
 use App\Domain\Location\Exceptions\LocationDoesntExists;
 use App\Domain\Location\Model\Location;
 use App\Domain\Location\Repository\LocationRepository;
+use App\Domain\Location\ValueObject\LocationId;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
@@ -30,9 +31,9 @@ class DoctrineLocationRepository extends ServiceEntityRepository implements Loca
         $this->_em->remove($location);
     }
 
-    public function findById(int $locationId): Location
+    public function findById(string $locationId): Location
     {
-        $location = $this->find($locationId);
+        $location = $this->find(new LocationId($locationId));
         if (null === $location) {
             throw new LocationDoesntExists();
         }

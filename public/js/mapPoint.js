@@ -1,7 +1,8 @@
 "use strict";
 
 //Constructor
-var mapPoint = function () {
+var mapPoint = function (travelId) {
+    this.travel = travelId;
     this.control = null;
     this.currentPoints = [];
     this.dragSrcEl = null;
@@ -342,8 +343,10 @@ mapPoint.prototype.rest = function(typeRest,data,locationPoint) {
     } else if (typeRest=='DELETE') {
         $.ajax({
             type:typeRest,
-            url: '../../api/location/' + locationPoint,
+            url: '../../api/travel/'+this.travel+'/location/' + locationPoint,
             success: function(result) {
+                $('#infoTravel').html('<p class="alert alert-success">Location Removed</p>');
+                $("#infoTravel").show().delay(5000).fadeOut();
                 console.log('Removing point ' + result);
             },
             error: function(data,testStatus,jqXHR) {

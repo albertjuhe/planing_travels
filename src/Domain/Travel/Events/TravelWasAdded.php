@@ -29,7 +29,6 @@ class TravelWasAdded implements DomainEvent
         return $this->travel;
     }
 
-
     /**
      * @param \DateTime $occuredOn
      */

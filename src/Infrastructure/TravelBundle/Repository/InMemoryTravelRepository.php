@@ -13,7 +13,6 @@ class InMemoryTravelRepository implements TravelRepository
 
     public function loadData()
     {
-
         $travel = Travel::fromTitleAndGeolocationAndUser('Dummy1',
             new GeoLocation(1, 2, 3, 4, 5, 6),
             User::byId(1));
