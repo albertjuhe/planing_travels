@@ -6,35 +6,23 @@ use App\Application\Query\Query;
 
 class BestTravelsListQuery implements Query
 {
-    /** @var int */
     private $numberMaxOfTravels;
-    /** @var string */
     private $orderedBy;
 
-    /**
-     * BestTravelsListCommand constructor.
-     *
-     * @param $numberMaxOfTravels
-     * @param $orderedBy
-     */
-    public function __construct($numberMaxOfTravels, $orderedBy)
+      public function __construct(
+          int $numberMaxOfTravels,
+          string $orderedBy
+      )
     {
         $this->numberMaxOfTravels = $numberMaxOfTravels;
         $this->orderedBy = $orderedBy;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getNumberMaxOfTravels()
+    public function getNumberMaxOfTravels(): int
     {
         return $this->numberMaxOfTravels;
     }
-
-    /**
-     * @return mixed
-     */
-    public function getOrderedBy()
+  public function getOrderedBy(): string
     {
         return $this->orderedBy;
     }
