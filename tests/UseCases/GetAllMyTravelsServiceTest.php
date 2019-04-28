@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: albert.juhe
- * Date: 01/10/2018
- * Time: 07:52.
- */
 
 namespace App\Tests\UseCases;
 
