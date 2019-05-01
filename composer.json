@@ -41,11 +41,12 @@
         "twig/extensions": "^1.5"
     },
     "require-dev": {
+        "doctrine/doctrine-fixtures-bundle": "^3.1",
+        "phpspec/phpspec": "^4.0",
         "phpunit/phpunit": "^6.0",
         "symfony/dotenv": "^4.0",
         "symfony/phpunit-bridge": "^4.0",
-        "symfony/test-pack": "^1.0",
-        "phpspec/phpspec": "^4.0"
+        "symfony/test-pack": "^1.0"
     },
     "config": {
         "preferred-install": {
