@@ -22,13 +22,6 @@ interface TravelRepository
     public function ofSlugOrFail(string $slug);
 
     /**
-     * @param $user
-     *
-     * @return mixed
-     */
-    public function getAllTravelsByUser(User $user);
-
-    /**
      * @param Travel $travel
      *
      * @return mixed

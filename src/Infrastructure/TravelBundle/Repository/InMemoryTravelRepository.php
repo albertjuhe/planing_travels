@@ -56,16 +56,6 @@ class InMemoryTravelRepository implements TravelRepository
         return array_search($travelId, array_column($this->travel, 'travelId'));
     }
 
-    /**
-     * @param User $user
-     *
-     * @return array|mixed
-     */
-    public function getAllTravelsByUser(User $user)
-    {
-        return $this->findByKeyValue('userId', $user->getId());
-    }
-
     public function getTravelById(string $id): Travel
     {
         $travels = array_search($id, array_column($this->travel, 'travelId'));
