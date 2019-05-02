@@ -2,13 +2,14 @@
 
 namespace App\Application\UseCases\Travel;
 
+use App\Domain\Travel\Repository\TravelReadModelRepository;
 use App\Domain\Travel\Repository\TravelRepository;
 use App\Domain\User\Model\User;
 
 class GetAllMyTravelsService
 {
     /**
-     * @var TravelRepository;
+     * @var TravelReadModelRepository;
      */
     private $travelRepository;
 
@@ -17,13 +18,13 @@ class GetAllMyTravelsService
      *
      * @param TravelRepository $travelRepository
      */
-    public function __construct(TravelRepository $travelRepository)
+    public function __construct(TravelReadModelRepository $travelRepository)
     {
         $this->travelRepository = $travelRepository;
     }
 
     public function execute(User $user)
     {
-        return $this->travelRepository->getAllTravelsByUser($user);
+        return $this->travelRepository->getAllTravelsByUser($user->userId()->id());
     }
 }

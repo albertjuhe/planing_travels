@@ -22,15 +22,6 @@ interface TravelRepository
     public function ofSlugOrFail(string $slug);
 
     /**
-     * Return the travels with max starts.
-     *
-     * @param $maximResults
-     *
-     * @return mixed
-     */
-    public function TravelsAllOrderedBy($maximResults);
-
-    /**
      * @param $user
      *
      * @return mixed

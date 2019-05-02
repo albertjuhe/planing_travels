@@ -4,23 +4,15 @@ namespace App\Application\UseCases\Travel;
 
 use App\Application\Query\Travel\BestTravelsListQuery;
 use App\Application\UseCases\usesCasesService;
-use App\Domain\Travel\Repository\TravelRepository;
+use App\Domain\Travel\Repository\TravelReadModelRepository;
 
 class GetBestTravelsOrderedByService implements usesCasesService
 {
-    /**
-     * @var TravelRepository;
-     */
-    private $travelRepository;
+    private $travelReadModelRepository;
 
-    /**
-     * GetAllMyTravels constructor.
-     *
-     * @param TravelRepository $travelRepository
-     */
-    public function __construct(TravelRepository $travelRepository)
+    public function __construct(TravelReadModelRepository $travelReadModelRepository)
     {
-        $this->travelRepository = $travelRepository;
+        $this->travelReadModelRepository = $travelReadModelRepository;
     }
 
     public function __invoke(BestTravelsListQuery $query)
@@ -28,6 +20,6 @@ class GetBestTravelsOrderedByService implements usesCasesService
         $numberMaxOfTravels = $query->getNumberMaxOfTravels();
         $orderedBy = $query->getOrderedBy();
 
-        return $this->travelRepository->TravelsAllOrderedBy($numberMaxOfTravels);
+        return $this->travelReadModelRepository->getTravelOrderedBy($orderedBy, $numberMaxOfTravels);
     }
 }

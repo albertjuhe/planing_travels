@@ -3,11 +3,11 @@
 namespace App\UI\Controller\http;
 
 use App\Domain\User\Exceptions\UserDoesntExists;
+use App\Infrastructure\TravelBundle\Repository\ElasticSearchReadModelRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Application\UseCases\Travel\GetAllMyTravelsService;
-use App\Infrastructure\TravelBundle\Repository\DoctrineTravelRepository;
 
 class ShowMyTravelsController extends AbstractController
 {
@@ -18,7 +18,7 @@ class ShowMyTravelsController extends AbstractController
      *
      * @param $travelRepository
      */
-    public function __construct(DoctrineTravelRepository $travelRepository)
+    public function __construct(ElasticSearchReadModelRepository $travelRepository)
     {
         $this->travelRepository = $travelRepository;
     }
