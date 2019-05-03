@@ -2,7 +2,6 @@
 
 namespace App\Domain\Travel\Repository;
 
-use App\Domain\User\Model\User;
 use App\Domain\Travel\Model\Travel;
 
 interface TravelRepository

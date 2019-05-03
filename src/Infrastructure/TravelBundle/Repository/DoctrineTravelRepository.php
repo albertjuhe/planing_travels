@@ -5,7 +5,6 @@ namespace App\Infrastructure\TravelBundle\Repository;
 use App\Domain\Travel\Exceptions\TravelDoesntExists;
 use App\Domain\Travel\Model\Travel;
 use App\Domain\Travel\ValueObject\TravelId;
-use App\Domain\User\Model\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use App\Domain\Travel\Repository\TravelRepository;

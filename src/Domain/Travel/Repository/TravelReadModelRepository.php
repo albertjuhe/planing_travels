@@ -2,8 +2,6 @@
 
 namespace App\Domain\Travel\Repository;
 
-use App\Domain\User\Model\User;
-
 interface TravelReadModelRepository
 {
     /**

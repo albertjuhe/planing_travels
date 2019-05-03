@@ -6,7 +6,6 @@ use App\Domain\Travel\Repository\TravelReadModelRepository;
 use App\Infrastructure\Application\ElasticSearch\Repository\ElasticSearchRepository;
 use App\Infrastructure\TravelBundle\DataTransformer\ElasticSearchTravelDataTransformer;
 use Elastica\Query;
-use Elastica\Query\Terms;
 
 class ElasticSearchReadModelRepository extends ElasticSearchRepository implements TravelReadModelRepository
 {
@@ -32,10 +31,7 @@ class ElasticSearchReadModelRepository extends ElasticSearchRepository implement
 
     public function getAllTravelsByUser(int $user)
     {
-        $terms = new Terms();
-        $terms->setTerms('userId', [$user]);
-        $result = $this->index->search($terms);
-        $documents = $result->getDocuments();
+        $documents = $this->findBy('userId', $user);
         $elasticSearchTravelDataTransformer = new ElasticSearchTravelDataTransformer();
         $elasticSearchTravelDataTransformer->write($documents);
 

@@ -35,8 +35,13 @@ class ElasticSearchRepository
 
     public function find(string $id): iterable
     {
+        return $this->findBy(self::PRIMARY_KEY, $id);
+    }
+
+    public function findBy(string $field, $value): iterable
+    {
         $terms = new Terms();
-        $terms->setTerms(self::PRIMARY_KEY, [$id]);
+        $terms->setTerms($field, [$value]);
 
         return $this->index->search($terms)->getDocuments();
     }
