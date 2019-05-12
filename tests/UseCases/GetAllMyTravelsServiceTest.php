@@ -2,28 +2,23 @@
 
 namespace App\Tests\UseCases;
 
-use PHPUnit\Framework\TestCase;
+use App\Application\Query\Travel\GetMyTravelsQuery;
 use App\Application\UseCases\Travel\GetAllMyTravelsService;
-use App\Infrastructure\TravelBundle\Repository\InMemoryTravelRepository;
 use App\Domain\User\Model\User;
 
-class GetAllMyTravelsServiceTest extends TestCase
+class GetAllMyTravelsServiceTest extends ReadTravelServiceTest
 {
-    /** @var InMemoryTravelRepository */
-    private $travelRepository;
-
     public function setUp()
     {
-        $this->travelRepository = new InMemoryTravelRepository();
-        $this->travelRepository->loadData();
+        parent::setUp();
     }
 
     public function testGetAllMyTravels()
     {
         $user = User::byId(1);
-
+        $getMyTravelQuery = new GetMyTravelsQuery($user);
         $getAllMyTravelsService = new GetAllMyTravelsService($this->travelRepository);
-        $travels = $getAllMyTravelsService->execute($user);
+        $travels = $getAllMyTravelsService->__invoke($getMyTravelQuery);
 
         foreach ($travels as $travel) {
             $this->assertEquals($travel->getUser()->userId(), $user->userId());

@@ -7,6 +7,7 @@ use App\Domain\Mark\Model\Mark;
 use App\Domain\Travel\ValueObject\GeoLocation;
 use App\Domain\Location\Model\Location;
 use App\UI\Controller\http\CommandController;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -53,8 +54,11 @@ class AddNewLocationAPIController extends CommandController
         $addLocationCommand = new AddLocationCommand($data['travel'], $location, $userId, $mark, $data['IdType']);
         $this->commandBus->handle($addLocationCommand);
 
-        return new JsonResponse(
+        $response = new JsonResponse(
             $response['data'] = $data
         );
+        $response->setContent(Response::HTTP_CREATED);
+
+        return $response;
     }
 }
