@@ -15,15 +15,31 @@ class GetAllMyTravelsServiceTest extends ReadTravelServiceTest
 
     public function testGetAllMyTravels()
     {
-        $user = User::byId(1);
-        $getMyTravelQuery = new GetMyTravelsQuery($user);
-        $getAllMyTravelsService = new GetAllMyTravelsService($this->travelRepository);
-        $travels = $getAllMyTravelsService->__invoke($getMyTravelQuery);
+        $userId = 1;
+        $travelId = mt_rand();
 
-        foreach ($travels as $travel) {
-            $this->assertEquals($travel->getUser()->userId(), $user->userId());
+        $user = User::byId($userId);
+        $travels = [
+            [
+                'id' => $travelId,
+                'user' => $userId,
+            ],
+            [
+                'id' => $travelId + 1,
+                'user' => $userId,
+            ],
+        ];
+
+        $getMyTravelQuery = new GetMyTravelsQuery($user);
+
+        $this->travelRepository->method('getAllTravelsByUser')->willReturn($travels);
+        $getAllMyTravelsService = new GetAllMyTravelsService($this->travelRepository);
+        $myTravels = $getAllMyTravelsService->__invoke($getMyTravelQuery);
+
+        foreach ($myTravels as $travel) {
+            $this->assertEquals($travel['user'], $user->userId()->id());
         }
 
-        $this->assertCount(3, $travels);
+        $this->assertCount(2, $travels);
     }
 }
