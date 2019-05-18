@@ -64,8 +64,9 @@ services:
         - { name: tactician.handler, command: App\Application\Command\Location\DeleteLocationCommand}
 
     # Query Bus
-    App\Application\UseCases\Travel\GetBestTravelsOrderedByService:
-      arguments: ['@doctrine.travel.repository']
+    trave.get_best_travels:
+      class: App\Application\UseCases\Travel\GetBestTravelsOrderedByService
+      arguments: ['@elasticsearch.travel.read_model.repository']
       tags: [messenger.message_handler]
 
     travel.show_handler:
@@ -73,10 +74,16 @@ services:
       arguments: ['@doctrine.travel.repository']
       tags: [messenger.message_handler]
 
+    travel.gey_my_travels:
+      class: App\Application\UseCases\Travel\GetAllMyTravelsService
+      arguments: ['@elasticsearch.travel.read_model.repository']
+      tags: [messenger.message_handler]
+
     location.get_by_travel_handler:
       class: App\Application\UseCases\Location\GetLocationsByTravelService
       arguments:  ['@doctrine.travel.repository' ]
       tags: [messenger.message_handler]
+
 
     # Tactician middleware Store domain events
     App\Application\Middleware\DomainEventsMiddleware:
@@ -89,6 +96,8 @@ services:
       arguments: ['@doctrine']
 
     doctrine.travel.repository: '@App\Infrastructure\TravelBundle\Repository\DoctrineTravelRepository'
+
+    elasticsearch.travel.read_model.repository: '@App\Infrastructure\TravelBundle\Repository\ElasticSearchReadModelRepository'
 
     # Repository User
     App\Infrastructure\UserBundle\Repository\DoctrineUserRepository:

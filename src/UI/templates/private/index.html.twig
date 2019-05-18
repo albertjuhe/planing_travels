@@ -13,14 +13,11 @@
                         <a href="{{ path('publishTravel', { 'slug': travel.slug }) }}">Publish</a>
                     </div>
                     <div>
-                        {% if travel.photo is empty %}
-                            <img id="travel{{ travel.id }}" class="featurette-image img-responsive" data-src="holder/holder.js/200x200/auto" alt="Travel photo">
-                        {% else %}
-                            <img id="travel{{ travel.id }}" src="{{ asset(travel.getWebPath()) }}" width="200" alt="">
-                        {% endif %}
+                             <img id="travel{{ travel.id }}" class="featurette-image img-responsive" data-src="holder/holder.js/200x200/auto" alt="Travel photo">
+
                     </div>
                     <div class="date-travel">
-                        <a href="#">   {{ travel.startAt | date("d/m/Y")}} To {{ travel.endAt |date("d/m/Y")}}</a>
+                        <a href="#">   {{ travel.startAt.date | date("d/m/Y")}} To {{ travel.endAt.date |date("d/m/Y")}}</a>
                     </div>
                     <div class="date-travel">
                         <span>STATUS: {{ travel.status }}</span>

@@ -51,24 +51,9 @@ class InMemoryTravelRepository implements TravelRepository
         ];
     }
 
-    public function TravelsAllOrderedBy($maximResults)
-    {
-        // TODO: Implement TravelsAllOrderedByStarts() method.
-    }
-
     public function ofIdOrFail(string $travelId): Travel
     {
         return array_search($travelId, array_column($this->travel, 'travelId'));
-    }
-
-    /**
-     * @param User $user
-     *
-     * @return array|mixed
-     */
-    public function getAllTravelsByUser(User $user)
-    {
-        return $this->findByKeyValue('userId', $user->getId());
     }
 
     public function getTravelById(string $id): Travel

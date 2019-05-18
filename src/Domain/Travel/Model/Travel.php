@@ -448,6 +448,8 @@ class Travel
             'username' => $this->getUser()->getUsername(),
             'publishedAt' => $this->getPublishedAt(),
             'status' => $this->getStatus(),
+            'stars' => $this->getStars(),
+            'watch' => $this->getWatch(),
         ];
     }
 }

@@ -2,27 +2,13 @@
 
 namespace App\UI\Controller\http;
 
+use App\Application\Query\Travel\GetMyTravelsQuery;
 use App\Domain\User\Exceptions\UserDoesntExists;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Application\UseCases\Travel\GetAllMyTravelsService;
-use App\Infrastructure\TravelBundle\Repository\DoctrineTravelRepository;
 
-class ShowMyTravelsController extends AbstractController
+class ShowMyTravelsController extends QueryController
 {
-    private $travelRepository;
-
-    /**
-     * ShowMyTravelsController constructor.
-     *
-     * @param $travelRepository
-     */
-    public function __construct(DoctrineTravelRepository $travelRepository)
-    {
-        $this->travelRepository = $travelRepository;
-    }
-
     /**
      * @Route("/{_locale}/private",name="main_private")
      *
@@ -34,9 +20,8 @@ class ShowMyTravelsController extends AbstractController
         if (!$user) {
             new UserDoesntExists();
         }
-
-        $getAllMyTravelsService = new GetAllMyTravelsService($this->travelRepository);
-        $travels = $getAllMyTravelsService->execute($user);
+        $getMyTravelQuery = new GetMyTravelsQuery($user);
+        $travels = $this->ask($getMyTravelQuery);
 
         return $this->render('private/index.html.twig', ['travels' => $travels]);
     }

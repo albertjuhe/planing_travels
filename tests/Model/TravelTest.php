@@ -86,6 +86,12 @@ class TravelTest extends TestCase
         $gpx2 = $travel->getGpx();
         $this->assertTrue($gpx->equals($gpx2));
 
+        $stars = mt_rand();
+        $travel->setStars($stars);
+
+        $watch = mt_rand();
+        $travel->setWatch($watch);
+
         $this->assertEquals(
             $travel->toArray(),
             [
@@ -103,6 +109,8 @@ class TravelTest extends TestCase
                 'username' => null,
                 'publishedAt' => new \DateTime('2018-01-01'),
                 'status' => Travel::TRAVEL_DRAFT,
+                'stars' => $stars,
+                'watch' => $watch,
             ]
             );
     }

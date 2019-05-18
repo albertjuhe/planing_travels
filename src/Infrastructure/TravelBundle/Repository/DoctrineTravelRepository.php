@@ -5,7 +5,6 @@ namespace App\Infrastructure\TravelBundle\Repository;
 use App\Domain\Travel\Exceptions\TravelDoesntExists;
 use App\Domain\Travel\Model\Travel;
 use App\Domain\Travel\ValueObject\TravelId;
-use App\Domain\User\Model\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use App\Domain\Travel\Repository\TravelRepository;
@@ -31,37 +30,6 @@ class DoctrineTravelRepository extends ServiceEntityRepository implements Travel
         }
 
         return $travel;
-    }
-
-    /**
-     * @param int $maximResults
-     *
-     * @return mixed|void
-     */
-    public function TravelsAllOrderedBy($maximResults = 10)
-    {
-        $q = $this->createQueryBuilder('t')
-            ->leftJoin('t.user', 'user')
-            ->addOrderBy('t.stars')
-            ->setMaxResults($maximResults)
-            ->getQuery();
-
-        return $q->getResult();
-    }
-
-    /**
-     * @param User $user
-     *
-     * @return mixed
-     */
-    public function getAllTravelsByUser(User $user)
-    {
-        $q = $this->createQueryBuilder('t')
-            ->leftJoin('t.user', 'user')
-            ->where('user = :user')
-            ->setParameter('user', $user)->getQuery();
-
-        return $q->getResult();
     }
 
     /**

@@ -2,7 +2,6 @@
 
 namespace App\Domain\Travel\Repository;
 
-use App\Domain\User\Model\User;
 use App\Domain\Travel\Model\Travel;
 
 interface TravelRepository
@@ -20,22 +19,6 @@ interface TravelRepository
      * @return mixed
      */
     public function ofSlugOrFail(string $slug);
-
-    /**
-     * Return the travels with max starts.
-     *
-     * @param $maximResults
-     *
-     * @return mixed
-     */
-    public function TravelsAllOrderedBy($maximResults);
-
-    /**
-     * @param $user
-     *
-     * @return mixed
-     */
-    public function getAllTravelsByUser(User $user);
 
     /**
      * @param Travel $travel
