@@ -4,6 +4,7 @@ namespace App\Application\UseCases\Travel;
 
 use App\Application\Command\Travel\PublishTravelCommand;
 use App\Application\UseCases\UsesCasesService;
+use App\Domain\Event\DomainEventPublisher;
 use App\Domain\Travel\Exceptions\NotAllowedToPublishTravel;
 use App\Domain\Travel\Repository\TravelRepository;
 use App\Domain\Travel\Model\Travel;
@@ -53,6 +54,8 @@ class PublishTravelService implements UsesCasesService
             throw new NotAllowedToPublishTravel();
         }
         $travel->publish();
+
+        DomainEventPublisher::instance()->publish($travel->pullDomainEvents());
         $this->travelRepository->save($travel);
 
         return $travel;

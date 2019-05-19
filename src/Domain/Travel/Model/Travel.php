@@ -2,7 +2,7 @@
 
 namespace App\Domain\Travel\Model;
 
-use App\Domain\Event\DomainEventPublisher;
+use App\Domain\Common\Model\AggregateRoot;
 use App\Domain\Gpx\Model\Gpx;
 use App\Domain\Location\Model\Location;
 use App\Domain\Travel\ValueObject\TravelId;
@@ -12,7 +12,7 @@ use App\Domain\Travel\Events\TravelWasPublished;
 use App\Application\DataTransformers\Travel\TravelPublishDataTransformer;
 use Doctrine\Common\Collections\ArrayCollection;
 
-class Travel
+class Travel extends AggregateRoot
 {
     const TRAVEL_DRAFT = 10;
     const TRAVEL_PUBLISHED = 20;
@@ -393,7 +393,7 @@ class Travel
         $this->status = self::TRAVEL_PUBLISHED;
         $this->publishedAt = new \DateTime();
 
-        DomainEventPublisher::instance()->publish(
+        $this->record(
             new TravelWasPublished(
                 (new TravelPublishDataTransformer($this))->read(),
                 $this->getUser()->getId()->id())

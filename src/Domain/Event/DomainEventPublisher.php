@@ -57,11 +57,13 @@ class DomainEventPublisher
         unset($this->subscribers[$id]);
     }
 
-    public function publish(DomainEvent $aDomainEvent)
+    public function publish(DomainEvent ...$aDomainEvent)
     {
-        foreach ($this->subscribers as $aSubscriber) {
-            if ($aSubscriber->isSubscribedTo($aDomainEvent)) {
-                $aSubscriber->handle($aDomainEvent);
+        foreach ($aDomainEvent as $domainEvent) {
+            foreach ($this->subscribers as $aSubscriber) {
+                if ($aSubscriber->isSubscribedTo($domainEvent)) {
+                    $aSubscriber->handle($domainEvent);
+                }
             }
         }
     }
