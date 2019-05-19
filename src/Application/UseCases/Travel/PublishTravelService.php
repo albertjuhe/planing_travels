@@ -55,7 +55,7 @@ class PublishTravelService implements UsesCasesService
         }
         $travel->publish();
 
-        DomainEventPublisher::instance()->publish($travel->pullDomainEvents());
+        DomainEventPublisher::instance()->publish(...$travel->pullDomainEvents());
         $this->travelRepository->save($travel);
 
         return $travel;
