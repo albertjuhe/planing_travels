@@ -1,7 +1,7 @@
 # Read the documentation: https://github.com/FriendsOfSymfony/FOSElasticaBundle/blob/master/Resources/doc/setup.md
 fos_elastica:
     clients:
-        default: { host: localhost, port: 9200 }
+        default: { host: elasticsearch, port: 9200 }
     indexes:
         travel:
             types:
@@ -26,14 +26,16 @@ fos_elastica:
                             type: text
                         publishedAt:
                             type: date
-                        starts: ~
-                        watch: ~
+                        stars:
+                            type: integer
+                        watch:
+                            type: integer
                         status: ~
                         geolocation:
                             type: geo_point
                     persistence:
                         driver: orm
-                        model: App\Infrastructure\TravelBundle\Resources\config\persistence\Travel.orm.yml
+                        model: App\Infrastructure\TravelBundle\Resources\config\persistence\Model\Travel.orm.yml
                         provider: ~
                         listener:
                             insert: false

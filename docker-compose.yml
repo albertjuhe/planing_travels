@@ -1,0 +1,59 @@
+version: '2.3'
+services:
+  app:
+    build:
+      context: ${PWD}/Docker
+      dockerfile: Dockerfile
+    ports:
+      - 8000:80
+    volumes:
+      - ${PWD}:/var/www/html
+    environment:
+      - MYSQL_HOST
+      - MYSQL_USER
+      - MYSQL_PASSWORD
+      - DISPLAY_ERRORS
+      - WAIT_COMMAND
+      - WAIT_START_CMD
+      - WAIT_SLEEP
+      - WAIT_LOOPS
+    depends_on:
+      - mysql
+      - elasticsearch
+    #command: sh /var/www/html/Docker/wait_to_start.sh
+
+  mysql:
+    image: mysql:5.7
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+    volumes:
+      - ${PWD}/Docker/migrations:/docker-entrypoint-initdb.d
+
+  adminer:
+    image: adminer
+    ports:
+      - 8080:8080
+    depends_on:
+      - mysql
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.4.3
+    container_name: elasticsearch
+    environment:
+      - node.name=elasticsearch
+      - cluster.name=docker-cluster
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ports:
+      - 9201:9200
+    ulimits:
+      memlock:
+          soft: -1
+          hard: -1
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://0.0.0.0:9200"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+
