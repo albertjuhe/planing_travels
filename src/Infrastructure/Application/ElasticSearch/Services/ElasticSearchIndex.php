@@ -16,8 +16,7 @@ class ElasticSearchIndex
 
     public function __construct(
         IndexManager $manager
-    )
-    {
+    ) {
         $this->manager = $manager;
         $this->client = new Client();
     }

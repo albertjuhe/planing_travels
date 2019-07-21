@@ -49,4 +49,6 @@ interface TravelRepository
      * @return mixed
      */
     public function find($id);
+
+    public function getAll();
 }

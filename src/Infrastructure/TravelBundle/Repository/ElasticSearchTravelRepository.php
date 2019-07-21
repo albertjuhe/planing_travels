@@ -21,7 +21,7 @@ class ElasticSearchTravelRepository extends ElasticSearchRepository implements I
      */
     public function save(Travel $travel): void
     {
-        $travelDocument = new Document($travel->getId(), $travel->toArray());
+        $travelDocument = new Document($travel->getId()->id(), $travel->toArray());
         $this->typeDocument->addDocument($travelDocument);
         $this->refresh();
     }
