@@ -11,6 +11,7 @@ fos_elastica:
                             type: text
                         createdAt:
                             type: date
+                            format: 'yyyy-MM-dd HH:mm:ss'
                         updatedAt:
                             type: date
                         title:

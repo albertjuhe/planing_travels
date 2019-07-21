@@ -57,7 +57,19 @@ php bin/console doctrine:migrations:migrate
 Working with assets in templates
 php composer.phar require symfony/asset
 
-Create folder assets
+## Commands
+Populates elasticsearch with the current travels
+> php bin/console app:populate-travel-elasticsearch
+
+## Fixer
+
+> php vendor/bin/php-cs-fixer fix src
+
+## Unit testing
+
+> php vendor/bin/phpunit
+
+
 
 
 

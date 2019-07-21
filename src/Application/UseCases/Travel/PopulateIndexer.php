@@ -8,18 +8,9 @@ use App\Domain\Travel\Repository\TravelRepository;
 
 class PopulateIndexer
 {
-    /**
-     * @var TravelRepository
-     */
     private $travelRepository;
-    /**
-     * @var IndexerRepository
-     */
     private $indexerRepository;
 
-    /**
-     * PopulateIndexer constructor.
-     */
     public function __construct(
         TravelRepository $travelRepository,
         IndexerRepository $indexerRepository
@@ -28,12 +19,11 @@ class PopulateIndexer
         $this->indexerRepository = $indexerRepository;
     }
 
-    public function execute()
+    public function execute(): void
     {
         $travels = $this->travelRepository->getAll();
         foreach ($travels as $travel) {
-            /** @var $travel Travel */
-            echo $travel->getId();
+            /* @var $travel Travel */
             $this->indexerRepository->save($travel);
         }
     }

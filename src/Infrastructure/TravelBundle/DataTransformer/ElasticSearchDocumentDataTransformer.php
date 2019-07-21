@@ -9,6 +9,11 @@ class ElasticSearchDocumentDataTransformer
     /** @var Travel */
     private $data;
 
+    public function __construct(Travel $travel)
+    {
+        $this->write($travel);
+    }
+
     public function write(Travel $travel)
     {
         $this->data = $travel;
