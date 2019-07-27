@@ -61,7 +61,7 @@ class DoctrineTravelRepository extends ServiceEntityRepository implements Travel
         return $travel;
     }
 
-    public function getAll()
+    public function getAll(): array
     {
         return $this->findAll();
     }

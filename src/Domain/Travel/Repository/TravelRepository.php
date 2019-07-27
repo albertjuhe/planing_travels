@@ -50,5 +50,5 @@ interface TravelRepository
      */
     public function find($id);
 
-    public function getAll();
+    public function getAll(): array;
 }

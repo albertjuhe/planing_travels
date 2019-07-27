@@ -88,7 +88,7 @@ class InMemoryTravelRepository implements TravelRepository
         return $this->findTravelBySlug($slug);
     }
 
-    public function getAll()
+    public function getAll(): array
     {
         return $this->travel;
     }
