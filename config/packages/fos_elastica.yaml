@@ -1,16 +1,17 @@
 # Read the documentation: https://github.com/FriendsOfSymfony/FOSElasticaBundle/blob/master/Resources/doc/setup.md
 fos_elastica:
     clients:
-        default: { host: elasticsearch, port: 9200 }
+        default: { host: localhost, port: 9200 }
     indexes:
         travel:
             types:
                 travel:
                     properties:
                         id:
-                            type: integer
+                            type: text
                         createdAt:
                             type: date
+                            format: 'yyyy-MM-dd HH:mm:ss'
                         updatedAt:
                             type: date
                         title:

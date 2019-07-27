@@ -4,6 +4,7 @@ namespace App\Infrastructure\TravelBundle\Repository;
 
 use App\Domain\Travel\Model\Travel;
 use App\Domain\Travel\Repository\IndexerRepository;
+use App\Infrastructure\TravelBundle\DataTransformer\ElasticSearchDocumentDataTransformer;
 use Elastica\Document;
 use App\Infrastructure\Application\ElasticSearch\Repository\ElasticSearchRepository;
 
@@ -21,7 +22,12 @@ class ElasticSearchTravelRepository extends ElasticSearchRepository implements I
      */
     public function save(Travel $travel): void
     {
-        $travelDocument = new Document($travel->getId(), $travel->toArray());
+        $elasticSearchDocumentDataTransformer = new ElasticSearchDocumentDataTransformer($travel);
+
+        $travelDocument = new Document(
+            $travel->getId()->id(),
+            $elasticSearchDocumentDataTransformer->read()
+        );
         $this->typeDocument->addDocument($travelDocument);
         $this->refresh();
     }

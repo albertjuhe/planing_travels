@@ -139,3 +139,6 @@ services:
       tags:
         - { name: doctrine.event_listener, event: postPersist }
         - { name: doctrine.event_listener, event: postUpdate }
+
+    App\Application\UseCases\Travel\PopulateIndexer:
+      arguments:  ['@doctrine.travel.repository', '@elasticsearch.travel.repository' ]

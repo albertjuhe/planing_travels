@@ -61,13 +61,18 @@ class DoctrineTravelRepository extends ServiceEntityRepository implements Travel
         return $travel;
     }
 
+    public function getAll(): array
+    {
+        return $this->findAll();
+    }
+
     /**
      * @param Travel $travel
      *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function save(Travel $travel)
+    public function save(Travel $travel): void
     {
         $this->_em->persist($travel);
     }
