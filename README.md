@@ -28,6 +28,7 @@ Create a map and add Locations, Routes, GPS tracks.
 1) OERPUB Blob travel
 1) Docker
 1) GraphQL Integration
+1) JWT JAson web tockens
 
 
 
