@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\UseCases;
+namespace App\Tests\UseCases\Travel;
 
 use App\Application\UseCases\Travel\PopulateIndexer;
 use App\Domain\Travel\Model\Travel;

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\UseCases;
+namespace App\Tests\UseCases\Travel;
 
 class GetBestTravelsOrderedByServiceTest
 {

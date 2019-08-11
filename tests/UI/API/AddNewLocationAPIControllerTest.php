@@ -1,11 +1,13 @@
 <?php
 
-namespace App\Tests\UI;
+namespace App\Tests\UI\API;
 
 use GuzzleHttp\Client;
 
-class GetLocationsAPIControllerTest extends APIControllerTest
+class AddNewLocationAPIControllerTest extends APIControllerTest
 {
+    private $api = '/api/user/1/location';
+
     public function setUp()
     {
         parent::setUp();
@@ -14,8 +16,8 @@ class GetLocationsAPIControllerTest extends APIControllerTest
     public function testGetLocationsByTravel()
     {
         $client = new Client();
-
-        $response = $client->request('GET', $this->endPoint.'/api/travel/2/locations', []);
+        $url = $this->endPoint.$this->api;
+        $response = $client->request('POST', $url, []);
         $this->assertEquals(200, $response->getStatusCode());
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\UseCases;
+namespace App\Tests\UseCases\Travel;
 
 use App\Application\Query\Travel\GetMyTravelsQuery;
 use App\Application\UseCases\Travel\GetAllMyTravelsService;

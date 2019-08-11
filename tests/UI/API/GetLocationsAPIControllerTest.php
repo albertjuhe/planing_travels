@@ -1,13 +1,11 @@
 <?php
 
-namespace App\Tests\UI;
+namespace App\Tests\UI\API;
 
 use GuzzleHttp\Client;
 
-class DeleteLocationAPIControllerTest extends APIControllerTest
+class GetLocationsAPIControllerTest extends APIControllerTest
 {
-    private $api = '/api/travel/2/location/1';
-
     public function setUp()
     {
         parent::setUp();
@@ -16,8 +14,8 @@ class DeleteLocationAPIControllerTest extends APIControllerTest
     public function testGetLocationsByTravel()
     {
         $client = new Client();
-        $url = $this->endPoint.$this->api;
-        $response = $client->request('DELETE', $url, []);
+
+        $response = $client->request('GET', $this->endPoint.'/api/travel/2/locations', []);
         $this->assertEquals(200, $response->getStatusCode());
     }
 }
