@@ -4,11 +4,9 @@ App\Domain\Mark\Model\Mark:
     id:
         id:
             type: string
-            scale: 0
             length: 150
-            unique: false
+            unique: true
             nullable: false
-            precision: 0
             id: true
     fields:
         title:
@@ -44,13 +42,4 @@ App\Domain\Mark\Model\Mark:
         geoLocation:
             class: App\Domain\Travel\ValueObject\GeoLocation
             columnPrefix: false
-    oneToMany:
-        location:
-            targetEntity: App\Domain\Location\Model\Location
-            cascade: {  }
-            fetch: LAZY
-            mappedBy: mark
-            inversedBy: null
-            orphanRemoval: false
-            orderBy: null
     lifecycleCallbacks: {  }

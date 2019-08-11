@@ -2,6 +2,7 @@
 
 namespace App\Infrastructure\TypeLocationBundle\Repository;
 
+use App\Domain\TypeLocation\Exceptions\TypeLocationDoesntExists;
 use App\Domain\TypeLocation\Repository\TypeLocationRepository;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
@@ -27,5 +28,15 @@ class DoctrineTypeLocation extends ServiceEntityRepository implements TypeLocati
     public function getAllTypeLocations()
     {
         return $this->findAll();
+    }
+
+    public function idOrFail(string $locationType): TypeLocation
+    {
+        $locationType = $this->find($locationType);
+        if (!$locationType instanceof TypeLocation) {
+            throw new TypeLocationDoesntExists();
+        }
+
+        return $locationType;
     }
 }

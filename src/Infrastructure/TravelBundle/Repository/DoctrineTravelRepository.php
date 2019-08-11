@@ -54,8 +54,8 @@ class DoctrineTravelRepository extends ServiceEntityRepository implements Travel
     public function ofIdOrFail(string $travelId): Travel
     {
         $travel = $this->find(new TravelId($travelId));
-        if (null === $travel) {
-            throw new TravelDoesntExists();
+        if (!$travel instanceof Travel) {
+            throw new TravelDoesntExists('Travel doesnt exists');
         }
 
         return $travel;
