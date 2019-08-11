@@ -24,12 +24,14 @@ class DoctrineMarkRepository extends ServiceEntityRepository implements MarkRepo
         $markStore = $this->find($mark->getId());
         if (!$markStore instanceof Mark) {
             $this->save($mark);
+
+            return $mark;
         }
 
-        return $mark;
+        return $markStore;
     }
 
-    public function save(Mark $mark)
+    public function save(Mark $mark): void
     {
         $this->_em->persist($mark);
     }

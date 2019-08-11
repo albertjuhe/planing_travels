@@ -64,7 +64,7 @@ App\Domain\Location\Model\Location:
             cascade: {  }
             fetch: EAGER
             mappedBy: null
-            inversedBy: location
+            inversedBy: null
             joinColumns:
                 mark_id:
                     referencedColumnName: id

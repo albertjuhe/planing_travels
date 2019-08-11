@@ -2,6 +2,8 @@
 
 namespace App\Domain\TypeLocation\Repository;
 
+use App\Domain\TypeLocation\Model\TypeLocation;
+
 interface TypeLocationRepository
 {
     /**
@@ -10,4 +12,6 @@ interface TypeLocationRepository
      * @return mixed
      */
     public function getAllTypeLocations();
+
+    public function idOrFail(string $locationType): TypeLocation;
 }
