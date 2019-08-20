@@ -41,13 +41,12 @@ class DeleteLocationService implements UsesCasesService
     public function handle(DeleteLocationCommand $deleteLocationCommand)
     {
         $locationId = $deleteLocationCommand->getLocationId();
-        $location = $this->locationRepository->findById($locationId);
-
         /** @var UserId $userId */
         $userId = $deleteLocationCommand->getUserId();
-        $this->userRepository->ofIdOrFail($userId);
-
         $travelId = $deleteLocationCommand->getTravelId();
+
+        $location = $this->locationRepository->findById($locationId);
+        $this->userRepository->ofIdOrFail($userId);
 
         if (!$location instanceof Location) {
             throw new LocationDoesntExists();
