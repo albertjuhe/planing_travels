@@ -4,8 +4,6 @@ namespace App\Application\UseCases\Location;
 
 use App\Application\Command\Location\AddLocationCommand;
 use App\Application\UseCases\UsesCasesService;
-use App\Domain\Event\DomainEventPublisher;
-use App\Domain\Location\Events\LocationWasAdded;
 use App\Domain\Location\Repository\LocationRepository;
 use App\Domain\Mark\Repository\MarkRepository;
 use App\Domain\Travel\Exceptions\InvalidTravelUser;
@@ -76,7 +74,6 @@ class AddLocationService implements UsesCasesService
         $location->setMark($mark);
         $location->setTypeLocation($locationType);
 
-        DomainEventPublisher::instance()->publish(new LocationWasAdded($location->toArray()));
         $this->locationRepository->save($location);
     }
 }
