@@ -6,7 +6,7 @@ use App\Application\Query\Travel\GetMyTravelsQuery;
 use App\Application\UseCases\Travel\GetAllMyTravelsService;
 use App\Domain\User\Model\User;
 
-class GetAllMyTravelsServiceTest extends ReadTravelServiceTest
+class GetAllMyTravelsServiceTest extends ReadTravelService
 {
     public function setUp()
     {

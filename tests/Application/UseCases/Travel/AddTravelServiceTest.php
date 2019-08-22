@@ -2,6 +2,8 @@
 
 namespace App\Tests\Application\UseCases\Travel;
 
+use App\Domain\Event\DomainEventPublisher;
+use App\Domain\Travel\Events\TravelWasAdded;
 use App\Domain\User\Exceptions\UserDoesntExists;
 use App\Application\UseCases\Travel\AddTravelService;
 use App\Domain\Travel\Model\Travel;
@@ -32,6 +34,11 @@ class AddTravelServiceTest extends TravelService
 
         $newTravel = $this->travelRepository->getTravelById($travelId);
         $this->assertEquals($newTravel->getId(), $travel->getId());
+
+        $subscriber = DomainEventPublisher::instance()->ofId($this->idSubscriber);
+        $this->assertCount(1, $subscriber->getEvents());
+        $event = $subscriber->getEvents()[0];
+        $this->assertInstanceOf(TravelWasAdded::class,$event);
     }
 
     public function testAddTravelWithInvalidUser()
