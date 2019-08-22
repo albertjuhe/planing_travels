@@ -1,12 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: ajuhe
- * Date: 8/07/18
- * Time: 18:47.
- */
 
-namespace App\Tests\Domain\ValueObject;
+namespace App\Tests\Domain\Money\ValueObject;
 
 use App\Domain\Money\ValueObject\Money;
 use App\Domain\Money\ValueObject\Currency;

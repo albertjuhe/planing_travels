@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Domain\ValueObject;
+namespace App\Tests\Domain\Travel\ValueObject;
 
 use App\Domain\Travel\ValueObject\TravelId;
 use PHPUnit\Framework\TestCase;

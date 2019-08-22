@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Domain\ValueObject;
+namespace App\Tests\Domain\Location\ValueObject;
 
 use App\Domain\Location\ValueObject\LocationId;
 use PHPUnit\Framework\TestCase;

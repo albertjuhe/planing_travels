@@ -1,12 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: albert.juhe
- * Date: 09/10/2018
- * Time: 06:48.
- */
 
-namespace App\Tests\Domain\Model;
+namespace App\Tests\Domain\Location\Model;
 
 use App\Domain\Travel\Model\Travel;
 use App\Domain\Travel\ValueObject\TravelId;

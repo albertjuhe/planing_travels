@@ -1,12 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: albert.juhe
- * Date: 18/10/2018
- * Time: 08:06.
- */
 
-namespace App\Tests\Domain\Model;
+namespace App\Tests\Domain\Gpx\Model;
 
 use App\Domain\Gpx\Model\Gpx;
 use App\Domain\Travel\ValueObject\TravelId;

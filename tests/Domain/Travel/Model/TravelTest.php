@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Domain\Model;
+namespace App\Tests\Domain\Travel\Model;
 
 use PHPUnit\Framework\TestCase;
 use App\Domain\Travel\Model\Travel;

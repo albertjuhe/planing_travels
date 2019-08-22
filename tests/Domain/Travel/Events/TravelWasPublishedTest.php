@@ -1,12 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: albert.juhe
- * Date: 09/11/2018
- * Time: 08:20.
- */
 
-namespace App\Tests\Domain\Events;
+namespace App\Tests\Domain\Travel\Events;
 
 use App\Domain\Travel\Events\TravelWasPublished;
 use App\Domain\Travel\Model\Travel;

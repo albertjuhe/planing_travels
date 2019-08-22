@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Domain\ValueObject;
+namespace App\Tests\Domain\User\ValueObject;
 
 use App\Domain\User\ValueObject\UserId;
 use PHPUnit\Framework\TestCase;

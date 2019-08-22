@@ -1,12 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: albert.juhe
- * Date: 18/10/2018
- * Time: 07:22.
- */
 
-namespace App\Tests\Domain\Model;
+namespace App\Tests\Domain\Mark\Model;
 
 use App\Domain\Mark\Model\Mark;
 use PHPUnit\Framework\TestCase;
