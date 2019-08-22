@@ -38,6 +38,7 @@ class AddTravelService implements UsesCasesService
     {
         /** @var Travel $travel */
         $travel = $command->getTravel();
+        $travel->setTitle('dummy1');
         /** @var User $user */
         $user = $command->getUser();
 

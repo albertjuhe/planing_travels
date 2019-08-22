@@ -2,14 +2,17 @@
 
 namespace App\Domain\Location\Model;
 
+use App\Domain\Common\Model\AggregateRoot;
+use App\Domain\Event\DomainEventPublisher;
 use App\Domain\Images\Model\Images;
+use App\Domain\Location\Events\LocationWasAdded;
 use App\Domain\Location\ValueObject\LocationId;
 use App\Domain\Mark\Model\Mark;
 use App\Domain\Travel\Model\Travel;
 use App\Domain\TypeLocation\Model\TypeLocation;
 use Doctrine\Common\Collections\ArrayCollection;
 
-class Location
+class Location extends AggregateRoot
 {
     /** @var LocationId */
     private $id;
@@ -54,6 +57,19 @@ class Location
         $this->images = new  ArrayCollection();
         $this->updatedAt = new \DateTime();
         $this->createdAt = new \DateTime();
+        $this->publishEvent();
+    }
+
+    private function publishEvent(): void
+    {
+        DomainEventPublisher::instance()->publish(
+            new LocationWasAdded([
+                    'id' => $this->getId()->id(),
+                    'createdAt' => $this->createdAt,
+                    'updatedAt' => $this->updatedAt,
+                ]
+            )
+        );
     }
 
     public static function fromCompleteAddress(

@@ -27,22 +27,6 @@ class LocationWasAdded implements DomainEvent
     /**
      * @return \DateTime
      */
-    public function getOccuredOn(): \DateTime
-    {
-        return $this->occuredOn;
-    }
-
-    /**
-     * @param \DateTime $occuredOn
-     */
-    public function setOccuredOn(\DateTime $occuredOn): void
-    {
-        $this->occuredOn = $occuredOn;
-    }
-
-    /**
-     * @return \DateTime
-     */
     public function occurredOn()
     {
         return $this->occuredOn;
