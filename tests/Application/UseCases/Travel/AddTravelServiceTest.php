@@ -38,7 +38,7 @@ class AddTravelServiceTest extends TravelService
         $subscriber = DomainEventPublisher::instance()->ofId($this->idSubscriber);
         $this->assertCount(1, $subscriber->getEvents());
         $event = $subscriber->getEvents()[0];
-        $this->assertInstanceOf(TravelWasAdded::class,$event);
+        $this->assertInstanceOf(TravelWasAdded::class, $event);
     }
 
     public function testAddTravelWithInvalidUser()
