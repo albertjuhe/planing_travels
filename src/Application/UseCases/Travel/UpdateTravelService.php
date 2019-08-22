@@ -49,7 +49,7 @@ class UpdateTravelService implements UsesCasesService
         $user = $commnand->user();
 
         //Only the owner can modify the travel
-        if (!$travel->getUser()->getId() == $user->getId()) {
+        if ($travel->getUser()->getId() !== $user->getId()) {
             throw new InvalidTravelUser();
         }
         DomainEventPublisher::instance()->publish(new TravelWasUpdated($travel->toArray()));
