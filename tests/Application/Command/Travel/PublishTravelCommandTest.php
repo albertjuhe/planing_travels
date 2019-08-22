@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Tests\Application\Command\Travel;
 
 use App\Application\Command\Travel\PublishTravelCommand;

@@ -8,7 +8,7 @@ use App\Domain\Travel\Model\Travel;
 use App\Domain\User\Model\User;
 use App\Application\Command\Travel\AddTravelCommand;
 
-class AddTravelServiceTest extends TravelServiceTest
+class AddTravelServiceTest extends TravelService
 {
     public function setUp()
     {
@@ -21,11 +21,10 @@ class AddTravelServiceTest extends TravelServiceTest
     public function testAddTravel()
     {
         $userId = mt_rand();
+        $user = User::byId($userId);
 
         $travel = new Travel();
         $travelId = $travel->getId()->id();
-
-        $user = User::byId($userId);
 
         $addTravelService = new AddTravelService($this->travelRepository, $this->userRepository);
         $command = new AddTravelCommand($travel, $user);

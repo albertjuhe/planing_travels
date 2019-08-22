@@ -9,7 +9,7 @@ use App\Domain\TypeLocation\Repository\TypeLocationRepository;
 use App\Domain\User\Repository\UserRepository;
 use PHPUnit\Framework\TestCase;
 
-class LocationServiceTest extends TestCase
+class LocationService extends TestCase
 {
     protected $travelRepository;
     protected $userRepository;

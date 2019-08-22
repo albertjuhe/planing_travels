@@ -9,28 +9,33 @@ use App\Domain\Travel\ValueObject\GeoLocation;
 
 class InMemoryTravelRepository implements TravelRepository
 {
+    const TRAVEL_1 = 'Dummy1';
+    const TRAVEL_2 = 'Dummy2';
+    const TRAVEL_3 = 'Dummy3';
+    const TRAVEL_4 = 'Dummy4';
+
     private $travel = [];
 
     public function loadData()
     {
-        $travel = Travel::fromTitleAndGeolocationAndUser('Dummy1',
+        $travel = Travel::fromTitleAndGeolocationAndUser(self::TRAVEL_1,
             new GeoLocation(1, 2, 3, 4, 5, 6),
             User::byId(1));
         $this->save($travel);
 
-        $travel = Travel::fromTitleAndGeolocationAndUser('Dummy2',
+        $travel = Travel::fromTitleAndGeolocationAndUser(self::TRAVEL_2,
             new GeoLocation(7, 8, 9, 10, 11, 12),
             User::byId(2));
         $travel->setStars(5);
         $this->save($travel);
 
-        $travel = Travel::fromTitleAndGeolocationAndUser('Dummy3',
+        $travel = Travel::fromTitleAndGeolocationAndUser(self::TRAVEL_3,
             new GeoLocation(13, 21, 31, 41, 51, 61),
             User::byId(1));
         $travel->setStars(25);
         $this->save($travel);
 
-        $travel = Travel::fromTitleAndGeolocationAndUser('Dummy4',
+        $travel = Travel::fromTitleAndGeolocationAndUser(self::TRAVEL_4,
             new GeoLocation(12, 22, 32, 42, 52, 62),
             User::byId(1));
         $travel->setStars(91);
@@ -41,6 +46,7 @@ class InMemoryTravelRepository implements TravelRepository
     {
         /** @var User $user */
         $user = $travel->getUser();
+        $travel->setSlug($travel->getTitle());
 
         //TODO Demeter remove
         $this->travel[] = [

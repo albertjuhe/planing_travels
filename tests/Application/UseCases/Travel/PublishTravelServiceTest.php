@@ -11,34 +11,18 @@ use App\Domain\Travel\Model\Travel;
 use App\Domain\User\Model\User;
 use App\Infrastructure\TravelBundle\Repository\InMemoryTravelRepository;
 use App\Tests\Subscriber\DomainEventAllSubscriber;
-use PHPUnit\Framework\TestCase;
-use App\Infrastructure\UserBundle\Repository\InMemoryUserRepository;
 
-class PublishTravelServiceTest extends TestCase
+class PublishTravelServiceTest extends TravelService
 {
-    /** @var InMemoryTravelRepository */
-    private $travelRepository;
-    /** @var InMemoryUserRepository */
-    private $userRepository;
-    /** @var int */
-    private $idSubscriber;
-
-    protected function setUp()
+    public function setUp()
     {
-        $this->travelRepository = new InMemoryTravelRepository();
-        $this->userRepository = new InMemoryUserRepository();
-        $this->idSubscriber = DomainEventPublisher::instance()->subscribe(new DomainEventAllSubscriber());
+        parent::setUp();
     }
 
     public function testPublishTravel()
     {
-        /** @var Travel $travel */
-        $travel = new Travel();
-        $travel->setSlug('test-travel');
-        /** @var User $user */
-        $user = User::byId(1);
-        $travel->setUser($user);
-        $this->travelRepository->save($travel);
+        $travel = $this->travelRepository->findTravelBySlug(InMemoryTravelRepository::TRAVEL_1);
+        $user = $travel->getUser();
 
         $this->assertEquals($travel->getStatus(), Travel::TRAVEL_DRAFT);
 
@@ -60,15 +44,8 @@ class PublishTravelServiceTest extends TestCase
     {
         $this->expectException(NotAllowedToPublishTravel::class);
 
-        /** @var Travel $travel */
-        $travel = new Travel();
-        $travel->setSlug('test-travel');
-        /** @var User $user */
-        $user = User::byId(1);
-        $user2 = User::byId(2);
-
-        $travel->setUser($user2);
-        $this->travelRepository->save($travel);
+        $travel = $this->travelRepository->findTravelBySlug(InMemoryTravelRepository::TRAVEL_1);
+        $user = User::byId(2);
 
         $this->assertEquals($travel->getStatus(), Travel::TRAVEL_DRAFT);
 

@@ -12,7 +12,7 @@ use App\Domain\TypeLocation\Model\TypeLocation;
 use App\Domain\User\Model\User;
 use App\Domain\User\ValueObject\UserId;
 
-class AddLocationServiceTest extends LocationServiceTest
+class AddLocationServiceTest extends LocationService
 {
     public function setUp()
     {

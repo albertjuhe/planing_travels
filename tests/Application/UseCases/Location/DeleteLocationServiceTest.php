@@ -8,7 +8,7 @@ use App\Domain\Location\Model\Location;
 use App\Domain\User\ValueObject\UserId;
 use App\Domain\Location\Exceptions\LocationDoesntExists;
 
-class DeleteLocationServiceTest extends LocationServiceTest
+class DeleteLocationServiceTest extends LocationService
 {
     public function setUp()
     {
