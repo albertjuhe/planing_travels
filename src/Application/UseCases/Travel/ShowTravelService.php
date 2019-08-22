@@ -5,6 +5,7 @@ namespace App\Application\UseCases\Travel;
 use App\Application\Query\Travel\ShowTravelBySlugQuery;
 use App\Application\UseCases\UsesCasesService;
 use App\Domain\Travel\Exceptions\TravelDoesntExists;
+use App\Domain\Travel\Model\Travel;
 use App\Domain\Travel\Repository\TravelRepository;
 
 class ShowTravelService implements UsesCasesService
@@ -22,12 +23,14 @@ class ShowTravelService implements UsesCasesService
         $this->travelRepository = $travelRepository;
     }
 
-    public function __invoke(ShowTravelBySlugQuery $query)
+    public function __invoke(ShowTravelBySlugQuery $query): Travel
     {
-        if (null === $query->getSlug()) {
+        $travel = $this->travelRepository->ofSlugOrFail($query->getSlug());
+
+        if (null === $travel) {
             throw new TravelDoesntExists();
         }
 
-        return $this->travelRepository->ofSlugOrFail($query->getSlug());
+        return $travel;
     }
 }

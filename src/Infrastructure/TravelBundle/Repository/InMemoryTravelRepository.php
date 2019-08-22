@@ -16,7 +16,7 @@ class InMemoryTravelRepository implements TravelRepository
 
     private $travel = [];
 
-    public function loadData()
+    public function loadData(): void
     {
         $travel = Travel::fromTitleAndGeolocationAndUser(self::TRAVEL_1,
             new GeoLocation(1, 2, 3, 4, 5, 6),
@@ -42,7 +42,7 @@ class InMemoryTravelRepository implements TravelRepository
         $this->save($travel);
     }
 
-    public function save(Travel $travel)
+    public function save(Travel $travel): void
     {
         /** @var User $user */
         $user = $travel->getUser();
@@ -69,7 +69,7 @@ class InMemoryTravelRepository implements TravelRepository
         return $this->travel[$travels]['travel'];
     }
 
-    public function findTravelBySlug(string $slug): Travel
+    public function findTravelBySlug(string $slug): ?Travel
     {
         $travels = $this->findByKeyValue('slug', $slug);
 
