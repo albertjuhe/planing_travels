@@ -19,8 +19,6 @@
 
     <!-- Custom styles for this template -->
     {% block css %}
-        {{ encore_entry_link_tags('app') }}
-
         <link href="{{ asset('css/carousel.css') }}" rel="stylesheet"/>
     {% endblock %}
 
@@ -35,16 +33,10 @@
     {% include 'default/navbarPublic.html.twig' %}
 {% endblock %}
 
-{% block body %}
-{% endblock %}
-
 {% block content %}
 {% endblock %}
 
-
-
 {% block javascript %}
-{{ encore_entry_script_tags('app') }}
 {% endblock %}
 
 </body>

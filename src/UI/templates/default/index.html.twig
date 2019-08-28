@@ -68,7 +68,7 @@
                         { 'maxtravels': 10 }
                     )) }}
             <!-- End Travels Best-->
-
+            <div id="root"></div>
             <hr class="featurette-divider">
 
             <div class="row featurette">
@@ -109,7 +109,15 @@
         <!-- /.container -->
 {% endblock %}
 
-{% block body %}
-    <div id="root"></div>
+ {% block css %}
+     {{ encore_entry_link_tags('app') }}
+     {{ parent() }}
+ {% endblock %}
+
+
+{% block javascript %}
+{{ encore_entry_script_tags('app') }}
 {% endblock %}
+
+
 

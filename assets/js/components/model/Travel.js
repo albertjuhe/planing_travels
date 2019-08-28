@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Travel = (data) =>  (
+const Travel = ({data}) =>  (
     <tr>
         <td>{data.title}</td>
         <td>06/10/2020 to06/12/2020</td>
