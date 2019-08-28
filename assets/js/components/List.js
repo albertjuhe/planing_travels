@@ -40,9 +40,11 @@ class List extends Component {
         },2000);
     }
 
-    render() {
-        if (this.state.isLoading) {
-            return (<Loading/>);
+    render()
+    {
+        const {travels, isLoading} = this.state; //El posem con a constant
+        if (isLoading) { //es podria fer com this.state.isLoading
+            return (<Loading message="Cargando desde List..."/>);
         }
         return (
             <React.Fragment>

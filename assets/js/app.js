@@ -1,10 +1,13 @@
 import React from 'react';
-import './app.css';
+import ReactDOM from 'react-dom';
 import List from './components/List';
 
-function App() {
-    return (<List/>);
+class App extends React.Component {
+    render() {
+        return (
+            <List/>
+        )
+    }
 }
-
-export default App;
+ReactDOM.render(<App/>, document.getElementById('root'));
 

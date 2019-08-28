@@ -17,6 +17,33 @@ wiki: https://github.com/albertjuhe/planing_travels/wiki
 Building Travel Experience: Plan travels colaborative, sharing travel content, upload photos, comment travels and vote the best travel.
 Create a map and add Locations, Routes, GPS tracks.
 
+## Reactjs
+
+### Install
+Symfony 4 install https://www.cloudways.com/blog/symfony-react-using-webpack-encore/
+
+```
+composer require symfony/webpack-encore-pack
+```
+Manage react with yarn
+
+```
+yarn add react react-dom prop-types babel-preset-react --dev
+yarn add babel-polyfill babel-preset-env --dev
+```
+
+Symfony 4 integration https://www.thinktocode.com/2018/06/21/symfony-4-and-reactjs/
+
+### Problems
+
+React Native Error: ENOSPC: System limit for number of file watchers reached
+https://stackoverflow.com/questions/55763428/react-native-error-enospc-system-limit-for-number-of-file-watchers-reached
+
+Manifest.json creation
+https://stackoverflow.com/questions/51393459/symfony-error-an-exception-has-been-thrown-during-the-rendering-of-a-template
+
+
+
 # Demo
 [Travel Planing](http://35.167.24.186/travelexperience/web/app.php/)
 

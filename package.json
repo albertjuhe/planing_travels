@@ -17,5 +17,8 @@
         "dev": "encore dev",
         "watch": "encore dev --watch",
         "build": "encore production --progress"
+    },
+    "dependencies": {
+        "babel-polyfill": "^6.26.0"
     }
 }
