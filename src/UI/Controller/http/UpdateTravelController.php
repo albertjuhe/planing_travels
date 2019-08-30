@@ -37,7 +37,7 @@ class UpdateTravelController extends CommandController
      * @throws UserDoesntExists
      * @throws \App\Domain\Travel\Exceptions\TravelDoesntExists
      */
-    public function updateTravel(Request $request, String $slug, $_locale)
+    public function updateTravel(Request $request, string $slug, $_locale)
     {
         if (!$this->getUser()) {
             throw new UserDoesntExists();

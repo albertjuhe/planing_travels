@@ -31,7 +31,7 @@ class FactoryElasticSearchRepository
      *
      * @return ElasticSearchRepository
      */
-    public function build(String $entity): ? ElasticSearchRepository
+    public function build(string $entity): ? ElasticSearchRepository
     {
         switch ($entity) {
             case 'Travel':

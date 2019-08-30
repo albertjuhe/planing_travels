@@ -161,7 +161,7 @@ class User implements UserInterface
         return null;
     }
 
-    public function getPassword(): String
+    public function getPassword(): string
     {
         return $this->password;
     }
