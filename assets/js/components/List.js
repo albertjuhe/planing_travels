@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import Loading from "./Loading";
 import Travel from "./model/Travel";
+import TravelAPI, {getBestTravels} from "../api/travelApi"
 
 class List extends Component {
 
@@ -14,30 +15,9 @@ class List extends Component {
 
     componentDidMount() {
         this.setState({isLoading: true}); //Nomes es pot fer amb set statet, temes concurrencies, si modifiques estat el component es renderitza
-        setTimeout( () => {
-            this.setState(
-                {
-                    isLoading:false,
-                    travels: [
-                        {
-                            id:1,
-                            title: 'travel 1',
-                            url: 'http://www.travel1.com',
-                        },
-                        {
-                            id:2,
-                            title: 'travel 2',
-                            url: 'http://www.travel2.com',
-                        },
-                        {
-                            id:3,
-                            title: 'travel 3',
-                            url: 'http://www.travel3.com',
-                        }
-                    ]
-                }
-            );
-        },2000);
+        fetch('http://localhost/planing_travels/public/index.php/api/travels/best/10')
+            .then(res => res.json())
+            .then(json => this.setState({isLoading:false,travels: json.data}));
     }
 
     render()
@@ -46,6 +26,7 @@ class List extends Component {
         if (isLoading) { //es podria fer com this.state.isLoading
             return (<Loading message="Cargando desde List..."/>);
         }
+
         return (
             <React.Fragment>
             <table className="table table-striped">
