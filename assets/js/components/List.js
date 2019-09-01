@@ -43,7 +43,7 @@ class List extends Component {
                 <tbody>
                 {
                     travels && travels.map((travel,i) => {
-                        return (<Travel key={i} data={travel}/>)
+                        return (<Travel key={i} data={travel} />)
                     })
                 }
                 </tbody>
