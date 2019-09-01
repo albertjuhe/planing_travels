@@ -15,9 +15,12 @@ class List extends Component {
 
     componentDidMount() {
         this.setState({isLoading: true}); //Nomes es pot fer amb set statet, temes concurrencies, si modifiques estat el component es renderitza
-        fetch('http://localhost/planing_travels/public/index.php/api/travels/best/10')
-            .then(res => res.json())
-            .then(json => this.setState({isLoading:false,travels: json.data}));
+        getBestTravels(10)
+            .then(
+                json => this.setState(
+                    {isLoading:false,travels: json.data}
+                    )
+            );
     }
 
     render()
