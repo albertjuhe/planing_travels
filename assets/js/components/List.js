@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import Loading from "./Loading";
 import Travel from "./model/Travel";
-import TravelAPI, {getBestTravels} from "../api/travelApi"
+import {getBestTravels} from "../api/travelApi"
 
 class List extends Component {
 
