@@ -19,6 +19,8 @@
         "build": "encore production --progress"
     },
     "dependencies": {
-        "babel-polyfill": "^6.26.0"
+        "babel-polyfill": "^6.26.0",
+        "react-router": "^5.0.1",
+        "react-router-dom": "^5.0.1"
     }
 }
