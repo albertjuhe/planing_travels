@@ -9,24 +9,34 @@ class List extends Component {
         super(props);
         this.state = {
             isLoading: false,
-            travels: null
+            travels: null,
+            error: null
         }
     }
 
     componentDidMount() {
         this.setState({isLoading: true}); //Nomes es pot fer amb set statet, temes concurrencies, si modifiques estat el component es renderitza
-        getBestTravels(10)
-            .then(
-                json => this.setState(
-                    {isLoading:false,travels: json.data}
+        try {
+            getBestTravels(10)
+                .then(
+                    json => this.setState(
+                        {isLoading: false, travels: json.data}
                     )
-            );
+                );
+        } catch(error) {
+            this.setState({error: error, isLoading: false});
+        }
     }
 
     render()
     {
-        const {travels, isLoading} = this.state; //El posem con a constant
-        if (isLoading) { //es podria fer com this.state.isLoading
+        const {travels, isLoading, error} = this.state; //El posem con a constant
+
+        if (error) {
+            return(<div>Error loading travels</div>);
+        }
+
+          if (isLoading) { //es podria fer com this.state.isLoading
             return (<Loading message="Cargando desde List..."/>);
         }
 
