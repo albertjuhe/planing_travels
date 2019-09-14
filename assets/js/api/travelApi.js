@@ -1,4 +1,4 @@
-export const baseUrl = '/public/index.php/';
+export const baseUrl = '/';
 
 export const getBestTravels = async(total) => {
     try {

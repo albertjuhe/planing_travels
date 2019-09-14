@@ -42,7 +42,11 @@ https://stackoverflow.com/questions/55763428/react-native-error-enospc-system-li
 Manifest.json creation
 https://stackoverflow.com/questions/51393459/symfony-error-an-exception-has-been-thrown-during-the-rendering-of-a-template
 
+### Comands
 
+```
+yarn encore dev
+```
 
 # Demo
 [Travel Planing](http://35.167.24.186/travelexperience/web/app.php/)
