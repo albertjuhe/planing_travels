@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import List from './components/List';
+import Root from './components/Root';
 
 class App extends React.Component {
     render() {
         return (
-            <List/>
+            <Root/>
         )
     }
 }

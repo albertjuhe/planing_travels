@@ -13,15 +13,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
 class GetLocationsAPIController extends QueryController
 {
-    /**
-     * @var Security
-     */
-    private $security;
-
     public function __construct(QueryBus $queryBus, Security $security)
     {
-        parent::__construct($queryBus);
-        $this->security = $security;
+        parent::__construct($queryBus, $security);
     }
 
     /**

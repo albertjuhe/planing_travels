@@ -13,15 +13,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
 class GetBestTravelsAPIController extends QueryController
 {
-    /**
-     * @var Security
-     */
-    private $security;
-
     public function __construct(QueryBus $queryBus, Security $security)
     {
-        parent::__construct($queryBus);
-        $this->security = $security;
+        parent::__construct($queryBus, $security);
     }
 
     /**
@@ -32,10 +26,7 @@ class GetBestTravelsAPIController extends QueryController
     {
         $query = new BestTravelsListQuery($maxtravels, 'stars');
         $travels = $this->ask($query);
-        $url = $this->generateUrl(
-            'getBestTravels',
-            ['maxtravels' => $maxtravels]
-        );
+        $url = $this->generateUrl('getBestTravels', ['maxtravels' => $maxtravels]);
         $data = [
             'links' => [
               'self' => $url,

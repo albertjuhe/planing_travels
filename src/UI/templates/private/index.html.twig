@@ -30,6 +30,7 @@
                         <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> Watch {{ travel.watch }}
                     </div>
                 </div>
+                <div id="root"></div>
             {% else %}
                 <div>Empty Travels</div>
             {% endfor %}
@@ -38,7 +39,12 @@
     </div>
 {%  endblock %}
 
+ {% block css %}
+     {{ encore_entry_link_tags('app') }}
+     {{ parent() }}
+ {% endblock %}
+
+
 {% block javascript %}
-    {{ parent() }}
-    <script src="{{ asset('js/angular/app/show-travels.js') }}"></script>
+{{ encore_entry_script_tags('app') }}
 {% endblock %}
