@@ -18,3 +18,11 @@ Activate domain /etc/hosts
 ````
 127.0.0.1       travelexperience.com
 ````
+
+## References
+
+https://stackoverflow.com/questions/50615860/how-to-remove-index-php-from-symfony4-router
+
+https://support.rackspace.com/how-to/set-up-apache-virtual-hosts-on-ubuntu/
+
+https://www.digitalocean.com/community/tutorials/como-configurar-virtual-hosts-de-apache-en-ubuntu-16-04-es
