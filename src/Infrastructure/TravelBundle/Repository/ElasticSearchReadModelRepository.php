@@ -17,7 +17,7 @@ class ElasticSearchReadModelRepository extends ElasticSearchRepository implement
         $query = new Query();
         $query->addSort(
             [
-                $order => ['order' => 'asc'],
+                $order => ['order' => 'desc'],
             ]
         );
 
