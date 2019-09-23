@@ -11,8 +11,7 @@ export const getBestTravels = async(total) => {
 
 export const getTravelsByUser = async(user) => {
     try {
-        const resp = await fetch(`${baseUrl}api/user/1/travels/`);
-        //const resp = await fetch(`${baseUrl}api/travels/best/10`);
+        const resp = await fetch(`${baseUrl}api/user/${user}/travels/`);
         return resp.json();
     } catch (error) {
         throw error;

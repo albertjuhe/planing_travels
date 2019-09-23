@@ -76,7 +76,7 @@ services:
 
     travel.gey_my_travels:
       class: App\Application\UseCases\Travel\GetAllMyTravelsService
-      arguments: ['@elasticsearch.travel.read_model.repository']
+      arguments: ['@elasticsearch.travel.read_model.repository','@doctrine.user.repository']
       tags: [messenger.message_handler]
 
     location.get_by_travel_handler:

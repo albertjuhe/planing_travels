@@ -3,6 +3,7 @@
 namespace App\UI\Controller\http;
 
 use App\Application\Query\Travel\GetMyTravelsQuery;
+use App\Domain\User\Model\User;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -15,8 +16,9 @@ class ShowMyTravelsController extends QueryController
      */
     public function showMyTravels()
     {
+        /** @var User $user */
         $user = $this->guard();
-        $getMyTravelQuery = new GetMyTravelsQuery($user);
+        $getMyTravelQuery = new GetMyTravelsQuery($user->userId()->id());
         $travels = $this->ask($getMyTravelQuery);
 
         return $this->render('private/index.html.twig', ['travels' => $travels]);

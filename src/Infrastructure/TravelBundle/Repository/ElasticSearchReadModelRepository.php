@@ -29,9 +29,9 @@ class ElasticSearchReadModelRepository extends ElasticSearchRepository implement
         return $elasticSearchTravelDataTransformer->read();
     }
 
-    public function getAllTravelsByUser(int $user)
+    public function getAllTravelsByUser(int $userId)
     {
-        $documents = $this->findBy('userId', $user);
+        $documents = $this->findBy('userId', $userId);
         $elasticSearchTravelDataTransformer = new ElasticSearchTravelDataTransformer();
         $elasticSearchTravelDataTransformer->write($documents);
 

@@ -4,6 +4,7 @@ namespace App\Tests\Application\UseCases\Travel;
 
 use App\Domain\Event\DomainEventPublisher;
 use App\Domain\Travel\Events\TravelWasAdded;
+use App\Domain\Travel\ValueObject\GeoLocation;
 use App\Domain\User\Exceptions\UserDoesntExists;
 use App\Application\UseCases\Travel\AddTravelService;
 use App\Domain\Travel\Model\Travel;
@@ -12,6 +13,8 @@ use App\Application\Command\Travel\AddTravelCommand;
 
 class AddTravelServiceTest extends TravelService
 {
+    const TRAVEL_DUMMY = 'travel-dummy-test';
+
     public function setUp()
     {
         parent::setUp();
@@ -24,8 +27,9 @@ class AddTravelServiceTest extends TravelService
     {
         $userId = mt_rand();
         $user = User::byId($userId);
-
-        $travel = new Travel();
+        $travel = Travel::fromTitleAndGeolocationAndUser(self::TRAVEL_DUMMY,
+            new GeoLocation(12, 22, 32, 42, 52, 62),
+            $user);
         $travelId = $travel->getId()->id();
 
         $addTravelService = new AddTravelService($this->travelRepository, $this->userRepository);

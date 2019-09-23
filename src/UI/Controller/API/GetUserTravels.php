@@ -3,7 +3,6 @@
 namespace App\UI\Controller\API;
 
 use App\Application\Query\Travel\GetMyTravelsQuery;
-use App\Domain\User\Exceptions\UserDoesntExists;
 use App\Domain\User\Repository\UserRepository;
 use App\Domain\User\ValueObject\UserId;
 use App\Infrastructure\Application\QueryBus\QueryBus;
@@ -32,20 +31,12 @@ class GetUserTravels extends QueryController
     }
 
     /**
-     * @Route("api/user/{userId}/travels", name="list travels by user")
+     * @Route("/api/user/{userId}/travels", name="list travels by user")
      * @Method({"GET"})
      */
     public function getTravelsByUser(Request $request, int $userId): JsonResponse
     {
-        try {
-            $user = $this->guard();
-        } catch (UserDoesntExists $e) {
-            return new JsonResponse(
-                $response['error'] = 'Operation not allowed'
-            );
-        }
-
-        $getMyTravelQuery = new GetMyTravelsQuery($this->security->getUser());
+        $getMyTravelQuery = new GetMyTravelsQuery($userId);
         $travels = $this->ask($getMyTravelQuery);
         $data = [
             'data' => $travels,
