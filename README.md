@@ -44,9 +44,13 @@ https://stackoverflow.com/questions/51393459/symfony-error-an-exception-has-been
 
 ### Comands
 
+Compile
 ```
 yarn encore dev
 ```
+
+### Utils
+- Pose [https://popmotion.io/pose/]
 
 # Demo
 [Travel Planing](http://35.167.24.186/travelexperience/web/app.php/)
@@ -60,7 +64,7 @@ yarn encore dev
 1) OERPUB Blob travel
 1) Docker
 1) GraphQL Integration
-1) JWT JAson web tockens
+1) JWT
 1) Protobuf Services in PHP
 
 
