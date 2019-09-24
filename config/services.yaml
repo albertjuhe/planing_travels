@@ -142,3 +142,7 @@ services:
 
     App\Application\UseCases\Travel\PopulateIndexer:
       arguments:  ['@doctrine.travel.repository', '@elasticsearch.travel.repository' ]
+
+    App\Domain\User\Repository\UserRepository: '@App\Infrastructure\UserBundle\Repository\DoctrineUserRepository'
+
+    get.user.token: '@App\Application\UseCases\User\GetUserTokenService'

@@ -9,6 +9,7 @@ class APIController extends TestCase
 {
     const LOCALHOST = 'http://travelexperience.com/';
 
+    /** @var Client */
     protected $client;
 
     protected function setUp()
