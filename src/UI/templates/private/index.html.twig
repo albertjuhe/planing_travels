@@ -5,35 +5,7 @@
         <div class="row" ng-controller="travelController">
             <h1>{{ 'MyMaps'|trans }}</h1>
             <h2>{{ 'Welcome'|trans }}</h2>
-            {% for travel in travels %}
-                <div class="col-sm-3">
-                    <h3><a href="{{ path('show_travel',{'slug':travel.slug}) }}">{{ travel.title }}</a></h3>
-                    <div>
-                        <a href="{{ path('updateTravel', { 'slug': travel.slug }) }}">Edit</a>
-                        <a href="{{ path('publishTravel', { 'slug': travel.slug }) }}">Publish</a>
-                    </div>
-                    <div>
-                             <img id="travel{{ travel.id }}" class="featurette-image img-responsive" data-src="holder/holder.js/200x200/auto" alt="Travel photo">
-
-                    </div>
-                    <div class="date-travel">
-                        <a href="#">   {{ travel.startAt.date | date("d/m/Y")}} To {{ travel.endAt.date |date("d/m/Y")}}</a>
-                    </div>
-                    <div class="date-travel">
-                        <span>STATUS: {{ travel.status }}</span>
-                    </div>
-                    <div class="info-travel">
-                        {{ travel.description|truncate(50) }}
-                    </div>
-                    <div>
-                        <span class="glyphicon glyphicon-star" aria-hidden="true"></span> Likes {{ travel.stars }}
-                        <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> Watch {{ travel.watch }}
-                    </div>
-                </div>
                 <div id="root"></div>
-            {% else %}
-                <div>Empty Travels</div>
-            {% endfor %}
         </div>
 
     </div>
