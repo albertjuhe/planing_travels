@@ -7,7 +7,7 @@ use PHPUnit\Framework\TestCase;
 
 class APIController extends TestCase
 {
-    const LOCALHOST = 'http://localhost/planing_travels/public/index.php/';
+    const LOCALHOST = 'http://travelexperience.com/';
 
     protected $client;
 
