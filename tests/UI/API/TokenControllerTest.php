@@ -2,6 +2,9 @@
 
 namespace App\Tests\UI\API;
 
+use App\Domain\Common\Model\ApiCodes;
+use GuzzleHttp\Exception\ClientException;
+
 class TokenControllerTest extends APIController
 {
     public function setUp()
@@ -23,13 +26,37 @@ class TokenControllerTest extends APIController
 
     public function testPOSTInvalidToken(): void
     {
-        $response = $this->client->request(
-            'POST',
-            'http://travelexperience.com/api/tokens?XDEBUG_SESSION_START=11940',
-            [
-                'auth' => ['ajuhe', 'e134le41t'],
-            ]
-        );
-        $this->assertEquals(401, $response->getStatusCode());
+        try {
+            $response = $this->client->request(
+                'POST',
+                'http://travelexperience.com/api/tokens',
+                [
+                    'auth' => ['ajuhe', 'xxx'],
+                ]
+            );
+        } catch (ClientException $e) {
+            $this->assertEquals(
+                ApiCodes::UNAUTHORIZED,
+                $e->getCode()
+            );
+        }
+    }
+
+    public function testPOSTInvalidUserToken(): void
+    {
+        try {
+            $response = $this->client->request(
+                'POST',
+                'http://travelexperience.com/api/tokens?XDEBUG_SESSION_START=11940',
+                [
+                    'auth' => ['xxx', 'xxx'],
+                ]
+            );
+        } catch (ClientException $e) {
+            $this->assertEquals(
+                ApiCodes::BAD_REQUEST,
+                $e->getCode()
+            );
+        }
     }
 }
