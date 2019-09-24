@@ -2,6 +2,7 @@
 
 namespace App\Application\UseCases\User;
 
+use App\Domain\Common\Model\ApiCodes;
 use App\Domain\User\Exceptions\BadCredentialsException;
 use App\Domain\User\Exceptions\UserDoesntExists;
 use App\Domain\User\Model\User;
@@ -32,13 +33,19 @@ class GetUserTokenService
         $user = $this->userRepository->UserByUsername($username);
 
         if (!$user instanceof User) {
-            throw new UserDoesntExists();
+            throw new UserDoesntExists(
+                ApiCodes::BAD_REQUEST,
+                'User doesnt exists'
+            );
         }
 
         $isValid = $this->userPasswordEncoderInterface->isPasswordValid($user, $password);
 
         if (!$isValid) {
-            throw new BadCredentialsException();
+            throw new BadCredentialsException(
+                ApiCodes::UNAUTHORIZED,
+                'Bad credentials'
+            );
         }
 
         return $this->JWTEncoder->encode([

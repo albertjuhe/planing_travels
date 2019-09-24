@@ -3,6 +3,8 @@
 namespace App\UI\Controller\API;
 
 use App\Application\UseCases\User\GetUserTokenService;
+use App\Domain\User\Exceptions\BadCredentialsException;
+use App\Domain\User\Exceptions\UserDoesntExists;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,7 +32,11 @@ class TokenController extends AbstractController
         $username = $request->getUser();
         $password = $request->getPassword();
 
-        $token = $this->getUSerTokenService->execute($username, $password);
+        try {
+            $token = $this->getUSerTokenService->execute($username, $password);
+        } catch (UserDoesntExists | BadCredentialsException $e) {
+            return new JsonResponse(['error' => $e->getMessage()], $e->getStatusCode());
+        }
 
         return new JsonResponse(['token' => $token]);
     }
