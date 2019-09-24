@@ -18,7 +18,7 @@ class TokenControllerTest extends APIController
             'POST',
             'http://travelexperience.com/api/tokens',
             [
-            'auth' => ['ajuhe', 'e134le41'],
+            'auth' => ['ajuhe', 'eeeee'],
         ]
         );
         $this->assertEquals(200, $response->getStatusCode());
