@@ -145,4 +145,8 @@ services:
 
     App\Domain\User\Repository\UserRepository: '@App\Infrastructure\UserBundle\Repository\DoctrineUserRepository'
 
+    # JWT Authenticator
+    jwt_token_authenticator:
+      class: App\Infrastructure\Application\Security\JwtTokenAuthenticator
+
     get.user.token: '@App\Application\UseCases\User\GetUserTokenService'

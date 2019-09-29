@@ -2,16 +2,30 @@
 
 namespace App\Infrastructure\Application\Security;
 
+use App\Domain\User\Repository\UserRepository;
+use Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\TokenExtractor\AuthorizationHeaderTokenExtractor;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Guard\AbstractGuardAuthenticator;
 
 class JwtTokenAuthenticator extends AbstractGuardAuthenticator
 {
+    private $encoder;
+    private $userRepository;
+
+    public function __construct(
+        JWTEncoderInterface $encoder,
+        UserRepository $userRepository
+    ) {
+        $this->encoder = $encoder;
+        $this->userRepository = $userRepository;
+    }
+
     public function getCredentials(Request $request)
     {
         $extractor = new AuthorizationHeaderTokenExtractor(
@@ -30,12 +44,18 @@ class JwtTokenAuthenticator extends AbstractGuardAuthenticator
 
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
-        // TODO: Implement getUser() method.
+        $data = $this->encoder->decode($credentials);
+
+        if (false === $data) {
+            throw new CustomUserMessageAuthenticationException('Invalid token');
+        }
+
+        return $this->userRepository->UserByUsername($data['username']);
     }
 
     public function checkCredentials($credentials, UserInterface $user)
     {
-        // TODO: Implement checkCredentials() method.
+        return true;
     }
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
@@ -50,11 +70,12 @@ class JwtTokenAuthenticator extends AbstractGuardAuthenticator
 
     public function supports(Request $request)
     {
+        return !(null === $request->headers->get('Authorization'));
     }
 
     public function supportsRememberMe()
     {
-        // TODO: Implement supportsRememberMe() method.
+        return false;
     }
 
     public function start(Request $request, AuthenticationException $authException = null)

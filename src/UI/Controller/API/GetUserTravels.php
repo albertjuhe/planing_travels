@@ -10,10 +10,14 @@ use App\Infrastructure\UserBundle\Repository\DoctrineUserRepository;
 use App\UI\Controller\http\QueryController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Core\Security as SecurityCore;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
+/**
+ * @Security("is_granted('ROLE_USER')")
+ */
 class GetUserTravels extends QueryController
 {
     /**
@@ -24,7 +28,7 @@ class GetUserTravels extends QueryController
     public function __construct(
         DoctrineUserRepository $userRepository,
         QueryBus $queryBus,
-        Security $security
+        SecurityCore $security
     ) {
         parent::__construct($queryBus, $security);
         $this->userRepository = $userRepository;

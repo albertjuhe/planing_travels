@@ -37,15 +37,11 @@ security:
               check_path: private_login
               default_target_path: main_private
             logout:
-               path: logout
-               target: homepage
-            # activate different ways to authenticate
-
-            # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
-            #http_basic: ~
-
-            # https://symfony.com/doc/current/security/form_login_setup.html
-            #form_login: ~
+              path: logout
+              target: homepage
+            guard:
+              authenticator:
+                - jwt_token_authenticator
 
     access_control:
         # require ROLE_ADMIN for /admin*
