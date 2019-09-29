@@ -29,6 +29,14 @@ security:
            logout:
               path: /admin/logout
               target: /
+        api:
+          pattern: ^/api/
+          anonymous: true
+          stateless: true
+          provider: db_users
+          guard:
+            authenticator:
+              - jwt_token_authenticator
         main:
             anonymous: ~
             provider: db_users
@@ -39,9 +47,7 @@ security:
             logout:
               path: logout
               target: homepage
-            guard:
-              authenticator:
-                - jwt_token_authenticator
+
 
     access_control:
         # require ROLE_ADMIN for /admin*
