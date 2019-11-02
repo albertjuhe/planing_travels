@@ -3,8 +3,10 @@
 namespace App\Infrastructure\Application\Security;
 
 use App\Domain\User\Repository\UserRepository;
+use Symfony\Component\HttpFoundation\Response;
 use Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\TokenExtractor\AuthorizationHeaderTokenExtractor;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
@@ -50,7 +52,10 @@ class JwtTokenAuthenticator extends AbstractGuardAuthenticator
             throw new CustomUserMessageAuthenticationException('Invalid token');
         }
 
-        return $this->userRepository->UserByUsername($data['username']);
+        $user = $this->userRepository->UserByUsername($data['username']);
+        $user->setToken($credentials);
+
+        return $user;
     }
 
     public function checkCredentials($credentials, UserInterface $user)
@@ -80,6 +85,11 @@ class JwtTokenAuthenticator extends AbstractGuardAuthenticator
 
     public function start(Request $request, AuthenticationException $authException = null)
     {
-        // TODO: Implement start() method.
+        $data = [
+            // you might translate this message
+            'message' => 'Authentication Required',
+        ];
+
+        return new JsonResponse($data, Response::HTTP_UNAUTHORIZED);
     }
 }
