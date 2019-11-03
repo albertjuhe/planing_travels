@@ -5,9 +5,11 @@ namespace App\UI\Controller\API;
 use App\Application\UseCases\User\GetUserTokenService;
 use App\Domain\User\Exceptions\BadCredentialsException;
 use App\Domain\User\Exceptions\UserDoesntExists;
+use http\Client\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
@@ -29,8 +31,13 @@ class TokenController extends AbstractController
      */
     public function newTokenAction(Request $request): JsonResponse
     {
-        $username = $request->getUser();
-        $password = $request->getPassword();
+        $jsonData = json_decode($request->getContent(), true);
+        if (!$jsonData) {
+            throw new HttpException(Response::HTTP_BAD_REQUEST, "Invalid json data");
+        }
+
+        $username = $jsonData['username'];
+        $password = $jsonData['password'];
 
         try {
             $token = $this->getUSerTokenService->execute($username, $password);

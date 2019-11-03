@@ -52,10 +52,8 @@ class JwtTokenAuthenticator extends AbstractGuardAuthenticator
             throw new CustomUserMessageAuthenticationException('Invalid token');
         }
 
-        $user = $this->userRepository->UserByUsername($data['username']);
-        $user->setToken($credentials);
+        return $this->userRepository->UserByUsername($data['username']);
 
-        return $user;
     }
 
     public function checkCredentials($credentials, UserInterface $user)
@@ -75,7 +73,7 @@ class JwtTokenAuthenticator extends AbstractGuardAuthenticator
 
     public function supports(Request $request)
     {
-        return !(null === $request->headers->get('Authorization'));
+        return $request->headers->has('Authorization');
     }
 
     public function supportsRememberMe()

@@ -21,6 +21,9 @@ class ShowMyTravelsController extends QueryController
         $getMyTravelQuery = new GetMyTravelsQuery($user->userId()->id());
         $travels = $this->ask($getMyTravelQuery);
 
-        return $this->render('private/index.html.twig', ['travels' => $travels]);
+        return $this->render(
+            'private/index.html.twig',
+            ['travels' => $travels, 'token' => $this->security->getToken()]
+        );
     }
 }
