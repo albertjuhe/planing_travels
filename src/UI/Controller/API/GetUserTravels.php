@@ -13,11 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Security as SecurityCore;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
-/**
- * @Security("is_granted('ROLE_USER')")
- */
 class GetUserTravels extends QueryController
 {
     /**

@@ -33,7 +33,7 @@ class TokenController extends AbstractController
     {
         $jsonData = json_decode($request->getContent(), true);
         if (!$jsonData) {
-            throw new HttpException(Response::HTTP_BAD_REQUEST, "Invalid json data");
+            throw new HttpException(Response::HTTP_BAD_REQUEST, 'Invalid json data');
         }
 
         $username = $jsonData['username'];

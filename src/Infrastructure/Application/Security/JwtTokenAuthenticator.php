@@ -53,7 +53,6 @@ class JwtTokenAuthenticator extends AbstractGuardAuthenticator
         }
 
         return $this->userRepository->UserByUsername($data['username']);
-
     }
 
     public function checkCredentials($credentials, UserInterface $user)
