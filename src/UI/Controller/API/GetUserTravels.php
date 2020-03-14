@@ -16,9 +16,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
 class GetUserTravels extends QueryController
 {
-    /**
-     * @var UserRepository
-     */
+
     private $userRepository;
 
     public function __construct(
