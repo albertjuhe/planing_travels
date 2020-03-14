@@ -76,7 +76,7 @@ services:
 
     travel.gey_my_travels:
       class: App\Application\UseCases\Travel\GetAllMyTravelsService
-      arguments: ['@elasticsearch.travel.read_model.repository']
+      arguments: ['@elasticsearch.travel.read_model.repository','@doctrine.user.repository']
       tags: [messenger.message_handler]
 
     location.get_by_travel_handler:
@@ -142,3 +142,11 @@ services:
 
     App\Application\UseCases\Travel\PopulateIndexer:
       arguments:  ['@doctrine.travel.repository', '@elasticsearch.travel.repository' ]
+
+    App\Domain\User\Repository\UserRepository: '@App\Infrastructure\UserBundle\Repository\DoctrineUserRepository'
+
+    # JWT Authenticator
+    jwt_token_authenticator:
+      class: App\Infrastructure\Application\Security\JwtTokenAuthenticator
+
+    get.user.token: '@App\Application\UseCases\User\GetUserTokenService'

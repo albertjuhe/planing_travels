@@ -9,7 +9,7 @@ class GetMyTravelsQuery implements Query
 {
     private $user;
 
-    public function __construct(User $user)
+    public function __construct(int $user)
     {
         $this->user = $user;
     }
@@ -17,7 +17,7 @@ class GetMyTravelsQuery implements Query
     /**
      * @return User
      */
-    public function getUser(): User
+    public function getUser(): int
     {
         return $this->user;
     }

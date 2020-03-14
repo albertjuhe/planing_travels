@@ -29,6 +29,14 @@ security:
            logout:
               path: /admin/logout
               target: /
+        api:
+          pattern: ^/api/
+          anonymous: true
+          stateless: true
+          provider: db_users
+          guard:
+            authenticator:
+              - jwt_token_authenticator
         main:
             anonymous: ~
             provider: db_users
@@ -37,15 +45,9 @@ security:
               check_path: private_login
               default_target_path: main_private
             logout:
-               path: logout
-               target: homepage
-            # activate different ways to authenticate
+              path: logout
+              target: homepage
 
-            # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
-            #http_basic: ~
-
-            # https://symfony.com/doc/current/security/form_login_setup.html
-            #form_login: ~
 
     access_control:
         # require ROLE_ADMIN for /admin*

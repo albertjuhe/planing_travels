@@ -67,6 +67,11 @@ class User implements UserInterface
      */
     private $travelsshared;
 
+    /**
+     * @var string
+     */
+    private $token;
+
     public function __construct()
     {
         $this->isActive = true;
@@ -446,5 +451,21 @@ class User implements UserInterface
     public function getTravelsshared()
     {
         return $this->travelsshared;
+    }
+
+    /**
+     * @return string
+     */
+    public function getToken(): string
+    {
+        return $this->token;
+    }
+
+    /**
+     * @param string $token
+     */
+    public function setToken(string $token): void
+    {
+        $this->token = $token;
     }
 }

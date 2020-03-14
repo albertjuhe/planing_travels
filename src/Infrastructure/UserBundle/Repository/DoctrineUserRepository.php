@@ -24,7 +24,7 @@ class DoctrineUserRepository extends ServiceEntityRepository implements UserRepo
 
     public function ofIdOrFail(UserId $userId): User
     {
-        $user = $this->find($userId->id());
+        $user = $this->find($userId);
         if (!$user instanceof User) {
             throw new UserDoesntExists('User doesnt exists');
         }

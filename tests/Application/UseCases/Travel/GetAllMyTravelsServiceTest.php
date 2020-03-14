@@ -30,10 +30,10 @@ class GetAllMyTravelsServiceTest extends ReadTravelService
             ],
         ];
 
-        $getMyTravelQuery = new GetMyTravelsQuery($user);
+        $getMyTravelQuery = new GetMyTravelsQuery($userId);
 
         $this->travelRepository->method('getAllTravelsByUser')->willReturn($travels);
-        $getAllMyTravelsService = new GetAllMyTravelsService($this->travelRepository);
+        $getAllMyTravelsService = new GetAllMyTravelsService($this->travelRepository, $this->userRepository);
         $myTravels = $getAllMyTravelsService->__invoke($getMyTravelQuery);
 
         foreach ($myTravels as $travel) {

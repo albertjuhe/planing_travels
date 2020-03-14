@@ -125,6 +125,9 @@
     "knplabs/knp-markdown-bundle": {
         "version": "1.7.0"
     },
+    "lcobucci/jwt": {
+        "version": "3.3.1"
+    },
     "league/tactician": {
         "version": "v1.0.3"
     },
@@ -146,6 +149,18 @@
     "league/tactician-logger": {
         "version": "v0.10.0"
     },
+    "lexik/jwt-authentication-bundle": {
+        "version": "2.5",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "2.5",
+            "ref": "5b2157bcd5778166a5696e42f552ad36529a07a6"
+        },
+        "files": [
+            "config/packages/lexik_jwt_authentication.yaml"
+        ]
+    },
     "michelf/php-markdown": {
         "version": "1.8.0"
     },
@@ -154,6 +169,9 @@
     },
     "myclabs/deep-copy": {
         "version": "1.8.1"
+    },
+    "namshi/jose": {
+        "version": "7.2.3"
     },
     "nikic/php-parser": {
         "version": "v4.0.3"
@@ -355,6 +373,9 @@
     },
     "symfony/event-dispatcher-contracts": {
         "version": "v1.1.5"
+    },
+    "symfony/expression-language": {
+        "version": "v4.3.4"
     },
     "symfony/filesystem": {
         "version": "v4.0.3"

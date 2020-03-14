@@ -4,7 +4,7 @@ namespace App\Application\UseCases\Location;
 
 use App\Application\Query\Location\GetLocationsByTravelQuery;
 use App\Application\UseCases\UsesCasesService;
-use App\Domain\Travel\DataTransformer\LocationsTravelArrayDataTransformer;
+use App\Domain\Travel\Exceptions\TravelDoesntExists;
 use App\Domain\Travel\Model\Travel;
 use App\Domain\Travel\Repository\TravelRepository;
 
@@ -34,12 +34,14 @@ class GetLocationsByTravelService implements usesCasesService
         /** @var Travel $travel */
         $travel = $this->travelRepository->ofIdOrFail($travelId);
 
+        if (!$travel instanceof Travel) {
+            throw new TravelDoesntExists();
+        }
+
         $locations = [];
-        $locationsTravelArrayDataTransformer = new LocationsTravelArrayDataTransformer();
 
         foreach ($travel->getLocation()->getValues() as $location) {
-            $locationsTravelArrayDataTransformer->write($location);
-            $locations[] = $locationsTravelArrayDataTransformer->read();
+            $locations[] = $location->toArray();
         }
 
         return $locations;

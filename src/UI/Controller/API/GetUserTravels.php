@@ -3,7 +3,6 @@
 namespace App\UI\Controller\API;
 
 use App\Application\Query\Travel\GetMyTravelsQuery;
-use App\Domain\User\Exceptions\UserDoesntExists;
 use App\Domain\User\Repository\UserRepository;
 use App\Domain\User\ValueObject\UserId;
 use App\Infrastructure\Application\QueryBus\QueryBus;
@@ -11,41 +10,31 @@ use App\Infrastructure\UserBundle\Repository\DoctrineUserRepository;
 use App\UI\Controller\http\QueryController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Core\Security as SecurityCore;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
 class GetUserTravels extends QueryController
 {
-    /**
-     * @var UserRepository
-     */
+
     private $userRepository;
 
     public function __construct(
         DoctrineUserRepository $userRepository,
         QueryBus $queryBus,
-        Security $security
+        SecurityCore $security
     ) {
         parent::__construct($queryBus, $security);
         $this->userRepository = $userRepository;
     }
 
     /**
-     * @Route("api/user/{userId}/travels", name="list travels by user")
+     * @Route("/api/user/{userId}/travels", name="list travels by user")
      * @Method({"GET"})
      */
     public function getTravelsByUser(Request $request, int $userId): JsonResponse
     {
-        try {
-            $user = $this->guard();
-        } catch (UserDoesntExists $e) {
-            return new JsonResponse(
-                $response['error'] = 'Operation not allowed'
-            );
-        }
-
-        $getMyTravelQuery = new GetMyTravelsQuery($this->security->getUser());
+        $getMyTravelQuery = new GetMyTravelsQuery($userId);
         $travels = $this->ask($getMyTravelQuery);
         $data = [
             'data' => $travels,
