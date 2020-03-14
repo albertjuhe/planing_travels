@@ -38,14 +38,14 @@ class GetUserTravels extends QueryController
     public function getTravelsByUser(Request $request, int $userId): JsonResponse
     {
         try {
-            $user = $this->guard();
+            $user = $this->userRepository->ofIdOrFail(new UserId($userId));
         } catch (UserDoesntExists $e) {
             return new JsonResponse(
                 $response['error'] = 'Operation not allowed'
             );
         }
 
-        $getMyTravelQuery = new GetMyTravelsQuery($this->security->getUser());
+        $getMyTravelQuery = new GetMyTravelsQuery($user);
         $travels = $this->ask($getMyTravelQuery);
         $data = [
             'data' => $travels,

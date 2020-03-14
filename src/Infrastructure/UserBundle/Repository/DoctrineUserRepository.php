@@ -53,7 +53,7 @@ class DoctrineUserRepository extends ServiceEntityRepository implements UserRepo
      *
      * @throws UserSavingError
      */
-    public function save(User $user)
+    public function save(User $user): void
     {
         try {
             $this->_em->persist($user);
