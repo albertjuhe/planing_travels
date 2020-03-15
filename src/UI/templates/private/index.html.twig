@@ -6,6 +6,7 @@
             <h1>{{ 'MyMaps'|trans }}</h1>
             <h2>{{ 'Welcome'|trans }}</h2>
             {% for travel in travels %}
+
                 <div class="col-sm-3">
                     <h3><a href="{{ path('show_travel',{'slug':travel.slug}) }}">{{ travel.title }}</a></h3>
                     <div>
@@ -30,7 +31,9 @@
                         <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> Watch {{ travel.watch }}
                     </div>
                 </div>
+                <!--
                 <div id="root"></div>
+                -->
             {% else %}
                 <div>Empty Travels</div>
             {% endfor %}

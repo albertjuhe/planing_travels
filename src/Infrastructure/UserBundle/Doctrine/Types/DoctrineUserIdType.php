@@ -15,7 +15,11 @@ class DoctrineUserIdType extends IntegerType
 
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
-        return $value->id();
+        if ($value instanceof UserId) {
+            return $value->id();
+        }
+
+        return $value;
     }
 
     public function convertToPHPValue($value, AbstractPlatform $platform)

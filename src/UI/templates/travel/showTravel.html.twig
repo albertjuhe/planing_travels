@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block content %}
-    <div class="container" ng-app="ManageMaps" ng-controller="mapsCtrl">
+    <div class="container">
         {% include 'travel/travelInfoHeader.html.twig' with {'travel': travel,'mode':'Edit'} %}
         <div id="infoTravel"></div>
         <div class="row">
@@ -60,6 +60,7 @@
     <script src="{{ asset('js/markersDefinition.js') }}"></script>
     <script src="{{ asset('js/mapPoint.js') }}"></script>
     <script src="{{ asset('js/locationGallery.js') }}"></script>
+     <script src="{{ asset('js/websocket/websockets.js') }}"></script>
 
     <script>
         var mPoint = new mapPoint('{{ travel.id }}');
