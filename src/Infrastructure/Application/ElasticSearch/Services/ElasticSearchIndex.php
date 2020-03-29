@@ -15,10 +15,11 @@ class ElasticSearchIndex
     private $index;
 
     public function __construct(
-        IndexManager $manager
+        IndexManager $manager,
+        Client $client
     ) {
         $this->manager = $manager;
-        $this->client = new Client();
+        $this->client = $client;
     }
 
     public function getOne(string $name): Index

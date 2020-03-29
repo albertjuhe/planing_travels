@@ -1,7 +1,7 @@
 # Read the documentation: https://github.com/FriendsOfSymfony/FOSElasticaBundle/blob/master/Resources/doc/setup.md
 fos_elastica:
     clients:
-        default: { host: localhost, port: 9200 }
+        default: { host: '%env(string:ELASTICSEARCH_HOST)%', port: '%env(int:ELASTICSEARCH_PORT)%' }
     indexes:
         travel:
             types:
