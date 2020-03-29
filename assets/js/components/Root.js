@@ -9,6 +9,8 @@ const Root = () => (
         <div>
             <Route exact path="/" component={List}/>
             <Route exact path="/en/private" component={TravelList}/>
+            <Route exact path="/public/index.php" component={List}/>
+            <Route exact path="/public/index.php/en/private" component={TravelList}/>
         </div>
     </BrowserRouter>
 );
