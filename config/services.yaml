@@ -142,3 +142,10 @@ services:
 
     App\Application\UseCases\Travel\PopulateIndexer:
       arguments:  ['@doctrine.travel.repository', '@elasticsearch.travel.repository' ]
+
+    Elastica\Client:
+      class: Elastica\Client
+      arguments:
+        $config:
+          host: '%env(string:ELASTICSEARCH_HOST)%'
+          port: '%env(string:ELASTICSEARCH_PORT)%'
