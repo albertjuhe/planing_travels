@@ -1,12 +1,19 @@
-mysql: systemctl start mysql
+up:
+	# start docker
+	docker-compose up
 
-cs-fix: php vendor/bin/php-cs-fixer fix tests
-php vendor/bin/php-cs-fixer fix src
+down:
+	# stop docker
+	docker-compose down
 
-Create image:
-docker build -t "php-planing-travels" .
+cs-fix:
+	#clean code
+	php vendor/bin/php-cs-fixer fix src
 
-Run image
-docker run -rm -p 8000:80 -it "php-planing-travels"
-Run image with volumen
-docker run -p 8000:80 -v $PWD:/var/www/html -it "php-planing-travels"
+tests:
+	#run tests
+	php vendor/bin/phpunit
+
+compile-react:
+	#compile react with yarn
+	yarn encore dev
