@@ -5,6 +5,10 @@ RUN apt-get update &&\
     docker-php-ext-enable xdebug &&\
     docker-php-ext-install pdo pdo_mysql
 
+RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
+    && php composer-setup.php --install-dir=/usr/bin --filename=composer \
+    && rm composer-setup.php
+
 ENV DISPLAY_ERRORS = "off"
 ENV ERROR_REPORTING = "E_ALL & ~E_DEPRECATED & ~E_STRICT"
 

@@ -18,7 +18,7 @@ compile-react:
 	#compile react with yarn
 	yarn encore dev
 
-compose-bash:
+bash:
 	#connect to bash container
 	docker-compose exec app bash
 
@@ -31,3 +31,11 @@ check-el:
 
 populate-el:
 	make exec CMD='bin/console app:populate-travel-elasticsearch'
+
+build-image:
+	docker build Docker
+
+SERVICE?=echo SERVICE to log
+log:
+	docker-compose logs -f '$(SERVICE)'
+
