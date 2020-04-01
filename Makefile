@@ -17,3 +17,17 @@ unit-test:
 compile-react:
 	#compile react with yarn
 	yarn encore dev
+
+compose-bash:
+	#connect to bash container
+	docker-compose exec app bash
+
+CMD?=echo CMD var with the command is expected
+exec:
+	docker-compose exec app sh -c '$(CMD)'
+
+check-el:
+	make exec CMD='bin/console app:check-travel-elasticsearch'
+
+populate-el:
+	make exec CMD='bin/console app:populate-travel-elasticsearch'
