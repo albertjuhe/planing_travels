@@ -17,6 +17,11 @@ services:
       - WAIT_START_CMD
       - WAIT_SLEEP
       - WAIT_LOOPS
+      - XDEBUG_CONFIG:remote_host=host.docker.internal
+      - PHP_EXTENSION_XDEBUG:1
+      - PHP_INI_XDEBUG__REMOTE_HOST:9000
+      - PHP_IDE_CONFIG:=serverName=localhost
+      - XDEBUG_CONFIG:'remote_port=9000 remote_autostart=1'
     depends_on:
       - mysql
       - elasticsearch

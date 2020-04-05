@@ -1,14 +1,32 @@
-# Docker
+# TRAVEL SHARE
 
-#### Run application with docker
-
+## Execution
 ```
-$docker-compose up
+$make up
+```
+```
+http://localhost:8000/public/index.php
+```
+## Docker
+
+#### Make commands 
+
+Up application
+```
+$make up
+```
+Down application
+```
+$make down
+```
+Exec comamnd in the container
+```
+$make exec CDM='ls'
 ```
 
 #### Container bash
 ```
-$docker-compose exec app bash
+$make bash
 ```
 
 ## MySQL 
@@ -33,14 +51,19 @@ DATABASE_URL=mysql://root:root@mysql:3306/travelGuuid
 is mapped in 8080 port to acces it with:
 
 ``
-localhost:8080
+http://localhost:8080/?server=mysql&username=root
 ``
+```
+server: mysql
+user: root
+password: root
+```
+
 Server: mysql (service name in the docker-compose)
 
 ## Elasticsearch
 
 Check if is alive
-
 ``
-http://elasticsearch:9200
+http://elasticsearch:9201
 ``

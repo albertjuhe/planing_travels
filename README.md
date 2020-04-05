@@ -1,16 +1,74 @@
-# DDD articles
-* Don't Use Entities in Symfony Forms. Use Custom Data Objects Instead (https://blog.martinhujer.cz/symfony-forms-with-request-objects/)
-* RigorTalks (https://carlosbuenosvinos.com/category/rigor-talks/)
-* Emmbedables objects https://www.doctrine-project.org/projects/doctrine-orm/en/2.6/tutorials/embeddables.html
-* Mapping types https://www.doctrine-project.org/projects/doctrine-orm/en/2.6/cookbook/advanced-field-value-conversion-using-custom-mapping-types.html
-* Command Bus: https://matthiasnoback.nl/2015/01/responsibilities-of-the-command-bus/
-* Transactional https://tactician.thephpleague.com/plugins/doctrine/
-* Redis Cache https://www.digitalocean.com/community/tutorials/how-to-install-and-secure-redis-on-ubuntu-18-04
-* ElasticSearch and Kibana https://www.admintome.com/blog/install-elasticsearch-on-ubuntu-18-04-1/
-* DDD Sample Cargo Eric Evans https://github.com/codeliner/php-ddd-cargo-sample
-* Protobuf php https://mattallan.me/posts/protobuf-php-services/
+# Travel share
 
-# Symfony 4
+## Start application with docker
+```
+$make up
+```
+```
+http://localhost:8000/public/index.php
+```
+## Docker
+
+#### Make commands 
+
+Up application
+```
+$make up
+```
+Down application
+```
+$make down
+```
+Exec comamnd in the container
+```
+$make exec CDM='ls'
+```
+
+#### Container bash
+```
+$make bash
+```
+
+## MySQL 
+
+### connection
+
+```
+DATABASE_URL=mysql://root:root@mysql:3306/travelGuuid
+```
+
+### mysql admin
+
+```
+ adminer:
+    image: adminer
+    ports:
+      - 8080:8080
+    depends_on:
+      - mysql
+```
+
+is mapped in 8080 port to acces it with:
+
+``
+http://localhost:8080/?server=mysql&username=root
+``
+```
+server: mysql
+user: root
+password: root
+```
+
+Server: mysql (service name in the docker-compose)
+
+## Elasticsearch
+
+Check if is alive
+``
+http://elasticsearch:9201
+``
+
+## Symfony 4
 
 wiki: https://github.com/albertjuhe/planing_travels/wiki
 
@@ -48,17 +106,26 @@ https://stackoverflow.com/questions/51393459/symfony-error-an-exception-has-been
 yarn encore dev
 ```
 
-# Demo
+## DDD articles
+* Don't Use Entities in Symfony Forms. Use Custom Data Objects Instead (https://blog.martinhujer.cz/symfony-forms-with-request-objects/)
+* RigorTalks (https://carlosbuenosvinos.com/category/rigor-talks/)
+* Emmbedables objects https://www.doctrine-project.org/projects/doctrine-orm/en/2.6/tutorials/embeddables.html
+* Mapping types https://www.doctrine-project.org/projects/doctrine-orm/en/2.6/cookbook/advanced-field-value-conversion-using-custom-mapping-types.html
+* Command Bus: https://matthiasnoback.nl/2015/01/responsibilities-of-the-command-bus/
+* Transactional https://tactician.thephpleague.com/plugins/doctrine/
+* Redis Cache https://www.digitalocean.com/community/tutorials/how-to-install-and-secure-redis-on-ubuntu-18-04
+* ElasticSearch and Kibana https://www.admintome.com/blog/install-elasticsearch-on-ubuntu-18-04-1/
+* DDD Sample Cargo Eric Evans https://github.com/codeliner/php-ddd-cargo-sample
+* Protobuf php https://mattallan.me/posts/protobuf-php-services/
+
+## Demo
 [Travel Planing](http://35.167.24.186/travelexperience/web/app.php/)
 
+
 ## TODO
-1) CQRS (CommandBus tactician, QueryBus Symfony Messenger)
-1) Reactjs as a FrontEnd
 1) Redis
-1) ElasticSearch
 1) Comments travels and descriptions with markdown
 1) OERPUB Blob travel
-1) Docker
 1) GraphQL Integration
 1) JWT JAson web tockens
 1) Protobuf Services in PHP
