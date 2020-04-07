@@ -1,6 +1,17 @@
 import React, {Component} from 'react';
 
 class AddTravel extends Component {
+
+    constructor(props) {
+        super(props)
+        this.state = {
+            hasError: false,
+            showSending: false,
+            title: '',
+            description: ''
+        }
+    }
+
     render() {
         return (
             <div className="col-sm-4">
@@ -8,11 +19,11 @@ class AddTravel extends Component {
                 <form name="travel" method="post">
                     <div className="form-group">
                         <label className="control-label required" htmlFor="travel_title">Title</label>
-                        <input type="text"  name="travel[title]" required="required" className="form-control"/>
+                        <input type="text" value={title} name="travel[title]" required="required" className="form-control"/>
                     </div>
                     <div className="form-group">
                         <label className="control-label required" htmlFor="travel_description">Description</label>
-                        <textarea id="travel_description" name="travel[description]" required="required" className="form-control"></textarea>
+                        <textarea id="travel_description" name="travel[description]" required="required" className="form-control">{description}</textarea>
                     </div>
                     <div className="form-group">
                         <label className="control-label required">Start at</label>
@@ -178,9 +189,6 @@ class AddTravel extends Component {
                     <div className="form-group">
                         <label className="control-label" htmlFor="travel_geoLocation_lng1">Lng1</label>
                         <input type="text" id="travel_geoLocation_lng1" name="travel[geoLocation][lng1]" className="form-control" value="0"/>
-                    </div>
-                    <div id="travel">
-                        <input type="hidden" id="travel__token" name="travel[_token]" value="jpiiEGc4ZZlMA4sNpcXuisrqF_AVyJ8d-8HQyWvcSno"/>
                     </div>
                     <input type="submit" className="btn btn-primary" value="Save"/>
                 </form>
