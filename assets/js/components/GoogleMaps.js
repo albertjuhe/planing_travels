@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
-import { compose, withProps } from "recompose"
 import credentials from "../credentials/credentials";
-import { Map, GoogleApiWrapper } from 'google-maps-react'
-// key=AIzaSyBDFGff7mQ3mWhfZ5IYuqPxsCd049nqIn4 -->
+import {Map, GoogleApiWrapper, InfoWindow, Marker} from 'google-maps-react'
 
 const mapStyles = {
     width: '100%',
@@ -10,6 +8,30 @@ const mapStyles = {
 };
 
 export class MapContainer extends Component {
+    state = {
+        showingInfoWindow: false,
+        activeMaker: {},
+        selectedPlace: {}
+    };
+
+    onMarkerClick = (props, marker, e) =>
+        this.setState(
+            {
+                selectedPlace: props,
+                activeMarker: marker,
+                showingInfoWindow: true
+            }
+        );
+
+    onClose = props => {
+        if (this.state.showingInfoWindow) {
+            this.setState({
+                showingInfoWindow: false,
+                activeMaker: null
+            });
+        }
+    };
+
     render() {
         return (
             <Map
@@ -17,10 +39,22 @@ export class MapContainer extends Component {
                 zoom={14}
                 style={mapStyles}
                 initialCenter={{
-                    lat: -1.2884,
-                    lng: 36.8233
-                }}
-            />
+                    lat: 40.730610,
+                    lng: -73.935242
+                }}>
+                <Marker
+                    onClick={this.onMarkerClick}
+                    name={'New York City'}/>
+                <InfoWindow
+                    marker={this.state.activeMarker}
+                    visible={this.state.showingInfoWindow}
+                    onClose={this.onClose}>
+                    <div>
+                        <h4>{this.state.selectedPlace.name}</h4>
+                    </div>
+                </InfoWindow>
+
+            </Map>
         );
     }
 }
