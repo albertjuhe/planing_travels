@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import MapContainer from './GoogleMaps'
-
+import LocationSearchInput from './PlaceAutoComplete'
 
 class AddTravel extends Component {
 
@@ -9,9 +9,17 @@ class AddTravel extends Component {
         this.state = {
             hasError: false,
             showSending: false,
+            googleMapLink: '',
             title: '',
-            description: ''
-        }
+            description: '',
+            lat: 0,
+            lng: 0,
+            lat0: 0,
+            lng0: 0,
+            lat1: 0,
+            lng1: 0
+        };
+
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
@@ -32,16 +40,17 @@ class AddTravel extends Component {
     }
 
     render() {
-        const {showSending, hasError, title, description} = this.state
+        const {showSending, hasError, title, description, lat, lat0, lat1, lng, lng0, lng1} = this.state
         return (
             <div className="row">
                 <div className="col-sm-4">
                     {showSending && (<span className="success">Enviando...</span>)}
 
                     <form name="travel" method="post">
+                        <LocationSearchInput/>
                         <div className="form-group">
                             <label className="control-label required" htmlFor="travel_title">Title</label>
-                            <input type="text" value={title} onChange={this.handleChange("title")} name="travel[title]" required="required"
+                            <input type="text" value={title} id="autocomplete" onChange={this.handleChange("title")} name="travel[title]" required="required"
                                    className="form-control"/>
                         </div>
                         <div className="form-group">
@@ -196,32 +205,38 @@ class AddTravel extends Component {
                         <div className="form-group">
                             <label className="control-label required" htmlFor="travel_geoLocation_lat">Lat</label>
                             <input type="number" id="travel_geoLocation_lat" name="travel[geoLocation][lat]"
-                                   required="required" className="form-control" value="0"/>
+                                   value={lat} onChange={this.handleChange("lat")}
+                                   required="required" className="form-control"/>
                         </div>
                         <div className="form-group">
                             <label className="control-label required" htmlFor="travel_geoLocation_lng">Lng</label>
                             <input type="number" id="travel_geoLocation_lng" name="travel[geoLocation][lng]"
-                                   required="required" className="form-control" value="0"/>
+                                   value={lng} onChange={this.handleChange("lng")}
+                                   required="required" className="form-control"/>
                         </div>
                         <div className="form-group">
                             <label className="control-label" htmlFor="travel_geoLocation_lat0">Lat0</label>
                             <input type="number" id="travel_geoLocation_lat0" name="travel[geoLocation][lat0]"
-                                   className="form-control" value="0"/>
+                                   value={lat0} onChange={this.handleChange("lat0")}
+                                  className="form-control"/>
                         </div>
                         <div className="form-group">
                             <label className="control-label" htmlFor="travel_geoLocation_lng0">Lng0</label>
                             <input type="number" id="travel_geoLocation_lng0" name="travel[geoLocation][lng0]"
-                                   className="form-control" value="0"/>
+                                   value={lng0} onChange={this.handleChange("lng0")}
+                                   className="form-control"/>
                         </div>
                         <div className="form-group">
                             <label className="control-label" htmlFor="travel_geoLocation_lat1">Lat1</label>
                             <input type="number" id="travel_geoLocation_lat1" name="travel[geoLocation][lat1]"
-                                   className="form-control" value="0"/>
+                                   value={lat1} onChange={this.handleChange("lat1")}
+                                   className="form-control"/>
                         </div>
                         <div className="form-group">
                             <label className="control-label" htmlFor="travel_geoLocation_lng1">Lng1</label>
                             <input type="text" id="travel_geoLocation_lng1" name="travel[geoLocation][lng1]"
-                                   className="form-control" value="0"/>
+                                   value={lng1} onChange={this.handleChange("lng1")}
+                                   className="form-control"/>
                         </div>
                         <input type="submit" onClick={this.handleSubmit} className="btn btn-primary" value="Save"
                                disabled={showSending}/>

@@ -8,11 +8,16 @@ const mapStyles = {
 };
 
 export class MapContainer extends Component {
-    state = {
-        showingInfoWindow: false,
-        activeMaker: {},
-        selectedPlace: {}
-    };
+
+    constructor(props) {
+        super(props)
+
+        this.state = {
+            showingInfoWindow: false,
+            activeMaker: {},
+            selectedPlace: {}
+        };
+    }
 
     onMarkerClick = (props, marker, e) =>
         this.setState(
