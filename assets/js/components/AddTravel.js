@@ -47,7 +47,10 @@ class AddTravel extends Component {
                     {showSending && (<span className="success">Enviando...</span>)}
 
                     <form name="travel" method="post">
-                        <LocationSearchInput/>
+                        <div className="form-group">
+                            <label className="control-label" htmlFor="address">Location</label>
+                            <LocationSearchInput/>
+                        </div>
                         <div className="form-group">
                             <label className="control-label required" htmlFor="travel_title">Title</label>
                             <input type="text" value={title} id="autocomplete" onChange={this.handleChange("title")} name="travel[title]" required="required"
