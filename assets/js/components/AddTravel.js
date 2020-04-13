@@ -7,6 +7,7 @@ class AddTravel extends Component {
     constructor(props) {
         super(props)
         this.state = {
+            address:'',
             hasError: false,
             showSending: false,
             googleMapLink: '',
@@ -22,6 +23,7 @@ class AddTravel extends Component {
 
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleAutoComplete = this.handleAutoComplete.bind(this);
     }
 
     handleChange(field) {
@@ -32,6 +34,13 @@ class AddTravel extends Component {
                 }
             )
         }
+    }
+
+    handleAutoComplete(address) {
+        this.setState({
+            lat: address.lat,
+            lng: address.lng
+        });
     }
 
     handleSubmit(e) {
@@ -49,7 +58,7 @@ class AddTravel extends Component {
                     <form name="travel" method="post">
                         <div className="form-group">
                             <label className="control-label" htmlFor="address">Location</label>
-                            <LocationSearchInput/>
+                            <LocationSearchInput handleAutoComplete={this.handleAutoComplete}/>
                         </div>
                         <div className="form-group">
                             <label className="control-label required" htmlFor="travel_title">Title</label>
