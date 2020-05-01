@@ -41,6 +41,7 @@ class AddTravel extends Component {
             lat: address.lat,
             lng: address.lng
         });
+        //Avisar al google maps
     }
 
     handleSubmit(e) {
@@ -256,7 +257,7 @@ class AddTravel extends Component {
 
                 </div>
                 <div className="col-sm-8">
-                        <MapContainer/>
+                        <MapContainer lat={this.state.lat} lng={this.state.lng}/>
                 </div>
             </div>
 

@@ -15,7 +15,12 @@ export class MapContainer extends Component {
         this.state = {
             showingInfoWindow: false,
             activeMaker: {},
-            selectedPlace: {}
+            selectedPlace: {},
+            center: {
+                lat: this.props.lat,
+                lng: this.props.lng,
+            },
+            name: 'New York City'
         };
     }
 
@@ -24,7 +29,7 @@ export class MapContainer extends Component {
             {
                 selectedPlace: props,
                 activeMarker: marker,
-                showingInfoWindow: true
+                showingInfoWindow: true,
             }
         );
 
@@ -37,19 +42,30 @@ export class MapContainer extends Component {
         }
     };
 
+    componentDidUpdate(prevProps, prevState) {
+        if (this.state.center.lat !== this.props.lat || this.state.center.lng !== this.props.lng) {
+            this.setState({
+                center: {
+                    lat: this.props.lat,
+                    lng: this.props.lng,
+                }
+            });
+        }
+    }
+
     render() {
         return (
             <Map
                 google={this.props.google}
                 zoom={14}
                 style={mapStyles}
-                initialCenter={{
-                    lat: 40.730610,
-                    lng: -73.935242
-                }}>
+                initialCenter={this.state.center}
+            center={this.state.center}>
                 <Marker
                     onClick={this.onMarkerClick}
-                    name={'New York City'}/>
+                    name={this.state.name}
+                    position={this.state.center}
+                />
                 <InfoWindow
                     marker={this.state.activeMarker}
                     visible={this.state.showingInfoWindow}
