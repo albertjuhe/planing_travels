@@ -228,30 +228,6 @@ class AddTravel extends Component {
                                    value={lng} onChange={this.handleChange("lng")}
                                    required="required" className="form-control"/>
                         </div>
-                        <div className="form-group">
-                            <label className="control-label" htmlFor="travel_geoLocation_lat0">Lat0</label>
-                            <input type="number" id="travel_geoLocation_lat0" name="travel[geoLocation][lat0]"
-                                   value={lat0} onChange={this.handleChange("lat0")}
-                                  className="form-control"/>
-                        </div>
-                        <div className="form-group">
-                            <label className="control-label" htmlFor="travel_geoLocation_lng0">Lng0</label>
-                            <input type="number" id="travel_geoLocation_lng0" name="travel[geoLocation][lng0]"
-                                   value={lng0} onChange={this.handleChange("lng0")}
-                                   className="form-control"/>
-                        </div>
-                        <div className="form-group">
-                            <label className="control-label" htmlFor="travel_geoLocation_lat1">Lat1</label>
-                            <input type="number" id="travel_geoLocation_lat1" name="travel[geoLocation][lat1]"
-                                   value={lat1} onChange={this.handleChange("lat1")}
-                                   className="form-control"/>
-                        </div>
-                        <div className="form-group">
-                            <label className="control-label" htmlFor="travel_geoLocation_lng1">Lng1</label>
-                            <input type="text" id="travel_geoLocation_lng1" name="travel[geoLocation][lng1]"
-                                   value={lng1} onChange={this.handleChange("lng1")}
-                                   className="form-control"/>
-                        </div>
                         <input type="submit" onClick={this.handleSubmit} className="btn btn-primary" value="Save"
                                disabled={showSending}/>
                     </form>
