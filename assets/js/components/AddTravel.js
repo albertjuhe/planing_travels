@@ -73,7 +73,7 @@ class AddTravel extends Component {
                                       className="form-control"/>
                         </div>
                         <div className="form-group">
-                            <label className="control-label required">Do you know the dates for your trip?</label>
+                            <div className="control-label">Do you know the dates for your trip?</div>
                             <label className="control-label required">Start date</label>
                             <div id="travel_startAt" className="form-inline">
                                 <div className="sr-only">
