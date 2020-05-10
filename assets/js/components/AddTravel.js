@@ -58,22 +58,23 @@ class AddTravel extends Component {
 
                     <form name="travel" method="post">
                         <div className="form-group">
-                            <label className="control-label" htmlFor="address">Location</label>
+                            <label className="control-label" htmlFor="address">Search destination</label>
                             <LocationSearchInput handleAutoComplete={this.handleAutoComplete}/>
                         </div>
                         <div className="form-group">
-                            <label className="control-label required" htmlFor="travel_title">Title</label>
+                            <label className="control-label required" htmlFor="travel_title">What's the name of your trip?</label>
                             <input type="text" value={title} id="autocomplete" onChange={this.handleChange("title")} name="travel[title]" required="required"
                                    className="form-control"/>
                         </div>
                         <div className="form-group">
-                            <label className="control-label required" htmlFor="travel_description">Description</label>
+                            <label className="control-label required" htmlFor="travel_description">Describe your trip:</label>
                             <textarea id="travel_description" onChange={this.handleChange("description")}
                                       value={description} name="travel[description]" required="required"
                                       className="form-control"/>
                         </div>
                         <div className="form-group">
-                            <label className="control-label required">Start at</label>
+                            <label className="control-label required">Do you know the dates for your trip?</label>
+                            <label className="control-label required">Start date</label>
                             <div id="travel_startAt" className="form-inline">
                                 <div className="sr-only">
                                     <label className="control-label required" htmlFor="travel_startAt_year">Year</label>
@@ -145,7 +146,7 @@ class AddTravel extends Component {
                             </div>
                         </div>
                         <div className="form-group">
-                            <label className="control-label required">End at</label>
+                            <label className="control-label required">End date</label>
                             <div id="travel_endAt" className="form-inline">
                                 <div className="sr-only">
                                     <label className="control-label required" htmlFor="travel_endAt_year">Year</label>
