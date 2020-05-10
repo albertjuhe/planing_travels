@@ -20,7 +20,6 @@ export class MapContainer extends Component {
                 lat: this.props.lat,
                 lng: this.props.lng,
             },
-            name: 'New York City'
         };
     }
 

@@ -36,12 +36,12 @@ class AddTravel extends Component {
         }
     }
 
-    handleAutoComplete(address) {
+    handleAutoComplete(geolocation, address) {
         this.setState({
-            lat: address.lat,
-            lng: address.lng
+            lat: geolocation.lat,
+            lng: geolocation.lng,
+            title: address
         });
-        //Avisar al google maps
     }
 
     handleSubmit(e) {
