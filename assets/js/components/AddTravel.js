@@ -15,10 +15,6 @@ class AddTravel extends Component {
             description: '',
             lat: 0,
             lng: 0,
-            lat0: 0,
-            lng0: 0,
-            lat1: 0,
-            lng1: 0
         };
 
         this.handleChange = this.handleChange.bind(this);
@@ -50,7 +46,7 @@ class AddTravel extends Component {
     }
 
     render() {
-        const {showSending, hasError, title, description, lat, lat0, lat1, lng, lng0, lng1} = this.state
+        const {showSending, hasError, title, description, lat, lng} = this.state //state relation
         return (
             <div className="row">
                 <div className="col-sm-4">
@@ -59,7 +55,7 @@ class AddTravel extends Component {
                     <form name="travel" method="post">
                         <div className="form-group">
                             <label className="control-label" htmlFor="address">Search destination</label>
-                            <LocationSearchInput handleAutoComplete={this.handleAutoComplete}/>
+                            <LocationSearchInput className="form-control" handleAutoComplete={this.handleAutoComplete}/>
                         </div>
                         <div className="form-group">
                             <label className="control-label required" htmlFor="travel_title">What's the name of your trip?</label>
