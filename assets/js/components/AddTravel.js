@@ -224,8 +224,7 @@ class AddTravel extends Component {
                                    value={lng} onChange={this.handleChange("lng")}
                                    required="required" className="form-control"/>
                         </div>
-                        <input type="submit" onClick={this.handleSubmit} className="btn btn-primary" value="Save"
-                               disabled={showSending}/>
+                        <input type="submit" className="btn btn-primary" value="Save" disabled={showSending}/>
                     </form>
 
                 </div>
