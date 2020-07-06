@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Infrastructure\Repository;
+namespace App\Tests\Infrastructure\UserBundle\Repository;
 
 use App\Domain\User\Exceptions\UserDoesntExists;
 use App\Domain\User\ValueObject\UserId;

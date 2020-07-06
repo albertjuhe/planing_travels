@@ -27,6 +27,7 @@ class AddTravelServiceTest extends TravelService
 
         $travel = new Travel();
         $travelId = $travel->getId()->id();
+        $travel->setTitle('dummy1');
 
         $addTravelService = new AddTravelService($this->travelRepository, $this->userRepository);
         $command = new AddTravelCommand($travel, $user);
