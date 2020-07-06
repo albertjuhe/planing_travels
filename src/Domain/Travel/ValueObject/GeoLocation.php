@@ -35,10 +35,10 @@ class GeoLocation
     public function __construct(
         float $latitud,
         float $longitud,
-        float $latitud0,
-        float $longitud0,
-        float $latitud1,
-        float $longitud1
+        float $latitud0 = 0,
+        float $longitud0 = 0,
+        float $latitud1 = 0,
+        float $longitud1 = 0
     ) {
         $this->lat = $latitud;
         $this->lng = $longitud;

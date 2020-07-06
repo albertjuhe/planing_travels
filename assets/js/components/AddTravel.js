@@ -52,8 +52,7 @@ class AddTravel extends Component {
                 <div className="col-sm-4">
                     {showSending && (<span className="success">Enviando...</span>)}
 
-                    <form name="travel" method="post">
-                        <div className="form-group">
+                       <div className="form-group">
                             <label className="control-label" htmlFor="address">Search destination</label>
                             <LocationSearchInput className="form-control" handleAutoComplete={this.handleAutoComplete}/>
                         </div>
@@ -225,7 +224,7 @@ class AddTravel extends Component {
                                    required="required" className="form-control"/>
                         </div>
                         <input type="submit" className="btn btn-primary" value="Save" disabled={showSending}/>
-                    </form>
+
 
                 </div>
                 <div className="col-sm-8">

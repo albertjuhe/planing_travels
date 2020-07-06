@@ -20,7 +20,12 @@
                 {% endfor %}
             </div>
         </div>
+        <form name="travel" method="post">
         <div id="root"></div>
+            <input type="hidden" name="_csrf_token"
+                   value="{{ csrf_token('authenticate') }}"
+            >
+        </form>
     </div>
 
 {% endblock %}

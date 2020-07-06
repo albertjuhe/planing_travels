@@ -13,10 +13,6 @@ class GeoLocationType extends AbstractType
         $builder
             ->add('lat')
             ->add('lng')
-            ->add('lat0')
-            ->add('lng0')
-            ->add('lat1')
-            ->add('lng1')
         ;
     }
 
