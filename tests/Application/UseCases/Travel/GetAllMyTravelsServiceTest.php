@@ -16,19 +16,8 @@ class GetAllMyTravelsServiceTest extends ReadTravelService
     public function testGetAllMyTravels()
     {
         $userId = 1;
-        $travelId = mt_rand();
-
         $user = User::byId($userId);
-        $travels = [
-            [
-                'id' => $travelId,
-                'user' => $userId,
-            ],
-            [
-                'id' => $travelId + 1,
-                'user' => $userId,
-            ],
-        ];
+        $travels = $this->getTravels($userId);
 
         $getMyTravelQuery = new GetMyTravelsQuery($user);
 
@@ -41,5 +30,21 @@ class GetAllMyTravelsServiceTest extends ReadTravelService
         }
 
         $this->assertCount(2, $travels);
+    }
+
+    private function getTravels(int $userId): array
+    {
+        $travelId = mt_rand();
+
+        return [
+            [
+                'id' => $travelId,
+                'user' => $userId,
+            ],
+            [
+                'id' => $travelId + 1,
+                'user' => $userId,
+            ],
+        ];
     }
 }
