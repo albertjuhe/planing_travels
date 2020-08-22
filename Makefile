@@ -1,6 +1,6 @@
 up:
 	# start docker
-	docker-compose up
+	docker-compose up -d
 
 down:
 	# stop docker

@@ -1,4 +1,4 @@
-{% extends 'old_base.html.twig' %}
+{% extends 'base.html.twig' %}
 
 {% block title %}New Travel{% endblock %}
 
@@ -6,43 +6,28 @@
     <script type="text/javascript" src="{{ google_maps }}"></script>
 {% endblock %}
 
+
+
 {% block content %}
     <div class="container">
         <div class="row">
-            <div class="col-sm-4">
+            <div class="col">
                 <h3>Add Travel</h3>
                 {% for flashMessage in app.session.flashbag.get('notice') %}
                     <div class="flash-notice">
                         {{ flashMessage }}
                     </div>
                 {% endfor %}
-                {{ form_start(travelForm) }}
-                {{ form_row(travelForm.title) }}
-                {{ form_row(travelForm.description)  }}
-                {{ form_row(travelForm.startAt) }}
-                {{ form_row(travelForm.endAt) }}
-                {{ form_row(travelForm.geoLocation.lat) }}
-                {{ form_row(travelForm.geoLocation.lng) }}
-                {{ form_row(travelForm.geoLocation.lat0) }}
-                {{ form_row(travelForm.geoLocation.lng0) }}
-                {{ form_row(travelForm.geoLocation.lat1) }}
-                {{ form_row(travelForm.geoLocation.lng1) }}
-                {{ form_widget(travelForm) }}
-
-                <input type="submit" class="btn btn-primary" value="Save"/>
-                {{ form_end(travelForm) }}
-            </div>
-            <div class="col-sm-8">
-                <div id="map-canvas"></div>
             </div>
         </div>
+        <form name="travel" method="post">
+        <div id="root"></div>
+            <input type="hidden" name="_csrf_token"
+                   value="{{ csrf_token('authenticate') }}"
+            >
+        </form>
     </div>
 
-{% endblock %}
-
-{% block javascript %}
-{{ parent() }}
-<script src="{{ asset('js/geoCodeSituation.js') }}"></script>
 {% endblock %}
 
 {% block css %}

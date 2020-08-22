@@ -15,7 +15,7 @@ class List extends Component {
     }
 
     componentDidMount() {
-        this.setState({isLoading: true}); //Nomes es pot fer amb set statet, temes concurrencies, si modifiques estat el component es renderitza
+        this.setState({isLoading: true}); //Nomes es pot fer amb set state, temes concurrencies, si modifiques estat el component es renderitza
         try {
             getBestTravels(10)
                 .then(

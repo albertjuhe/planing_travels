@@ -27,6 +27,7 @@ class TravelType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Travel::class,
+            'csrf_protection' => false,
         ]);
     }
 }
