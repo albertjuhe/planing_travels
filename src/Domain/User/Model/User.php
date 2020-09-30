@@ -130,7 +130,7 @@ class User implements UserInterface
         return $this->id;
     }
 
-    public function userId()
+    public function userId(): UserId
     {
         if (null === $this->id) {
             $this->id = new UserId($this->id());
