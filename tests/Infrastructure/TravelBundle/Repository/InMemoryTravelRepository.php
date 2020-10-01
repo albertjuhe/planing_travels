@@ -5,8 +5,7 @@ namespace App\Tests\Infrastructure\TravelBundle\Repository;
 use App\Domain\Travel\Repository\TravelRepository;
 use App\Domain\Travel\Model\Travel;
 use App\Domain\User\Model\User;
-use App\Tests\Domain\Travel\ValueObject\GeoLocationStub;
-use App\Tests\Domain\User\Model\UserMother;
+use App\Tests\Domain\Travel\Model\TravelMother;
 
 class InMemoryTravelRepository implements TravelRepository
 {
@@ -19,36 +18,13 @@ class InMemoryTravelRepository implements TravelRepository
 
     public function loadData(): void
     {
-        $travel = Travel::fromTitleAndGeolocationAndUser(
-            self::TRAVEL_1,
-            GeoLocationStub::random(),
-            UserMother::random()
-        );
+        $travel = TravelMother::withTitle(self::TRAVEL_1);
         $this->save($travel);
-
-        $travel = Travel::fromTitleAndGeolocationAndUser(
-            self::TRAVEL_2,
-            GeoLocationStub::random(),
-            UserMother::random()
-        );
-
-        $travel->setStars(5);
+        $travel = TravelMother::withTitle(self::TRAVEL_2);
         $this->save($travel);
-
-        $travel = Travel::fromTitleAndGeolocationAndUser(
-            self::TRAVEL_3,
-            GeoLocationStub::random(),
-            UserMother::random()
-        );
-        $travel->setStars(25);
+        $travel = TravelMother::withTitle(self::TRAVEL_3);
         $this->save($travel);
-
-        $travel = Travel::fromTitleAndGeolocationAndUser(
-            self::TRAVEL_4,
-            GeoLocationStub::random(),
-            UserMother::random()
-        );
-        $travel->setStars(91);
+        $travel = TravelMother::withTitle(self::TRAVEL_4);
         $this->save($travel);
     }
 
