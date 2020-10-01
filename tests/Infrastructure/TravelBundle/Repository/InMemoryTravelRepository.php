@@ -19,26 +19,35 @@ class InMemoryTravelRepository implements TravelRepository
 
     public function loadData(): void
     {
-        $travel = Travel::fromTitleAndGeolocationAndUser(self::TRAVEL_1,
+        $travel = Travel::fromTitleAndGeolocationAndUser(
+            self::TRAVEL_1,
             GeoLocationStub::random(),
-            UserMother::random());
+            UserMother::random()
+        );
         $this->save($travel);
 
-        $travel = Travel::fromTitleAndGeolocationAndUser(self::TRAVEL_2,
+        $travel = Travel::fromTitleAndGeolocationAndUser(
+            self::TRAVEL_2,
             GeoLocationStub::random(),
-            UserMother::random());
+            UserMother::random()
+        );
+
         $travel->setStars(5);
         $this->save($travel);
 
-        $travel = Travel::fromTitleAndGeolocationAndUser(self::TRAVEL_3,
+        $travel = Travel::fromTitleAndGeolocationAndUser(
+            self::TRAVEL_3,
             GeoLocationStub::random(),
-            UserMother::random());
+            UserMother::random()
+        );
         $travel->setStars(25);
         $this->save($travel);
 
-        $travel = Travel::fromTitleAndGeolocationAndUser(self::TRAVEL_4,
+        $travel = Travel::fromTitleAndGeolocationAndUser(
+            self::TRAVEL_4,
             GeoLocationStub::random(),
-            UserMother::random());
+            UserMother::random()
+        );
         $travel->setStars(91);
         $this->save($travel);
     }
