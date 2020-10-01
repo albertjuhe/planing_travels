@@ -6,7 +6,7 @@ use App\Application\Command\Travel\UpdateTravelCommand;
 use App\Application\UseCases\Travel\UpdateTravelService;
 use App\Domain\Travel\Exceptions\InvalidTravelUser;
 use App\Domain\User\Model\User;
-use App\Infrastructure\TravelBundle\Repository\InMemoryTravelRepository;
+use App\Tests\Infrastructure\TravelBundle\Repository\InMemoryTravelRepository;
 
 class UpdateTravelServiceTest extends TravelService
 {

@@ -9,7 +9,7 @@ use App\Domain\Event\DomainEventPublisher;
 use App\Domain\Travel\Exceptions\NotAllowedToPublishTravel;
 use App\Domain\Travel\Model\Travel;
 use App\Domain\User\Model\User;
-use App\Infrastructure\TravelBundle\Repository\InMemoryTravelRepository;
+use App\Tests\Infrastructure\TravelBundle\Repository\InMemoryTravelRepository;
 use App\Tests\Subscriber\DomainEventAllSubscriber;
 
 class PublishTravelServiceTest extends TravelService
