@@ -4,7 +4,7 @@ namespace App\Tests\Application\UseCases\Travel;
 
 use App\Application\Query\Travel\GetMyTravelsQuery;
 use App\Application\UseCases\Travel\GetAllMyTravelsService;
-use App\Domain\User\Model\User;
+use App\Tests\Domain\User\Model\UserMother;
 
 class GetAllMyTravelsServiceTest extends ReadTravelService
 {
@@ -15,9 +15,8 @@ class GetAllMyTravelsServiceTest extends ReadTravelService
 
     public function testGetAllMyTravels()
     {
-        $userId = 1;
-        $user = User::byId($userId);
-        $travels = $this->getTravels($userId);
+        $user = UserMother::random();
+        $travels = $this->getTravels($user->getId()->id());
 
         $getMyTravelQuery = new GetMyTravelsQuery($user);
 
