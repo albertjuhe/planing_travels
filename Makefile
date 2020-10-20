@@ -16,7 +16,7 @@ cs-fix-tests:
 
 unit-test:
 	#run tests
-	php vendor/bin/phpunit
+	php vendor/bin/phpunit --order-by=random
 
 compile-react:
 	#compile react with yarn
