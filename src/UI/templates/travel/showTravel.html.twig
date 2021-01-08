@@ -7,6 +7,11 @@
 {% endblock %}
 
 {% block content %}
+
+    <a class="btn btn-app" style="display:none" id="online-user">
+        <i class="fa fa-users"></i> Connected
+    </a>
+
     <div class="container">
         {% include 'travel/travelInfoHeader.html.twig' with {'travel': travel,'mode':'Edit'} %}
         <div id="infoTravel"></div>
@@ -44,7 +49,6 @@
 
 {% block javascript %}
     {{ parent() }}
-     <script src="{{ asset('js/angular/js/manage-maps.js') }}"></script>
     <script src="{{ asset('js/jquery.ui.widget.js') }}"></script>
     <script src="{{ asset('js/jquery.iframe-transport.js') }}"></script>
     <script src="{{ asset('js/jquery.fileupload.js') }}"></script>
@@ -60,8 +64,7 @@
     <script src="{{ asset('js/markersDefinition.js') }}"></script>
     <script src="{{ asset('js/mapPoint.js') }}"></script>
     <script src="{{ asset('js/locationGallery.js') }}"></script>
-     <script src="{{ asset('js/websocket/websockets.js') }}"></script>
-
+    <script src="{{ asset('js/websocket/websockets.js') }}"></script>
     <script>
         var mPoint = new mapPoint('{{ travel.id }}');
         mPoint.addPlugin('locationGallery',new locationGallery('{{ asset('uploads/gallery/') }}'));
