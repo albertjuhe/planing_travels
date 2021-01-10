@@ -33,9 +33,7 @@ class GetBestTravelsAPIController extends QueryController
             ],
             'data' => $travels,
         ];
-        $response = new JsonResponse($data
-        );
 
-        return $response;
+        return new JsonResponse($data);
     }
 }

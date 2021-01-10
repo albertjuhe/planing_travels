@@ -2,6 +2,8 @@
 
 namespace App\Tests\Application\UseCases\Travel;
 
+use App\Tests\Infrastructure\TravelBundle\Repository\InMemoryTravelRepository;
+
 class GetBestTravelsOrderedByServiceTest
 {
     /** @var InMemoryTravelRepository */

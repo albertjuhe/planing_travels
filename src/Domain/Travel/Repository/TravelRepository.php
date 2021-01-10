@@ -11,7 +11,7 @@ interface TravelRepository
      *
      * @return Travel
      */
-    public function ofIdOrFail(string $travelId): Travel;
+    public function ofIdOrFail(string $travelId);
 
     /**
      * @param string $slug

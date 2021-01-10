@@ -8,8 +8,8 @@ use App\Application\UseCases\Travel\UpdateTravelService;
 use App\Domain\Event\DomainEventPublisher;
 use App\Domain\Travel\Exceptions\NotAllowedToPublishTravel;
 use App\Domain\Travel\Model\Travel;
-use App\Domain\User\Model\User;
-use App\Infrastructure\TravelBundle\Repository\InMemoryTravelRepository;
+use App\Tests\Domain\User\Model\UserMother;
+use App\Tests\Infrastructure\TravelBundle\Repository\InMemoryTravelRepository;
 use App\Tests\Subscriber\DomainEventAllSubscriber;
 
 class PublishTravelServiceTest extends TravelService
@@ -45,7 +45,7 @@ class PublishTravelServiceTest extends TravelService
         $this->expectException(NotAllowedToPublishTravel::class);
 
         $travel = $this->travelRepository->findTravelBySlug(InMemoryTravelRepository::TRAVEL_1);
-        $user = User::byId(2);
+        $user = UserMother::random();
 
         $this->assertEquals($travel->getStatus(), Travel::TRAVEL_DRAFT);
 

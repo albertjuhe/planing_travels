@@ -9,17 +9,17 @@ class GeoLocationTest extends TestCase
 {
     public function testEqual()
     {
-        $geoLocation = new GeoLocation(10, 20, 30, 40, 50, 60);
-        $geoLocation2 = new GeoLocation(10, 20, 30, 40, 50, 60);
+        $geoLocation = GeoLocationStub::withLongitudAndLatitude(10, 20);
+        $geoLocation2 = GeoLocationStub::withLongitudAndLatitude(10, 20);
         $this->assertTrue($geoLocation->equal($geoLocation2));
 
-        $geoLocation3 = new GeoLocation(1, 2, 30, 40, 50, 60);
+        $geoLocation3 = GeoLocationStub::random();
         $this->assertFalse($geoLocation->equal($geoLocation3));
     }
 
     public function testSetGeolocationValues()
     {
-        $geoLocation = new GeoLocation(10, 20, 30, 40, 50, 60);
+        $geoLocation = GeoLocationStub::random();
         $geoLocation->setLat(45.99999999);
         $geoLocation->setLng(0);
         $geoLocation->setLat0(23.4352452);

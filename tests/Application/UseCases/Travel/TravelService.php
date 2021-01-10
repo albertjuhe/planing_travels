@@ -3,8 +3,8 @@
 namespace App\Tests\Application\UseCases\Travel;
 
 use App\Domain\Event\DomainEventPublisher;
-use App\Infrastructure\TravelBundle\Repository\InMemoryTravelRepository;
 use App\Infrastructure\UserBundle\Repository\InMemoryUserRepository;
+use App\Tests\Infrastructure\TravelBundle\Repository\InMemoryTravelRepository;
 use App\Tests\Subscriber\DomainEventAllSubscriber;
 use PHPUnit\Framework\TestCase;
 

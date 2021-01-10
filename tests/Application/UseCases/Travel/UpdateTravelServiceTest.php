@@ -5,8 +5,8 @@ namespace App\Tests\Application\UseCases\Travel;
 use App\Application\Command\Travel\UpdateTravelCommand;
 use App\Application\UseCases\Travel\UpdateTravelService;
 use App\Domain\Travel\Exceptions\InvalidTravelUser;
-use App\Domain\User\Model\User;
-use App\Infrastructure\TravelBundle\Repository\InMemoryTravelRepository;
+use App\Tests\Domain\User\Model\UserMother;
+use App\Tests\Infrastructure\TravelBundle\Repository\InMemoryTravelRepository;
 
 class UpdateTravelServiceTest extends TravelService
 {
@@ -34,12 +34,12 @@ class UpdateTravelServiceTest extends TravelService
         $this->expectException(InvalidTravelUser::class);
         $travel = $this->travelRepository->findTravelBySlug(InMemoryTravelRepository::TRAVEL_1);
         $newTitle = uniqid();
-        $user2 = User::byId(2);
+        $user = UserMother::random();
 
         $travel->setTitle($newTitle);
 
         $updateTravelService = new UpdateTravelService($this->travelRepository);
-        $updateTravelCommand = new UpdateTravelCommand($travel, $user2);
+        $updateTravelCommand = new UpdateTravelCommand($travel, $user);
         $travel = $this->travelRepository->findTravelBySlug(InMemoryTravelRepository::TRAVEL_1);
         $updateTravelService->handle($updateTravelCommand);
         $this->assertEquals($travel->getTitle(), $newTitle);

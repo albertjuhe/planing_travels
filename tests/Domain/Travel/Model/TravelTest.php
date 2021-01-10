@@ -2,9 +2,9 @@
 
 namespace App\Tests\Domain\Travel\Model;
 
+use App\Tests\Domain\Travel\ValueObject\GeoLocationStub;
 use PHPUnit\Framework\TestCase;
 use App\Domain\Travel\Model\Travel;
-use App\Domain\Travel\ValueObject\GeoLocation;
 use App\Domain\User\Model\User;
 use App\Domain\Location\Model\Location;
 use App\Domain\Gpx\Model\Gpx;
@@ -32,17 +32,17 @@ class TravelTest extends TestCase
 
     public function testFromGeoLocation()
     {
-        $geoLocation = new GeoLocation(10, 20, 30, 40, 50, 60);
+        $geoLocation = GeoLocationStub::withLongitudAndLatitude(10, 20);
         $travel = Travel::fromGeoLocation($geoLocation);
 
-        $geoLocation2 = new GeoLocation(10, 20, 30, 40, 50, 60);
+        $geoLocation2 = GeoLocationStub::withLongitudAndLatitude(10, 20);
         $this->assertTrue($geoLocation2->equal($travel->getGeoLocation()));
     }
 
     public function testSettersGetters()
     {
         $userId = mt_rand();
-        $geoLocation = new GeoLocation(10, 20, 30, 40, 50, 60);
+        $geoLocation = GeoLocationStub::random();
         $user = User::fromId($userId);
 
         $travel = Travel::fromGeoLocation($geoLocation);

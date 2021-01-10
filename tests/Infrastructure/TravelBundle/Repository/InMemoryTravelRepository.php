@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Infrastructure\TravelBundle\Repository;
+namespace App\Tests\Infrastructure\TravelBundle\Repository;
 
 use App\Domain\Travel\Repository\TravelRepository;
 use App\Domain\Travel\Model\Travel;
 use App\Domain\User\Model\User;
-use App\Domain\Travel\ValueObject\GeoLocation;
+use App\Tests\Domain\Travel\Model\TravelMother;
 
 class InMemoryTravelRepository implements TravelRepository
 {
@@ -18,27 +18,13 @@ class InMemoryTravelRepository implements TravelRepository
 
     public function loadData(): void
     {
-        $travel = Travel::fromTitleAndGeolocationAndUser(self::TRAVEL_1,
-            new GeoLocation(1, 2, 3, 4, 5, 6),
-            User::byId(1));
+        $travel = TravelMother::withTitle(self::TRAVEL_1);
         $this->save($travel);
-
-        $travel = Travel::fromTitleAndGeolocationAndUser(self::TRAVEL_2,
-            new GeoLocation(7, 8, 9, 10, 11, 12),
-            User::byId(2));
-        $travel->setStars(5);
+        $travel = TravelMother::withTitle(self::TRAVEL_2);
         $this->save($travel);
-
-        $travel = Travel::fromTitleAndGeolocationAndUser(self::TRAVEL_3,
-            new GeoLocation(13, 21, 31, 41, 51, 61),
-            User::byId(1));
-        $travel->setStars(25);
+        $travel = TravelMother::withTitle(self::TRAVEL_3);
         $this->save($travel);
-
-        $travel = Travel::fromTitleAndGeolocationAndUser(self::TRAVEL_4,
-            new GeoLocation(12, 22, 32, 42, 52, 62),
-            User::byId(1));
-        $travel->setStars(91);
+        $travel = TravelMother::withTitle(self::TRAVEL_4);
         $this->save($travel);
     }
 
@@ -57,7 +43,7 @@ class InMemoryTravelRepository implements TravelRepository
         ];
     }
 
-    public function ofIdOrFail(string $travelId): Travel
+    public function ofIdOrFail(string $travelId)
     {
         return array_search($travelId, array_column($this->travel, 'travelId'));
     }

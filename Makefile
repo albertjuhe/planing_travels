@@ -10,6 +10,10 @@ cs-fix:
 	#clean code
 	php vendor/bin/php-cs-fixer fix src
 
+cs-fix-tests:
+	#clean code
+	php vendor/bin/php-cs-fixer fix tests
+
 unit-test:
 	#run tests
 	php vendor/bin/phpunit

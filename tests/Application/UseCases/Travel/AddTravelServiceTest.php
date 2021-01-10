@@ -7,8 +7,8 @@ use App\Domain\Travel\Events\TravelWasAdded;
 use App\Domain\User\Exceptions\UserDoesntExists;
 use App\Application\UseCases\Travel\AddTravelService;
 use App\Domain\Travel\Model\Travel;
-use App\Domain\User\Model\User;
 use App\Application\Command\Travel\AddTravelCommand;
+use App\Tests\Domain\User\Model\UserMother;
 
 class AddTravelServiceTest extends TravelService
 {
@@ -22,11 +22,11 @@ class AddTravelServiceTest extends TravelService
      */
     public function testAddTravel()
     {
-        $userId = mt_rand();
-        $user = User::byId($userId);
+        $user = UserMother::random();
 
         $travel = new Travel();
         $travelId = $travel->getId()->id();
+        $travel->setTitle('dummy1');
 
         $addTravelService = new AddTravelService($this->travelRepository, $this->userRepository);
         $command = new AddTravelCommand($travel, $user);
@@ -45,7 +45,7 @@ class AddTravelServiceTest extends TravelService
     {
         $this->expectExceptionObject(new UserDoesntExists());
         $travel = new Travel();
-        $user = User::byId(0);
+        $user = UserMother::withUserId(0);
 
         $addTravelService = new AddTravelService($this->travelRepository, $this->userRepository);
         $command = new AddTravelCommand($travel, $user);

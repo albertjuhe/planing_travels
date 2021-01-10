@@ -6,7 +6,7 @@ use App\Application\Query\Travel\ShowTravelBySlugQuery;
 use App\Application\UseCases\Travel\ShowTravelService;
 use App\Domain\Travel\Exceptions\TravelDoesntExists;
 use App\Domain\Travel\Model\Travel;
-use App\Infrastructure\TravelBundle\Repository\InMemoryTravelRepository;
+use App\Tests\Infrastructure\TravelBundle\Repository\InMemoryTravelRepository;
 
 class ShowTravelServiceTest extends TravelService
 {
