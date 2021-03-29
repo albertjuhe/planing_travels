@@ -23,6 +23,7 @@
         "@babel/plugin-proposal-class-properties": "^7.8.3",
         "@babel/plugin-transform-runtime": "^7.9.0",
         "babel-polyfill": "^6.26.0",
+        "google-map-react": "^2.1.9",
         "google-maps-react": "^2.0.2",
         "react-geocode": "^0.2.1",
         "react-google-autocomplete": "^1.1.3",
