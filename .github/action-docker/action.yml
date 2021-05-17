@@ -1,0 +1,5 @@
+name: "Using docker"
+
+runs:
+  using: "docker"
+  image: "../../Docker/Dockerfile"

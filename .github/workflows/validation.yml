@@ -1,0 +1,13 @@
+name: Test php project
+on: push
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Building image from dockerfile
+        uses: ./.github/action-docker
+
+
