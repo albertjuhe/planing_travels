@@ -19,4 +19,10 @@ jobs:
           echo "Job Context: $JOB_CONTEXT"
           echo "Done!"
 
+      - name: Install dependencies
+        run: composer install --ignore-platform-reqs
+
+      - name: Run tests
+        run: php vendor/bin/phpunit
+
 
