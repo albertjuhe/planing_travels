@@ -25,4 +25,7 @@ jobs:
       - name: Run tests
         run: php vendor/bin/phpunit
 
+      - name: CS Fixer
+        run: php vendor/bin/php-cs-fixer fix tests
+
 
