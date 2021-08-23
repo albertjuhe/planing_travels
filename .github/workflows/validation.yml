@@ -1,4 +1,4 @@
-name: Test php project
+name: Test php planing travels
 
 on: [push]
 
@@ -7,25 +7,31 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
 
-      - name: Building image from dockerfile
-        run: echo "Hello!!!! from ${{ github.workflow }} triggered by the ${{ github.event_name }}"
+      - name: Install Docker Compose
+        uses: ./.github/docker-compose
 
-      - name: More and more
-        env:
-          JOB_CONTEXT: ${{ toJson(job) }}
+      - name: Make up
         run: |
-          echo "Job Context: $JOB_CONTEXT"
-          echo "Done!"
+          make up
 
-      - name: Install dependencies
-        run: composer install --ignore-platform-reqs
+      - name: Install Composer
+        uses: ./.github/composer
 
-      - name: Run tests
-        run: php vendor/bin/phpunit
+      - name: Run Unit tests
+        run: |
+          make unit-test
 
       - name: CS Fixer
-        run: php vendor/bin/php-cs-fixer fix tests
+        run: |
+          make cs-fix
+          make cs-fix-tests
+
+      - if: always()
+        name: Stop containers
+        run: |
+          make down
 
 
