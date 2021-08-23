@@ -6,7 +6,7 @@ use App\Domain\Event\DomainEvent;
 
 class TravelWasPublished implements DomainEvent
 {
-    const PUBLISH_TRAVEL_EVENT_REQUEST = 'publish_travel_request_event';
+    public const PUBLISH_TRAVEL_EVENT_REQUEST = 'publish_travel_request_event';
 
     /** @var array */
     private $travel;

@@ -8,9 +8,9 @@ use FOS\ElasticaBundle\Index\IndexManager;
 
 class ElasticSearchRepository
 {
-    const DOCUMENT_INDEX = 'travel';
-    const DOCUMENT_TYPE = 'travel';
-    const PRIMARY_KEY = '_id';
+    public const DOCUMENT_INDEX = 'travel';
+    public const DOCUMENT_TYPE = 'travel';
+    public const PRIMARY_KEY = '_id';
 
     protected $indexManager;
     protected $index;

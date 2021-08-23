@@ -11,7 +11,7 @@ use JMS\Serializer\SerializerInterface;
 
 class DoctrineEventStore extends ServiceEntityRepository implements EventStore
 {
-    const SERIALIZE_JSON = 'json';
+    public const SERIALIZE_JSON = 'json';
     /**
      * @var Serializer
      */

@@ -50,7 +50,8 @@ class GetUserTravels extends QueryController
         $data = [
             'data' => $travels,
         ];
-        $response = new JsonResponse($data
+        $response = new JsonResponse(
+            $data
         );
 
         return $response;

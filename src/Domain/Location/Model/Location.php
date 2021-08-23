@@ -63,7 +63,8 @@ class Location extends AggregateRoot
     private function publishEvent(): void
     {
         DomainEventPublisher::instance()->publish(
-            new LocationWasAdded([
+            new LocationWasAdded(
+                [
                     'id' => $this->getId()->id(),
                     'createdAt' => $this->createdAt,
                     'updatedAt' => $this->updatedAt,

@@ -7,7 +7,7 @@ use App\Domain\Travel\Model\Travel;
 
 class TravelWasAdded implements DomainEvent
 {
-    const ADD_TRAVEL_EVENT_REQUEST = 'add_travel_request_event';
+    public const ADD_TRAVEL_EVENT_REQUEST = 'add_travel_request_event';
 
     /** @var array */
     private $travel;

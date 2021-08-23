@@ -9,8 +9,8 @@ use Elastica\Query;
 
 class ElasticSearchReadModelRepository extends ElasticSearchRepository implements TravelReadModelRepository
 {
-    const DOCUMENT_INDEX = 'travel';
-    const DOCUMENT_TYPE = 'travel';
+    public const DOCUMENT_INDEX = 'travel';
+    public const DOCUMENT_TYPE = 'travel';
 
     public function getTravelOrderedBy(string $order, int $maxResults): iterable
     {

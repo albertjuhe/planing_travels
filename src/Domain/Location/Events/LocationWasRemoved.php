@@ -6,7 +6,7 @@ use App\Domain\Event\DomainEvent;
 
 class LocationWasRemoved implements DomainEvent
 {
-    const REMOVE_LOCATION_EVENT_REQUEST = 'remove_location_request_event';
+    public const REMOVE_LOCATION_EVENT_REQUEST = 'remove_location_request_event';
 
     private $locationId;
     private $userId;

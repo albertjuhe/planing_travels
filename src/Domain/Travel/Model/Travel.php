@@ -14,8 +14,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 class Travel extends AggregateRoot
 {
-    const TRAVEL_DRAFT = 10;
-    const TRAVEL_PUBLISHED = 20;
+    public const TRAVEL_DRAFT = 10;
+    public const TRAVEL_PUBLISHED = 20;
 
     /** @var TravelId */
     protected $id;
@@ -396,7 +396,8 @@ class Travel extends AggregateRoot
         $this->record(
             new TravelWasPublished(
                 (new TravelPublishDataTransformer($this))->read(),
-                $this->getUser()->getId()->id())
+                $this->getUser()->getId()->id()
+            )
         );
 
         return $this;

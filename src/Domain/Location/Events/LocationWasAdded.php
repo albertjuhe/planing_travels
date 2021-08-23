@@ -6,7 +6,7 @@ use App\Domain\Event\DomainEvent;
 
 class LocationWasAdded implements DomainEvent
 {
-    const ADD_LOCATION_EVENT_REQUEST = 'add_location_request_event';
+    public const ADD_LOCATION_EVENT_REQUEST = 'add_location_request_event';
 
     /** @var array */
     private $location;

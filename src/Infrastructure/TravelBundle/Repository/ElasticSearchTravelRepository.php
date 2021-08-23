@@ -10,8 +10,8 @@ use App\Infrastructure\Application\ElasticSearch\Repository\ElasticSearchReposit
 
 class ElasticSearchTravelRepository extends ElasticSearchRepository implements IndexerRepository
 {
-    const DOCUMENT_INDEX = 'travel';
-    const DOCUMENT_TYPE = 'travel';
+    public const DOCUMENT_INDEX = 'travel';
+    public const DOCUMENT_TYPE = 'travel';
 
     /**
      * Add travel to elascticsearch.

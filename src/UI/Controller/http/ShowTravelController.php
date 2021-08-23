@@ -18,7 +18,9 @@ class ShowTravelController extends QueryController
         $query = new ShowTravelBySlugQuery($slug);
         $travel = $this->ask($query);
 
-        return $this->render('travel/showTravel.html.twig',
-            ['travel' => $travel]);
+        return $this->render(
+            'travel/showTravel.html.twig',
+            ['travel' => $travel]
+        );
     }
 }
