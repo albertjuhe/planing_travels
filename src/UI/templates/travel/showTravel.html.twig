@@ -54,7 +54,8 @@
     <script src="{{ asset('js/jquery.fileupload.js') }}"></script>
     <script src="{{ asset('js/json2.js') }}"></script>
     <script src="{{ asset('js/jquery.sortable.js') }}"></script>
-    <script src="{{ asset('leaflet/leaflet.js') }}"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script src="{{ asset('leaflet/leaflet-routing-machine.js') }}"></script>
     <script src="{{ asset('leaflet/leaflet-plugins-master/layer/tile/Google.js') }}"></script>
     <script src="{{ asset('js/leaflet.awesome-markers.min.js') }}"></script>
@@ -65,6 +66,7 @@
     <script src="{{ asset('js/mapPoint.js') }}"></script>
     <script src="{{ asset('js/locationGallery.js') }}"></script>
     <script src="{{ asset('js/websocket/websockets.js') }}"></script>
+    <script src="{{ asset('leaflet/leaflet-easyprint.js') }}"></script>
     <script>
         var mPoint = new mapPoint('{{ travel.id }}');
         mPoint.addPlugin('locationGallery',new locationGallery('{{ asset('uploads/gallery/') }}'));
@@ -79,11 +81,29 @@
         var geocoder = new google.maps.Geocoder();
 
         var osm = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
-        var ggl = new L.Google();
-        var ggl2 = new L.Google('TERRAIN');
-        var gglRoadMap = new L.Google('ROADMAP');
-        map.addLayer(gglRoadMap);
-        map.addControl(new L.Control.Layers( {'OSM':osm, 'Google':ggl, 'Google Terrain':ggl2,'RoadMap':gglRoadMap}, {}));
+
+        var googleTerrain = L.tileLayer('http://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}',{
+            maxZoom: 20,
+            subdomains:['mt0','mt1','mt2','mt3']
+        });
+
+        var googleSat = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',{
+            maxZoom: 20,
+            subdomains:['mt0','mt1','mt2','mt3']
+        });
+
+        var googleHybrid = L.tileLayer('http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}',{
+            maxZoom: 20,
+            subdomains:['mt0','mt1','mt2','mt3']
+        });
+
+        var googleRoadMap = L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',{
+            maxZoom: 20,
+            subdomains:['mt0','mt1','mt2','mt3']
+        }).addTo(map);
+
+        //map.addLayer(gglRoadMap);
+        map.addControl(new L.Control.Layers( {'OSM':osm, 'Google Hybrid':googleHybrid, 'Google Satellite':googleSat, 'Google Terrain':googleTerrain,'RoadMap':googleRoadMap}, {}));
 
         var centralMark = L.marker([{{ travel.geolocation.lat}},{{ travel.geolocation.lng }}], {icon: centerMarker}).addTo(map);
 
@@ -133,13 +153,22 @@
             {% include 'travel/loadPointsMap.html.twig' with {'locations': travel.location} %}
             {#'travel/loadGpxTracks.html.twig' with {'gpxs': travel.gpx} #}
         }
+
         initialize();
+
+        var printer = L.easyPrint({
+      		tileLayer: googleRoadMap,
+      		sizeModes: ['Current', 'A4Landscape', 'A4Portrait'],
+      		filename: 'myMap',
+      		exportOnly: true,
+      		hideControlContainer: true
+		}).addTo(map);
 
     </script>
 {% endblock %}
 
 {% block aside %}{% endblock %}
 
-  {% block header_js %}
-      <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyBDFGff7mQ3mWhfZ5IYuqPxsCd049nqIn4"></script>
-  {% endblock %}
+{% block header_js %}
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyBDFGff7mQ3mWhfZ5IYuqPxsCd049nqIn4"></script>
+{% endblock %}

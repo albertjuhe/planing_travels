@@ -227,9 +227,7 @@ class AddTravel extends Component {
 
 
                 </div>
-                <div className="col-sm-8">
-                        <MapContainer lat={this.state.lat} lng={this.state.lng}/>
-                </div>
+
             </div>
 
         );
