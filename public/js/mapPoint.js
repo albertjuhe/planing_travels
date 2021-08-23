@@ -51,9 +51,10 @@ mapPoint.prototype.addPlugin = function (name,obj) {
 };
 
 mapPoint.prototype.removeRoute = function() {
-    map.removeControl(this.control);
-    this.control = null;
-    //this.control.removeFrom(map)
+    if (this.control != null) {
+        map.removeControl(this.control);
+        this.control = null;
+    }
 };
 
 mapPoint.prototype.calculateRoute = function() {
