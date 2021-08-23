@@ -101,8 +101,14 @@
             subdomains:['mt0','mt1','mt2','mt3']
         }).addTo(map);
 
+        var googleTraffic = L.tileLayer('https://{s}.google.com/vt/lyrs=m@221097413,traffic&x={x}&y={y}&z={z}', {
+        maxZoom: 20,
+        minZoom: 2,
+        subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
+    });
+
         //map.addLayer(gglRoadMap);
-        map.addControl(new L.Control.Layers( {'OSM':osm, 'Google Hybrid':googleHybrid, 'Google Satellite':googleSat, 'Google Terrain':googleTerrain,'RoadMap':googleRoadMap}, {}));
+        map.addControl(new L.Control.Layers( {'OSM':osm, 'Google Hybrid':googleHybrid, 'Google Satellite':googleSat, 'Google Terrain':googleTerrain,'RoadMap':googleRoadMap, 'Traffic':googleTraffic}, {}));
 
         var centralMark = L.marker([{{ travel.geolocation.lat}},{{ travel.geolocation.lng }}], {icon: centerMarker}).addTo(map);
 
