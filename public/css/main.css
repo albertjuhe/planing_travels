@@ -70,3 +70,7 @@ see http://stackoverflow.com/questions/10957781/google-maps-autocomplete-result-
 .fos_comment_comment_show .fos_comment_comment_show {
     margin-left: 50px;
 }
+
+.container {
+    width: auto;
+}

@@ -12,7 +12,7 @@
     <div class="container">
         <div class="row">
             <div class="col">
-                <h3>Add Travel</h3>
+
                 {% for flashMessage in app.session.flashbag.get('notice') %}
                     <div class="flash-notice">
                         {{ flashMessage }}
@@ -20,12 +20,21 @@
                 {% endfor %}
             </div>
         </div>
-        <form name="travel" method="post">
-        <div id="root"></div>
-            <input type="hidden" name="_csrf_token"
-                   value="{{ csrf_token('authenticate') }}"
-            >
-        </form>
+        <div class="col-sm-2">
+        </div>
+
+        <div class="col-sm-6">
+            <h3>Add Travel</h3>
+            <form name="travel" method="post">
+                <div id="root"></div>
+                <input type="hidden" name="_csrf_token"
+                       value="{{ csrf_token('authenticate') }}"
+                >
+            </form>
+        </div>
+        <div class="col-sm-6">
+        </div>
+
     </div>
 
 {% endblock %}
