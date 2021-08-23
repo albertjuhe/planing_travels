@@ -1,0 +1,10 @@
+name: "Docker Compose"
+description: "Install Docker Compose"
+runs:
+  using: "composite"
+  steps:
+    - name: install-dockercompose
+      shell: bash
+      env:
+        DOCKER_COMPOSE_VERSION: '1.29.2'
+      run: $GITHUB_ACTION_PATH/install-docker-compose.sh

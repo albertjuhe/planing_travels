@@ -1,0 +1,12 @@
+name: "Composer install"
+description: "Install Composer"
+runs:
+  using: "composite"
+  steps:
+    - name: install-composer
+      shell: bash
+      run: |
+        make exec CMD="ln -fs parameters_local.yml.docker app/config/parameters_local.yml"
+        make exec CMD="composer validate"
+        make exec CMD="composer install --optimize-autoloader --no-scripts --no-interaction --no-suggest --ignore-platform-reqs"
+        make exec CMD="composer config cache-files-dir"
