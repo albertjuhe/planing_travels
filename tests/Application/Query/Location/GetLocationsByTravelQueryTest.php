@@ -10,8 +10,9 @@ class GetLocationsByTravelQueryTest extends TestCase
 {
     public function testGetLocationsByTravelQueryCreate()
     {
-        $travel = $this->createMock(Travel::class);
-        $getLocationsByTravelQuery = new GetLocationsByTravelQuery($travel);
-        $this->assertEquals($travel, $getLocationsByTravelQuery->getTravel());
+        $travelId = '9c7299d3-665b-4469-ba47-9020c38e91d7';
+
+        $getLocationsByTravelQuery = new GetLocationsByTravelQuery($travelId);
+        $this->assertEquals($travelId, $getLocationsByTravelQuery->getTravel());
     }
 }

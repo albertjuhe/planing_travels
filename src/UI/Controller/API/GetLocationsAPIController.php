@@ -22,15 +22,16 @@ class GetLocationsAPIController extends QueryController
      * @Route("api/travel/{travel}/locations", name="locations_by_travel")
      * @Method({"GET"})
      */
-    public function getLocationsByTravel(Request $request, int $travel)
+    public function getLocationsByTravel(Request $request, string $travel)
     {
-        $user = $this->security->getUser();
-        if (empty($user)) {
-            return new JsonResponse(
-                $response['error'] = 'Operation not allowed'
-            );
-        }
-
+        /*
+                $user = $this->security->getUser();
+                if (empty($user)) {
+                    return new JsonResponse(
+                        $response['error'] = 'Operation not allowed'
+                    );
+                }
+        */
         $query = new GetLocationsByTravelQuery($travel);
         $locations = $this->ask($query);
 

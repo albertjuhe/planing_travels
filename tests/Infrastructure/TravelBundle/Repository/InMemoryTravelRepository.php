@@ -45,7 +45,7 @@ class InMemoryTravelRepository implements TravelRepository
 
     public function ofIdOrFail(string $travelId)
     {
-        return array_search($travelId, array_column($this->travel, 'travelId'));
+        return $this->getTravelById($travelId);
     }
 
     public function getTravelById(string $id): Travel
