@@ -112,7 +112,7 @@ class TravelTest extends TestCase
                 'stars' => $stars,
                 'watch' => $watch,
             ]
-            );
+        );
     }
 
     public function testPublishTravel()

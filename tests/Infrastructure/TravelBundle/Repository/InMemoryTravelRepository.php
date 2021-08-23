@@ -9,10 +9,10 @@ use App\Tests\Domain\Travel\Model\TravelMother;
 
 class InMemoryTravelRepository implements TravelRepository
 {
-    const TRAVEL_1 = 'Dummy1';
-    const TRAVEL_2 = 'Dummy2';
-    const TRAVEL_3 = 'Dummy3';
-    const TRAVEL_4 = 'Dummy4';
+    public const TRAVEL_1 = 'Dummy1';
+    public const TRAVEL_2 = 'Dummy2';
+    public const TRAVEL_3 = 'Dummy3';
+    public const TRAVEL_4 = 'Dummy4';
 
     private $travel = [];
 

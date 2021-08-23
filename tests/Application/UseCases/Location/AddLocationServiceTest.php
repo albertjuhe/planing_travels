@@ -65,7 +65,7 @@ class AddLocationServiceTest extends LocationService
             $mark
         );
         $location->expects($this->once())->method('setTypeLocation')->with(
-             $typeLocation
+            $typeLocation
         );
 
         $this->locationRepository->expects($this->once())->method('save');

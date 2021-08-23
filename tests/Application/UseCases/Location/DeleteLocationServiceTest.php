@@ -25,7 +25,7 @@ class DeleteLocationServiceTest extends LocationService
         $deleteLocationCommand = new DeleteLocationCommand(
             $locationId,
             $travelId,
-           $userId
+            $userId
         );
 
         $location = $this->createMock(Location::class);

@@ -4,7 +4,7 @@ namespace App\Tests\UI\API;
 
 class GetLocationsAPIController extends APIController
 {
-    const API_GET_LOCATION = 'api/travel/2/locations';
+    public const API_GET_LOCATION = 'api/travel/2/locations';
 
     public function setUp()
     {
