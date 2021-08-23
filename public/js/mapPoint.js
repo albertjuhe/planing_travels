@@ -19,8 +19,7 @@ var mapPoint = function (travelId) {
     this.showGallery = __bind(this.showGallery, this);
 
 
-    mapPoint.prototype.plugin = {}; //This object contains all the exercices tipologies that appears in the document
-
+    mapPoint.prototype.plugin = {};
 
     var _elementDrop = $('#routePoints');
     _elementDrop.bind({ //Events for drop
@@ -52,7 +51,9 @@ mapPoint.prototype.addPlugin = function (name,obj) {
 };
 
 mapPoint.prototype.removeRoute = function() {
-    this.control.removeFrom(map)
+    map.removeControl(this.control);
+    this.control = null;
+    //this.control.removeFrom(map)
 };
 
 mapPoint.prototype.calculateRoute = function() {
