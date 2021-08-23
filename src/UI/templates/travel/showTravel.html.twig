@@ -16,7 +16,7 @@
         {% include 'travel/travelInfoHeader.html.twig' with {'travel': travel,'mode':'Edit'} %}
         <div id="infoTravel"></div>
         <div class="row">
-            <div class="col-sm-4">
+            <div class="col-sm-3">
                 {% include 'travel/locationsPanel.html.twig' %}
             </div>
             <div class="col-sm-8">
@@ -24,7 +24,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-sm-4">
+            <div class="col-sm-3">
                 {% include 'travel/routePanel.html.twig' %}
                 {% include 'travel/tracksPanel.html.twig' with {'gpxs': travel.gpx} %}
             </div>
