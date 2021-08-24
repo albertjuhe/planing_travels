@@ -39,6 +39,9 @@ populate-el:
 build-image:
 	docker build Docker
 
+docker-bash:
+	docker-compose exec app  bash
+
 SERVICE?=echo SERVICE to log
 log:
 	docker-compose logs -f '$(SERVICE)'
