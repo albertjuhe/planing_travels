@@ -1,6 +1,7 @@
 up:
 	# start docker
 	docker-compose up -d
+	make populate-el
 
 down:
 	# stop docker
