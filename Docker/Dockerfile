@@ -1,7 +1,7 @@
 FROM php:7.4-apache
 RUN  apt-get update \
     && pecl install redis-5.1.1 \
-    && pecl install xdebug-2.8.1 \
+    && pecl install xdebug \
     && docker-php-ext-install pdo pdo_mysql \
     && docker-php-ext-enable redis xdebug
 
