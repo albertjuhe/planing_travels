@@ -5,4 +5,4 @@ twig:
     form_themes:
             - bootstrap_3_layout.html.twig
     globals:
-        google_maps: https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyBDFGff7mQ3mWhfZ5IYuqPxsCd049nqIn4
+        google_maps: https://maps.googleapis.com/maps/api/js?libraries=places&key=%env(GOOGLE_API)%
