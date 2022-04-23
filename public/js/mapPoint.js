@@ -50,19 +50,19 @@ mapPoint.prototype.addPlugin = function (name,obj) {
     }
 };
 
-mapPoint.prototype.removeRoute = function() {
+mapPoint.prototype.removeRoute = function () {
         map.removeControl(this.control);
         this.control = null;
 };
 
-mapPoint.prototype.calculateRoute = function() {
+mapPoint.prototype.calculateRoute = function () {
     var routePoints = $('#routePoints').find(".point-view");
     var _self = this;
     this.control = L.Routing.control({
         routeWhileDragging: true
     });
 
-    $.each(routePoints,function(key,value) {
+    $.each(routePoints,function (key,value) {
         var idPoint = $(value).data('id');
         var locationPoint = $('#' + idPoint).data('location');
         _self.control.spliceWaypoints(key, 2 ,  L.latLng(locationPoint.latitude,locationPoint.longitude));
@@ -73,17 +73,19 @@ mapPoint.prototype.calculateRoute = function() {
 
 };
 
-mapPoint.prototype.panelItinerary = function() {
+mapPoint.prototype.panelItinerary = function () {
     if ($('.leaflet-routing-container') != 'undefined' && this.control!=null) {
         if ($('.leaflet-routing-container').is(':visible')) {
             $('.leaflet-routing-container').hide()
-        } else $('.leaflet-routing-container').show();
+        } else {
+            $('.leaflet-routing-container').show();
+        }
     }
 };
 
 //Create a location point object
-mapPoint.prototype.createLocation = function(id,latitude,longitude,placeAddress,place_id,typeIcon,description,address,currentMark) {
-    var l = {};
+mapPoint.prototype.createLocation = function (id,latitude,longitude,placeAddress,place_id,typeIcon,description,address,currentMark) {
+    const l = {};
     l.id = id;
     l.latitude = latitude;
     l.longitude = longitude;
@@ -97,24 +99,24 @@ mapPoint.prototype.createLocation = function(id,latitude,longitude,placeAddress,
     return l;
 };
 
-mapPoint.prototype.addPoint = function(locationPoint) {
+mapPoint.prototype.addPoint = function (locationPoint) {
 
-    var removeButton = this.createButton('remove','btn-danger','fa-trash',locationPoint.place_id);
-    var goButton = this.createButton('go','btn-warning','fa-home',locationPoint.place_id);
-    var infoButton = this.createButton('info','btn-info','fa-info',locationPoint.place_id);
-    var notaButton = this.createButton('nota','btn-success','fa-sticky-note',locationPoint.place_id);
+    let removeButton = this.createButton('remove', 'btn-danger', 'fa-trash', locationPoint.place_id);
+    let goButton = this.createButton('go', 'btn-warning', 'fa-home', locationPoint.place_id);
+    let infoButton = this.createButton('info', 'btn-info', 'fa-info', locationPoint.place_id);
+    let notaButton = this.createButton('nota', 'btn-success', 'fa-sticky-note', locationPoint.place_id);
 
-    var layerLoc= '<div class="row point-view" id="layer_'+locationPoint.place_id+'">' +
-        '<div class="col-sm-7" draggable="true" id="'+locationPoint.place_id+'">' +
+    const layerLoc = '<div class="row point-view" id="layer_' + locationPoint.place_id + '">' +
+        '<div class="col-sm-7" draggable="true" id="' + locationPoint.place_id + '">' +
         '<span class="title-point">' +
-        '<i class="'+locationPoint.typeIcon+'" style="font-size: 16px; line-height: 1.5em;margin-right:3px"></i><b>'+ locationPoint.address +'</b></span><br><i style="font-size:11px">'+locationPoint.placeAddress+'</i></div>' +
+        '<i class="' + locationPoint.typeIcon + '" style="font-size: 16px; line-height: 1.5em;margin-right:3px"></i><b>' + locationPoint.address + '</b></span><br><i style="font-size:11px">' + locationPoint.placeAddress + '</i></div>' +
         '<div class="col-sm-5">' +
         goButton + infoButton + removeButton + notaButton +
         '</div>' +
         '</div>';
 
     $('#mapPoints').append(layerLoc);
-    var currentPoint = "#"+ locationPoint.place_id;
+    const currentPoint = "#" + locationPoint.place_id;
     $(currentPoint).data('location',locationPoint);
     $(currentPoint).bind(
         {
@@ -122,17 +124,17 @@ mapPoint.prototype.addPoint = function(locationPoint) {
         }
     );
 
-    var layerPoint = "#layer_"+ locationPoint.place_id;
+    const layerPoint = "#layer_" + locationPoint.place_id;
     $(layerPoint).bind(
         {
-             'mouseover': function(e) {
-                 e.stopPropagation();
+            'mouseover': function (e) {
+                e.stopPropagation();
 
                 //var dades = $(e.target).data('location');
                //  dades.currentMark.togglePopup();
                 //dades.currentMark.setIcon(SelectedIcon);
             },
-            'mouseout': function(e) {
+            'mouseout': function (e) {
                 e.stopPropagation();
 
             }
@@ -142,17 +144,17 @@ mapPoint.prototype.addPoint = function(locationPoint) {
 
 
     //Buttons Accions
-    var goButton = $('*[data-place="'+locationPoint.place_id+'"][data-function="go"]');
-    var removeButton = $('*[data-place="'+locationPoint.place_id+'"][data-function="remove"]');
-    var infoButton = $('*[data-place="'+locationPoint.place_id+'"][data-function="info"]');
-    var notaButton = $('*[data-place="'+locationPoint.place_id+'"][data-function="nota"]');
+    goButton = $('*[data-place="' + locationPoint.place_id + '"][data-function="go"]');
+    removeButton = $('*[data-place="' + locationPoint.place_id + '"][data-function="remove"]');
+    infoButton = $('*[data-place="' + locationPoint.place_id + '"][data-function="info"]');
+    notaButton = $('*[data-place="' + locationPoint.place_id + '"][data-function="nota"]');
     $(goButton).bind({'click':this.goMark});
     $(removeButton).bind({'click':this.deleteMark});
     $(infoButton).bind({'click':this.info});
     $(notaButton).bind({'click':this.nota});
 };
 
-mapPoint.prototype.save = function(locationPoint,currentMark) {
+mapPoint.prototype.save = function (locationPoint,currentMark) {
      //Serializing object point
     var _serializer = JSON.stringify(locationPoint);
     locationPoint.currentMark = currentMark;
@@ -160,11 +162,11 @@ mapPoint.prototype.save = function(locationPoint,currentMark) {
 
 };
 
-mapPoint.prototype.createButton = function(title,type,button_type,place_id) {
+mapPoint.prototype.createButton = function (title,type,button_type,place_id) {
      return '<button data-place="'+place_id+'" style="margin:1px" data-function="'+title+'" data-target="'+'#'+title+'" data-toggle="modal" type="button" class="btn '+type+' btn-xs">'+title+'</button>';
 };
 
-mapPoint.prototype.info = function(e) {
+mapPoint.prototype.info = function (e) {
     var current = $(e.target);
     var placeToGo = current.data('place');
     var l = $('#' + placeToGo).data('location');
@@ -200,14 +202,14 @@ mapPoint.prototype.showNotes = function(l) {
 }
  */
 
-mapPoint.prototype.showGallery = function(l) {
+mapPoint.prototype.showGallery = function (l) {
     if (typeof(this.plugin['locationGallery'].getLocationImages) === "function") { //Si té init l utilitzem
         this.plugin['locationGallery'].getLocationImages(l);
     }
 };
 
 
-mapPoint.prototype.goMark = function(e) {
+mapPoint.prototype.goMark = function (e) {
     var current = $(e.target);
     var placeToGo = current.data('place');
     var l = $('#' + placeToGo).data('location');
@@ -215,7 +217,7 @@ mapPoint.prototype.goMark = function(e) {
 };
 
 
-mapPoint.prototype.deleteMark = function(e) {
+mapPoint.prototype.deleteMark = function (e) {
     var current = $(e.target);
     var placeToGo = current.data('place');
     var l = $('#' + placeToGo).data('location');
@@ -224,17 +226,17 @@ mapPoint.prototype.deleteMark = function(e) {
     this.rest('DELETE', null, l.id);
 };
 
-mapPoint.prototype.nota = function(e) {
+mapPoint.prototype.nota = function (e) {
     var current = $(e.target);
     var placeToGo = current.data('place');
     var l = $('#' + placeToGo).data('location');
 
-    $("#addnota").attr("data-target", l.id );
+    $("#addnota").attr("data-target", l.id);
     $('#addnota').modal();
 };
 
 
-mapPoint.prototype.addNota = function() {
+mapPoint.prototype.addNota = function () {
     var _self = this;
     var title = document.getElementById("ntitle").value;
     var description = document.getElementById("description").value;
@@ -248,25 +250,25 @@ mapPoint.prototype.addNota = function() {
     _self.saveNota(nota);
 };
 
-mapPoint.prototype.saveNota = function(nota) {
-    var _serializer = JSON.stringify(nota);   
+mapPoint.prototype.saveNota = function (nota) {
+    var _serializer = JSON.stringify(nota);
 
     $.ajax({
-            type:'POST',
-            contentType: 'application/json',
-            url: '../api/annotations',
-            dataType:'json',            
-            data: _serializer,
-            success: function(result) {
-                console.log('Added note ' + result);
-            },
-            error: function(data,testStatus,jqXHR) {
-                console.log('Error note ');
-            }
-        });        
+        type:'POST',
+        contentType: 'application/json',
+        url: '../api/annotations',
+        dataType:'json',
+        data: _serializer,
+        success: function (result) {
+            console.log('Added note ' + result);
+        },
+        error: function (data,testStatus,jqXHR) {
+            console.log('Error note ');
+        }
+        });
 };
 
-mapPoint.prototype.resetRoute = function() {
+mapPoint.prototype.resetRoute = function () {
     $('#routePoints').empty();
 };
 
@@ -283,16 +285,15 @@ mapPoint.prototype.handleDrop = function (e) {
         e.stopPropagation(); // stops the browser from redirecting.
     }
     var _dataTransfer = e.originalEvent.dataTransfer;
-    if (_dataTransfer.getData('text')!='') {
+    if (_dataTransfer.getData('text')!=='') {
         var buttonRemove ='<button class="btn btn-danger btn-xs" data-place="'+_dataTransfer.getData('text')+'" id="remove-point-'+_dataTransfer.getData('text')+'">Remove</button>';
         var layerRoute = '<div class="point-view" id="route-'+_dataTransfer.getData('text')+'" data-route="true" data-id="'+_dataTransfer.getData('text')+'">' + $('#' + _dataTransfer.getData('text')).html() + ' ' +buttonRemove+'</div>';
 
         $('#routePoints').append(layerRoute);
         $('#routePoints').sortable();
-        $('#remove-point-'+_dataTransfer.getData('text')).bind({'click':function() {
+        $('#remove-point-'+_dataTransfer.getData('text')).bind({'click':function () {
             $('#route-'+$(this).data('place')).remove();
         }})
-
     }
     return false;
 };
@@ -317,39 +318,39 @@ mapPoint.prototype.handleDragLeave = function (e) {
 };
 
 //Rest API for Traveling
-mapPoint.prototype.rest = function(typeRest,data,locationPoint) {
+mapPoint.prototype.rest = function (typeRest,data,locationPoint) {
     var _self = this;
 
-    if (typeRest=='POST') {
-    $.ajax({
-        type:typeRest,
-        contentType: 'application/json',
-        url: '../../api/user/' + locationPoint.user +'/location',
-        dataType:'json',
-        data: data,
-        success: function(data,testStatus,jqXHR) {
-            locationPoint.id = data;
-            _self.addPoint(locationPoint);
-            $('#infoForm').html('<p class="alert alert-success">Location Added</p>');
-            $("#infoForm").show().delay(5000).fadeOut();
-            console.log('Added point ' + data);
-            socket.emit('add',data);
-        },
-        error: function(data,testStatus,jqXHR) {
-           $('#infoForm').html('<p class="alert alert-danger">Error: Location not Added</p>');
-           $("#infoForm").show().delay(5000).fadeOut();
-        }
-    });
-    } else if (typeRest=='DELETE') {
+    if (typeRest==='POST') {
+        $.ajax({
+            type:typeRest,
+            contentType: 'application/json',
+            url: '../../api/user/' + locationPoint.user +'/location',
+            dataType:'json',
+            data: data,
+            success: function (data,testStatus,jqXHR) {
+                locationPoint.id = data;
+                _self.addPoint(locationPoint);
+                $('#infoForm').html('<p class="alert alert-success">Location Added</p>');
+                $("#infoForm").show().delay(5000).fadeOut();
+                console.log('Added point ' + data);
+                socket.emit('add',data);
+            },
+            error: function (data,testStatus,jqXHR) {
+                $('#infoForm').html('<p class="alert alert-danger">Error: Location not Added</p>');
+                $("#infoForm").show().delay(5000).fadeOut();
+            }
+        });
+    } else if (typeRest==='DELETE') {
         $.ajax({
             type:typeRest,
             url: '../../api/travel/'+this.travel+'/location/' + locationPoint,
-            success: function(result) {
+            success: function (result) {
                 $('#infoTravel').html('<p class="alert alert-success">Location Removed</p>');
                 $("#infoTravel").show().delay(5000).fadeOut();
                 console.log('Removing point ' + result);
             },
-            error: function(data,testStatus,jqXHR) {
+            error: function (data,testStatus,jqXHR) {
                 console.log('Error removing location ' + testStatus);
             }
         });
@@ -379,24 +380,28 @@ mapPoint.prototype.rest = function(typeRest,data,locationPoint) {
      });
 }*/
 
-mapPoint.prototype.returnTown = function(results) {
+mapPoint.prototype.returnTown = function (results) {
     var level_1;
     var level_2;
-    for (var y = 0, length_2 = results.address_components.length; y < length_2; y++){
+    for (var y = 0, length_2 = results.address_components.length; y < length_2; y++) {
         var type = results.address_components[y].types[0];
         if ( type === "administrative_area_level_1") {
             level_1 = results.address_components[y].long_name;
-            if (level_2) break;
-        } else if (type === "locality"){
+            if (level_2) {
+                break;
+            }
+        } else if (type === "locality") {
             level_2 = results.address_components[y].long_name;
-            if (level_1) break;
+            if (level_1) {
+                break;
+            }
         }
     }
 
     return [level_2, level_1];
 };
 
-mapPoint.prototype.getMark = function(pointtype,latitude,longitude,placeAdress,popup) {
+mapPoint.prototype.getMark = function (pointtype,latitude,longitude,placeAdress,popup) {
     var currentMark;
     var typeIcon;
 
@@ -452,30 +457,29 @@ mapPoint.prototype.getMark = function(pointtype,latitude,longitude,placeAdress,p
     return {mark:currentMark,type:typeIcon};
 };
 
-mapPoint.prototype.codeAddress = function() {
-    var _self = this;
+mapPoint.prototype.codeAddress = function () {
+    const _self = this;
 
     var title = document.getElementById("title").value;
-    var address = document.getElementById("address").value;
+    var placeAdress = document.getElementById("address").value;
     var link = document.getElementById("link").value;
     var comment = document.getElementById("comment").value;
     var travel = document.getElementById("travel").value;
     var user = document.getElementById("user").value;
-    geocoder.geocode( { 'address': address}, function(results, status) {
-        if (status == google.maps.GeocoderStatus.OK) {
-            var e = document.getElementById("pointtype");
-            var pointtype = e.options[e.selectedIndex].text;
-            var latitude = results[0].geometry.location.lat();
-            var longitude = results[0].geometry.location.lng();
-            var place_id = results[0].place_id;
-            var placeAdress = results[0].formatted_address;
+    var latitude = document.getElementById("latPoint").value;
+    var longitude = document.getElementById("lngPoint").value;
+    var place_id = document.getElementById("placeId").value;
+    var e = document.getElementById("pointtype");
+    var pointtype = e.options[e.selectedIndex].text;
 
             var typeIcon = "";
             var currentMark;
             var popup = "<b>"+placeAdress+"</b>";
-            if (link!='') {
+            if (link!=='') {
                 popup = "<b><a href='"+link+"'>"+placeAdress+"</a></b><br/>" + comment;
-            } else popup = "<b>"+placeAdress+"</b><br/>" + comment;
+            } else {
+                popup = "<b>"+placeAdress+"</b><br/>" + comment;
+            }
 
             var point = _self.getMark(pointtype,latitude,longitude,placeAdress,popup);
             point.mark.addTo(map);
@@ -495,15 +499,11 @@ mapPoint.prototype.codeAddress = function() {
 
             _self.save(location,point.currentMark); //Addind this point to map
             map.setView([latitude,longitude],8);
-
-        } else {
-            alert("Geocode was not successful for the following reason: " + status);
-        }
-    });
 };
 
 
-function __bind(fn, me) {
+function __bind(fn, me)
+{
     return function () {
         return fn.apply(me, arguments);
     };

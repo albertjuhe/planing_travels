@@ -45,6 +45,7 @@
     <link rel="stylesheet" href="{{ asset('css/ionicons-2.0.1/css/ionicons.min.css') }}"/>
     <link rel="stylesheet" href="{{ asset('css/leaflet.awesome-markers.css')}}">
     <link rel="stylesheet" href="{{ asset('css/dropzone.css')}}">
+    <link rel="stylesheet" href="{{ asset('css/autocomplete@1.8.3/autocomplete.min.css') }}"/>
 {% endblock %}
 
 {% block javascript %}
@@ -54,7 +55,9 @@
     <script src="{{ asset('js/jquery.fileupload.js') }}"></script>
     <script src="{{ asset('js/json2.js') }}"></script>
     <script src="{{ asset('js/jquery.sortable.js') }}"></script>
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="{{ asset('js/leaflet@1.7.1/leaflet.js') }}"></script>
+    <script src="{{ asset('js/autocomplete@1.8.3/autocomplete.js')}}"></script>
+    <script src="{{ asset('js/autocomplete/popUpAutocomplete.js') }}"></script>
     <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
     <script src="{{ asset('leaflet/leaflet-plugins-master/layer/tile/Google.js') }}"></script>
     <script src="{{ asset('js/leaflet.awesome-markers.min.js') }}"></script>
@@ -148,13 +151,10 @@
             mPoint.panelItinerary();
         }
 
-        // This example displays an address form, using the autocomplete feature
-        // of the Google Places API to help users fill in the information.
 
         function initialize() {
             var gpxRoutes = [];
 
-            autocomplete = new google.maps.places.Autocomplete((document.getElementById('address')),{ types: ['geocode'] });
             {% include 'travel/loadPointsMap.html.twig' with {'locations': travel.location} %}
             {#'travel/loadGpxTracks.html.twig' with {'gpxs': travel.gpx} #}
         }
