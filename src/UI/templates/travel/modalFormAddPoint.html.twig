@@ -12,7 +12,15 @@
                 <form>
                     <fieldset>
                         <label>Adress</label>
-                        <input id="address" type="textbox" value="" placeholder="Enter Adress..."/><br/>
+                        <div class="auto-search-wrapper">
+                            <input
+                                    type="text"
+                                    autocomplete="off"
+                                    id="address"
+                                    class="full-width"
+                                    placeholder="enter the city name"
+                            />
+                        </div>
                         <label>Title</label>
                         <input id="title" type="textbox" value="" placeholder="Title"/><br/>
                         <label>URL</label>
@@ -24,6 +32,9 @@
                                 {{ render(controller('App\\UI\\Controller\\http\\GetAllLocationsTypeController::getAllLocationsType')) }}
                             </select>
                         </label>
+                        <input id="latPoint" type="hidden" value=""/>
+                        <input id="lngPoint" type="hidden" value=""/>
+                        <input id="placeId" type="hidden" value=""/>
                         <input id="travel" type="hidden" value="{{ travel.id }}"/>
                         <input id="user" type="hidden" value="{{ travel.user.userId }}"/><br/><br/>
                     </fieldset>

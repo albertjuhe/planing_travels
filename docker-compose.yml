@@ -10,7 +10,6 @@ services:
       - ${PWD}:/var/www/html
       - ./Docker/php/conf.d/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
       - ./Docker/php/conf.d/error_reporting.ini:/usr/local/etc/php/conf.d/error_reporting.ini
-
     environment:
       - MYSQL_HOST
       - MYSQL_USER

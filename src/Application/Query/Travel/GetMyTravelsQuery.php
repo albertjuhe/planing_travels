@@ -4,12 +4,13 @@ namespace App\Application\Query\Travel;
 
 use App\Application\Query\Query;
 use App\Domain\User\Model\User;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class GetMyTravelsQuery implements Query
 {
     private $user;
 
-    public function __construct(User $user)
+    public function __construct(UserInterface $user)
     {
         $this->user = $user;
     }
@@ -17,7 +18,7 @@ class GetMyTravelsQuery implements Query
     /**
      * @return User
      */
-    public function getUser(): User
+    public function getUser(): UserInterface
     {
         return $this->user;
     }

@@ -5,6 +5,7 @@ namespace App\UI\Controller\http;
 use App\Application\Command\Travel\AddTravelCommand;
 use App\Domain\Travel\Model\Travel;
 use App\Infrastructure\TravelBundle\Form\TravelType;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -29,7 +30,7 @@ class AddNewTravelController extends CommandController
      * @param Request $request
      * @param $_locale
      *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
+     * @return RedirectResponse|Response
      *
      * @throws UserDoesntExists
      */
