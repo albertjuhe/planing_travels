@@ -27,7 +27,7 @@ jobs:
 
       - name: Composer install
         run: |
-          make exec CMD="composer install --no-plugins"
+          make exec CMD="composer install -vvv --no-plugins"
 
       - name: Composer Cache
         run: |
