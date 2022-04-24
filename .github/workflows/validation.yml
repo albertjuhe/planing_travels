@@ -27,6 +27,7 @@ jobs:
 
       - name: Composer install
         run: |
+          echo "{}" > /root/.composer/composer.json
           make exec CMD="composer install -vvv --no-plugins"
 
       - name: Composer Cache
