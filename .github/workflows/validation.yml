@@ -29,7 +29,7 @@ jobs:
         run: |
           make exec CMD="composer install --no-plugins"
 
-      - name: Composer install
+      - name: Composer Cache
         run: |
           make exec CMD="composer config cache-files-dir"
 
