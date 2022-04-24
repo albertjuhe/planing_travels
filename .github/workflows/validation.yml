@@ -21,8 +21,17 @@ jobs:
         run: |
           make up
 
-      - name: Install Composer
-        uses: ./.github/composer
+      - name: Composer validate
+        run: |
+          make exec CMD="composer validate"
+
+      - name: Composer install
+        run: |
+          make exec CMD="composer install --no-plugins"
+
+      - name: Composer install
+        run: |
+          make exec CMD="composer config cache-files-dir"
 
       - name: Run Unit tests
         run: |
