@@ -12,8 +12,8 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
 ENV DISPLAY_ERRORS = "off"
 ENV ERROR_REPORTING = "E_ALL & ~E_DEPRECATED & ~E_STRICT"
 
-COPY wait_to_start.sh /var/www/html
-COPY php.ini  /usr/local/etc/php
+# COPY wait_to_start.sh /var/www/html
+# COPY php.ini  /usr/local/etc/php
 
 EXPOSE 9000
 WORKDIR /var/www/html

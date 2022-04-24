@@ -1,0 +1,50 @@
+name: Test php planing travels
+
+on: [push]
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Cleanup #https://github.com/actions/checkout/issues/211
+        run: |
+          sudo chown -R $USER:$USER $GITHUB_WORKSPACE
+
+      - name: Checkout repository
+        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
+
+      - name: Install Docker Compose
+        uses: ./.github/docker-compose
+
+      - name: Make up
+        run: |
+          make up
+
+      - name: Composer validate
+        run: |
+          make exec CMD="composer validate"
+
+      - name: Composer install
+        run: |
+          make exec CMD="composer install -vvv --no-plugins"
+
+      - name: Composer Cache
+        run: |
+          make exec CMD="composer config cache-files-dir"
+
+      - name: Run Unit tests
+        run: |
+          make unit-test
+
+      - name: CS Fixer
+        run: |
+          make cs-fix
+          make cs-fix-tests
+
+      - if: always()
+        name: Stop containers
+        run: |
+          make down
+
+
