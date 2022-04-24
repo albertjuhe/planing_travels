@@ -2,7 +2,9 @@
 
 namespace App\UI\Controller\http;
 
+use App\Domain\Travel\Exceptions\TravelDoesntExists;
 use App\Domain\Travel\Model\Travel;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -32,10 +34,10 @@ class UpdateTravelController extends CommandController
      * @param string  $slug
      * @param $_locale
      *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
+     * @return RedirectResponse|Response
      *
      * @throws UserDoesntExists
-     * @throws \App\Domain\Travel\Exceptions\TravelDoesntExists
+     * @throws TravelDoesntExists
      */
     public function updateTravel(Request $request, string $slug, $_locale)
     {
@@ -57,6 +59,8 @@ class UpdateTravelController extends CommandController
 
         return $this->render('travel/updateTravel.html.twig', [
             'travelForm' => $form->createView(),
+            'latitude' => $travel->getLatitude(),
+            'longitude' => $travel->getLongitude(),
         ]);
     }
 }

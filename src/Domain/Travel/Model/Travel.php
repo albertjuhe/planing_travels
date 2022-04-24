@@ -453,4 +453,14 @@ class Travel extends AggregateRoot
             'watch' => $this->getWatch(),
         ];
     }
+
+    public function getLatitude(): float
+    {
+        return $this->getGeoLocation()->lat();
+    }
+
+    public function getLongitude(): float
+    {
+        return $this->getGeoLocation()->lng();
+    }
 }

@@ -115,6 +115,19 @@ class TravelTest extends TestCase
         );
     }
 
+    public function testGetLatitude()
+    {
+        $lat = 10;
+        $lng = 20;
+
+        $user = User::byId(1);
+        $geoLocation = GeoLocationStub::withLongitudAndLatitude($lat, $lng);
+        $travel = Travel::fromGeoLocation($geoLocation);
+        $travel->setUser($user);
+        $this->assertEquals($lng, $travel->getLongitude());
+        $this->assertEquals($lat, $travel->getLatitude());
+    }
+
     public function testPublishTravel()
     {
         $user = User::byId(1);
