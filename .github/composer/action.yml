@@ -7,5 +7,5 @@ runs:
       shell: bash
       run: |
         make exec CMD="composer validate"
-        make exec CMD="composer install --optimize-autoloader --no-scripts --no-interaction --ignore-platform-reqs"
+        make exec CMD="composer install --no-scripts --no-interaction --ignore-platform-reqs"
         make exec CMD="composer config cache-files-dir"
