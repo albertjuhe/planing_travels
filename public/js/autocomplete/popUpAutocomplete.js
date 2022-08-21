@@ -6,7 +6,7 @@ new Autocomplete("address", {
     // onSearch
     onSearch: ({ currentValue }) => {
         // api
-        const api = `https://nominatim.openstreetmap.org/search?format=geojson&limit=5&city=${encodeURI(currentValue)}`;
+        const api = `https://nominatim.openstreetmap.org/search?format=geojson&limit=5&q=${encodeURI(currentValue)}`;
 
         return new Promise((resolve) => {
             fetch(api)
