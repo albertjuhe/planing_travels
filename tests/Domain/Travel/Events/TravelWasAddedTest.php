@@ -21,7 +21,7 @@ class TravelWasAddedTest extends TestCase
 
     public function testGetTravelFromEvent()
     {
-        $travel = ['id' => uniqid()];
+        $travel = ['id' => uniqid('', true)];
 
         $travelWasAdded = new TravelWasAdded($travel);
         $this->assertEquals($travel, $travelWasAdded->getTravel());
