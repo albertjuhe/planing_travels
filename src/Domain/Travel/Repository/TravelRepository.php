@@ -51,4 +51,6 @@ interface TravelRepository
     public function find($id);
 
     public function getAll(): array;
+
+    public function getAllTravelsByUser(int $userId);
 }

@@ -5,6 +5,7 @@ namespace App\Infrastructure\TravelBundle\Repository;
 use App\Domain\Travel\Exceptions\TravelDoesntExists;
 use App\Domain\Travel\Model\Travel;
 use App\Domain\Travel\ValueObject\TravelId;
+use App\Domain\User\Model\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use App\Domain\Travel\Repository\TravelRepository;
@@ -75,5 +76,10 @@ class DoctrineTravelRepository extends ServiceEntityRepository implements Travel
     public function save(Travel $travel): void
     {
         $this->_em->persist($travel);
+    }
+
+    public function getAllTravelsByUser(int $userId)
+    {
+        return $this->findBy(['user' => $userId]);
     }
 }
