@@ -89,6 +89,10 @@ services:
     App\Application\Middleware\DomainEventsMiddleware:
       arguments: ['@doctrine.travel_event.repository']
 
+
+    App\Domain\Event\Repository\EventStore:
+      alias: App\Infrastructure\EventBundle\Repository\DummyEventStore
+
     tactician.middleware.domainEventStore: '@App\Infrastructure\Middleware\DomainEventsMiddleware'
 
     # Repository travel
@@ -122,7 +126,10 @@ services:
     App\Infrastructure\EventBundle\Repository\DoctrineEventStore:
       arguments: ['@doctrine','@jms_serializer']
 
-    doctrine.travel_event.repository: '@App\Infrastructure\EventBundle\Repository\DoctrineEventStore'
+    App\Infrastructure\EventBundle\Repository\DummyEventStore:
+      arguments: ['@doctrine']
+
+    doctrine.travel_event.repository: '@App\Infrastructure\EventBundle\Repository\DummyEventStore'
 
     # Tactician middleware Store elasticsearch
     App\Application\Middleware\ElasticSearchMiddleware:
