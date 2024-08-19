@@ -76,7 +76,7 @@ services:
 
     travel.gey_my_travels:
       class: App\Application\UseCases\Travel\GetAllMyTravelsService
-      arguments: ['@elasticsearch.travel.read_model.repository']
+      arguments: ['@doctrine.travel.repository']
       tags: [messenger.message_handler]
 
     location.get_by_travel_handler:
@@ -88,6 +88,10 @@ services:
     # Tactician middleware Store domain events
     App\Application\Middleware\DomainEventsMiddleware:
       arguments: ['@doctrine.travel_event.repository']
+
+
+    App\Domain\Event\Repository\EventStore:
+      alias: App\Infrastructure\EventBundle\Repository\DummyEventStore
 
     tactician.middleware.domainEventStore: '@App\Infrastructure\Middleware\DomainEventsMiddleware'
 
@@ -122,7 +126,10 @@ services:
     App\Infrastructure\EventBundle\Repository\DoctrineEventStore:
       arguments: ['@doctrine','@jms_serializer']
 
-    doctrine.travel_event.repository: '@App\Infrastructure\EventBundle\Repository\DoctrineEventStore'
+    App\Infrastructure\EventBundle\Repository\DummyEventStore:
+      arguments: ['@doctrine']
+
+    doctrine.travel_event.repository: '@App\Infrastructure\EventBundle\Repository\DummyEventStore'
 
     # Tactician middleware Store elasticsearch
     App\Application\Middleware\ElasticSearchMiddleware:

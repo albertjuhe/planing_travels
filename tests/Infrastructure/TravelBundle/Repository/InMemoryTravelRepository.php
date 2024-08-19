@@ -94,4 +94,9 @@ class InMemoryTravelRepository implements TravelRepository
     {
         // TODO: Implement findBy() method.
     }
+
+    public function getAllTravelsByUser(int $userId)
+    {
+        // TODO: Implement getAllTravelsByUser() method.
+    }
 }

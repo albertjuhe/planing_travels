@@ -44,12 +44,14 @@ services:
       - mysql
 
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:6.4.3
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.7.1
     container_name: elasticsearch
     environment:
-      - discovery.type=single-node
+      - CLI_JAVA_OPTS=-Xms2g -Xmx2g
       - bootstrap.memory_lock=true
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - xpack.security.enrollment.enabled=false
     ports:
       - "9201:9200"
     ulimits:

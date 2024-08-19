@@ -24,13 +24,13 @@ class ElasticSearchListener
     public function postPersist(LifecycleEventArgs $args)
     {
         $entity = $args->getEntity();
-        $this->updateElasticSearch($entity);
+        //$this->updateElasticSearch($entity);
     }
 
     public function postUpdate(LifecycleEventArgs $args)
     {
         $entity = $args->getEntity();
-        $this->updateElasticSearch($entity);
+        //$this->updateElasticSearch($entity);
     }
 
     public function updateElasticSearch($entity)

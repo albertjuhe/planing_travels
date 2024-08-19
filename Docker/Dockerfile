@@ -1,7 +1,7 @@
-FROM php:8.1-apache
+FROM php:7.4-apache
 RUN apt-get update
 RUN pecl install redis
-RUN pecl install xdebug
+RUN pecl install xdebug-3.1.6
 RUN docker-php-ext-install pdo pdo_mysql
 RUN docker-php-ext-enable redis xdebug
 
