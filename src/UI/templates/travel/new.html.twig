@@ -48,7 +48,7 @@
 
 {% block css %}
     {{ parent() }}
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="{{ asset('css/leaflet@1.7.1/leaflet.css')}}" />
     <link href="{{ asset('css/main.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/autocomplete@1.8.3/autocomplete.min.css') }}"/>
 {% endblock %}
