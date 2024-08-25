@@ -1,4 +1,4 @@
-let socket = new WebSocket("ws://localhost:5555/ping");
+let socket = new WebSocket("ws://localhost:5555/ws");
 console.log("Websocket connection");
 
 socket.onopen = function (event) {
