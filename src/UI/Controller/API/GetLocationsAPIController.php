@@ -35,12 +35,17 @@ class GetLocationsAPIController extends QueryController
         $query = new GetLocationsByTravelQuery($travel);
         $locations = $this->ask($query);
 
-        return new JsonResponse(
+        $response = new JsonResponse(
             $response['data'] = [
                 'type' => 'travel',
                 'id' => $travel,
                 'locations' => $locations,
             ]
         );
+
+        $response->headers->set("Cache-Control","max-age=3600");
+
+        return $response;
+
     }
 }
