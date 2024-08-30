@@ -1,4 +1,13 @@
 # Travel experience
+The goal of this application is to have a place to investigate and research development/infrastructure technics:
+- SOLID, Hexagonal, DDD
+- CQRS
+- Docker
+- Github Actions
+- FrontEnd: Jquery, Reactjs,...
+- ElastichSearch
+- Redis
+- Diferent Testing Approaches
 
 ## Start application with docker
 ```
