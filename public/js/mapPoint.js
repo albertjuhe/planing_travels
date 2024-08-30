@@ -334,7 +334,7 @@ mapPoint.prototype.rest = function (typeRest,data,locationPoint) {
                 $('#infoForm').html('<p class="alert alert-success">Location Added</p>');
                 $("#infoForm").show().delay(5000).fadeOut();
                 console.log('Added point ' + data);
-                socket.emit('add',data);
+               // socket.emit('add',data);
             },
             error: function (data,testStatus,jqXHR) {
                 $('#infoForm').html('<p class="alert alert-danger">Error: Location not Added</p>');
