@@ -1,5 +1,5 @@
 # Travel experience
-The goal of this application is to have a place to investigate and research development/infrastructure technics:
+The goal of this application is to have a place to investigate and research development/infrastructure technics, all inside Symfony:
 - SOLID, Hexagonal, DDD
 - CQRS
 - Docker
@@ -8,6 +8,7 @@ The goal of this application is to have a place to investigate and research deve
 - ElastichSearch
 - Redis
 - Diferent Testing Approaches
+- Websockets (golang)
 
 ## Start application with docker
 ```
