@@ -50,7 +50,7 @@ class AddLocationService implements UsesCasesService
         $this->typeLocationRepository = $typeLocationRepository;
     }
 
-    public function handle(AddLocationCommand $addLocationCommand)
+    public function handle(AddLocationCommand $addLocationCommand): void
     {
         $travelId = $addLocationCommand->getTravelId();
         $location = $addLocationCommand->getLocation();
