@@ -22,7 +22,7 @@ class ShowMyTravelsController extends QueryController
         $travels = $this->ask($getMyTravelQuery);
 
         $output = $this->render('private/index.html.twig', ['travels' => $travels]);
-        $output->headers->set("Cache-control","max-age=3600");
+        $output->headers->set("Cache-control", "max-age=3600");
 
         return $output;
     }

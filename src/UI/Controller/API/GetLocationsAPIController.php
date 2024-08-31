@@ -43,7 +43,7 @@ class GetLocationsAPIController extends QueryController
             ]
         );
 
-        $response->headers->set("Cache-Control","max-age=3600");
+        $response->headers->set("Cache-Control", "max-age=3600");
 
         return $response;
 

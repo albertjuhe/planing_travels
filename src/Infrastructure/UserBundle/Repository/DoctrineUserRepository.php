@@ -8,7 +8,7 @@ use App\Domain\User\Model\User;
 use App\Domain\User\ValueObject\UserId;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
-use  App\Domain\User\Exceptions\UserSavingError;
+use App\Domain\User\Exceptions\UserSavingError;
 
 class DoctrineUserRepository extends ServiceEntityRepository implements UserRepository
 {

@@ -54,7 +54,7 @@ class Location extends AggregateRoot
     public function __construct()
     {
         $this->id = new LocationId();
-        $this->images = new  ArrayCollection();
+        $this->images = new ArrayCollection();
         $this->updatedAt = new \DateTime();
         $this->createdAt = new \DateTime();
         $this->publishEvent();
