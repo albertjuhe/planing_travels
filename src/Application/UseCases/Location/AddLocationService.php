@@ -50,6 +50,9 @@ class AddLocationService implements UsesCasesService
         $this->typeLocationRepository = $typeLocationRepository;
     }
 
+    /**
+     * @throws InvalidTravelUser
+     */
     public function handle(AddLocationCommand $addLocationCommand): void
     {
         $travelId = $addLocationCommand->getTravelId();
@@ -59,6 +62,10 @@ class AddLocationService implements UsesCasesService
         $locationType = $addLocationCommand->getLocationType();
 
         $user = $this->userRepository->ofIdOrFail(new UserId($userId));
+
+        if (is_null($user)) {
+            throw new InvalidTravelUser('User does not exists');
+        }
 
         $travel = $this->travelRepository->ofIdOrFail($travelId);
 
