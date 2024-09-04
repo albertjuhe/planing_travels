@@ -18,7 +18,7 @@ class UpdateTravelServiceTest extends TravelService
     public function testUpdateTravel(): void
     {
         $travel = $this->travelRepository->findTravelBySlug(InMemoryTravelRepository::TRAVEL_1);
-        $newTitle = uniqid();
+        $newTitle = uniqid('', true);
 
         $travel->setTitle($newTitle);
 

@@ -20,7 +20,7 @@ class SymfonyEventSubscriber implements DomainEventSubscriber
         $this->dispatcher = $dispatcher;
     }
 
-    public function handle(DomainEvent $domainEvent)
+    public function handle(DomainEvent $domainEvent): void
     {
         $this->dispatcher->dispatch($domainEvent);
     }
