@@ -64,7 +64,7 @@ services:
         - { name: tactician.handler, command: App\Application\Command\Location\DeleteLocationCommand}
 
     # Query Bus
-    trave.get_best_travels:
+    travel.get_best_travels:
       class: App\Application\UseCases\Travel\GetBestTravelsOrderedByService
       arguments: ['@elasticsearch.travel.read_model.repository']
       tags: [messenger.message_handler]
