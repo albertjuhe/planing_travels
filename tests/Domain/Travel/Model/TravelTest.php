@@ -2,6 +2,7 @@
 
 namespace App\Tests\Domain\Travel\Model;
 
+use App\Domain\Travel\Events\TravelWasPublished;
 use App\Tests\Domain\Travel\ValueObject\GeoLocationStub;
 use PHPUnit\Framework\TestCase;
 use App\Domain\Travel\Model\Travel;
@@ -115,7 +116,7 @@ class TravelTest extends TestCase
         );
     }
 
-    public function testGetLatitude()
+    public function testGetLatitude(): void
     {
         $lat = 10;
         $lng = 20;
@@ -128,13 +129,16 @@ class TravelTest extends TestCase
         $this->assertEquals($lat, $travel->getLatitude());
     }
 
-    public function testPublishTravel()
+    public function testPublishTravel(): void
     {
         $user = User::byId(1);
         $travel = Travel::fromUser($user);
 
-        $this->assertEquals($travel->getStatus(), Travel::TRAVEL_DRAFT);
+        $this->assertEquals(Travel::TRAVEL_DRAFT, $travel->getStatus());
         $travel->publish();
-        $this->assertEquals($travel->getStatus(), Travel::TRAVEL_PUBLISHED);
+        $this->assertEquals(Travel::TRAVEL_PUBLISHED, $travel->getStatus());
+        $events = $travel->pullDomainEvents();
+
+        $this->assertInstanceOf(TravelWasPublished::class, $events[0]);
     }
 }

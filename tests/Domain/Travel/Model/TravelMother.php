@@ -28,7 +28,7 @@ class TravelMother
         $travel->setGeoLocation(GeoLocationStub::random());
         $travel->setStars(mt_rand());
         $travel->setWatch(mt_rand());
-        $travel->setTitle(uniqid());
+        $travel->setTitle(uniqid('', true));
 
         return $travel;
     }

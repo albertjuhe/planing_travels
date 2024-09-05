@@ -52,7 +52,7 @@ class UpdateTravelService implements UsesCasesService
         if ($travel->getUser()->getId() !== $user->getId()) {
             throw new InvalidTravelUser();
         }
-        DomainEventPublisher::instance()->publish(new TravelWasUpdated($travel->toArray()));
         $this->travelRepository->save($travel);
+        DomainEventPublisher::instance()->publish(new TravelWasUpdated($travel->toArray()));
     }
 }
