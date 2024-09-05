@@ -93,3 +93,7 @@ yarn-error.log
 npm-debug.log
 yarn-error.log
 ###< symfony/webpack-encore-pack ###
+
+###> friends-of-behat/symfony-extension ###
+/behat.yml
+###< friends-of-behat/symfony-extension ###

@@ -8,11 +8,13 @@ down:
 
 cs-fix:
 	#clean code
-	tools/php-cs-fixer/vendor/bin/php-cs-fixer fix src
+	# tools/php-cs-fixer/vendor/bin/php-cs-fixer fix src
+	php-cs-fixer fix src
 
 cs-fix-tests:
 	#clean code
-	tools/php-cs-fixer/vendor/bin/php-cs-fixer fix tests
+	# tools/php-cs-fixer/vendor/bin/php-cs-fixer fix tests
+	php-cs-fixer fix tests
 
 unit-test:
 	#run tests
