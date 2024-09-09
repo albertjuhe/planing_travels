@@ -2,10 +2,17 @@ default:
     suites:
         default:
             contexts:
-                - App\Tests\Behat\DemoContext
+                - behatch:context:json
+                - behatch:context:rest
+                - Behat\MinkExtension\Context\MinkContext
 
     extensions:
         FriendsOfBehat\SymfonyExtension:
             kernel:
                 environment: test
+        Behatch\Extension: ~
+        Behat\MinkExtension:
+            sessions:
+                default:
+                    symfony: ~
 

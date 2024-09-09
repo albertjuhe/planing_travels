@@ -4,9 +4,10 @@ namespace App\Tests\Application\UseCases\Travel;
 
 use App\Application\Query\Travel\GetMyTravelsQuery;
 use App\Application\UseCases\Travel\GetAllMyTravelsService;
+use App\Tests\Domain\Travel\Model\TravelMother;
 use App\Tests\Domain\User\Model\UserMother;
 
-class GetAllMyTravelsServiceTest extends ReadTravelService
+class GetAllMyTravelsServiceTest extends TravelService
 {
     public function setUp()
     {
@@ -16,19 +17,22 @@ class GetAllMyTravelsServiceTest extends ReadTravelService
     public function testGetAllMyTravels()
     {
         $user = UserMother::random();
-        $travels = $this->getTravels($user->getId()->id());
+
+        $travel = TravelMother::withUser($user);
+        $travelId = $travel->getTravelUniqId();
+        $this->travelRepository->save($travel);
 
         $getMyTravelQuery = new GetMyTravelsQuery($user);
 
-        $this->travelRepository->method('getAllTravelsByUser')->willReturn($travels);
         $getAllMyTravelsService = new GetAllMyTravelsService($this->travelRepository);
         $myTravels = $getAllMyTravelsService->__invoke($getMyTravelQuery);
 
         foreach ($myTravels as $travel) {
-            $this->assertEquals($travel['user'], $user->userId()->id());
+            $this->assertEquals($travel['userId'], $user->userId()->id());
+            $this->assertEquals($travel['id'], $travelId);
         }
 
-        $this->assertCount(2, $travels);
+        $this->assertCount(1, $myTravels);
     }
 
     private function getTravels(int $userId): array

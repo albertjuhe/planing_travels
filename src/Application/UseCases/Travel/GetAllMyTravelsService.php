@@ -3,6 +3,7 @@
 namespace App\Application\UseCases\Travel;
 
 use App\Application\Query\Travel\GetMyTravelsQuery;
+use App\Domain\Travel\Model\Travel;
 use App\Domain\Travel\Repository\TravelReadModelRepository;
 use App\Domain\Travel\Repository\TravelRepository;
 
@@ -20,10 +21,19 @@ class GetAllMyTravelsService
 
     public function __invoke(GetMyTravelsQuery $getMyTravelsQuery)
     {
+        $travels = [];
+
         $user = $getMyTravelsQuery->getUser();
 
-        return $this->travelRepository->getAllTravelsByUser(
+        $travelsResult = $this->travelRepository->getAllTravelsByUser(
             $user->userId()->id()
         );
+
+        /** @var Travel $travel */
+        foreach ($travelsResult as $travel) {
+            $travels[] = $travel->toArray();
+        }
+
+        return $travels;
     }
 }

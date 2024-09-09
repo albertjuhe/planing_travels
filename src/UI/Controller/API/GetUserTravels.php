@@ -47,6 +47,7 @@ class GetUserTravels extends QueryController
 
         $getMyTravelQuery = new GetMyTravelsQuery($user);
         $travels = $this->ask($getMyTravelQuery);
+
         $data = [
             'data' => $travels,
         ];
