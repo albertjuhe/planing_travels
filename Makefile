@@ -16,6 +16,9 @@ cs-fix-tests:
 	# tools/php-cs-fixer/vendor/bin/php-cs-fixer fix tests
 	php-cs-fixer fix tests
 
+behat:
+	make exec CMD='./vendor/bin/behat'
+
 unit-test:
 	#run tests
 	php vendor/bin/phpunit
