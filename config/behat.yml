@@ -5,6 +5,7 @@ default:
                 - behatch:context:json
                 - behatch:context:rest
                 - Behat\MinkExtension\Context\MinkContext
+                - App\Tests\Behat\TravelContext
 
     extensions:
         FriendsOfBehat\SymfonyExtension:
