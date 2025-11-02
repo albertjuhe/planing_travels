@@ -1,5 +1,6 @@
 services:
   app:
+    platform: linux/amd64
     build:
       context: ${PWD}/Docker
       dockerfile: Dockerfile
@@ -28,6 +29,7 @@ services:
 
   mysql:
     image: mysql:5.7
+    platform: linux/amd64
     environment:
       - MYSQL_ROOT_PASSWORD=root
     volumes:
