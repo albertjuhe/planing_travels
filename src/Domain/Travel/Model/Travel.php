@@ -427,6 +427,11 @@ class Travel extends AggregateRoot
         $this->geoLocation = $geoLocation;
     }
 
+    public function getTravelUniqId(): string
+    {
+        return $this->getId()->id();
+    }
+
     /**
      * info.
      *
@@ -435,7 +440,7 @@ class Travel extends AggregateRoot
     public function toArray()
     {
         return [
-            'id' => $this->id,
+            'id' => $this->getTravelUniqId(),
             'title' => $this->getTitle(),
             'description' => $this->getDescription(),
             'createdAt' => $this->getCreatedAt(),

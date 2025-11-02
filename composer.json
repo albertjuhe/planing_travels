@@ -47,7 +47,11 @@
         "twig/extensions": "^1.5"
     },
     "require-dev": {
+        "behat/behat": "^3.14",
+        "behatch/contexts": "^3.3",
         "doctrine/doctrine-fixtures-bundle": "^3.1",
+        "friends-of-behat/mink-browserkit-driver": "^1.6",
+        "friends-of-behat/symfony-extension": "^2.1",
         "phpunit/phpunit": "^6.0",
         "symfony/browser-kit": "^4.4",
         "symfony/css-selector": "^4.4",

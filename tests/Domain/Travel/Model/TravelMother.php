@@ -3,6 +3,7 @@
 namespace App\Tests\Domain\Travel\Model;
 
 use App\Domain\Travel\Model\Travel;
+use App\Domain\User\Model\User;
 use App\Tests\Domain\Travel\ValueObject\GeoLocationStub;
 use App\Tests\Domain\User\Model\UserMother;
 
@@ -29,6 +30,14 @@ class TravelMother
         $travel->setStars(mt_rand());
         $travel->setWatch(mt_rand());
         $travel->setTitle(uniqid('', true));
+
+        return $travel;
+    }
+
+    public static function withUser(User $user): Travel
+    {
+        $travel = self::random();
+        $travel->setUser($user);
 
         return $travel;
     }

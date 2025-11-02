@@ -7,4 +7,3 @@ tactician:
         - tactician.middleware.doctrine
         - tactician.middleware.domainEventStore
         - tactician.commandbus.command.middleware.command_handler
-
