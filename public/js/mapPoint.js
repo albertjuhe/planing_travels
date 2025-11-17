@@ -23,9 +23,9 @@ var mapPoint = function (travelId) {
 
     var _elementDrop = $('#routePoints');
     _elementDrop.bind({ //Events for drop
-        'drop':      this.handleDrop,
-        'dragend':   this.handleDragEnd,
-        'dragover':  this.handleDragOver,
+        'drop': this.handleDrop,
+        'dragend': this.handleDragEnd,
+        'dragover': this.handleDragOver,
         'dragenter': this.handleDragEnter,
         'dragleave': this.handleDragLeave
     });
@@ -38,7 +38,7 @@ var mapPoint = function (travelId) {
  * @param name: Name of the plugin must be unique
  * @param obj:plugin object
  ****************************************************/
-mapPoint.prototype.addPlugin = function (name,obj) {
+mapPoint.prototype.addPlugin = function (name, obj) {
     if (this.plugin[name]) {
         console.error("You cannot have more than one instance of any plugin.");
     } else {
@@ -51,30 +51,32 @@ mapPoint.prototype.addPlugin = function (name,obj) {
 };
 
 mapPoint.prototype.removeRoute = function () {
-        map.removeControl(this.control);
-        this.control = null;
+    map.removeControl(this.control);
+    this.control = null;
 };
 
 mapPoint.prototype.calculateRoute = function () {
     var routePoints = $('#routePoints').find(".point-view");
     var _self = this;
-    this.control = L.Routing.control({
+    this.control = L.Routing.control(
+        {
         routeWhileDragging: true
-    });
+    }
+    )
 
-    $.each(routePoints,function (key,value) {
+    $.each(routePoints, function (key, value) {
         var idPoint = $(value).data('id');
         var locationPoint = $('#' + idPoint).data('location');
-        _self.control.spliceWaypoints(key, 2 ,  L.latLng(locationPoint.latitude,locationPoint.longitude));
+        _self.control.spliceWaypoints(key, 2, L.latLng(locationPoint.latitude, locationPoint.longitude));
     });
 
-  //  control.route();
+    //  control.route();
     this.control.addTo(map);
 
 };
 
 mapPoint.prototype.panelItinerary = function () {
-    if ($('.leaflet-routing-container') != 'undefined' && this.control!=null) {
+    if ($('.leaflet-routing-container') != 'undefined' && this.control != null) {
         if ($('.leaflet-routing-container').is(':visible')) {
             $('.leaflet-routing-container').hide()
         } else {
@@ -84,7 +86,7 @@ mapPoint.prototype.panelItinerary = function () {
 };
 
 //Create a location point object
-mapPoint.prototype.createLocation = function (id,latitude,longitude,placeAddress,place_id,typeIcon,description,address,currentMark) {
+mapPoint.prototype.createLocation = function (id, latitude, longitude, placeAddress, place_id, typeIcon, description, address, currentMark) {
     const l = {};
     l.id = id;
     l.latitude = latitude;
@@ -117,7 +119,7 @@ mapPoint.prototype.addPoint = function (locationPoint) {
 
     $('#mapPoints').append(layerLoc);
     const currentPoint = "#" + locationPoint.place_id;
-    $(currentPoint).data('location',locationPoint);
+    $(currentPoint).data('location', locationPoint);
     $(currentPoint).bind(
         {
             'dragstart': this.handleDragStart
@@ -131,7 +133,7 @@ mapPoint.prototype.addPoint = function (locationPoint) {
                 e.stopPropagation();
 
                 //var dades = $(e.target).data('location');
-               //  dades.currentMark.togglePopup();
+                //  dades.currentMark.togglePopup();
                 //dades.currentMark.setIcon(SelectedIcon);
             },
             'mouseout': function (e) {
@@ -148,22 +150,22 @@ mapPoint.prototype.addPoint = function (locationPoint) {
     removeButton = $('*[data-place="' + locationPoint.place_id + '"][data-function="remove"]');
     infoButton = $('*[data-place="' + locationPoint.place_id + '"][data-function="info"]');
     notaButton = $('*[data-place="' + locationPoint.place_id + '"][data-function="nota"]');
-    $(goButton).bind({'click':this.goMark});
-    $(removeButton).bind({'click':this.deleteMark});
-    $(infoButton).bind({'click':this.info});
-    $(notaButton).bind({'click':this.nota});
+    $(goButton).bind({'click': this.goMark});
+    $(removeButton).bind({'click': this.deleteMark});
+    $(infoButton).bind({'click': this.info});
+    $(notaButton).bind({'click': this.nota});
 };
 
-mapPoint.prototype.save = function (locationPoint,currentMark) {
-     //Serializing object point
+mapPoint.prototype.save = function (locationPoint, currentMark) {
+    //Serializing object point
     var _serializer = JSON.stringify(locationPoint);
     locationPoint.currentMark = currentMark;
-    this.rest('POST', _serializer,locationPoint);
+    this.rest('POST', _serializer, locationPoint);
 
 };
 
-mapPoint.prototype.createButton = function (title,type,button_type,place_id) {
-     return '<button data-place="'+place_id+'" style="margin:1px" data-function="'+title+'" data-target="'+'#'+title+'" data-toggle="modal" type="button" class="btn '+type+' btn-xs">'+title+'</button>';
+mapPoint.prototype.createButton = function (title, type, button_type, place_id) {
+    return '<button data-place="' + place_id + '" style="margin:1px" data-function="' + title + '" data-target="' + '#' + title + '" data-toggle="modal" type="button" class="btn ' + type + ' btn-xs">' + title + '</button>';
 };
 
 mapPoint.prototype.info = function (e) {
@@ -175,7 +177,7 @@ mapPoint.prototype.info = function (e) {
     $('#location_media').show();
     $('#fileupload').data('location', l.id);
     this.showGallery(l.id);
-   // this.showNotes(l.id);
+    // this.showNotes(l.id);
 };
 /*
 Deprecated
@@ -203,7 +205,7 @@ mapPoint.prototype.showNotes = function(l) {
  */
 
 mapPoint.prototype.showGallery = function (l) {
-    if (typeof(this.plugin['locationGallery'].getLocationImages) === "function") { //Si té init l utilitzem
+    if (typeof (this.plugin['locationGallery'].getLocationImages) === "function") { //Si té init l utilitzem
         this.plugin['locationGallery'].getLocationImages(l);
     }
 };
@@ -213,7 +215,7 @@ mapPoint.prototype.goMark = function (e) {
     var current = $(e.target);
     var placeToGo = current.data('place');
     var l = $('#' + placeToGo).data('location');
-    map.setView([l.latitude,l.longitude],30);
+    map.setView([l.latitude, l.longitude], 30);
 };
 
 
@@ -254,18 +256,18 @@ mapPoint.prototype.saveNota = function (nota) {
     var _serializer = JSON.stringify(nota);
 
     $.ajax({
-        type:'POST',
+        type: 'POST',
         contentType: 'application/json',
         url: '../api/annotations',
-        dataType:'json',
+        dataType: 'json',
         data: _serializer,
         success: function (result) {
             console.log('Added note ' + result);
         },
-        error: function (data,testStatus,jqXHR) {
+        error: function (data, testStatus, jqXHR) {
             console.log('Error note ');
         }
-        });
+    });
 };
 
 mapPoint.prototype.resetRoute = function () {
@@ -285,15 +287,17 @@ mapPoint.prototype.handleDrop = function (e) {
         e.stopPropagation(); // stops the browser from redirecting.
     }
     var _dataTransfer = e.originalEvent.dataTransfer;
-    if (_dataTransfer.getData('text')!=='') {
-        var buttonRemove ='<button class="btn btn-danger btn-xs" data-place="'+_dataTransfer.getData('text')+'" id="remove-point-'+_dataTransfer.getData('text')+'">Remove</button>';
-        var layerRoute = '<div class="point-view" id="route-'+_dataTransfer.getData('text')+'" data-route="true" data-id="'+_dataTransfer.getData('text')+'">' + $('#' + _dataTransfer.getData('text')).html() + ' ' +buttonRemove+'</div>';
+    if (_dataTransfer.getData('text') !== '') {
+        var buttonRemove = '<button class="btn btn-danger btn-xs" data-place="' + _dataTransfer.getData('text') + '" id="remove-point-' + _dataTransfer.getData('text') + '">Remove</button>';
+        var layerRoute = '<div class="point-view" id="route-' + _dataTransfer.getData('text') + '" data-route="true" data-id="' + _dataTransfer.getData('text') + '">' + $('#' + _dataTransfer.getData('text')).html() + ' ' + buttonRemove + '</div>';
 
         $('#routePoints').append(layerRoute);
         $('#routePoints').sortable();
-        $('#remove-point-'+_dataTransfer.getData('text')).bind({'click':function () {
-            $('#route-'+$(this).data('place')).remove();
-        }})
+        $('#remove-point-' + _dataTransfer.getData('text')).bind({
+            'click': function () {
+                $('#route-' + $(this).data('place')).remove();
+            }
+        })
     }
     return false;
 };
@@ -318,66 +322,66 @@ mapPoint.prototype.handleDragLeave = function (e) {
 };
 
 //Rest API for Traveling
-mapPoint.prototype.rest = function (typeRest,data,locationPoint) {
+mapPoint.prototype.rest = function (typeRest, data, locationPoint) {
     var _self = this;
 
-    if (typeRest==='POST') {
+    if (typeRest === 'POST') {
         $.ajax({
-            type:typeRest,
+            type: typeRest,
             contentType: 'application/json',
-            url: '../../api/user/' + locationPoint.user +'/location',
-            dataType:'json',
+            url: '../../api/user/' + locationPoint.user + '/location',
+            dataType: 'json',
             data: data,
-            success: function (data,testStatus,jqXHR) {
+            success: function (data, testStatus, jqXHR) {
                 locationPoint.id = data;
                 _self.addPoint(locationPoint);
                 $('#infoForm').html('<p class="alert alert-success">Location Added</p>');
                 $("#infoForm").show().delay(5000).fadeOut();
                 console.log('Added point ' + data);
-               // socket.emit('add',data);
+                // socket.emit('add',data);
             },
-            error: function (data,testStatus,jqXHR) {
+            error: function (data, testStatus, jqXHR) {
                 $('#infoForm').html('<p class="alert alert-danger">Error: Location not Added</p>');
                 $("#infoForm").show().delay(5000).fadeOut();
             }
         });
-    } else if (typeRest==='DELETE') {
+    } else if (typeRest === 'DELETE') {
         $.ajax({
-            type:typeRest,
-            url: '../../api/travel/'+this.travel+'/location/' + locationPoint,
+            type: typeRest,
+            url: '../../api/travel/' + this.travel + '/location/' + locationPoint,
             success: function (result) {
                 $('#infoTravel').html('<p class="alert alert-success">Location Removed</p>');
                 $("#infoTravel").show().delay(5000).fadeOut();
                 console.log('Removing point ' + result);
             },
-            error: function (data,testStatus,jqXHR) {
+            error: function (data, testStatus, jqXHR) {
                 console.log('Error removing location ' + testStatus);
             }
         });
     }
 };
 
-    /*
-     var request = {
-     placeId: placeId
-     };
-     var _self = this;
-     var infowindow = new google.maps.InfoWindow();
-     var mp = $('#mapPoints');
-     var service = new google.maps.places.PlacesService(mp[0]);
+/*
+ var request = {
+ placeId: placeId
+ };
+ var _self = this;
+ var infowindow = new google.maps.InfoWindow();
+ var mp = $('#mapPoints');
+ var service = new google.maps.places.PlacesService(mp[0]);
 
-     service.getDetails(request, function(place, status) {
-     if (status == google.maps.places.PlacesServiceStatus.OK) {
-     //alert('added place');
-     var photos = place.photos;
-     var images = "";
-     if (photos) {
-     images = '<img src="'+photos[0].getUrl({'maxWidth':200, 'maxHeight': 200})+'"/>';
-     }
+ service.getDetails(request, function(place, status) {
+ if (status == google.maps.places.PlacesServiceStatus.OK) {
+ //alert('added place');
+ var photos = place.photos;
+ var images = "";
+ if (photos) {
+ images = '<img src="'+photos[0].getUrl({'maxWidth':200, 'maxHeight': 200})+'"/>';
+ }
 
-     $('#mapPoints').append('<div class="col-sm-3" data-placeId="'+placeId+'"><h3>'+address+'</h3><div class="image">'+images+'</div><div class="address">'+ place.formatted_address +'</div></div>');
-     }
-     });
+ $('#mapPoints').append('<div class="col-sm-3" data-placeId="'+placeId+'"><h3>'+address+'</h3><div class="image">'+images+'</div><div class="address">'+ place.formatted_address +'</div></div>');
+ }
+ });
 }*/
 
 mapPoint.prototype.returnTown = function (results) {
@@ -385,7 +389,7 @@ mapPoint.prototype.returnTown = function (results) {
     var level_2;
     for (var y = 0, length_2 = results.address_components.length; y < length_2; y++) {
         var type = results.address_components[y].types[0];
-        if ( type === "administrative_area_level_1") {
+        if (type === "administrative_area_level_1") {
             level_1 = results.address_components[y].long_name;
             if (level_2) {
                 break;
@@ -401,60 +405,63 @@ mapPoint.prototype.returnTown = function (results) {
     return [level_2, level_1];
 };
 
-mapPoint.prototype.getMark = function (pointtype,latitude,longitude,placeAdress,popup) {
+mapPoint.prototype.getMark = function (pointtype, latitude, longitude, placeAdress, popup) {
     var currentMark;
     var typeIcon;
 
     switch (pointtype) {
         case "House":
-            currentMark = L.marker([latitude,longitude],{icon: HouseMarker,title: placeAdress}).bindPopup(popup);
+            currentMark = L.marker([latitude, longitude], {icon: HouseMarker, title: placeAdress}).bindPopup(popup);
             typeIcon = "fa fa-bed";
             break;
         case "Airport":
-            currentMark = L.marker([latitude,longitude],{icon: AirportMarker,title: placeAdress}).bindPopup(popup);
+            currentMark = L.marker([latitude, longitude], {icon: AirportMarker, title: placeAdress}).bindPopup(popup);
             typeIcon = "fa fa-plane";
             break;
         case "Monument":
-            currentMark = L.marker([latitude,longitude],{icon: MonumentMarker,title: placeAdress}).bindPopup(popup);
+            currentMark = L.marker([latitude, longitude], {icon: MonumentMarker, title: placeAdress}).bindPopup(popup);
             typeIcon = "fa fa-camera";
             break;
         case "City":
-            currentMark = L.marker([latitude,longitude],{icon:CityMarker,title: placeAdress}).bindPopup(popup);
+            currentMark = L.marker([latitude, longitude], {icon: CityMarker, title: placeAdress}).bindPopup(popup);
             typeIcon = "fa fa-building";
             break;
         case "Lunch":
-            currentMark = L.marker([latitude,longitude],{icon:LunchMarker,title: placeAdress}).bindPopup(popup);
+            currentMark = L.marker([latitude, longitude], {icon: LunchMarker, title: placeAdress}).bindPopup(popup);
             typeIcon = "fa fa-cutlery";
             break;
         case "Bicycle":
-            currentMark = L.marker([latitude,longitude],{icon:BicycleMarker,title: placeAdress}).bindPopup(popup);
+            currentMark = L.marker([latitude, longitude], {icon: BicycleMarker, title: placeAdress}).bindPopup(popup);
             typeIcon = "fa fa-bicycle";
             break;
         case "Bus":
-            currentMark = L.marker([latitude,longitude],{icon:BusMarker,title: placeAdress}).bindPopup(popup);
+            currentMark = L.marker([latitude, longitude], {icon: BusMarker, title: placeAdress}).bindPopup(popup);
             typeIcon = "fa fa-bus";
             break;
         case "Automobile":
-            currentMark = L.marker([latitude,longitude],{icon:AutomobileMarker,title: placeAdress}).bindPopup(popup);
+            currentMark = L.marker([latitude, longitude], {
+                icon: AutomobileMarker,
+                title: placeAdress
+            }).bindPopup(popup);
             typeIcon = "fa fa-automobile";
             break;
         case "Train":
-            currentMark = L.marker([latitude,longitude],{icon:TrainMarker,title: placeAdress}).bindPopup(popup);
+            currentMark = L.marker([latitude, longitude], {icon: TrainMarker, title: placeAdress}).bindPopup(popup);
             typeIcon = "fa fa-train";
             break;
         case "Ship":
-            currentMark = L.marker([latitude,longitude],{icon:ShipMarker,title: placeAdress}).bindPopup(popup);
+            currentMark = L.marker([latitude, longitude], {icon: ShipMarker, title: placeAdress}).bindPopup(popup);
             typeIcon = "fa fa-ship";
             break;
         case "Coffee":
-            currentMark = L.marker([latitude,longitude],{icon:BreakfastMarker,title: placeAdress}).bindPopup(popup);
+            currentMark = L.marker([latitude, longitude], {icon: BreakfastMarker, title: placeAdress}).bindPopup(popup);
             typeIcon = "fa fa-coffee";
             break;
         default:
-            currentMark = L.marker([latitude,longitude],{title: placeAdress}).bindPopup(popup);
+            currentMark = L.marker([latitude, longitude], {title: placeAdress}).bindPopup(popup);
     }
 
-    return {mark:currentMark,type:typeIcon};
+    return {mark: currentMark, type: typeIcon};
 };
 
 mapPoint.prototype.codeAddress = function () {
@@ -472,38 +479,37 @@ mapPoint.prototype.codeAddress = function () {
     var e = document.getElementById("pointtype");
     var pointtype = e.options[e.selectedIndex].text;
 
-            var typeIcon = "";
-            var currentMark;
-            var popup = "<b>"+placeAdress+"</b>";
-            if (link!=='') {
-                popup = "<b><a href='"+link+"'>"+placeAdress+"</a></b><br/>" + comment;
-            } else {
-                popup = "<b>"+placeAdress+"</b><br/>" + comment;
-            }
+    var typeIcon = "";
+    var currentMark;
+    var popup = "<b>" + placeAdress + "</b>";
+    if (link !== '') {
+        popup = "<b><a href='" + link + "'>" + placeAdress + "</a></b><br/>" + comment;
+    } else {
+        popup = "<b>" + placeAdress + "</b><br/>" + comment;
+    }
 
-            var point = _self.getMark(pointtype,latitude,longitude,placeAdress,popup);
-            point.mark.addTo(map);
-            var location = {};
-            location.placeAddress = placeAdress; //Mark address
-            location.typeIcon = point.typeIcon;
-            location.IdType =  e.options[e.selectedIndex].value;
-            location.link = link;
-            location.comment = comment;
-            location.latitude = latitude;
-            location.longitude = longitude;
-            location.place_id = place_id;
-            location.address = title; //Our title
-            location.travel = travel;
-            location.user = user;
-            location.currentMark = null; //No podem serialitzar aquest objecte, el serialitzem desprès
+    var point = _self.getMark(pointtype, latitude, longitude, placeAdress, popup);
+    point.mark.addTo(map);
+    var location = {};
+    location.placeAddress = placeAdress; //Mark address
+    location.typeIcon = point.typeIcon;
+    location.IdType = e.options[e.selectedIndex].value;
+    location.link = link;
+    location.comment = comment;
+    location.latitude = latitude;
+    location.longitude = longitude;
+    location.place_id = place_id;
+    location.address = title; //Our title
+    location.travel = travel;
+    location.user = user;
+    location.currentMark = null; //No podem serialitzar aquest objecte, el serialitzem desprès
 
-            _self.save(location,point.currentMark); //Addind this point to map
-            map.setView([latitude,longitude],8);
+    _self.save(location, point.currentMark); //Addind this point to map
+    map.setView([latitude, longitude], 8);
 };
 
 
-function __bind(fn, me)
-{
+function __bind(fn, me) {
     return function () {
         return fn.apply(me, arguments);
     };

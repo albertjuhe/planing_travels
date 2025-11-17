@@ -17,7 +17,7 @@ trait TriggerEventsTrait
         $this->events[] = $event;
     }
 
-    public function getEvents()
+    public function getEvents(): array
     {
         return $this->events;
     }

@@ -1,5 +1,7 @@
 FROM php:7.4-apache
 RUN apt-get update
+RUN apt install -y git
+RUN apt install -y unzip
 RUN pecl install redis
 RUN pecl install xdebug-3.1.6
 RUN docker-php-ext-install pdo pdo_mysql
