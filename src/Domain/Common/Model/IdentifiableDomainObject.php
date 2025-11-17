@@ -11,6 +11,9 @@ abstract class IdentifiableDomainObject
         return $this->id;
     }
 
+    /**
+     * @return static
+     */
     public static function create($anId = null)
     {
         return new static($anId);
