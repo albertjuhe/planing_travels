@@ -5,6 +5,7 @@ namespace App\UI\Controller\http;
 use App\Application\Command\Travel\AddTravelCommand;
 use App\Domain\Travel\Model\Travel;
 use App\Infrastructure\TravelBundle\Form\TravelType;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,13 +13,9 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Domain\User\Exceptions\UserDoesntExists;
 use League\Tactician\CommandBus;
 
+
 class AddNewTravelController extends CommandController
 {
-    /**
-     * ShowMyTravelsController constructor.
-     *
-     * @param $commandBus
-     */
     public function __construct(CommandBus $commandBus)
     {
         parent::__construct($commandBus);
@@ -45,6 +42,21 @@ class AddNewTravelController extends CommandController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $photoFile = $form->get('photo')->getData();
+            if ($photoFile) {
+                $originalFilename = pathinfo($photoFile->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeFilename = preg_replace('/[^a-zA-Z0-9_-]/', '-', $originalFilename);
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$photoFile->guessExtension();
+                try {
+                    $photoFile->move(
+                        $this->getParameter('travel_photos_directory'),
+                        $newFilename
+                    );
+                    $travel->setPhoto($newFilename);
+                } catch (FileException $e) {
+                }
+            }
+
             $addTravelCommand = new AddTravelCommand($travel, $this->getUser());
             $this->commandBus->handle($addTravelCommand);
 
