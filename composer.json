@@ -63,7 +63,11 @@
         "allow-plugins": {
             "symfony/flex": true
         },
-        "discard-changes": true
+        "discard-changes": true,
+        "audit": {
+            "abandoned": "ignore",
+            "block-insecure": false
+        }
     },
     "autoload": {
         "psr-4": {

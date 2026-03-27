@@ -93,3 +93,7 @@ yarn-error.log
 npm-debug.log
 yarn-error.log
 ###< symfony/webpack-encore-pack ###
+
+###> phpstan/phpstan ###
+phpstan.neon
+###< phpstan/phpstan ###

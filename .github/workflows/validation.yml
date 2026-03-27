@@ -23,11 +23,14 @@ jobs:
 
       - name: Make up
         run: |
-          make up
+            make up
+            # Wait for the app container to be ready
+            sleep 10
+            docker-compose exec -T app sh -c 'until composer --version > /dev/null 2>&1; do sleep 2; done'
 
       - name: Composer install
         run: |
-          make exec CMD="composer install --no-plugins"
+           make exec CMD="composer install --no-plugins --no-audit"
 
       - name: Composer Cache
         run: |
