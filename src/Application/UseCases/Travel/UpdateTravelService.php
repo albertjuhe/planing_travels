@@ -37,16 +37,16 @@ class UpdateTravelService implements UsesCasesService
     /**
      * Modify a travel.
      *
-     * @param UpdateTravelCommand $commnand
+     * @param UpdateTravelCommand $command
      *
      * @throws InvalidTravelUser
      */
-    public function handle(UpdateTravelCommand $commnand)
+    public function handle(UpdateTravelCommand $command)
     {
         /** @var Travel */
-        $travel = $commnand->travel();
+        $travel = $command->travel();
         /** @var User */
-        $user = $commnand->user();
+        $user = $command->user();
 
         //Only the owner can modify the travel
         if ($travel->getUser()->getId() !== $user->getId()) {

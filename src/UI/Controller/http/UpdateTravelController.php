@@ -55,8 +55,9 @@ class UpdateTravelController extends CommandController
             $photoFile = $form->get('photo')->getData();
             if ($photoFile) {
                 $originalFilename = pathinfo($photoFile->getClientOriginalName(), PATHINFO_FILENAME);
+                $extension = pathinfo($photoFile->getClientOriginalName(), PATHINFO_EXTENSION);
                 $safeFilename = preg_replace('/[^a-zA-Z0-9_-]/', '-', $originalFilename);
-                $newFilename = $safeFilename.'-'.uniqid().'.'.$photoFile->guessExtension();
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$extension;
                 try {
                     $photoFile->move(
                         $this->getParameter('travel_photos_directory'),

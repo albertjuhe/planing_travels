@@ -80,6 +80,12 @@ class DoctrineTravelRepository extends ServiceEntityRepository implements Travel
 
     public function getAllTravelsByUser(int $userId)
     {
-        return $this->findBy(['user' => $userId]);
+        return $this->createQueryBuilder('t')
+            ->select('t')
+            ->where('t.user = :userId')
+            ->setParameter('userId', $userId)
+            ->orderBy('t.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult();
     }
 }

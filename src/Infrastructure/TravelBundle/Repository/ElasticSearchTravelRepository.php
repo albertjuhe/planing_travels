@@ -28,12 +28,12 @@ class ElasticSearchTravelRepository extends ElasticSearchRepository implements I
             $travel->getId()->id(),
             $elasticSearchDocumentDataTransformer->read()
         );
-        $this->typeDocument->addDocument($travelDocument);
+        $this->getTypeDocument()->addDocument($travelDocument);
         $this->refresh();
     }
 
     public function refresh()
     {
-        $this->typeDocument->getIndex()->refresh();
+        $this->getTypeDocument()->getIndex()->refresh();
     }
 }

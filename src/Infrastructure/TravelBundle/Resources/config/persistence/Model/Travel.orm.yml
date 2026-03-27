@@ -1,6 +1,11 @@
 App\Domain\Travel\Model\Travel:
     type: entity
     table: travel
+    indexes:
+        travel_user_id_idx:
+            columns: [user_id]
+        travel_status_idx:
+            columns: [status]
     id:
         id:
             type: TravelId

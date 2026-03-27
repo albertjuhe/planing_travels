@@ -2,10 +2,6 @@
 
 {% block title %}Update Travel{% endblock %}
 
-{% block header_js %}
-    <script type="text/javascript" src="{{ google_maps }}"></script>
-{% endblock %}
-
 {% block content %}
     <div class="container">
         <div class="row">
@@ -32,67 +28,69 @@
             </div>
         </div>
     </div>
-
 {% endblock %}
 
 {% block javascript %}
 {{ parent() }}
 <script src="{{ asset('js/leaflet@1.7.1/leaflet.js') }}"></script>
- <script src="{{ asset('js/leaflet.awesome-markers.min.js') }}"></script>
- <script src="{{ asset('js/markersDefinition.js') }}"></script>
+<script src="{{ asset('js/leaflet.awesome-markers.min.js') }}"></script>
+<script src="{{ asset('js/markersDefinition.js') }}"></script>
+<script src="{{ google_maps }}" async defer></script>
 <script>
-     var map = L.map('map',{
-            center: [{{ latitude }}, {{ longitude }}],
-            zoom:8,
-            fullscreenControl: {
-                pseudoFullscreen: false
-            }
-        });
-        var geocoder = new google.maps.Geocoder();
-
-        var osm = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
-
-        var googleTerrain = L.tileLayer('http://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}',{
-            maxZoom: 20,
-            subdomains:['mt0','mt1','mt2','mt3']
-        });
-
-        var googleSat = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',{
-            maxZoom: 20,
-            subdomains:['mt0','mt1','mt2','mt3']
-        });
-
-        var googleHybrid = L.tileLayer('http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}',{
-            maxZoom: 20,
-            subdomains:['mt0','mt1','mt2','mt3']
-        });
-
-        var googleRoadMap = L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',{
-            maxZoom: 20,
-            subdomains:['mt0','mt1','mt2','mt3']
-        }).addTo(map);
-
-        var googleTraffic = L.tileLayer('https://{s}.google.com/vt/lyrs=m@221097413,traffic&x={x}&y={y}&z={z}', {
-        maxZoom: 20,
-        minZoom: 2,
-        subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
+    var map = L.map('map', {
+        center: [{{ latitude }}, {{ longitude }}],
+        zoom: 8
     });
 
-        //map.addLayer(gglRoadMap);
-        map.addControl(new L.Control.Layers( {'OSM':osm, 'Google Hybrid':googleHybrid, 'Google Satellite':googleSat, 'Google Terrain':googleTerrain,'RoadMap':googleRoadMap, 'Traffic':googleTraffic}, {}));
+    var osm = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
 
-        var centralMark = L.marker([{{ latitude }}, {{ longitude }}], {icon: centerMarker}).addTo(map);
+    var googleTerrain = L.tileLayer('http://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}', {
+        maxZoom: 20,
+        subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+    });
 
-          $( "#center" ).click(function() {
-            map.setView([{{ latitude }}, {{ longitude }}],8);
-        });
+    var googleSat = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
+        maxZoom: 20,
+        subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+    });
+
+    var googleHybrid = L.tileLayer('http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}', {
+        maxZoom: 20,
+        subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+    });
+
+    var googleRoadMap = L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+        maxZoom: 20,
+        subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+    }).addTo(map);
+
+    var googleTraffic = L.tileLayer('https://{s}.google.com/vt/lyrs=m@221097413,traffic&x={x}&y={y}&z={z}', {
+        maxZoom: 20,
+        minZoom: 2,
+        subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+    });
+
+    map.addControl(new L.Control.Layers({
+        'OSM': osm,
+        'Google Hybrid': googleHybrid,
+        'Google Satellite': googleSat,
+        'Google Terrain': googleTerrain,
+        'RoadMap': googleRoadMap,
+        'Traffic': googleTraffic
+    }, {}));
+
+    var centralMark = L.marker([{{ latitude }}, {{ longitude }}], {icon: centerMarker}).addTo(map);
+
+    $('#center').click(function () {
+        map.setView([{{ latitude }}, {{ longitude }}], 8);
+    });
 </script>
 {% endblock %}
 
 {% block css %}
     {{ parent() }}
     <link href="{{ asset('css/main.css') }}" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('css/leaflet@1.7.1/leaflet.css') }}" />
+    <link rel="stylesheet" href="{{ asset('css/leaflet@1.7.1/leaflet.css') }}"/>
     <link rel="stylesheet" href="/public/font-awesome-4.3.0/css/font-awesome.min.css"/>
     <link rel="stylesheet" href="/public/css/ionicons-2.0.1/css/ionicons.min.css"/>
     <link rel="stylesheet" href="/public/css/leaflet.awesome-markers.css">
