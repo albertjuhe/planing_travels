@@ -4,6 +4,7 @@ namespace App\UI\Controller\http;
 
 use App\Domain\Travel\Exceptions\TravelDoesntExists;
 use App\Domain\Travel\Model\Travel;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -51,6 +52,21 @@ class UpdateTravelController extends CommandController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $photoFile = $form->get('photo')->getData();
+            if ($photoFile) {
+                $originalFilename = pathinfo($photoFile->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeFilename = preg_replace('/[^a-zA-Z0-9_-]/', '-', $originalFilename);
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$photoFile->guessExtension();
+                try {
+                    $photoFile->move(
+                        $this->getParameter('travel_photos_directory'),
+                        $newFilename
+                    );
+                    $travel->setPhoto($newFilename);
+                } catch (FileException $e) {
+                }
+            }
+
             $commandUpdate = new UpdateTravelCommand($travel, $this->getUser());
             $this->commandBus->handle($commandUpdate);
 
@@ -61,6 +77,7 @@ class UpdateTravelController extends CommandController
             'travelForm' => $form->createView(),
             'latitude' => $travel->getLatitude(),
             'longitude' => $travel->getLongitude(),
+            'currentPhoto' => $travel->getPhoto(),
         ]);
     }
 }

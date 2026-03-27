@@ -10,13 +10,19 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-4">
-                {{ form_start(travelForm) }}
+                {{ form_start(travelForm, {'attr': {'enctype': 'multipart/form-data'}}) }}
                 <h3>Update Travel</h3> <button class="btn btn-warning btn-xs" id="center">Center Map</button>
                 {% for flashMessage in app.session.flashbag.get('notice') %}
                     <div class="flash-notice">
                         {{ flashMessage }}
                     </div>
                 {% endfor %}
+                {% if currentPhoto %}
+                    <div>
+                        <img src="{{ asset('uploads/travel_photos/' ~ currentPhoto) }}" class="img-responsive" alt="Current cover" style="max-height:150px; margin-bottom:8px;">
+                        <p><small>Upload a new image to replace it</small></p>
+                    </div>
+                {% endif %}
                 {{ form_widget(travelForm) }}
                 <button type="submit" class="btn btn-primary">Update</button>
                 {{ form_end(travelForm) }}

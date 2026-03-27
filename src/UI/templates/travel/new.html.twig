@@ -17,7 +17,7 @@
                     </div>
                 {% endfor %}
 
-                {{ form_start(travelForm) }}
+                {{ form_start(travelForm, {'attr': {'enctype': 'multipart/form-data'}}) }}
                 <div class="auto-search-wrapper">
                     <input
                             type="text"

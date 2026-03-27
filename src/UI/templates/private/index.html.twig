@@ -14,8 +14,9 @@
                         <a href="{{ path('publishTravel', { 'slug': travel.slug }) }}">Publish</a>
                     </div>
                     <div>
-                             <img id="travel{{ travel.id }}" class="featurette-image img-responsive" data-src="holder/holder.js/200x200/auto" alt="Travel photo">
-
+                        {% if travel.photo %}
+                            <img src="{{ asset('uploads/travel_photos/' ~ travel.photo) }}" class="featurette-image img-responsive" alt="{{ travel.title }}">
+                        {% endif %}
                     </div>
                     <div class="date-travel">
                         <a href="#">   {{ travel.startAt | date("d/m/Y")}} To {{ travel.endAt |date("d/m/Y")}}</a>
