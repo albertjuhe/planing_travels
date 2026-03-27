@@ -30,7 +30,7 @@
         "symfony/flex": "^1.0",
         "symfony/form": "^4.0",
         "symfony/framework-bundle": "^4.0",
-        "symfony/lts": "^4@dev",
+
         "symfony/maker-bundle": "^1.0",
         "symfony/messenger": "^4.0",
         "symfony/monolog-bundle": "^3.3",
@@ -62,7 +62,8 @@
         "sort-packages": true,
         "allow-plugins": {
             "symfony/flex": true
-        }
+        },
+        "discard-changes": true
     },
     "autoload": {
         "psr-4": {
