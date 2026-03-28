@@ -1,47 +1,474 @@
-<nav class="navbar navbar-default">
+<nav class="ts-navbar" id="ts-navbar">
     <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
+        <div class="ts-navbar__inner">
+
+            <!-- Brand -->
+            <a class="ts-navbar__brand" href="{{ path('homepage') }}">
+                <span class="ts-navbar__brand-icon">✈</span>
+                <span class="ts-navbar__brand-text">Travel<strong>Share</strong></span>
+            </a>
+
+            <!-- Hamburger (mobile) -->
+            <button class="ts-navbar__toggle" id="ts-navbar-toggle" aria-label="Toggle navigation" aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
             </button>
-            <a class="navbar-brand" href="#">Travel Yeah</a>
-        </div>
-        <div id="navbar" class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-                <li><a href="{{ path('homepage') }}">Home</a></li>
-                <li><a href="{{ path('homepage') }}#favoritplaces">Most popular travels</a></li>
-                {% if app.user %}
-                    <li><a href="{{ path('main_private') }}">Private Area</a></li>
-                    <li><a href="{{ path('main_private') }}">My travels</a></li>
-                    <li><a href="{{ path('newTravel') }}">Add Travel</a></li>
-                {% endif %}
-                <li><a href="{{ path('homepage') }}#about">About</a></li>
-                <li><a href="{{ path('homepage') }}#contact">Contact</a></li>
-            </ul>
-            <ul class="nav pull-right">
-                <li class="divider-vertical"></li>
 
-                {% if app.user %}
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                            <span class="glyphicon glyphicon-user"></span> {{ app.user.username }} <span class="caret"></span>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-right">
-                            <li><a href="{{ path('profile_edit', {'_locale': 'en'}) }}"><span class="glyphicon glyphicon-cog"></span> My Profile</a></li>
-                            <li role="separator" class="divider"></li>
-                            <li><a href="{{ path('logout') }}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
-                        </ul>
+            <!-- Nav links -->
+            <div class="ts-navbar__collapse" id="ts-navbar-collapse">
+                <ul class="ts-navbar__nav">
+                    <li class="ts-navbar__item">
+                        <a class="ts-navbar__link" href="{{ path('homepage') }}">Home</a>
                     </li>
-                {% elseif not app.user %}
-                    <li><a href="{{ path('private_login') }}"><button type="button" class="btn btn-success navbar-btn">Sign in</button></a></li>
-                {% endif %}
-            </ul>
+                    <li class="ts-navbar__item">
+                        <a class="ts-navbar__link" href="{{ path('homepage') }}#favoritplaces">Top Travels</a>
+                    </li>
+                    {% if app.user %}
+                        <li class="ts-navbar__item">
+                            <a class="ts-navbar__link" href="{{ path('main_private') }}">My Travels</a>
+                        </li>
+                        <li class="ts-navbar__item">
+                            <a class="ts-navbar__link ts-navbar__link--cta" href="{{ path('newTravel') }}">
+                                <span class="ts-navbar__link-icon">+</span> Add Travel
+                            </a>
+                        </li>
+                    {% endif %}
+                    <li class="ts-navbar__item">
+                        <a class="ts-navbar__link" href="{{ path('homepage') }}#about">About</a>
+                    </li>
+                    <li class="ts-navbar__item">
+                        <a class="ts-navbar__link" href="{{ path('homepage') }}#contact">Contact</a>
+                    </li>
+                </ul>
 
+                <!-- Right side -->
+                <div class="ts-navbar__actions">
+                    {% if app.user %}
+                        <div class="ts-navbar__user-menu" id="ts-user-menu">
+                            <button class="ts-navbar__user-btn" id="ts-user-btn" aria-haspopup="true" aria-expanded="false">
+                                <span class="ts-navbar__avatar">{{ app.user.username|slice(0,1)|upper }}</span>
+                                <span class="ts-navbar__username">{{ app.user.username }}</span>
+                                <svg class="ts-navbar__chevron" viewBox="0 0 10 6" width="10" height="6"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+                            </button>
+                            <ul class="ts-navbar__dropdown" id="ts-user-dropdown" role="menu">
+                                <li class="ts-navbar__dropdown-header">{{ app.user.username }}</li>
+                                <li class="ts-navbar__dropdown-divider"></li>
+                                <li>
+                                    <a class="ts-navbar__dropdown-item" href="{{ path('profile_edit', {'_locale': 'en'}) }}" role="menuitem">
+                                        <svg viewBox="0 0 16 16" width="15" height="15" fill="currentColor"><path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm5 5a5 5 0 0 0-10 0h10z"/></svg>
+                                        My Profile
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="ts-navbar__dropdown-item" href="{{ path('main_private') }}" role="menuitem">
+                                        <svg viewBox="0 0 16 16" width="15" height="15" fill="currentColor"><path d="M2 2h5v5H2zm7 0h5v5H9zM2 9h5v5H2zm7 0h5v5H9z"/></svg>
+                                        My Travels
+                                    </a>
+                                </li>
+                                <li class="ts-navbar__dropdown-divider"></li>
+                                <li>
+                                    <a class="ts-navbar__dropdown-item ts-navbar__dropdown-item--danger" href="{{ path('logout') }}" role="menuitem">
+                                        <svg viewBox="0 0 16 16" width="15" height="15" fill="currentColor"><path d="M6 2H3a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3M10 11l3-3-3-3M13 8H6" stroke="currentColor" stroke-width="1.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                        Logout
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    {% else %}
+                        <a href="{{ path('private_login') }}" class="ts-navbar__btn ts-navbar__btn--ghost">Sign In</a>
+                        <a href="{{ path('private_register') }}" class="ts-navbar__btn ts-navbar__btn--primary">Get Started</a>
+                    {% endif %}
+                </div>
+            </div>
 
         </div>
-
     </div>
 </nav>
+
+<style>
+/* ── Variables ── */
+:root {
+    --nav-h: 64px;
+    --nav-bg: #1a2e4a;
+    --nav-bg-scroll: rgba(20, 38, 65, 0.97);
+    --nav-border: rgba(255,255,255,0.08);
+    --nav-text: rgba(255,255,255,0.80);
+    --nav-text-hover: #ffffff;
+    --nav-accent: #f39c12;
+    --nav-accent-hover: #e67e22;
+    --nav-radius: 8px;
+    --nav-shadow: 0 4px 24px rgba(0,0,0,0.18);
+    --nav-transition: 0.2s ease;
+}
+
+/* ── Base ── */
+.ts-navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    height: var(--nav-h);
+    background: var(--nav-bg);
+    border-bottom: 1px solid var(--nav-border);
+    transition: background var(--nav-transition), box-shadow var(--nav-transition);
+}
+.ts-navbar.is-scrolled {
+    background: var(--nav-bg-scroll);
+    box-shadow: var(--nav-shadow);
+}
+.ts-navbar .container { height: 100%; }
+.ts-navbar__inner {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    gap: 32px;
+}
+
+/* ── Brand ── */
+.ts-navbar__brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    flex-shrink: 0;
+}
+.ts-navbar__brand:hover { text-decoration: none; }
+.ts-navbar__brand-icon {
+    font-size: 22px;
+    line-height: 1;
+}
+.ts-navbar__brand-text {
+    font-size: 20px;
+    color: #fff;
+    letter-spacing: -0.3px;
+}
+.ts-navbar__brand-text strong {
+    color: var(--nav-accent);
+    font-weight: 700;
+}
+
+/* ── Collapse wrapper ── */
+.ts-navbar__collapse {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    gap: 4px;
+}
+
+/* ── Nav links ── */
+.ts-navbar__nav {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 2px;
+    flex: 1;
+}
+.ts-navbar__item { position: relative; }
+.ts-navbar__link {
+    display: block;
+    padding: 8px 14px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--nav-text);
+    text-decoration: none;
+    border-radius: var(--nav-radius);
+    transition: color var(--nav-transition), background var(--nav-transition);
+    white-space: nowrap;
+}
+.ts-navbar__link:hover,
+.ts-navbar__link:focus {
+    color: var(--nav-text-hover);
+    background: rgba(255,255,255,0.08);
+    text-decoration: none;
+}
+.ts-navbar__link.is-active {
+    color: var(--nav-accent);
+}
+
+/* Add Travel CTA link */
+.ts-navbar__link--cta {
+    color: var(--nav-accent);
+    border: 1px solid rgba(243,156,18,0.4);
+    padding: 7px 14px;
+}
+.ts-navbar__link--cta:hover {
+    background: rgba(243,156,18,0.12);
+    color: var(--nav-accent);
+    border-color: var(--nav-accent);
+}
+.ts-navbar__link-icon {
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1;
+    margin-right: 2px;
+}
+
+/* ── Actions (right side) ── */
+.ts-navbar__actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+    margin-left: auto;
+}
+
+/* Buttons */
+.ts-navbar__btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 18px;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 20px;
+    text-decoration: none;
+    transition: background var(--nav-transition), color var(--nav-transition), border-color var(--nav-transition);
+    white-space: nowrap;
+}
+.ts-navbar__btn--ghost {
+    color: rgba(255,255,255,0.85);
+    border: 1px solid rgba(255,255,255,0.3);
+    background: transparent;
+}
+.ts-navbar__btn--ghost:hover {
+    color: #fff;
+    border-color: rgba(255,255,255,0.7);
+    background: rgba(255,255,255,0.08);
+    text-decoration: none;
+}
+.ts-navbar__btn--primary {
+    color: #fff;
+    background: var(--nav-accent);
+    border: 1px solid var(--nav-accent);
+}
+.ts-navbar__btn--primary:hover {
+    background: var(--nav-accent-hover);
+    border-color: var(--nav-accent-hover);
+    color: #fff;
+    text-decoration: none;
+}
+
+/* ── User menu ── */
+.ts-navbar__user-menu { position: relative; }
+.ts-navbar__user-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 24px;
+    padding: 5px 12px 5px 6px;
+    cursor: pointer;
+    color: var(--nav-text-hover);
+    font-size: 14px;
+    font-weight: 500;
+    transition: background var(--nav-transition), border-color var(--nav-transition);
+}
+.ts-navbar__user-btn:hover,
+.ts-navbar__user-menu.is-open .ts-navbar__user-btn {
+    background: rgba(255,255,255,0.14);
+    border-color: rgba(255,255,255,0.3);
+}
+.ts-navbar__avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--nav-accent);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+.ts-navbar__username { max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ts-navbar__chevron {
+    color: var(--nav-text);
+    transition: transform var(--nav-transition);
+    flex-shrink: 0;
+}
+.ts-navbar__user-menu.is-open .ts-navbar__chevron { transform: rotate(180deg); }
+
+/* Dropdown */
+.ts-navbar__dropdown {
+    display: none;
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    min-width: 200px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.16);
+    border: 1px solid rgba(0,0,0,0.08);
+    list-style: none;
+    padding: 6px 0;
+    margin: 0;
+    z-index: 100;
+    animation: ts-dropdown-in 0.15s ease;
+}
+.ts-navbar__user-menu.is-open .ts-navbar__dropdown { display: block; }
+
+@keyframes ts-dropdown-in {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.ts-navbar__dropdown-header {
+    padding: 8px 16px 6px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #95a5a6;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+}
+.ts-navbar__dropdown-divider {
+    height: 1px;
+    background: #f0f0f0;
+    margin: 4px 0;
+}
+.ts-navbar__dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 16px;
+    font-size: 14px;
+    color: #2c3e50;
+    text-decoration: none;
+    transition: background var(--nav-transition), color var(--nav-transition);
+}
+.ts-navbar__dropdown-item:hover {
+    background: #f8f9fa;
+    color: #1a2e4a;
+    text-decoration: none;
+}
+.ts-navbar__dropdown-item--danger { color: #e74c3c; }
+.ts-navbar__dropdown-item--danger:hover { background: #fdf2f2; color: #c0392b; }
+
+/* ── Hamburger (mobile) ── */
+.ts-navbar__toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 36px;
+    height: 36px;
+    padding: 4px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 6px;
+    cursor: pointer;
+    margin-left: auto;
+    flex-shrink: 0;
+}
+.ts-navbar__toggle span {
+    display: block;
+    height: 2px;
+    background: #fff;
+    border-radius: 2px;
+    transition: transform 0.25s ease, opacity 0.25s ease;
+}
+.ts-navbar__toggle.is-open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.ts-navbar__toggle.is-open span:nth-child(2) { opacity: 0; }
+.ts-navbar__toggle.is-open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* ── Push page content below fixed nav ── */
+body { padding-top: var(--nav-h); }
+
+/* ── Responsive ── */
+@media (max-width: 991px) {
+    .ts-navbar__toggle { display: flex; }
+    .ts-navbar { height: var(--nav-h); }
+    .ts-navbar__inner { flex-wrap: wrap; align-items: flex-start; height: auto; padding: 0; }
+    .ts-navbar__brand { height: var(--nav-h); }
+
+    .ts-navbar__collapse {
+        display: none;
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+        padding: 12px 0 16px;
+        border-top: 1px solid var(--nav-border);
+        gap: 0;
+    }
+    .ts-navbar__collapse.is-open { display: flex; }
+
+    .ts-navbar__nav {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 2px;
+        width: 100%;
+    }
+    .ts-navbar__link { padding: 10px 16px; border-radius: 6px; }
+
+    .ts-navbar__actions {
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+        margin-left: 0;
+        margin-top: 8px;
+        padding: 0 4px;
+        gap: 8px;
+    }
+    .ts-navbar__btn { justify-content: center; border-radius: 8px; padding: 10px 18px; }
+
+    .ts-navbar__user-menu { width: 100%; }
+    .ts-navbar__user-btn { width: 100%; justify-content: flex-start; border-radius: 8px; }
+    .ts-navbar__dropdown {
+        position: static;
+        box-shadow: none;
+        border: 1px solid #e9ecef;
+        border-radius: 8px;
+        margin-top: 6px;
+        animation: none;
+    }
+}
+</style>
+
+<script>
+(function () {
+    var navbar   = document.getElementById('ts-navbar');
+    var toggle   = document.getElementById('ts-navbar-toggle');
+    var collapse = document.getElementById('ts-navbar-collapse');
+    var userMenu = document.getElementById('ts-user-menu');
+    var userBtn  = document.getElementById('ts-user-btn');
+
+    /* Scroll: add shadow */
+    window.addEventListener('scroll', function () {
+        navbar.classList.toggle('is-scrolled', window.scrollY > 10);
+    }, { passive: true });
+
+    /* Mobile hamburger */
+    if (toggle && collapse) {
+        toggle.addEventListener('click', function () {
+            var open = collapse.classList.toggle('is-open');
+            toggle.classList.toggle('is-open', open);
+            toggle.setAttribute('aria-expanded', open);
+        });
+    }
+
+    /* User dropdown */
+    if (userBtn && userMenu) {
+        userBtn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            var open = userMenu.classList.toggle('is-open');
+            userBtn.setAttribute('aria-expanded', open);
+        });
+        document.addEventListener('click', function () {
+            userMenu.classList.remove('is-open');
+            userBtn.setAttribute('aria-expanded', false);
+        });
+    }
+
+    /* Active link highlight */
+    var links = document.querySelectorAll('.ts-navbar__link');
+    links.forEach(function (link) {
+        if (link.href === window.location.href) {
+            link.classList.add('is-active');
+        }
+    });
+}());
+</script>

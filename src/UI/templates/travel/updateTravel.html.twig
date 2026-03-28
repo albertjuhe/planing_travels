@@ -1,192 +1,454 @@
-{% extends 'old_base.html.twig' %}
+{% extends 'base.html.twig' %}
 
-{% block title %}Update Travel{% endblock %}
-
-{% block css %}
-    {{ parent() }}
-    <link href="{{ asset('css/main.css') }}" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('css/leaflet@1.7.1/leaflet.css') }}"/>
-    <link rel="stylesheet" href="/public/font-awesome-4.3.0/css/font-awesome.min.css"/>
-    <link rel="stylesheet" href="/public/css/ionicons-2.0.1/css/ionicons.min.css"/>
-    <link rel="stylesheet" href="/public/css/leaflet.awesome-markers.css">
-    {{ encore_entry_link_tags('app') }}
-    <style>
-        .page-header-bar {
-            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
-            color: white;
-            padding: 30px 0 24px;
-            margin-bottom: 32px;
-        }
-        .page-header-bar h1 {
-            margin: 0 0 4px;
-            font-size: 28px;
-            font-weight: 300;
-        }
-        .page-header-bar a {
-            color: rgba(255,255,255,0.75);
-            font-size: 13px;
-            text-decoration: none;
-        }
-        .page-header-bar a:hover {
-            color: #fff;
-        }
-        .page-header-bar .glyphicon-chevron-left {
-            font-size: 11px;
-            margin-right: 4px;
-        }
-
-        .form-panel {
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.10);
-            overflow: hidden;
-            margin-bottom: 30px;
-        }
-        .form-panel-header {
-            padding: 16px 20px;
-            border-bottom: 1px solid #eee;
-            background: #f8f9fa;
-        }
-        .form-panel-header h3 {
-            margin: 0;
-            font-size: 16px;
-            font-weight: 600;
-            color: #2c3e50;
-        }
-        .form-panel-body {
-            padding: 20px;
-        }
-
-        .current-photo-wrap {
-            border-radius: 6px;
-            overflow: hidden;
-            margin-bottom: 12px;
-            position: relative;
-        }
-        .current-photo-wrap img {
-            width: 100%;
-            max-height: 160px;
-            object-fit: cover;
-            display: block;
-        }
-        .current-photo-wrap .photo-label {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(0,0,0,0.45);
-            color: #fff;
-            font-size: 11px;
-            padding: 4px 8px;
-        }
-
-        .flash-notice {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-            border-radius: 6px;
-            padding: 10px 14px;
-            margin-bottom: 16px;
-            font-size: 13px;
-        }
-
-        .map-panel {
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.10);
-            overflow: hidden;
-            margin-bottom: 30px;
-        }
-        .map-panel-header {
-            padding: 16px 20px;
-            border-bottom: 1px solid #eee;
-            background: #f8f9fa;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        .map-panel-header h3 {
-            margin: 0;
-            font-size: 16px;
-            font-weight: 600;
-            color: #2c3e50;
-        }
-        #map {
-            height: 520px;
-            width: 100%;
-        }
-
-        .btn-update {
-            width: 100%;
-            padding: 10px;
-            font-size: 15px;
-            font-weight: 600;
-            border-radius: 6px;
-            margin-top: 8px;
-        }
-    </style>
-{% endblock %}
+{% block title %} · Update Travel{% endblock %}
 
 {% block content %}
-    <div class="page-header-bar">
+<div class="ut-page">
+
+    {# ── Page header ── #}
+    <div class="ut-header">
         <div class="container">
-            <a href="{{ path('main_private') }}">
-                <span class="glyphicon glyphicon-chevron-left"></span> My Travels
-            </a>
-            <h1><span class="glyphicon glyphicon-pencil"></span> Update Travel</h1>
+            <div class="ut-header__inner">
+                <div class="ut-header__left">
+                    <a href="{{ path('main_private') }}" class="ut-back">
+                        <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3L5 8l5 5"/></svg>
+                        My Travels
+                    </a>
+                    <h1 class="ut-header__title">
+                        <svg viewBox="0 0 16 16" width="18" height="18" fill="currentColor" style="opacity:.8;margin-right:8px;flex-shrink:0"><path d="M11.7 1.3a1 1 0 0 1 1.4 0l1.6 1.6a1 1 0 0 1 0 1.4L5.5 13.5 1 15l1.5-4.5 9.2-9.2z"/></svg>
+                        {{ travelTitle }}
+                    </h1>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-4">
+    {# ── Body ── #}
+    <div class="container ut-container">
 
-                {% for flashMessage in app.session.flashbag.get('notice') %}
-                    <div class="flash-notice">
-                        <span class="glyphicon glyphicon-ok"></span> {{ flashMessage }}
+        {# Flash messages #}
+        {% for flashMessage in app.session.flashbag.get('notice') %}
+            <div class="ut-flash">
+                <svg viewBox="0 0 16 16" width="15" height="15" fill="currentColor"><path d="M8 1a7 7 0 1 1 0 14A7 7 0 0 1 8 1zm0 3v4m0 2v1"/></svg>
+                {{ flashMessage }}
+            </div>
+        {% endfor %}
+
+        <div class="ut-layout">
+
+            {# ── Left: form ── #}
+            <div class="ut-form-col">
+                {{ form_start(travelForm, {'attr': {'enctype': 'multipart/form-data', 'class': 'ut-form', 'id': 'ut-form'}}) }}
+
+                {# Cover photo panel #}
+                <div class="ut-panel">
+                    <div class="ut-panel__head">
+                        <svg viewBox="0 0 16 16" width="15" height="15" fill="currentColor" opacity=".7"><path d="M0 3h16v10H0V3zm1 1v8h14V4H1zm4 2a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm-1 5l2-3 2 2 2-3 3 4H3z"/></svg>
+                        Cover Photo
                     </div>
-                {% endfor %}
-
-                {{ form_start(travelForm, {'attr': {'enctype': 'multipart/form-data'}}) }}
-
-                <div class="form-panel">
-                    <div class="form-panel-header">
-                        <h3><span class="glyphicon glyphicon-info-sign"></span> Travel details</h3>
-                    </div>
-                    <div class="form-panel-body">
+                    <div class="ut-panel__body">
                         {% if currentPhoto %}
-                            <div class="current-photo-wrap">
-                                <img src="{{ asset('uploads/travel_photos/' ~ currentPhoto) }}" alt="Current cover">
-                                <span class="photo-label">
-                                    <span class="glyphicon glyphicon-camera"></span> Current cover photo
-                                </span>
+                            <div class="ut-cover-preview" id="ut-cover-preview">
+                                <img src="{{ asset('uploads/travel_photos/' ~ currentPhoto) }}"
+                                     alt="Current cover" id="ut-cover-img">
+                                <span class="ut-cover-label">Current cover</span>
+                            </div>
+                        {% else %}
+                            <div class="ut-cover-empty" id="ut-cover-preview">
+                                <svg viewBox="0 0 48 48" width="40" height="40" fill="none" stroke="#b0bec5" stroke-width="1.5"><rect x="4" y="8" width="40" height="32" rx="3"/><circle cx="16" cy="20" r="4"/><path d="M4 36l10-12 8 8 6-7 12 11"/></svg>
+                                <span>No cover yet</span>
                             </div>
                         {% endif %}
-
-                        {{ form_widget(travelForm) }}
+                        <div class="ut-file-field">
+                            {{ form_label(travelForm.photo, null, {'label_attr': {'class': 'ut-label'}}) }}
+                            <label class="ut-file-btn" for="{{ travelForm.photo.vars.id }}">
+                                <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><path d="M8 1v9M4 6l4-4 4 4M2 13h12"/></svg>
+                                Choose image
+                            </label>
+                            {{ form_widget(travelForm.photo, {'attr': {'class': 'ut-file-input', 'id': travelForm.photo.vars.id}}) }}
+                            <span class="ut-file-hint">JPEG, PNG, WebP · max 5 MB</span>
+                            {{ form_errors(travelForm.photo) }}
+                        </div>
                     </div>
                 </div>
 
-                <button type="submit" class="btn btn-primary btn-update">
-                    <span class="glyphicon glyphicon-floppy-disk"></span> Save changes
-                </button>
+                {# Details panel #}
+                <div class="ut-panel">
+                    <div class="ut-panel__head">
+                        <svg viewBox="0 0 16 16" width="15" height="15" fill="currentColor" opacity=".7"><path d="M2 2h12v12H2V2zm1 1v10h10V3H3zm2 2h6v1H5V5zm0 3h6v1H5V8zm0 3h4v1H5v-1z"/></svg>
+                        Travel Details
+                    </div>
+                    <div class="ut-panel__body ut-fields">
+
+                        <div class="ut-field">
+                            {{ form_label(travelForm.title, 'Title', {'label_attr': {'class': 'ut-label'}}) }}
+                            {{ form_widget(travelForm.title, {'attr': {'class': 'ut-input', 'placeholder': 'e.g. Summer in Japan'}}) }}
+                            {{ form_errors(travelForm.title) }}
+                        </div>
+
+                        <div class="ut-field-row">
+                            <div class="ut-field">
+                                {{ form_label(travelForm.startAt, 'Start date', {'label_attr': {'class': 'ut-label'}}) }}
+                                {{ form_widget(travelForm.startAt, {'attr': {'class': 'ut-date-widget'}}) }}
+                                {{ form_errors(travelForm.startAt) }}
+                            </div>
+                            <div class="ut-field">
+                                {{ form_label(travelForm.endAt, 'End date', {'label_attr': {'class': 'ut-label'}}) }}
+                                {{ form_widget(travelForm.endAt, {'attr': {'class': 'ut-date-widget'}}) }}
+                                {{ form_errors(travelForm.endAt) }}
+                            </div>
+                        </div>
+
+                        <div class="ut-field">
+                            {{ form_label(travelForm.description, 'Description', {'label_attr': {'class': 'ut-label'}}) }}
+                            {{ form_widget(travelForm.description, {'attr': {'class': 'ut-textarea', 'rows': '4', 'placeholder': 'Describe your travel experience…'}}) }}
+                            {{ form_errors(travelForm.description) }}
+                        </div>
+
+                    </div>
+                </div>
+
+                {# Actions #}
+                <div class="ut-actions">
+                    <a href="{{ path('main_private') }}" class="ut-btn ut-btn--ghost">Cancel</a>
+                    <button type="submit" class="ut-btn ut-btn--primary">
+                        <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><path d="M13 2H5L2 5v9h12V2h-1zm-5 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm2-9H5V3h5v1z"/></svg>
+                        Save changes
+                    </button>
+                </div>
 
                 {{ form_end(travelForm) }}
             </div>
 
-            <div class="col-sm-8">
-                <div class="map-panel">
-                    <div class="map-panel-header">
-                        <h3><span class="glyphicon glyphicon-map-marker"></span> Location</h3>
-                        <button class="btn btn-default btn-xs" id="center">
-                            <span class="glyphicon glyphicon-screenshot"></span> Center map
+            {# ── Right: map ── #}
+            <div class="ut-map-col">
+                <div class="ut-panel ut-panel--map">
+                    <div class="ut-panel__head ut-panel__head--map">
+                        <span>
+                            <svg viewBox="0 0 16 16" width="15" height="15" fill="currentColor" opacity=".7"><path d="M8 1a5 5 0 0 1 5 5c0 4-5 9-5 9S3 10 3 6a5 5 0 0 1 5-5zm0 3a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/></svg>
+                            Location
+                        </span>
+                        <button class="ut-map-center" id="ut-center" type="button">
+                            <svg viewBox="0 0 16 16" width="13" height="13" fill="currentColor"><path d="M8 5a3 3 0 1 1 0 6A3 3 0 0 1 8 5zM1 7h2m10 0h2M7 1v2m0 10v2"/></svg>
+                            Re-centre
                         </button>
                     </div>
                     <div id="map"></div>
                 </div>
             </div>
+
         </div>
     </div>
+</div>
+{% endblock %}
+
+{% block css %}
+{{ parent() }}
+<link rel="stylesheet" href="{{ asset('css/leaflet@1.7.1/leaflet.css') }}"/>
+<link rel="stylesheet" href="/public/font-awesome-4.3.0/css/font-awesome.min.css"/>
+<link rel="stylesheet" href="/public/css/ionicons-2.0.1/css/ionicons.min.css"/>
+<link rel="stylesheet" href="/public/css/leaflet.awesome-markers.css">
+<style>
+/* ─────────────────────────────────────────
+   Page shell
+───────────────────────────────────────── */
+.ut-page {
+    background: #f4f6f8;
+    min-height: calc(100vh - 64px);
+    padding-bottom: 60px;
+}
+
+/* ─────────────────────────────────────────
+   Header
+───────────────────────────────────────── */
+.ut-header {
+    background: linear-gradient(135deg, #1a2e4a 0%, #2980b9 100%);
+    padding: 28px 0 24px;
+    margin-bottom: 32px;
+}
+.ut-header__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+.ut-header__left {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+.ut-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: rgba(255,255,255,0.7);
+    font-size: 13px;
+    text-decoration: none;
+    transition: color 0.15s;
+}
+.ut-back:hover { color: #fff; text-decoration: none; }
+.ut-header__title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #fff;
+    margin: 0;
+    display: flex;
+    align-items: center;
+}
+
+/* ─────────────────────────────────────────
+   Flash
+───────────────────────────────────────── */
+.ut-flash {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #eafaf1;
+    border: 1px solid #a9dfbf;
+    color: #1e8449;
+    border-radius: 8px;
+    padding: 11px 16px;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+/* ─────────────────────────────────────────
+   Layout: two-column
+───────────────────────────────────────── */
+.ut-container { padding-top: 0; }
+.ut-layout {
+    display: grid;
+    grid-template-columns: 380px 1fr;
+    gap: 24px;
+    align-items: start;
+}
+
+/* ─────────────────────────────────────────
+   Panels
+───────────────────────────────────────── */
+.ut-panel {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.07), 0 4px 16px rgba(0,0,0,0.05);
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+.ut-panel--map { margin-bottom: 0; }
+.ut-panel__head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 13px 18px;
+    background: #f8f9fa;
+    border-bottom: 1px solid #eaecef;
+    font-size: 13px;
+    font-weight: 700;
+    color: #2c3e50;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.ut-panel__head--map {
+    justify-content: space-between;
+}
+.ut-panel__body {
+    padding: 20px;
+}
+
+/* ─────────────────────────────────────────
+   Cover photo
+───────────────────────────────────────── */
+.ut-cover-preview {
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 14px;
+    height: 160px;
+    background: #f0f2f4;
+}
+.ut-cover-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s;
+}
+.ut-cover-preview:hover img { transform: scale(1.03); }
+.ut-cover-label {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    background: rgba(0,0,0,0.45);
+    color: #fff;
+    font-size: 11px;
+    padding: 5px 10px;
+    font-weight: 500;
+}
+.ut-cover-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 120px;
+    border: 2px dashed #dde3ea;
+    border-radius: 8px;
+    color: #b0bec5;
+    font-size: 13px;
+    margin-bottom: 14px;
+}
+
+/* File upload */
+.ut-file-field { display: flex; flex-direction: column; gap: 6px; }
+.ut-file-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 14px;
+    background: #f4f6f8;
+    border: 1.5px solid #dde3ea;
+    border-radius: 7px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #2c3e50;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+    width: fit-content;
+}
+.ut-file-btn:hover { background: #eaecef; border-color: #c5cdd6; }
+.ut-file-input { display: none; }
+.ut-file-hint { font-size: 11px; color: #b0bec5; }
+
+/* ─────────────────────────────────────────
+   Form fields
+───────────────────────────────────────── */
+.ut-fields { display: flex; flex-direction: column; gap: 16px; }
+.ut-field { display: flex; flex-direction: column; gap: 5px; }
+.ut-field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+.ut-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: #2c3e50;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    margin: 0;
+}
+.ut-input,
+.ut-textarea {
+    width: 100%;
+    padding: 9px 12px;
+    font-size: 14px;
+    color: #2c3e50;
+    background: #f8f9fa;
+    border: 1.5px solid #dde3ea;
+    border-radius: 7px;
+    outline: none;
+    transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+    box-sizing: border-box;
+    font-family: inherit;
+}
+.ut-input:focus,
+.ut-textarea:focus {
+    border-color: #2980b9;
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(41,128,185,0.12);
+}
+.ut-textarea { resize: vertical; min-height: 90px; }
+
+/* Symfony date widget selects */
+.ut-date-widget select {
+    padding: 8px 10px;
+    font-size: 13px;
+    background: #f8f9fa;
+    border: 1.5px solid #dde3ea;
+    border-radius: 7px;
+    color: #2c3e50;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    margin-right: 4px;
+    margin-bottom: 4px;
+}
+.ut-date-widget select:focus {
+    border-color: #2980b9;
+    box-shadow: 0 0 0 3px rgba(41,128,185,0.12);
+}
+
+/* ─────────────────────────────────────────
+   Actions
+───────────────────────────────────────── */
+.ut-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 4px;
+}
+.ut-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 10px 22px;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.15s, color 0.15s, transform 0.1s;
+}
+.ut-btn:active { transform: scale(0.98); }
+.ut-btn--primary {
+    background: #f39c12;
+    color: #fff;
+}
+.ut-btn--primary:hover { background: #e67e22; color: #fff; text-decoration: none; }
+.ut-btn--ghost {
+    background: #f4f6f8;
+    color: #636e72;
+    border: 1.5px solid #dde3ea;
+}
+.ut-btn--ghost:hover { background: #eaecef; color: #2c3e50; text-decoration: none; }
+
+/* ─────────────────────────────────────────
+   Map
+───────────────────────────────────────── */
+#map {
+    height: 520px;
+    width: 100%;
+}
+.ut-map-center {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    background: #fff;
+    border: 1.5px solid #dde3ea;
+    border-radius: 16px;
+    color: #2c3e50;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+}
+.ut-map-center:hover { background: #f4f6f8; border-color: #c5cdd6; }
+
+/* ─────────────────────────────────────────
+   Responsive
+───────────────────────────────────────── */
+@media (max-width: 991px) {
+    .ut-layout {
+        grid-template-columns: 1fr;
+    }
+    #map { height: 360px; }
+}
+@media (max-width: 600px) {
+    .ut-field-row { grid-template-columns: 1fr; }
+    .ut-actions { flex-direction: column; }
+    .ut-btn { justify-content: center; }
+}
+</style>
 {% endblock %}
 
 {% block javascript %}
@@ -196,52 +458,51 @@
 <script src="{{ asset('js/markersDefinition.js') }}"></script>
 <script src="{{ google_maps }}" async defer></script>
 <script>
-    var map = L.map('map', {
-        center: [{{ latitude }}, {{ longitude }}],
-        zoom: 8
-    });
+(function () {
+    /* ── Map ── */
+    var lat = {{ latitude }};
+    var lng = {{ longitude }};
 
-    var osm = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+    var map = L.map('map', { center: [lat, lng], zoom: 8 });
 
-    var googleTerrain = L.tileLayer('http://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}', {
-        maxZoom: 20,
-        subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
-    });
-
-    var googleSat = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
-        maxZoom: 20,
-        subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
-    });
-
-    var googleHybrid = L.tileLayer('http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}', {
-        maxZoom: 20,
-        subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
-    });
-
-    var googleRoadMap = L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
-        maxZoom: 20,
-        subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
-    }).addTo(map);
-
-    var googleTraffic = L.tileLayer('https://{s}.google.com/vt/lyrs=m@221097413,traffic&x={x}&y={y}&z={z}', {
-        maxZoom: 20,
-        minZoom: 2,
-        subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
-    });
+    var osm           = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+    var googleTerrain = L.tileLayer('http://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}',   { maxZoom: 20, subdomains: ['mt0','mt1','mt2','mt3'] });
+    var googleSat     = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',   { maxZoom: 20, subdomains: ['mt0','mt1','mt2','mt3'] });
+    var googleHybrid  = L.tileLayer('http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}', { maxZoom: 20, subdomains: ['mt0','mt1','mt2','mt3'] });
+    var googleRoad    = L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',   { maxZoom: 20, subdomains: ['mt0','mt1','mt2','mt3'] }).addTo(map);
+    var googleTraffic = L.tileLayer('https://{s}.google.com/vt/lyrs=m@221097413,traffic&x={x}&y={y}&z={z}', { maxZoom: 20, minZoom: 2, subdomains: ['mt0','mt1','mt2','mt3'] });
 
     map.addControl(new L.Control.Layers({
         'OSM': osm,
         'Google Hybrid': googleHybrid,
         'Google Satellite': googleSat,
         'Google Terrain': googleTerrain,
-        'RoadMap': googleRoadMap,
+        'Road Map': googleRoad,
         'Traffic': googleTraffic
     }, {}));
 
-    var centralMark = L.marker([{{ latitude }}, {{ longitude }}], {icon: centerMarker}).addTo(map);
+    L.marker([lat, lng], { icon: centerMarker }).addTo(map);
 
-    $('#center').click(function () {
-        map.setView([{{ latitude }}, {{ longitude }}], 8);
+    document.getElementById('ut-center').addEventListener('click', function () {
+        map.setView([lat, lng], 8);
     });
+
+    /* ── Live cover photo preview ── */
+    var fileInput = document.querySelector('.ut-file-input');
+    if (fileInput) {
+        fileInput.addEventListener('change', function () {
+            if (!this.files || !this.files[0]) return;
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                var preview = document.getElementById('ut-cover-preview');
+                preview.innerHTML =
+                    '<img src="' + e.target.result + '" alt="Preview" id="ut-cover-img" style="width:100%;height:100%;object-fit:cover;display:block;">' +
+                    '<span class="ut-cover-label">New cover (unsaved)</span>';
+                preview.style.height = '160px';
+            };
+            reader.readAsDataURL(this.files[0]);
+        });
+    }
+}());
 </script>
 {% endblock %}
