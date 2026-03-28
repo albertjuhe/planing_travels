@@ -25,8 +25,16 @@
                 <li class="divider-vertical"></li>
 
                 {% if app.user %}
-                    <li><a href="{{ path('logout') }}">Logout</a></li>
-                    <li>Logged as {{ app.user.username}}</li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                            <span class="glyphicon glyphicon-user"></span> {{ app.user.username }} <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            <li><a href="{{ path('profile_edit', {'_locale': 'en'}) }}"><span class="glyphicon glyphicon-cog"></span> My Profile</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="{{ path('logout') }}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+                        </ul>
+                    </li>
                 {% elseif not app.user %}
                     <li><a href="{{ path('private_login') }}"><button type="button" class="btn btn-success navbar-btn">Sign in</button></a></li>
                 {% endif %}
