@@ -1,260 +1,280 @@
 {% extends 'base.html.twig' %}
 
-{% block title %} - Sign In{% endblock %}
+{% block title %} · Sign In{% endblock %}
 
-{% block navbar %}{% endblock %}
+{% block content %}
+<div class="login-page">
+    <div class="login-card">
+
+        <!-- Logo / Brand -->
+        <div class="login-brand">
+            <a href="{{ path('homepage') }}" class="login-brand__link">
+                <span class="login-brand__icon">✈</span>
+                <span class="login-brand__text">Travel<strong>Share</strong></span>
+            </a>
+        </div>
+
+        <h1 class="login-title">Welcome back</h1>
+        <p class="login-subtitle">Sign in to continue your adventures</p>
+
+        {% if error %}
+            <div class="login-alert">
+                <span class="glyphicon glyphicon-exclamation-sign"></span>
+                {{ error.messageKey|trans(error.messageData, 'security') }}
+            </div>
+        {% endif %}
+
+        <form class="login-form" action="{{ path('private_login') }}" method="post">
+
+            <div class="login-field">
+                <label for="username" class="login-label">Username</label>
+                <div class="login-input-wrap">
+                    <span class="login-input-icon glyphicon glyphicon-user"></span>
+                    <input
+                        type="text"
+                        class="login-input"
+                        id="username"
+                        name="_username"
+                        value="{{ last_username }}"
+                        placeholder="Your username"
+                        required
+                        autofocus
+                    >
+                </div>
+            </div>
+
+            <div class="login-field">
+                <label for="password" class="login-label">
+                    Password
+                    <a href="#" class="login-forgot">Forgot password?</a>
+                </label>
+                <div class="login-input-wrap">
+                    <span class="login-input-icon glyphicon glyphicon-lock"></span>
+                    <input
+                        type="password"
+                        class="login-input"
+                        id="password"
+                        name="_password"
+                        placeholder="Your password"
+                        required
+                    >
+                </div>
+            </div>
+
+            <div class="login-remember">
+                <label class="login-checkbox">
+                    <input type="checkbox" id="remember_me" name="_remember_me" checked>
+                    <span class="login-checkbox__mark"></span>
+                    Keep me signed in
+                </label>
+            </div>
+
+            <button class="login-submit" type="submit">Sign In</button>
+
+        </form>
+
+        <p class="login-register">
+            Don't have an account?
+            <a href="{{ path('private_register') }}">Create one for free</a>
+        </p>
+
+    </div>
+</div>
+{% endblock %}
 
 {% block css %}
     {{ parent() }}
     <style>
-        html, body {
-            height: 100%;
-        }
-        body {
-            background: linear-gradient(135deg, #1a2a3a 0%, #2c3e50 50%, #1a6b9a 100%);
-            min-height: 100vh;
+        /* ── Page layout ── */
+        .login-page {
+            min-height: calc(100vh - 64px);
             display: flex;
             align-items: center;
             justify-content: center;
-        }
-        .login-wrapper {
-            width: 100%;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            background: linear-gradient(135deg, #1a2e4a 0%, #2980b9 60%, #6dd5fa 100%);
             padding: 40px 16px;
         }
+
+        /* ── Card ── */
         .login-card {
             background: #fff;
             border-radius: 16px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+            padding: 48px 40px 40px;
             width: 100%;
             max-width: 420px;
-            overflow: hidden;
         }
-        .login-card-header {
-            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
-            padding: 40px 36px 32px;
+
+        /* ── Brand ── */
+        .login-brand {
             text-align: center;
-            color: #fff;
+            margin-bottom: 28px;
         }
-        .login-card-header .brand-icon {
-            font-size: 48px;
-            margin-bottom: 12px;
-            display: block;
-        }
-        .login-card-header h1 {
-            font-size: 24px;
-            font-weight: 300;
-            margin: 0 0 4px;
-            letter-spacing: 0.5px;
-        }
-        .login-card-header p {
-            margin: 0;
-            font-size: 13px;
-            opacity: 0.75;
-        }
-        .login-card-body {
-            padding: 36px;
-        }
-        .form-group {
-            margin-bottom: 20px;
-            position: relative;
-        }
-        .form-group label {
-            font-size: 12px;
-            font-weight: 600;
-            color: #7f8c8d;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-            margin-bottom: 6px;
-            display: block;
-        }
-        .input-icon-wrap {
-            position: relative;
-        }
-        .input-icon-wrap .glyphicon {
-            position: absolute;
-            left: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #aab8c2;
-            font-size: 14px;
-        }
-        .input-icon-wrap input {
-            padding-left: 36px;
-        }
-        .form-control {
-            border: 1.5px solid #e0e6ed;
-            border-radius: 8px;
-            height: 44px;
-            font-size: 14px;
-            color: #2c3e50;
-            transition: border-color 0.2s, box-shadow 0.2s;
-        }
-        .form-control:focus {
-            border-color: #3498db;
-            box-shadow: 0 0 0 3px rgba(52,152,219,0.12);
-            outline: none;
-        }
-        .remember-row {
-            display: flex;
+        .login-brand__link {
+            display: inline-flex;
             align-items: center;
-            justify-content: space-between;
-            margin-bottom: 24px;
-            font-size: 13px;
-        }
-        .remember-row label {
-            margin: 0;
-            color: #555;
-            font-weight: normal;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .remember-row a {
-            color: #3498db;
-            text-decoration: none;
-            font-size: 13px;
-        }
-        .remember-row a:hover {
-            text-decoration: underline;
-        }
-        .btn-login {
-            width: 100%;
-            height: 46px;
-            font-size: 15px;
-            font-weight: 600;
-            border-radius: 8px;
-            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
-            border: none;
-            color: #fff;
-            letter-spacing: 0.5px;
-            transition: opacity 0.2s, transform 0.1s;
-        }
-        .btn-login:hover {
-            opacity: 0.92;
-            transform: translateY(-1px);
-            color: #fff;
-        }
-        .btn-login:active {
-            transform: translateY(0);
-        }
-        .login-card-footer {
-            border-top: 1px solid #f0f3f6;
-            padding: 20px 36px;
-            text-align: center;
-            background: #f8f9fa;
-        }
-        .login-card-footer p {
-            margin: 0;
-            font-size: 13px;
-            color: #7f8c8d;
-        }
-        .login-card-footer a {
-            color: #3498db;
-            font-weight: 600;
+            gap: 8px;
             text-decoration: none;
         }
-        .login-card-footer a:hover {
-            text-decoration: underline;
+        .login-brand__link:hover { text-decoration: none; }
+        .login-brand__icon { font-size: 26px; line-height: 1; }
+        .login-brand__text {
+            font-size: 22px;
+            color: #1a2e4a;
+            letter-spacing: -0.3px;
         }
-        .alert-error {
-            background: #fdf0f0;
+        .login-brand__text strong { color: #f39c12; font-weight: 700; }
+
+        /* ── Headings ── */
+        .login-title {
+            font-size: 26px;
+            font-weight: 700;
+            color: #1a2e4a;
+            text-align: center;
+            margin: 0 0 6px;
+        }
+        .login-subtitle {
+            font-size: 14px;
+            color: #7f8c8d;
+            text-align: center;
+            margin: 0 0 28px;
+        }
+
+        /* ── Error alert ── */
+        .login-alert {
+            background: #fdf2f2;
             border: 1px solid #f5c6cb;
-            border-radius: 8px;
             color: #c0392b;
+            border-radius: 8px;
             padding: 10px 14px;
-            font-size: 13px;
+            font-size: 14px;
             margin-bottom: 20px;
             display: flex;
             align-items: center;
             gap: 8px;
         }
-        .back-link {
-            position: fixed;
-            top: 20px;
-            left: 24px;
-            color: rgba(255,255,255,0.7);
+
+        /* ── Fields ── */
+        .login-form { display: flex; flex-direction: column; gap: 18px; }
+        .login-field { display: flex; flex-direction: column; gap: 6px; }
+        .login-label {
             font-size: 13px;
-            text-decoration: none;
-            transition: color 0.2s;
+            font-weight: 600;
+            color: #2c3e50;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 0;
         }
-        .back-link:hover {
+        .login-forgot {
+            font-size: 12px;
+            font-weight: 400;
+            color: #2980b9;
+        }
+        .login-forgot:hover { color: #1a5276; text-decoration: none; }
+
+        .login-input-wrap {
+            position: relative;
+        }
+        .login-input-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #aab7c4;
+            font-size: 14px;
+            pointer-events: none;
+        }
+        .login-input {
+            width: 100%;
+            padding: 11px 14px 11px 40px;
+            font-size: 14px;
+            color: #2c3e50;
+            background: #f8f9fa;
+            border: 1.5px solid #dde3ea;
+            border-radius: 8px;
+            outline: none;
+            transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+            box-sizing: border-box;
+        }
+        .login-input:focus {
+            border-color: #2980b9;
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(41, 128, 185, 0.12);
+        }
+        .login-input::placeholder { color: #b0bec5; }
+
+        /* ── Remember me ── */
+        .login-remember { margin-top: -4px; }
+        .login-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: #555;
+            cursor: pointer;
+            margin: 0;
+            font-weight: 400;
+        }
+        .login-checkbox input[type="checkbox"] { display: none; }
+        .login-checkbox__mark {
+            width: 16px;
+            height: 16px;
+            border: 1.5px solid #aab7c4;
+            border-radius: 4px;
+            background: #f8f9fa;
+            flex-shrink: 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.15s, border-color 0.15s;
+        }
+        .login-checkbox input:checked + .login-checkbox__mark {
+            background: #2980b9;
+            border-color: #2980b9;
+        }
+        .login-checkbox input:checked + .login-checkbox__mark::after {
+            content: '';
+            display: block;
+            width: 4px;
+            height: 7px;
+            border: 2px solid #fff;
+            border-top: none;
+            border-left: none;
+            transform: rotate(45deg) translateY(-1px);
+        }
+
+        /* ── Submit ── */
+        .login-submit {
+            width: 100%;
+            padding: 12px;
+            font-size: 15px;
+            font-weight: 600;
             color: #fff;
+            background: #f39c12;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+            margin-top: 4px;
         }
-        .back-link .glyphicon {
-            font-size: 11px;
-            margin-right: 4px;
+        .login-submit:hover { background: #e67e22; }
+        .login-submit:active { transform: scale(0.99); }
+
+        /* ── Register link ── */
+        .login-register {
+            text-align: center;
+            font-size: 13px;
+            color: #7f8c8d;
+            margin: 20px 0 0;
+        }
+        .login-register a { color: #2980b9; font-weight: 600; }
+        .login-register a:hover { color: #1a5276; text-decoration: none; }
+
+        /* ── Responsive ── */
+        @media (max-width: 480px) {
+            .login-card { padding: 36px 24px 32px; }
+            .login-title { font-size: 22px; }
         }
     </style>
-{% endblock %}
-
-{% block content %}
-    <a href="{{ path('homepage') }}" class="back-link">
-        <span class="glyphicon glyphicon-chevron-left"></span> Back to home
-    </a>
-
-    <div class="login-wrapper">
-        <div class="login-card">
-
-            <div class="login-card-header">
-                <span class="brand-icon glyphicon glyphicon-globe"></span>
-                <h1>Travel Yeah</h1>
-                <p>Sign in to your account</p>
-            </div>
-
-            <div class="login-card-body">
-
-                {% if error %}
-                    <div class="alert-error">
-                        <span class="glyphicon glyphicon-exclamation-sign"></span>
-                        {{ error.messageKey|trans(error.messageData, 'security') }}
-                    </div>
-                {% endif %}
-
-                <form action="{{ path('private_login') }}" method="post">
-
-                    <div class="form-group">
-                        <label for="username">Username</label>
-                        <div class="input-icon-wrap">
-                            <span class="glyphicon glyphicon-user"></span>
-                            <input type="text" class="form-control" id="username" name="_username"
-                                   value="{{ last_username }}" placeholder="Enter your username"
-                                   required autofocus>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="password">Password</label>
-                        <div class="input-icon-wrap">
-                            <span class="glyphicon glyphicon-lock"></span>
-                            <input type="password" class="form-control" id="password" name="_password"
-                                   placeholder="Enter your password" required>
-                        </div>
-                    </div>
-
-                    <div class="remember-row">
-                        <label>
-                            <input type="checkbox" id="remember_me" name="_remember_me" checked/>
-                            Remember me
-                        </label>
-                        <a href="#">Forgot password?</a>
-                    </div>
-
-                    <button class="btn btn-login" type="submit">
-                        <span class="glyphicon glyphicon-log-in"></span> Sign in
-                    </button>
-
-                </form>
-            </div>
-
-            <div class="login-card-footer">
-                <p>Don't have an account? <a href="{{ path('private_register') }}">Create one</a></p>
-            </div>
-
-        </div>
-    </div>
 {% endblock %}

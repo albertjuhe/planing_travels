@@ -2,107 +2,349 @@
 
 {% block content %}
 
-    <div class="container marketing">
-
-        <!-- Three columns of text below the carousel -->
+<!-- Hero Section -->
+<div class="hero-section">
+    <div class="hero-overlay"></div>
+    <div class="container hero-content">
         <div class="row">
-            <div class="col-lg-8">
-                <h1>Plan your trip in a seconds</h1>
-                <h2>Create your trip collaborative, sharing trips</h2>
-                <img class="featurette-image img-responsive" data-src="holder.js/500x350/auto" alt="Generic placeholder image">
+            <div class="col-md-8 col-md-offset-2 text-center">
+                <h1 class="hero-title">Discover &amp; Share Your Adventures</h1>
+                <p class="hero-subtitle">Plan trips collaboratively, create routes, and inspire fellow travelers around the world.</p>
+
                 {% if not(app.user) %}
-                    <div>
-                        <a href="{{ path('private_login') }}"><button type="button" class="btn btn-success navbar-btn">Sign in</button></a>
-                        <a href="{{ path('private_register') }}"><button type="button" class="btn btn-success navbar-btn">Register</button></a>
+                    <div class="hero-actions">
+                        <a href="{{ path('private_login') }}" class="btn btn-hero-primary btn-lg">Sign In</a>
+                        <a href="{{ path('private_register') }}" class="btn btn-hero-secondary btn-lg">Get Started Free</a>
                     </div>
-                {%  endif  %}
-            </div><!-- /.col-lg-4 -->
-            <div class="col-lg-4">
-                <h1>Sign up</h1>
-
-            </div><!-- /.row -->
-            <hr class="featurette-divider">
-            <div class="row">
-                <div class="col-lg-12">
-                    <form class="form-horizontal">
-                        <div class="form-group form-group-lg">
-                            <label class="col-sm-2 control-label" for="formGroupInputLarge">Search a trip</label>
-                            <div class="col-sm-6">
-                                <input class="form-control" type="text" id="formGroupInputLarge" placeholder="Where do you want to go?">
-                            </div>
-                            <div class="col-sm-4">
-                                <button type="submit" class="btn btn-warning  btn-lg">Search</button>
-                            </div>
-
-                        </div>
-
-                    </form>
-                </div><!-- /.col-lg-4 -->
-
-            </div><!-- /.row -->
-            <hr class="featurette-divider">
-            <!-- Three columns of text below the carousel -->
-            <div class="row">
-                <div class="col-lg-4">
-                    <img src="{{ asset('img/1438458977_world.png') }}" alt="Generic placeholder image" style="width: 140px; height: 140px;">
-                    <h2>Plan trip</h2>
-                    <p>Allow to oher user to read documents and allow them to annotate. The users diced if the annotations will be shared or not.</p>
-                    <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
-                </div><!-- /.col-lg-4 -->
-                <div class="col-lg-4">
-                    <img  src="{{ asset('img/1438458971_photo.png') }}" alt="Generic placeholder image" style="width: 140px; height: 140px;">
-                    <h2>Create Routes</h2>
-                    <p>Make your documents more rich adding external resources with a simple drag and drop</p>
-                    <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
-                </div><!-- /.col-lg-4 -->
-                <div class="col-lg-4">
-                    <img  src="{{ asset('img/1438459021_camera.png') }}" alt="Generic placeholder image" style="width: 140px; height: 140px;">
-                    <h2>Share information</h2>
-                    <p>Export the documents annotated to PDF format or sets as a valid versión.</p>
-                    <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
-                </div><!-- /.col-lg-4 -->
-            </div><!-- /.row -->
-            <div id="root"></div>
-            <hr class="featurette-divider">
-
-            <div class="row featurette">
-                <div class="col-md-5">
-                    <img class="featurette-image img-responsive" data-src="holder.js/500x500/auto" alt="Generic placeholder image">
-                </div>
-                <div class="col-md-7">
-                    <h2 class="featurette-heading">Oh yeah, it's that good. <span class="text-muted">See for yourself.</span></h2>
-                    <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
-                </div>
+                {% else %}
+                    <div class="hero-actions">
+                        <a href="{{ path('newTravel') }}" class="btn btn-hero-primary btn-lg">Add New Travel</a>
+                        <a href="{{ path('main_private') }}" class="btn btn-hero-secondary btn-lg">My Travels</a>
+                    </div>
+                {% endif %}
             </div>
-
-            <hr class="featurette-divider">
-
-            <div class="row featurette">
-                <div class="col-md-7">
-                    <h2 class="featurette-heading">And lastly, this one. <span class="text-muted">Checkmate.</span></h2>
-                    <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
-                </div>
-                <div class="col-md-5">
-                    <img class="featurette-image img-responsive" data-src="{{ asset('holder/holder.js/500x500/auto')}}" alt="Generic placeholder image">
-                </div>
-            </div>
-
-            <hr class="featurette-divider">
-
-            <!-- /END THE FEATURETTES -->
-
-
-            <!-- FOOTER -->
-            <footer>
-                <p class="pull-right"><a href="#">Back to top</a></p>
-                <p>&copy;  {{ "now"|date("Y") }} Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
-            </footer>
-
         </div>
     </div>
-        <!-- /.container -->
+</div>
+
+<!-- Search Section -->
+<div class="search-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <div class="search-box">
+                    <form class="form-inline">
+                        <div class="input-group input-group-lg search-input-group">
+                            <span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
+                            <input class="form-control" type="text" placeholder="Where do you want to go?">
+                            <span class="input-group-btn">
+                                <button type="submit" class="btn btn-warning btn-lg">Explore</button>
+                            </span>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Features Section -->
+<div class="features-section">
+    <div class="container">
+        <div class="section-header text-center">
+            <h2>Everything you need to plan the perfect trip</h2>
+            <p class="section-subheading">Powerful tools for modern travelers</p>
+        </div>
+        <div class="row features-row">
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <img src="{{ asset('img/1438458977_world.png') }}" alt="Plan trip" style="width: 72px; height: 72px;">
+                    </div>
+                    <h3>Plan Your Trip</h3>
+                    <p>Build detailed travel plans, set dates, budgets and collaborate with fellow travelers in real time.</p>
+                    <a class="btn btn-outline" href="#" role="button">Learn more</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card feature-card--highlight">
+                    <div class="feature-icon">
+                        <img src="{{ asset('img/1438458971_photo.png') }}" alt="Create routes" style="width: 72px; height: 72px;">
+                    </div>
+                    <h3>Create Routes</h3>
+                    <p>Map out your journey with interactive routes, waypoints and GPS track uploads.</p>
+                    <a class="btn btn-outline" href="#" role="button">Learn more</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <img src="{{ asset('img/1438459021_camera.png') }}" alt="Share information" style="width: 72px; height: 72px;">
+                    </div>
+                    <h3>Share &amp; Inspire</h3>
+                    <p>Publish your trips, share photos and inspire a global community of adventurers.</p>
+                    <a class="btn btn-outline" href="#" role="button">Learn more</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Best Travels Section -->
+<div class="travels-section" id="favoritplaces">
+    <div class="container">
+        <div class="section-header text-center">
+            <h2>Top Travels</h2>
+            <p class="section-subheading">Handpicked adventures loved by our community</p>
+        </div>
+
+        {% if travels is defined and travels|length > 0 %}
+        <div class="table-responsive">
+            <table class="table travels-table">
+                <thead>
+                    <tr>
+                        <th>Destination</th>
+                        <th>Dates</th>
+                        <th><span class="glyphicon glyphicon-star"></span> Rating</th>
+                        <th><span class="glyphicon glyphicon-eye-open"></span> Views</th>
+                        <th>Traveler</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for travel in travels %}
+                    <tr>
+                        <td>
+                            <a class="travel-link" href="{{ path('show_travel', {'slug': travel.slug}) }}">{{ travel.title }}</a>
+                            {% if travel.description %}
+                                <br><small class="text-muted">{{ travel.description|slice(0, 80) }}{% if travel.description|length > 80 %}…{% endif %}</small>
+                            {% endif %}
+                        </td>
+                        <td class="text-nowrap">{{ travel.startAt.date|date("d M Y") }} &rarr; {{ travel.endAt.date|date("d M Y") }}</td>
+                        <td>{{ travel.stars }}</td>
+                        <td>{{ travel.watch }}</td>
+                        <td><span class="glyphicon glyphicon-user"></span> {{ travel.username }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-travels text-center">
+            <span class="glyphicon glyphicon-globe empty-icon"></span>
+            <p>No travels published yet. Be the first to share your adventure!</p>
+            {% if not app.user %}
+                <a href="{{ path('private_register') }}" class="btn btn-primary">Get Started</a>
+            {% else %}
+                <a href="{{ path('newTravel') }}" class="btn btn-primary">Add a Travel</a>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- About Section -->
+<div class="about-section" id="about">
+    <div class="container">
+        <div class="row about-row">
+            <div class="col-md-6 about-text">
+                <h2>Built for passionate travelers</h2>
+                <p class="lead">TravelShare is a platform where explorers plan, document and share their journeys. Whether you're backpacking solo or organising a group adventure, our tools make it simple.</p>
+                <ul class="about-list">
+                    <li><span class="glyphicon glyphicon-ok-circle"></span> Collaborative trip planning</li>
+                    <li><span class="glyphicon glyphicon-ok-circle"></span> Interactive maps &amp; GPS tracks</li>
+                    <li><span class="glyphicon glyphicon-ok-circle"></span> Community ratings &amp; reviews</li>
+                    <li><span class="glyphicon glyphicon-ok-circle"></span> Free to use, forever</li>
+                </ul>
+                {% if not app.user %}
+                    <a href="{{ path('private_register') }}" class="btn btn-primary btn-lg">Join the community</a>
+                {% endif %}
+            </div>
+            <div class="col-md-6 about-visual">
+                <div class="about-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">∞</span>
+                        <span class="stat-label">Destinations</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">100%</span>
+                        <span class="stat-label">Free</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">24/7</span>
+                        <span class="stat-label">Available</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="site-footer" id="contact">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <h4>TravelShare</h4>
+                <p>Plan, share and explore the world together.</p>
+            </div>
+            <div class="col-md-4">
+                <h4>Quick Links</h4>
+                <ul class="footer-links">
+                    <li><a href="{{ path('homepage') }}">Home</a></li>
+                    <li><a href="#favoritplaces">Top Travels</a></li>
+                    <li><a href="#about">About</a></li>
+                </ul>
+            </div>
+            <div class="col-md-4 text-right">
+                <p class="footer-copy">&copy; {{ "now"|date("Y") }} TravelShare &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
+                <p><a href="#" class="back-to-top">Back to top &uarr;</a></p>
+            </div>
+        </div>
+    </div>
+</footer>
+
 {% endblock %}
 
+{% block css %}
+    {{ parent() }}
+    <style>
+        /* ── Hero ── */
+        .hero-section {
+            position: relative;
+            background: linear-gradient(135deg, #1a3a5c 0%, #2980b9 60%, #6dd5fa 100%);
+            min-height: 480px;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+        }
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(10, 30, 60, 0.45);
+        }
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            padding: 80px 15px;
+        }
+        .hero-title {
+            font-size: 46px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 18px;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+        .hero-subtitle {
+            font-size: 20px;
+            color: rgba(255,255,255,0.88);
+            margin-bottom: 36px;
+        }
+        .hero-actions { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+        .btn-hero-primary {
+            background: #f39c12;
+            border-color: #f39c12;
+            color: #fff;
+            font-weight: 600;
+            padding: 12px 32px;
+            border-radius: 30px;
+        }
+        .btn-hero-primary:hover { background: #e67e22; border-color: #e67e22; color: #fff; }
+        .btn-hero-secondary {
+            background: transparent;
+            border: 2px solid #fff;
+            color: #fff;
+            font-weight: 600;
+            padding: 12px 32px;
+            border-radius: 30px;
+        }
+        .btn-hero-secondary:hover { background: rgba(255,255,255,0.15); color: #fff; }
 
+        /* ── Search ── */
+        .search-section {
+            background: #f8f9fa;
+            padding: 32px 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+        .search-box { background: #fff; border-radius: 8px; padding: 24px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
+        .search-input-group { width: 100%; }
+        .search-input-group .form-control { border-radius: 0; }
+        .search-input-group .input-group-addon { background: #fff; border-right: 0; color: #aaa; }
 
+        /* ── Section shared ── */
+        .section-header { margin-bottom: 48px; }
+        .section-header h2 { font-size: 32px; font-weight: 700; color: #2c3e50; margin-bottom: 8px; }
+        .section-subheading { font-size: 16px; color: #7f8c8d; }
 
+        /* ── Features ── */
+        .features-section { padding: 72px 0; background: #fff; }
+        .features-row { display: flex; flex-wrap: wrap; }
+        .feature-card {
+            text-align: center;
+            padding: 40px 28px;
+            border-radius: 12px;
+            background: #f8f9fa;
+            margin-bottom: 24px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            height: 100%;
+        }
+        .feature-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
+        .feature-card--highlight { background: #eaf4fd; border: 2px solid #2980b9; }
+        .feature-icon { margin-bottom: 20px; }
+        .feature-card h3 { font-size: 20px; font-weight: 700; color: #2c3e50; margin-bottom: 12px; }
+        .feature-card p { color: #636e72; margin-bottom: 20px; }
+        .btn-outline {
+            border: 2px solid #2980b9;
+            color: #2980b9;
+            background: transparent;
+            border-radius: 20px;
+            padding: 6px 20px;
+            font-weight: 600;
+        }
+        .btn-outline:hover { background: #2980b9; color: #fff; }
+
+        /* ── Travels table ── */
+        .travels-section { padding: 72px 0; background: #f8f9fa; }
+        .travels-table { background: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.07); }
+        .travels-table thead th { background: #2c3e50; color: #fff; border: none; padding: 14px 16px; font-weight: 600; }
+        .travels-table tbody tr:hover { background: #eaf4fd; }
+        .travels-table tbody td { padding: 14px 16px; vertical-align: middle; border-color: #f0f0f0; }
+        .travel-link { font-weight: 600; color: #2980b9; }
+        .travel-link:hover { color: #1a5276; }
+        .empty-travels { padding: 60px 0; }
+        .empty-icon { font-size: 64px; color: #bdc3c7; display: block; margin-bottom: 16px; }
+
+        /* ── About ── */
+        .about-section { padding: 72px 0; background: #fff; }
+        .about-row { display: flex; align-items: center; flex-wrap: wrap; }
+        .about-text { padding-right: 40px; }
+        .about-text h2 { font-size: 30px; font-weight: 700; color: #2c3e50; margin-bottom: 16px; }
+        .about-list { list-style: none; padding: 0; margin: 20px 0 28px; }
+        .about-list li { padding: 6px 0; color: #555; font-size: 16px; }
+        .about-list .glyphicon { color: #27ae60; margin-right: 10px; }
+        .about-visual { padding: 32px 0; }
+        .about-stats { display: flex; justify-content: space-around; flex-wrap: wrap; gap: 16px; }
+        .stat-item { text-align: center; background: #eaf4fd; border-radius: 12px; padding: 28px 24px; min-width: 120px; flex: 1; }
+        .stat-number { display: block; font-size: 36px; font-weight: 800; color: #2980b9; }
+        .stat-label { display: block; font-size: 13px; color: #7f8c8d; margin-top: 4px; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* ── Footer ── */
+        .site-footer { background: #2c3e50; color: #bdc3c7; padding: 48px 0 24px; margin-top: 0; }
+        .site-footer h4 { color: #ecf0f1; margin-bottom: 14px; }
+        .site-footer p { font-size: 14px; }
+        .footer-links { list-style: none; padding: 0; }
+        .footer-links li { margin-bottom: 6px; }
+        .footer-links a { color: #bdc3c7; }
+        .footer-links a:hover { color: #fff; text-decoration: none; }
+        .footer-copy { color: #95a5a6; }
+        .footer-copy a { color: #bdc3c7; }
+        .back-to-top { color: #bdc3c7; }
+        .back-to-top:hover { color: #fff; text-decoration: none; }
+
+        @media (max-width: 767px) {
+            .hero-title { font-size: 30px; }
+            .hero-subtitle { font-size: 16px; }
+            .about-text { padding-right: 0; margin-bottom: 32px; }
+            .site-footer .text-right { text-align: left !important; margin-top: 24px; }
+        }
+    </style>
+{% endblock %}
