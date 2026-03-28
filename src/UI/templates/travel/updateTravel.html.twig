@@ -2,29 +2,188 @@
 
 {% block title %}Update Travel{% endblock %}
 
+{% block css %}
+    {{ parent() }}
+    <link href="{{ asset('css/main.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/leaflet@1.7.1/leaflet.css') }}"/>
+    <link rel="stylesheet" href="/public/font-awesome-4.3.0/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="/public/css/ionicons-2.0.1/css/ionicons.min.css"/>
+    <link rel="stylesheet" href="/public/css/leaflet.awesome-markers.css">
+    {{ encore_entry_link_tags('app') }}
+    <style>
+        .page-header-bar {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+            padding: 30px 0 24px;
+            margin-bottom: 32px;
+        }
+        .page-header-bar h1 {
+            margin: 0 0 4px;
+            font-size: 28px;
+            font-weight: 300;
+        }
+        .page-header-bar a {
+            color: rgba(255,255,255,0.75);
+            font-size: 13px;
+            text-decoration: none;
+        }
+        .page-header-bar a:hover {
+            color: #fff;
+        }
+        .page-header-bar .glyphicon-chevron-left {
+            font-size: 11px;
+            margin-right: 4px;
+        }
+
+        .form-panel {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+        .form-panel-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid #eee;
+            background: #f8f9fa;
+        }
+        .form-panel-header h3 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        .form-panel-body {
+            padding: 20px;
+        }
+
+        .current-photo-wrap {
+            border-radius: 6px;
+            overflow: hidden;
+            margin-bottom: 12px;
+            position: relative;
+        }
+        .current-photo-wrap img {
+            width: 100%;
+            max-height: 160px;
+            object-fit: cover;
+            display: block;
+        }
+        .current-photo-wrap .photo-label {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0,0,0,0.45);
+            color: #fff;
+            font-size: 11px;
+            padding: 4px 8px;
+        }
+
+        .flash-notice {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            border-radius: 6px;
+            padding: 10px 14px;
+            margin-bottom: 16px;
+            font-size: 13px;
+        }
+
+        .map-panel {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+        .map-panel-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid #eee;
+            background: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .map-panel-header h3 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        #map {
+            height: 520px;
+            width: 100%;
+        }
+
+        .btn-update {
+            width: 100%;
+            padding: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            border-radius: 6px;
+            margin-top: 8px;
+        }
+    </style>
+{% endblock %}
+
 {% block content %}
+    <div class="page-header-bar">
+        <div class="container">
+            <a href="{{ path('main_private') }}">
+                <span class="glyphicon glyphicon-chevron-left"></span> My Travels
+            </a>
+            <h1><span class="glyphicon glyphicon-pencil"></span> Update Travel</h1>
+        </div>
+    </div>
+
     <div class="container">
         <div class="row">
             <div class="col-sm-4">
-                {{ form_start(travelForm, {'attr': {'enctype': 'multipart/form-data'}}) }}
-                <h3>Update Travel</h3> <button class="btn btn-warning btn-xs" id="center">Center Map</button>
+
                 {% for flashMessage in app.session.flashbag.get('notice') %}
                     <div class="flash-notice">
-                        {{ flashMessage }}
+                        <span class="glyphicon glyphicon-ok"></span> {{ flashMessage }}
                     </div>
                 {% endfor %}
-                {% if currentPhoto %}
-                    <div>
-                        <img src="{{ asset('uploads/travel_photos/' ~ currentPhoto) }}" class="img-responsive" alt="Current cover" style="max-height:150px; margin-bottom:8px;">
-                        <p><small>Upload a new image to replace it</small></p>
+
+                {{ form_start(travelForm, {'attr': {'enctype': 'multipart/form-data'}}) }}
+
+                <div class="form-panel">
+                    <div class="form-panel-header">
+                        <h3><span class="glyphicon glyphicon-info-sign"></span> Travel details</h3>
                     </div>
-                {% endif %}
-                {{ form_widget(travelForm) }}
-                <button type="submit" class="btn btn-primary">Update</button>
+                    <div class="form-panel-body">
+                        {% if currentPhoto %}
+                            <div class="current-photo-wrap">
+                                <img src="{{ asset('uploads/travel_photos/' ~ currentPhoto) }}" alt="Current cover">
+                                <span class="photo-label">
+                                    <span class="glyphicon glyphicon-camera"></span> Current cover photo
+                                </span>
+                            </div>
+                        {% endif %}
+
+                        {{ form_widget(travelForm) }}
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-update">
+                    <span class="glyphicon glyphicon-floppy-disk"></span> Save changes
+                </button>
+
                 {{ form_end(travelForm) }}
             </div>
+
             <div class="col-sm-8">
-                <div id="map"></div>
+                <div class="map-panel">
+                    <div class="map-panel-header">
+                        <h3><span class="glyphicon glyphicon-map-marker"></span> Location</h3>
+                        <button class="btn btn-default btn-xs" id="center">
+                            <span class="glyphicon glyphicon-screenshot"></span> Center map
+                        </button>
+                    </div>
+                    <div id="map"></div>
+                </div>
             </div>
         </div>
     </div>
@@ -85,13 +244,4 @@
         map.setView([{{ latitude }}, {{ longitude }}], 8);
     });
 </script>
-{% endblock %}
-
-{% block css %}
-    {{ parent() }}
-    <link href="{{ asset('css/main.css') }}" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('css/leaflet@1.7.1/leaflet.css') }}"/>
-    <link rel="stylesheet" href="/public/font-awesome-4.3.0/css/font-awesome.min.css"/>
-    <link rel="stylesheet" href="/public/css/ionicons-2.0.1/css/ionicons.min.css"/>
-    <link rel="stylesheet" href="/public/css/leaflet.awesome-markers.css">
 {% endblock %}

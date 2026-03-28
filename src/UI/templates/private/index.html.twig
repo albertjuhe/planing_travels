@@ -1,44 +1,244 @@
 {% extends 'base.html.twig' %}
 
-{% block content %}
-    <div class="container" ng-app="ShowTravelsApp">
-        <div class="row" ng-controller="travelController">
-            <h1>{{ 'MyMaps'|trans }}</h1>
-            <h2>{{ 'Welcome'|trans }}</h2>
-            {% for travel in travels %}
+{% block css %}
+    {{ parent() }}
+    <style>
+        .private-header {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+            padding: 40px 0 30px;
+            margin-bottom: 40px;
+        }
+        .private-header h1 {
+            margin: 0 0 5px;
+            font-size: 32px;
+            font-weight: 300;
+        }
+        .private-header p {
+            margin: 0;
+            opacity: 0.8;
+            font-size: 16px;
+        }
+        .travel-card {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+            margin-bottom: 30px;
+            overflow: hidden;
+            transition: box-shadow 0.2s, transform 0.2s;
+        }
+        .travel-card:hover {
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+            transform: translateY(-2px);
+        }
+        .travel-card-img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+        }
+        .travel-card-img-placeholder {
+            width: 100%;
+            height: 160px;
+            background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #aab8c2;
+            font-size: 48px;
+        }
+        .travel-card-body {
+            padding: 16px;
+        }
+        .travel-card-title {
+            font-size: 17px;
+            font-weight: 600;
+            margin: 0 0 8px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .travel-card-title a {
+            color: #2c3e50;
+            text-decoration: none;
+        }
+        .travel-card-title a:hover {
+            color: #3498db;
+        }
+        .travel-card-dates {
+            font-size: 12px;
+            color: #7f8c8d;
+            margin-bottom: 8px;
+        }
+        .travel-card-description {
+            font-size: 13px;
+            color: #555;
+            margin-bottom: 12px;
+            min-height: 36px;
+        }
+        .travel-card-meta {
+            font-size: 12px;
+            color: #7f8c8d;
+            margin-bottom: 12px;
+        }
+        .travel-card-meta span {
+            margin-right: 12px;
+        }
+        .travel-card-footer {
+            padding: 10px 16px;
+            background: #f8f9fa;
+            border-top: 1px solid #eee;
+            display: flex;
+            gap: 8px;
+        }
+        .btn-card-edit {
+            flex: 1;
+            font-size: 13px;
+            padding: 6px 10px;
+        }
+        .btn-card-publish {
+            flex: 1;
+            font-size: 13px;
+            padding: 6px 10px;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .status-published {
+            background: #d4edda;
+            color: #155724;
+        }
+        .status-draft {
+            background: #fff3cd;
+            color: #856404;
+        }
+        .status-default {
+            background: #e2e3e5;
+            color: #383d41;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            color: #aab8c2;
+        }
+        .empty-state .glyphicon {
+            font-size: 64px;
+            margin-bottom: 20px;
+            display: block;
+        }
+        .empty-state h3 {
+            font-weight: 300;
+            color: #7f8c8d;
+        }
+        .section-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+    </style>
+{% endblock %}
 
-                <div class="col-sm-3">
-                    <h3><a href="{{ path('show_travel',{'slug':travel.slug}) }}">{{ travel.title }}</a></h3>
-                    <div>
-                        <a href="{{ path('updateTravel', { 'slug': travel.slug }) }}">Edit</a>
-                        <a href="{{ path('publishTravel', { 'slug': travel.slug }) }}">Publish</a>
-                    </div>
-                    <div>
-                        {% if travel.photo %}
-                            <img src="{{ asset('uploads/travel_photos/' ~ travel.photo) }}" class="featurette-image img-responsive" alt="{{ travel.title }}">
-                        {% endif %}
-                    </div>
-                    <div class="date-travel">
-                        <a href="#">   {{ travel.startAt | date("d/m/Y")}} To {{ travel.endAt |date("d/m/Y")}}</a>
-                    </div>
-                    <div class="date-travel">
-                        <span>STATUS: {{ travel.status }}</span>
-                    </div>
-                    <div class="info-travel">
-                        {{ travel.description|truncate(50) }}
-                    </div>
-                    <div>
-                        <span class="glyphicon glyphicon-star" aria-hidden="true"></span> Likes {{ travel.stars }}
-                        <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> Watch {{ travel.watch }}
-                    </div>
-                </div>
-                <!--
-                <div id="root"></div>
-                -->
-            {% else %}
-                <div>Empty Travels</div>
-            {% endfor %}
+{% block content %}
+    <div class="private-header">
+        <div class="container">
+            <h1><span class="glyphicon glyphicon-map-marker"></span> My Travels</h1>
+            <p>{{ 'Welcome'|trans }}</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="section-toolbar">
+            <span class="text-muted">
+                {% if travels|length > 0 %}
+                    {{ travels|length }} travel{% if travels|length != 1 %}s{% endif %}
+                {% endif %}
+            </span>
+            <a href="{{ path('newTravel') }}" class="btn btn-success btn-sm">
+                <span class="glyphicon glyphicon-plus"></span> New Travel
+            </a>
         </div>
 
+        <div class="row">
+            {% for travel in travels %}
+                <div class="col-sm-6 col-md-4 col-lg-3">
+                    <div class="travel-card">
+
+                        {% if travel.photo %}
+                            <img src="{{ asset('uploads/travel_photos/' ~ travel.photo) }}"
+                                 class="travel-card-img" alt="{{ travel.title }}">
+                        {% else %}
+                            <div class="travel-card-img-placeholder">
+                                <span class="glyphicon glyphicon-picture"></span>
+                            </div>
+                        {% endif %}
+
+                        <div class="travel-card-body">
+                            <div class="travel-card-title">
+                                <a href="{{ path('show_travel', {'slug': travel.slug}) }}">{{ travel.title }}</a>
+                            </div>
+
+                            <div class="travel-card-dates">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                                {{ travel.startAt|date("d/m/Y") }} &rarr; {{ travel.endAt|date("d/m/Y") }}
+                            </div>
+
+                            <div class="travel-card-description">
+                                {{ travel.description|truncate(80) }}
+                            </div>
+
+                            <div class="travel-card-meta">
+                                <span>
+                                    <span class="glyphicon glyphicon-star" style="color:#f39c12;"></span>
+                                    {{ travel.stars }}
+                                </span>
+                                <span>
+                                    <span class="glyphicon glyphicon-eye-open"></span>
+                                    {{ travel.watch }}
+                                </span>
+                                <span>
+                                    {% set status = travel.status|lower %}
+                                    {% if status == 'published' %}
+                                        <span class="status-badge status-published">{{ travel.status }}</span>
+                                    {% elseif status == 'draft' %}
+                                        <span class="status-badge status-draft">{{ travel.status }}</span>
+                                    {% else %}
+                                        <span class="status-badge status-default">{{ travel.status }}</span>
+                                    {% endif %}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="travel-card-footer">
+                            <a href="{{ path('updateTravel', {'slug': travel.slug}) }}"
+                               class="btn btn-default btn-card-edit">
+                                <span class="glyphicon glyphicon-pencil"></span> Edit
+                            </a>
+                            <a href="{{ path('publishTravel', {'slug': travel.slug}) }}"
+                               class="btn btn-primary btn-card-publish">
+                                <span class="glyphicon glyphicon-globe"></span> Publish
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+            {% else %}
+                <div class="col-sm-12">
+                    <div class="empty-state">
+                        <span class="glyphicon glyphicon-map-marker"></span>
+                        <h3>No travels yet</h3>
+                        <p>Start by creating your first travel experience.</p>
+                        <a href="{{ path('newTravel') }}" class="btn btn-success btn-lg" style="margin-top:16px;">
+                            <span class="glyphicon glyphicon-plus"></span> Create your first travel
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
     </div>
-{%  endblock %}
+{% endblock %}
