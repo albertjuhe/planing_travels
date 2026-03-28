@@ -6,37 +6,166 @@
     <script type="text/javascript" src="{{ google_maps }}"></script>
 {% endblock %}
 
+{% block css %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/leaflet@1.7.1/leaflet.css')}}"/>
+    <link href="{{ asset('css/main.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/autocomplete@1.8.3/autocomplete.min.css') }}"/>
+    {{ encore_entry_link_tags('app') }}
+    <style>
+        .page-header-bar {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+            padding: 30px 0 24px;
+            margin-bottom: 32px;
+        }
+        .page-header-bar h1 {
+            margin: 0 0 4px;
+            font-size: 28px;
+            font-weight: 300;
+        }
+        .page-header-bar a {
+            color: rgba(255,255,255,0.75);
+            font-size: 13px;
+            text-decoration: none;
+        }
+        .page-header-bar a:hover {
+            color: #fff;
+        }
+        .page-header-bar .glyphicon-chevron-left {
+            font-size: 11px;
+            margin-right: 4px;
+        }
+
+        .form-panel {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+            overflow: visible;
+            margin-bottom: 30px;
+        }
+        .form-panel-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid #eee;
+            background: #f8f9fa;
+        }
+        .form-panel-header h3 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        .form-panel-body {
+            padding: 20px;
+        }
+
+        .flash-notice {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            border-radius: 6px;
+            padding: 10px 14px;
+            margin-bottom: 16px;
+            font-size: 13px;
+        }
+
+        .map-panel {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+        .map-panel-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid #eee;
+            background: #f8f9fa;
+        }
+        .map-panel-header h3 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        #map {
+            height: 520px;
+            width: 100%;
+        }
+
+        .auto-results-wrapper.auto-is-active {
+            z-index: 99999 !important;
+        }
+
+        .btn-save {
+            width: 100%;
+            padding: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            border-radius: 6px;
+            margin-top: 8px;
+        }
+    </style>
+{% endblock %}
+
 {% block content %}
+    <div class="page-header-bar">
+        <div class="container">
+            <a href="{{ path('main_private') }}">
+                <span class="glyphicon glyphicon-chevron-left"></span> My Travels
+            </a>
+            <h1><span class="glyphicon glyphicon-plus"></span> New Travel</h1>
+        </div>
+    </div>
+
     <div class="container">
         <div class="row">
             <div class="col-sm-4">
-                <h3>Add Travel</h3>
+
                 {% for flashMessage in app.session.flashbag.get('notice') %}
                     <div class="flash-notice">
-                        {{ flashMessage }}
+                        <span class="glyphicon glyphicon-ok"></span> {{ flashMessage }}
                     </div>
                 {% endfor %}
 
                 {{ form_start(travelForm, {'attr': {'enctype': 'multipart/form-data'}}) }}
-                <div class="auto-search-wrapper">
-                    <input
+
+                <div style="position: relative; z-index: 10000; margin-bottom: 16px;">
+                    <div class="auto-search-wrapper">
+                        <input
                             type="text"
                             autocomplete="off"
                             id="search"
-                            class="full-width"
-                            placeholder="enter the city name"
-                    />
+                            placeholder="Search a city..."
+                        />
+                    </div>
                 </div>
-                {{ form_widget(travelForm) }}
-                <button type="submit" class="btn btn-primary">Save</button>
+
+                <div class="form-panel">
+                    <div class="form-panel-header">
+                        <h3><span class="glyphicon glyphicon-info-sign"></span> Travel details</h3>
+                    </div>
+                    <div class="form-panel-body">
+                        {{ form_widget(travelForm) }}
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-success btn-save">
+                    <span class="glyphicon glyphicon-floppy-disk"></span> Save travel
+                </button>
+
                 {{ form_end(travelForm) }}
             </div>
+
             <div class="col-sm-8">
-                <div id="map"></div>
+                <div class="map-panel">
+                    <div class="map-panel-header">
+                        <h3><span class="glyphicon glyphicon-map-marker"></span> Location</h3>
+                    </div>
+                    <div id="map"></div>
+                </div>
             </div>
         </div>
     </div>
-
 {% endblock %}
 
 {% block javascript %}
@@ -44,11 +173,4 @@
 <script src="{{ asset('js/leaflet@1.7.1/leaflet.js') }}"></script>
 <script src="{{ asset('js/autocomplete@1.8.3/autocomplete.js')}}"></script>
 <script src="{{ asset('js/autocomplete/autocomplete.js') }}"></script>
-{% endblock %}
-
-{% block css %}
-    {{ parent() }}
-    <link rel="stylesheet" href="{{ asset('css/leaflet@1.7.1/leaflet.css')}}" />
-    <link href="{{ asset('css/main.css') }}" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('css/autocomplete@1.8.3/autocomplete.min.css') }}"/>
 {% endblock %}
