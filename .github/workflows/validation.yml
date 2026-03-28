@@ -20,7 +20,7 @@ jobs:
 
       - name: Composer install
         run: |
-          make exec CMD="composer install --no-plugins --no-audit"
+          make exec CMD="COMPOSER_ALLOW_SUPERUSER=1 composer install"
 
       - name: Run Unit tests
         run: |

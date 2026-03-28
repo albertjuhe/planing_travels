@@ -435,7 +435,7 @@ class Travel extends AggregateRoot
     public function toArray()
     {
         return [
-            'id' => $this->id,
+            'id' => $this->id->id(),
             'title' => $this->getTitle(),
             'description' => $this->getDescription(),
             'createdAt' => $this->getCreatedAt(),

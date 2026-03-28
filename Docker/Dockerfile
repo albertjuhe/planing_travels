@@ -2,9 +2,10 @@ FROM php:7.4-apache
 RUN apt-get update
 RUN apt install -y git
 RUN apt install -y unzip
+RUN apt install -y libzip-dev
 RUN pecl install redis
 RUN pecl install xdebug-3.1.6
-RUN docker-php-ext-install pdo pdo_mysql
+RUN docker-php-ext-install pdo pdo_mysql zip
 RUN docker-php-ext-enable redis xdebug
 
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
