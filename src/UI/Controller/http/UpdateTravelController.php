@@ -79,6 +79,7 @@ class UpdateTravelController extends CommandController
             'latitude' => $travel->getLatitude(),
             'longitude' => $travel->getLongitude(),
             'currentPhoto' => $travel->getPhoto(),
+            'travelTitle' => $travel->getTitle(),
         ]);
     }
 }

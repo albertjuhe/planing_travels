@@ -180,7 +180,9 @@
 
                         <div class="travel-card-body">
                             <div class="travel-card-title">
-                                <a href="{{ path('show_travel', {'slug': travel.slug}) }}">{{ travel.title }}</a>
+                                <a href="{{ path('show_travel', {'slug': travel.slug}) }}">
+                                    <span class="glyphicon glyphicon-globe" style="font-size:13px; color:#3498db; margin-right:5px;"></span>{{ travel.title }}
+                                </a>
                             </div>
 
                             <div class="travel-card-dates">

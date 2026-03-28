@@ -1,0 +1,142 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} - My Profile{% endblock %}
+
+{% block css %}
+    {{ parent() }}
+    <style>
+        .profile-header {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+            padding: 40px 0 30px;
+            margin-bottom: 40px;
+        }
+        .profile-header h1 {
+            margin: 0 0 5px;
+            font-size: 32px;
+            font-weight: 300;
+        }
+        .profile-header p {
+            margin: 0;
+            opacity: 0.8;
+            font-size: 16px;
+        }
+        .profile-panel {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+        .profile-panel-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid #eee;
+            background: #f8f9fa;
+        }
+        .profile-panel-header h3 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        .profile-panel-body {
+            padding: 24px;
+        }
+        .flash-notice {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            border-radius: 6px;
+            padding: 10px 14px;
+            margin-bottom: 16px;
+            font-size: 13px;
+        }
+        .flash-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            border-radius: 6px;
+            padding: 10px 14px;
+            margin-bottom: 16px;
+            font-size: 13px;
+        }
+        .btn-save {
+            width: 100%;
+            padding: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            border-radius: 6px;
+            margin-top: 8px;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="profile-header">
+        <div class="container">
+            <a href="{{ path('main_private') }}" style="color: rgba(255,255,255,0.75); font-size:13px; text-decoration:none;">
+                <span class="glyphicon glyphicon-chevron-left" style="font-size:11px; margin-right:4px;"></span> My Travels
+            </a>
+            <h1><span class="glyphicon glyphicon-user"></span> My Profile</h1>
+            <p>{{ app.user.username }}</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+
+            <div class="col-sm-6">
+
+                {% for msg in app.session.flashbag.get('notice') %}
+                    <div class="flash-notice">
+                        <span class="glyphicon glyphicon-ok"></span> {{ msg }}
+                    </div>
+                {% endfor %}
+                {% for msg in app.session.flashbag.get('error') %}
+                    <div class="flash-error">
+                        <span class="glyphicon glyphicon-remove"></span> {{ msg }}
+                    </div>
+                {% endfor %}
+
+                {{ form_start(profileForm) }}
+                <div class="profile-panel">
+                    <div class="profile-panel-header">
+                        <h3><span class="glyphicon glyphicon-info-sign"></span> Personal information</h3>
+                    </div>
+                    <div class="profile-panel-body">
+                        {{ form_row(profileForm.firstName) }}
+                        {{ form_row(profileForm.lastName) }}
+                        {{ form_row(profileForm.email) }}
+                        {{ form_row(profileForm.username) }}
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary btn-save">
+                    <span class="glyphicon glyphicon-floppy-disk"></span> Save changes
+                </button>
+                {{ form_end(profileForm) }}
+
+            </div>
+
+            <div class="col-sm-6">
+
+                {{ form_start(passwordForm) }}
+                <div class="profile-panel">
+                    <div class="profile-panel-header">
+                        <h3><span class="glyphicon glyphicon-lock"></span> Change password</h3>
+                    </div>
+                    <div class="profile-panel-body">
+                        {{ form_row(passwordForm.currentPassword) }}
+                        {{ form_row(passwordForm.newPassword.first) }}
+                        {{ form_row(passwordForm.newPassword.second) }}
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-warning btn-save">
+                    <span class="glyphicon glyphicon-lock"></span> Change password
+                </button>
+                {{ form_end(passwordForm) }}
+
+            </div>
+
+        </div>
+    </div>
+{% endblock %}
