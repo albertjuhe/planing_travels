@@ -1,0 +1,32 @@
+name: Test php planing travels
+
+on: [push, pull_request]
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
+
+      - name: Install Docker Compose
+        uses: ./.github/docker-compose
+
+      - name: Build and start containers
+        run: |
+          docker-compose up -d --build
+          docker-compose exec -T app sh -c 'until php -v > /dev/null 2>&1; do sleep 2; done'
+
+      - name: Composer install
+        run: |
+          make exec CMD="COMPOSER_ALLOW_SUPERUSER=1 composer install"
+
+      - name: Run Unit tests
+        run: |
+          make exec CMD="php vendor/bin/phpunit"
+
+      - if: always()
+        name: Stop containers
+        run: |
+          make down

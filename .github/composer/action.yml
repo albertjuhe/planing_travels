@@ -1,0 +1,11 @@
+name: "Composer install"
+description: "Install Composer"
+runs:
+  using: "composite"
+  steps:
+    - name: install-composer
+      shell: bash
+      run: |
+        make exec CMD="composer validate"
+        make exec CMD="composer install --no-plugins"
+        make exec CMD="composer config cache-files-dir"

@@ -11,6 +11,7 @@ namespace App\Application\Command\Travel;
 use App\Application\Command\Command;
 use App\Domain\Travel\Model\Travel;
 use App\Domain\User\Model\User;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class UpdateTravelCommand implements Command
 {
@@ -25,7 +26,7 @@ class UpdateTravelCommand implements Command
      * @param Travel $travel
      * @param User   $user
      */
-    public function __construct(Travel $travel, User $user)
+    public function __construct(Travel $travel, UserInterface $user)
     {
         $this->travel = $travel;
         $this->user = $user;

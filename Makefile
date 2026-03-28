@@ -28,7 +28,7 @@ bash:
 
 CMD?=echo CMD var with the command is expected
 exec:
-	docker-compose exec app sh -c '$(CMD)'
+	docker-compose exec -T app sh -c '$(CMD)'
 
 check-el:
 	make exec CMD='bin/console app:check-travel-elasticsearch'

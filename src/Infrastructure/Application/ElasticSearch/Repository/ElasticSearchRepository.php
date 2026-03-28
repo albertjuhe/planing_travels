@@ -29,8 +29,16 @@ class ElasticSearchRepository
     ) {
         $this->elasticSearchIndex = $elasticSearchIndex;
         $this->indexManager = $indexManager;
-        $this->index = $this->elasticSearchIndex->getOne(static::DOCUMENT_INDEX);
-        $this->typeDocument = $this->index->getType(static::DOCUMENT_TYPE);
+    }
+
+    protected function getTypeDocument()
+    {
+        if ($this->typeDocument === null) {
+            $this->index = $this->elasticSearchIndex->getOne(static::DOCUMENT_INDEX);
+            $this->typeDocument = $this->index->getType(static::DOCUMENT_TYPE);
+        }
+
+        return $this->typeDocument;
     }
 
     public function find(string $id): iterable
@@ -43,6 +51,6 @@ class ElasticSearchRepository
         $terms = new Terms();
         $terms->setTerms($field, [$value]);
 
-        return $this->index->search($terms)->getDocuments();
+        return $this->getTypeDocument()->getIndex()->search($terms)->getDocuments();
     }
 }

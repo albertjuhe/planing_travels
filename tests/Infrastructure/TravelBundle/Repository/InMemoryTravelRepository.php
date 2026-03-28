@@ -95,8 +95,11 @@ class InMemoryTravelRepository implements TravelRepository
         // TODO: Implement findBy() method.
     }
 
-    public function getAllTravelsByUser(int $userId)
+    public function getAllTravelsByUser(int $userId): array
     {
-        // TODO: Implement getAllTravelsByUser() method.
+        return array_map(
+            fn($row) => $row['travel'],
+            array_filter($this->travel, fn($row) => $row['userId'] === $userId)
+        );
     }
 }

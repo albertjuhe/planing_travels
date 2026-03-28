@@ -22,6 +22,7 @@ services:
       - PHP_EXTENSION_XDEBUG:1
       - ENABLE_XDEBUG=1
       - XDEBUG_REMOTE_HOST=${DOCKER_HOST_IP:-localhost}
+    entrypoint: ["/bin/sh", "-c", "git config --global --add safe.directory /var/www/html && exec apache2-foreground"]
     depends_on:
       - mysql
       - elasticsearch

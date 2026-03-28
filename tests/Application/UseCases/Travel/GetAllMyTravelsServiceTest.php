@@ -4,46 +4,62 @@ namespace App\Tests\Application\UseCases\Travel;
 
 use App\Application\Query\Travel\GetMyTravelsQuery;
 use App\Application\UseCases\Travel\GetAllMyTravelsService;
+use App\Domain\Travel\Model\Travel;
+use App\Tests\Domain\Travel\Model\TravelMother;
 use App\Tests\Domain\User\Model\UserMother;
 
-class GetAllMyTravelsServiceTest extends ReadTravelService
+class GetAllMyTravelsServiceTest extends TravelService
 {
     public function setUp()
     {
         parent::setUp();
     }
 
-    public function testGetAllMyTravels()
+    public function testReturnsAllTravelsForUser(): void
     {
         $user = UserMother::random();
-        $travels = $this->getTravels($user->getId()->id());
+        $travel1 = TravelMother::random();
+        $travel1->setUser($user);
+        $travel2 = TravelMother::random();
+        $travel2->setUser($user);
+        $this->travelRepository->save($travel1);
+        $this->travelRepository->save($travel2);
 
-        $getMyTravelQuery = new GetMyTravelsQuery($user);
+        $service = new GetAllMyTravelsService($this->travelRepository);
+        $query = new GetMyTravelsQuery($user);
 
-        $this->travelRepository->method('getAllTravelsByUser')->willReturn($travels);
-        $getAllMyTravelsService = new GetAllMyTravelsService($this->travelRepository);
-        $myTravels = $getAllMyTravelsService->__invoke($getMyTravelQuery);
+        $result = $service->__invoke($query);
 
-        foreach ($myTravels as $travel) {
-            $this->assertEquals($travel['user'], $user->userId()->id());
-        }
-
-        $this->assertCount(2, $travels);
+        $this->assertCount(2, $result);
+        $this->assertContainsOnlyInstancesOf(Travel::class, $result);
     }
 
-    private function getTravels(int $userId): array
+    public function testReturnsEmptyArrayWhenUserHasNoTravels(): void
     {
-        $travelId = mt_rand();
+        $user = UserMother::random();
 
-        return [
-            [
-                'id' => $travelId,
-                'user' => $userId,
-            ],
-            [
-                'id' => $travelId + 1,
-                'user' => $userId,
-            ],
-        ];
+        $service = new GetAllMyTravelsService($this->travelRepository);
+        $query = new GetMyTravelsQuery($user);
+
+        $result = $service->__invoke($query);
+
+        $this->assertEmpty($result);
+    }
+
+    public function testDoesNotReturnTravelsFromOtherUsers(): void
+    {
+        $user = UserMother::random();
+        $otherUser = UserMother::random();
+
+        $travel = TravelMother::random();
+        $travel->setUser($otherUser);
+        $this->travelRepository->save($travel);
+
+        $service = new GetAllMyTravelsService($this->travelRepository);
+        $query = new GetMyTravelsQuery($user);
+
+        $result = $service->__invoke($query);
+
+        $this->assertEmpty($result);
     }
 }
