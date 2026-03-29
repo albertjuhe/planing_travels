@@ -80,6 +80,8 @@ class UpdateTravelController extends CommandController
             'longitude' => $travel->getLongitude(),
             'currentPhoto' => $travel->getPhoto(),
             'travelTitle' => $travel->getTitle(),
+            'travelSlug' => $travel->getSlug(),
+            'isPublished' => $travel->isPublished(),
         ]);
     }
 }

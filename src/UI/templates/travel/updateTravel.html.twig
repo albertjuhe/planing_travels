@@ -5,6 +5,7 @@
 {% block css %}
 {{ parent() }}
 <link rel="stylesheet" href="{{ asset('css/leaflet@1.7.1/leaflet.css') }}"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <link rel="stylesheet" href="/public/font-awesome-4.3.0/css/font-awesome.min.css"/>
 <link rel="stylesheet" href="/public/css/ionicons-2.0.1/css/ionicons.min.css"/>
 <link rel="stylesheet" href="/public/css/leaflet.awesome-markers.css">
@@ -65,15 +66,26 @@
     display: inline-flex;
     align-items: center;
     gap: 5px;
-    background: rgba(255,255,255,0.15);
-    border: 1px solid rgba(255,255,255,0.25);
-    color: rgba(255,255,255,0.9);
     font-size: 12px;
     font-weight: 600;
     padding: 4px 10px;
     border-radius: 12px;
     white-space: nowrap;
     align-self: flex-start;
+    text-decoration: none;
+    transition: opacity 0.15s, transform 0.1s;
+    cursor: pointer;
+}
+.ut-header__badge:hover { opacity: 0.85; transform: translateY(-1px); text-decoration: none; }
+.ut-header__badge--draft {
+    background: rgba(243,156,18,0.2);
+    border: 1px solid rgba(243,156,18,0.4);
+    color: #fdebd0;
+}
+.ut-header__badge--published {
+    background: rgba(39,174,96,0.2);
+    border: 1px solid rgba(39,174,96,0.4);
+    color: #d5f5e3;
 }
 
 /* ─────────────────────────────────────────
@@ -229,22 +241,52 @@
 }
 .ut-textarea { resize: vertical; min-height: 90px; }
 
-/* Symfony date widget selects */
-.ut-date-widget select {
-    padding: 8px 10px;
-    font-size: 13px;
+/* Hide Symfony date selects — replaced by Flatpickr */
+.ut-date-widget { display: none; }
+
+/* Flatpickr input */
+.ut-datepicker-wrap { position: relative; }
+.ut-datepicker-wrap svg {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #b0bec5;
+    pointer-events: none;
+}
+.ut-datepicker {
+    width: 100%;
+    padding: 9px 12px 9px 32px;
+    font-size: 14px;
+    color: #2c3e50;
     background: #f8f9fa;
     border: 1.5px solid #dde3ea;
     border-radius: 7px;
-    color: #2c3e50;
     outline: none;
-    transition: border-color 0.2s, box-shadow 0.2s;
-    margin-right: 4px;
-    margin-bottom: 4px;
+    box-sizing: border-box;
+    font-family: inherit;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
 }
-.ut-date-widget select:focus {
+.ut-datepicker:focus {
     border-color: #2980b9;
+    background: #fff;
     box-shadow: 0 0 0 3px rgba(41,128,185,0.12);
+}
+.flatpickr-calendar {
+    border-radius: 10px !important;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.14) !important;
+    border: 1px solid #eaecef !important;
+    font-family: inherit !important;
+}
+.flatpickr-day.selected, .flatpickr-day.selected:hover {
+    background: #2980b9 !important;
+    border-color: #2980b9 !important;
+}
+.flatpickr-day.inRange {
+    background: rgba(41,128,185,0.12) !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
 }
 
 /* ─────────────────────────────────────────
@@ -278,6 +320,10 @@
     border: 1.5px solid #dde3ea;
 }
 .ut-btn--ghost:hover { background: #eaecef; color: #2c3e50; text-decoration: none; }
+.ut-btn--publish { background: #27ae60; color: #fff; }
+.ut-btn--publish:hover { background: #219a52; color: #fff; text-decoration: none; }
+.ut-btn--unpublish { background: #ecf0f1; color: #636e72; border: 1.5px solid #dde3ea; }
+.ut-btn--unpublish:hover { background: #dde3ea; color: #2c3e50; text-decoration: none; }
 
 /* ─────────────────────────────────────────
    Map
@@ -331,10 +377,17 @@
                         <svg viewBox="0 0 16 16" width="18" height="18" fill="currentColor" style="opacity:.8;flex-shrink:0"><path d="M11.7 1.3a1 1 0 0 1 1.4 0l1.6 1.6a1 1 0 0 1 0 1.4L5.5 13.5 1 15l1.5-4.5 9.2-9.2z"/></svg>
                         {{ travelTitle }}
                     </h1>
-                    <span class="ut-header__badge">
-                        <svg viewBox="0 0 8 8" width="6" height="6"><circle cx="4" cy="4" r="4" fill="#f39c12"/></svg>
-                        Draft
-                    </span>
+                    {% if isPublished %}
+                        <a href="{{ path('unpublishTravel', {'slug': travelSlug}) }}" class="ut-header__badge ut-header__badge--published">
+                            <svg viewBox="0 0 8 8" width="6" height="6"><circle cx="4" cy="4" r="4" fill="#27ae60"/></svg>
+                            Published · Set as Draft
+                        </a>
+                    {% else %}
+                        <a href="{{ path('publishTravel', {'slug': travelSlug}) }}" class="ut-header__badge ut-header__badge--draft">
+                            <svg viewBox="0 0 8 8" width="6" height="6"><circle cx="4" cy="4" r="4" fill="#f39c12"/></svg>
+                            Draft · Publish now
+                        </a>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -405,11 +458,19 @@
                         <div class="ut-field-row">
                             <div class="ut-field">
                                 {{ form_label(travelForm.startAt, 'Start date', {'label_attr': {'class': 'ut-label'}}) }}
+                                <div class="ut-datepicker-wrap">
+                                    <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><path d="M11 1v1H5V1H3v1H1v13h14V2h-2V1h-2zm2 12H3V6h10v7z"/></svg>
+                                    <input type="text" class="ut-datepicker" id="ut-start-picker" placeholder="Select date" readonly>
+                                </div>
                                 {{ form_widget(travelForm.startAt, {'attr': {'class': 'ut-date-widget'}}) }}
                                 {{ form_errors(travelForm.startAt) }}
                             </div>
                             <div class="ut-field">
                                 {{ form_label(travelForm.endAt, 'End date', {'label_attr': {'class': 'ut-label'}}) }}
+                                <div class="ut-datepicker-wrap">
+                                    <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><path d="M11 1v1H5V1H3v1H1v13h14V2h-2V1h-2zm2 12H3V6h10v7z"/></svg>
+                                    <input type="text" class="ut-datepicker" id="ut-end-picker" placeholder="Select date" readonly>
+                                </div>
                                 {{ form_widget(travelForm.endAt, {'attr': {'class': 'ut-date-widget'}}) }}
                                 {{ form_errors(travelForm.endAt) }}
                             </div>
@@ -427,6 +488,17 @@
                 {# Actions #}
                 <div class="ut-actions">
                     <a href="{{ path('main_private') }}" class="ut-btn ut-btn--ghost">Cancel</a>
+                    {% if isPublished %}
+                        <a href="{{ path('unpublishTravel', {'slug': travelSlug}) }}" class="ut-btn ut-btn--unpublish">
+                            <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><path d="M8 1a7 7 0 1 1 0 14A7 7 0 0 1 8 1zm-3 6h6v2H5V7z"/></svg>
+                            Set as Draft
+                        </a>
+                    {% else %}
+                        <a href="{{ path('publishTravel', {'slug': travelSlug}) }}" class="ut-btn ut-btn--publish">
+                            <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><path d="M8 1l7 14H1L8 1zm0 4v5M8 12v1"/></svg>
+                            Publish
+                        </a>
+                    {% endif %}
                     <button type="submit" class="ut-btn ut-btn--primary">
                         <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><path d="M13 2H5L2 5v9h12V2h-1zm-5 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm2-9H5V3h5v1z"/></svg>
                         Save changes
@@ -463,6 +535,7 @@
 <script src="{{ asset('js/leaflet@1.7.1/leaflet.js') }}"></script>
 <script src="{{ asset('js/leaflet.awesome-markers.min.js') }}"></script>
 <script src="{{ asset('js/markersDefinition.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="{{ google_maps }}" async defer></script>
 <script>
 (function () {
@@ -492,6 +565,45 @@
 
     document.getElementById('ut-center').addEventListener('click', function () {
         map.setView([lat, lng], 8);
+    });
+
+    /* ── Flatpickr date pickers ── */
+    function readSelectsDate(fieldId) {
+        var y = document.getElementById(fieldId + '_year');
+        var m = document.getElementById(fieldId + '_month');
+        var d = document.getElementById(fieldId + '_day');
+        if (!y || !m || !d || !y.value || !m.value || !d.value) return null;
+        return new Date(parseInt(y.value), parseInt(m.value) - 1, parseInt(d.value));
+    }
+
+    function writeSelectsDate(fieldId, date) {
+        if (!date) return;
+        var y = document.getElementById(fieldId + '_year');
+        var m = document.getElementById(fieldId + '_month');
+        var d = document.getElementById(fieldId + '_day');
+        if (!y || !m || !d) return;
+        y.value = date.getFullYear();
+        m.value = date.getMonth() + 1;
+        d.value = date.getDate();
+    }
+
+    var startFieldId = '{{ travelForm.startAt.vars.id }}';
+    var endFieldId   = '{{ travelForm.endAt.vars.id }}';
+
+    flatpickr('#ut-start-picker', {
+        dateFormat: 'd M Y',
+        defaultDate: readSelectsDate(startFieldId),
+        onChange: function(dates) {
+            writeSelectsDate(startFieldId, dates[0]);
+        }
+    });
+
+    flatpickr('#ut-end-picker', {
+        dateFormat: 'd M Y',
+        defaultDate: readSelectsDate(endFieldId),
+        onChange: function(dates) {
+            writeSelectsDate(endFieldId, dates[0]);
+        }
     });
 
     /* ── Live cover photo preview ── */

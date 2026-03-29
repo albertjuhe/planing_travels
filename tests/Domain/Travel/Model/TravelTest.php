@@ -141,4 +141,30 @@ class TravelTest extends TestCase
 
         $this->assertInstanceOf(TravelWasPublished::class, $events[0]);
     }
+
+    public function testUnpublishTravel(): void
+    {
+        $user = User::byId(1);
+        $travel = Travel::fromUser($user);
+
+        $travel->publish();
+        $this->assertEquals(Travel::TRAVEL_PUBLISHED, $travel->getStatus());
+        $this->assertNotNull($travel->getPublishedAt());
+
+        $travel->unpublish();
+        $this->assertEquals(Travel::TRAVEL_DRAFT, $travel->getStatus());
+        $this->assertNull($travel->getPublishedAt());
+    }
+
+    public function testIsPublished(): void
+    {
+        $user = User::byId(1);
+        $travel = Travel::fromUser($user);
+
+        $this->assertFalse($travel->isPublished());
+        $travel->publish();
+        $this->assertTrue($travel->isPublished());
+        $travel->unpublish();
+        $this->assertFalse($travel->isPublished());
+    }
 }

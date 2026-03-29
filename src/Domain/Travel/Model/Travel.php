@@ -403,6 +403,17 @@ class Travel extends AggregateRoot
         return $this;
     }
 
+    public function unpublish(): void
+    {
+        $this->status = self::TRAVEL_DRAFT;
+        $this->publishedAt = null;
+    }
+
+    public function isPublished(): bool
+    {
+        return $this->status === self::TRAVEL_PUBLISHED;
+    }
+
     /**
      * @param mixed $status
      */

@@ -6,6 +6,7 @@
 {{ parent() }}
 <link rel="stylesheet" href="{{ asset('css/leaflet@1.7.1/leaflet.css') }}"/>
 <link rel="stylesheet" href="{{ asset('css/autocomplete@1.8.3/autocomplete.min.css') }}"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <link rel="stylesheet" href="/public/font-awesome-4.3.0/css/font-awesome.min.css"/>
 <link rel="stylesheet" href="/public/css/ionicons-2.0.1/css/ionicons.min.css"/>
 <link rel="stylesheet" href="/public/css/leaflet.awesome-markers.css">
@@ -252,22 +253,52 @@
 .nt-textarea { resize: vertical; min-height: 90px; }
 .nt-hidden { display: none; }
 
-/* Symfony date widget selects */
-.nt-date-widget select {
-    padding: 8px 10px;
-    font-size: 13px;
+/* Hide Symfony date selects — replaced by Flatpickr */
+.nt-date-widget { display: none; }
+
+/* Flatpickr input */
+.nt-datepicker-wrap { position: relative; }
+.nt-datepicker-wrap svg {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #b0bec5;
+    pointer-events: none;
+}
+.nt-datepicker {
+    width: 100%;
+    padding: 9px 12px 9px 32px;
+    font-size: 14px;
+    color: #2c3e50;
     background: #f8f9fa;
     border: 1.5px solid #dde3ea;
     border-radius: 7px;
-    color: #2c3e50;
     outline: none;
-    transition: border-color 0.2s, box-shadow 0.2s;
-    margin-right: 4px;
-    margin-bottom: 4px;
+    box-sizing: border-box;
+    font-family: inherit;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
 }
-.nt-date-widget select:focus {
+.nt-datepicker:focus {
     border-color: #2980b9;
+    background: #fff;
     box-shadow: 0 0 0 3px rgba(41,128,185,0.12);
+}
+.flatpickr-calendar {
+    border-radius: 10px !important;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.14) !important;
+    border: 1px solid #eaecef !important;
+    font-family: inherit !important;
+}
+.flatpickr-day.selected, .flatpickr-day.selected:hover {
+    background: #2980b9 !important;
+    border-color: #2980b9 !important;
+}
+.flatpickr-day.inRange {
+    background: rgba(41,128,185,0.12) !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
 }
 
 /* ─────────────────────────────────────────
@@ -428,11 +459,19 @@
                         <div class="nt-field-row">
                             <div class="nt-field">
                                 {{ form_label(travelForm.startAt, 'Start date', {'label_attr': {'class': 'nt-label'}}) }}
+                                <div class="nt-datepicker-wrap">
+                                    <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><path d="M11 1v1H5V1H3v1H1v13h14V2h-2V1h-2zm2 12H3V6h10v7z"/></svg>
+                                    <input type="text" class="nt-datepicker" id="nt-start-picker" placeholder="Select date" readonly>
+                                </div>
                                 {{ form_widget(travelForm.startAt, {'attr': {'class': 'nt-date-widget'}}) }}
                                 {{ form_errors(travelForm.startAt) }}
                             </div>
                             <div class="nt-field">
                                 {{ form_label(travelForm.endAt, 'End date', {'label_attr': {'class': 'nt-label'}}) }}
+                                <div class="nt-datepicker-wrap">
+                                    <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><path d="M11 1v1H5V1H3v1H1v13h14V2h-2V1h-2zm2 12H3V6h10v7z"/></svg>
+                                    <input type="text" class="nt-datepicker" id="nt-end-picker" placeholder="Select date" readonly>
+                                </div>
                                 {{ form_widget(travelForm.endAt, {'attr': {'class': 'nt-date-widget'}}) }}
                                 {{ form_errors(travelForm.endAt) }}
                             </div>
@@ -492,6 +531,7 @@
 <script src="{{ asset('js/leaflet.awesome-markers.min.js') }}"></script>
 <script src="{{ asset('js/markersDefinition.js') }}"></script>
 <script src="{{ asset('js/autocomplete@1.8.3/autocomplete.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script>
 (function () {
     /* ── Map ── */
@@ -520,6 +560,35 @@
 
     document.getElementById('nt-reset').addEventListener('click', function () {
         map.setView([defaultLat, defaultLng], 4);
+    });
+
+    /* ── Flatpickr date pickers ── */
+    function writeSelectsDate(fieldId, date) {
+        if (!date) return;
+        var y = document.getElementById(fieldId + '_year');
+        var m = document.getElementById(fieldId + '_month');
+        var d = document.getElementById(fieldId + '_day');
+        if (!y || !m || !d) return;
+        y.value = date.getFullYear();
+        m.value = date.getMonth() + 1;
+        d.value = date.getDate();
+    }
+
+    var startFieldId = '{{ travelForm.startAt.vars.id }}';
+    var endFieldId   = '{{ travelForm.endAt.vars.id }}';
+
+    flatpickr('#nt-start-picker', {
+        dateFormat: 'd M Y',
+        onChange: function(dates) {
+            writeSelectsDate(startFieldId, dates[0]);
+        }
+    });
+
+    flatpickr('#nt-end-picker', {
+        dateFormat: 'd M Y',
+        onChange: function(dates) {
+            writeSelectsDate(endFieldId, dates[0]);
+        }
     });
 
     /* ── Autocomplete ── */
