@@ -1,142 +1,333 @@
 {% extends 'base.html.twig' %}
 
-{% block title %} - My Profile{% endblock %}
+{% block title %} · Profile{% endblock %}
 
 {% block css %}
-    {{ parent() }}
-    <style>
-        .profile-header {
-            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
-            color: white;
-            padding: 40px 0 30px;
-            margin-bottom: 40px;
-        }
-        .profile-header h1 {
-            margin: 0 0 5px;
-            font-size: 32px;
-            font-weight: 300;
-        }
-        .profile-header p {
-            margin: 0;
-            opacity: 0.8;
-            font-size: 16px;
-        }
-        .profile-panel {
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.10);
-            overflow: hidden;
-            margin-bottom: 30px;
-        }
-        .profile-panel-header {
-            padding: 16px 20px;
-            border-bottom: 1px solid #eee;
-            background: #f8f9fa;
-        }
-        .profile-panel-header h3 {
-            margin: 0;
-            font-size: 16px;
-            font-weight: 600;
-            color: #2c3e50;
-        }
-        .profile-panel-body {
-            padding: 24px;
-        }
-        .flash-notice {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-            border-radius: 6px;
-            padding: 10px 14px;
-            margin-bottom: 16px;
-            font-size: 13px;
-        }
-        .flash-error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-            border-radius: 6px;
-            padding: 10px 14px;
-            margin-bottom: 16px;
-            font-size: 13px;
-        }
-        .btn-save {
-            width: 100%;
-            padding: 10px;
-            font-size: 15px;
-            font-weight: 600;
-            border-radius: 6px;
-            margin-top: 8px;
-        }
-    </style>
+{{ parent() }}
+<style>
+/* ─────────────────────────────────────────
+   Page shell
+───────────────────────────────────────── */
+.pf-page {
+    background: #f4f6f8;
+    min-height: calc(100vh - 64px);
+    padding-bottom: 60px;
+}
+
+/* ─────────────────────────────────────────
+   Header
+───────────────────────────────────────── */
+.pf-header {
+    background: linear-gradient(135deg, #1a2e4a 0%, #2980b9 100%);
+    padding: 28px 0 24px;
+    margin-bottom: 32px;
+}
+.pf-header__inner {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+.pf-header__back {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: rgba(255,255,255,0.7);
+    font-size: 13px;
+    text-decoration: none;
+    transition: color 0.15s;
+    margin-bottom: 8px;
+}
+.pf-header__back:hover { color: #fff; text-decoration: none; }
+.pf-header__meta {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+.pf-header__avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: #f39c12;
+    color: #fff;
+    font-size: 24px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 0 0 3px rgba(255,255,255,0.25);
+}
+.pf-header__title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #fff;
+    margin: 0 0 2px;
+}
+.pf-header__sub {
+    font-size: 13px;
+    color: rgba(255,255,255,0.7);
+    margin: 0;
+}
+
+/* ─────────────────────────────────────────
+   Layout
+───────────────────────────────────────── */
+.pf-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    align-items: start;
+}
+
+/* ─────────────────────────────────────────
+   Panels
+───────────────────────────────────────── */
+.pf-panel {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.07), 0 4px 16px rgba(0,0,0,0.05);
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+.pf-panel__head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 13px 18px;
+    background: #f8f9fa;
+    border-bottom: 1px solid #eaecef;
+    font-size: 13px;
+    font-weight: 700;
+    color: #2c3e50;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.pf-panel__body {
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* ─────────────────────────────────────────
+   Flash messages
+───────────────────────────────────────── */
+.pf-flash {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-radius: 8px;
+    padding: 11px 16px;
+    font-size: 14px;
+    margin-bottom: 4px;
+}
+.pf-flash--success {
+    background: #eafaf1;
+    border: 1px solid #a9dfbf;
+    color: #1e8449;
+}
+.pf-flash--error {
+    background: #fdf3f4;
+    border: 1px solid #f5c6cb;
+    color: #922b21;
+}
+
+/* ─────────────────────────────────────────
+   Form fields
+───────────────────────────────────────── */
+.pf-field {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+.pf-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: #2c3e50;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    margin: 0;
+}
+.pf-input {
+    width: 100%;
+    padding: 9px 12px;
+    font-size: 14px;
+    color: #2c3e50;
+    background: #f8f9fa;
+    border: 1.5px solid #dde3ea;
+    border-radius: 7px;
+    outline: none;
+    transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+    box-sizing: border-box;
+    font-family: inherit;
+}
+.pf-input:focus {
+    border-color: #2980b9;
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(41,128,185,0.12);
+}
+
+/* ─────────────────────────────────────────
+   Actions
+───────────────────────────────────────── */
+.pf-actions {
+    padding: 14px 22px 18px;
+    border-top: 1px solid #f0f2f4;
+    background: #fafbfc;
+}
+.pf-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 10px 22px;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.15s, color 0.15s, transform 0.1s;
+    width: 100%;
+    justify-content: center;
+}
+.pf-btn:active { transform: scale(0.98); }
+.pf-btn--primary {
+    background: #2980b9;
+    color: #fff;
+}
+.pf-btn--primary:hover { background: #1a6fa0; color: #fff; text-decoration: none; }
+.pf-btn--warning {
+    background: #f39c12;
+    color: #fff;
+}
+.pf-btn--warning:hover { background: #e67e22; color: #fff; text-decoration: none; }
+
+/* ─────────────────────────────────────────
+   Symfony form overrides
+───────────────────────────────────────── */
+.pf-panel__body .form-group { margin-bottom: 0; }
+.pf-panel__body .form-group label {
+    font-size: 12px;
+    font-weight: 700;
+    color: #2c3e50;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    margin-bottom: 5px;
+}
+.pf-panel__body .form-control {
+    background: #f8f9fa;
+    border: 1.5px solid #dde3ea;
+    border-radius: 7px;
+    font-size: 14px;
+    color: #2c3e50;
+    padding: 9px 12px;
+    height: auto;
+    transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+}
+.pf-panel__body .form-control:focus {
+    border-color: #2980b9;
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(41,128,185,0.12);
+    outline: none;
+}
+
+/* ─────────────────────────────────────────
+   Responsive
+───────────────────────────────────────── */
+@media (max-width: 767px) {
+    .pf-layout { grid-template-columns: 1fr; }
+    .pf-header__title { font-size: 20px; }
+}
+</style>
 {% endblock %}
 
 {% block content %}
-    <div class="profile-header">
+<div class="pf-page">
+
+    {# ── Header ── #}
+    <div class="pf-header">
         <div class="container">
-            <a href="{{ path('main_private') }}" style="color: rgba(255,255,255,0.75); font-size:13px; text-decoration:none;">
-                <span class="glyphicon glyphicon-chevron-left" style="font-size:11px; margin-right:4px;"></span> My Travels
+            <a href="{{ path('main_private') }}" class="pf-header__back">
+                <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3L5 8l5 5"/></svg>
+                My Travels
             </a>
-            <h1><span class="glyphicon glyphicon-user"></span> My Profile</h1>
-            <p>{{ app.user.username }}</p>
+            <div class="pf-header__inner">
+                <div class="pf-header__avatar">{{ app.user.username|slice(0,1)|upper }}</div>
+                <div class="pf-header__meta">
+                    <h1 class="pf-header__title">My Profile</h1>
+                    <p class="pf-header__sub">{{ app.user.username }}</p>
+                </div>
+            </div>
         </div>
     </div>
 
     <div class="container">
-        <div class="row">
 
-            <div class="col-sm-6">
+        {# ── Flash messages ── #}
+        {% for msg in app.session.flashbag.get('notice') %}
+            <div class="pf-flash pf-flash--success">
+                <svg viewBox="0 0 16 16" width="15" height="15" fill="currentColor"><path d="M8 1a7 7 0 1 1 0 14A7 7 0 0 1 8 1zm3.3 4.3L7 9.6 4.7 7.3l-1 1L7 11.6l5.3-5.3-1-1z"/></svg>
+                {{ msg }}
+            </div>
+        {% endfor %}
+        {% for msg in app.session.flashbag.get('error') %}
+            <div class="pf-flash pf-flash--error">
+                <svg viewBox="0 0 16 16" width="15" height="15" fill="currentColor"><path d="M8 1a7 7 0 1 1 0 14A7 7 0 0 1 8 1zm-.75 4v4.5h1.5V5h-1.5zm0 5.5V12h1.5v-1.5h-1.5z"/></svg>
+                {{ msg }}
+            </div>
+        {% endfor %}
 
-                {% for msg in app.session.flashbag.get('notice') %}
-                    <div class="flash-notice">
-                        <span class="glyphicon glyphicon-ok"></span> {{ msg }}
-                    </div>
-                {% endfor %}
-                {% for msg in app.session.flashbag.get('error') %}
-                    <div class="flash-error">
-                        <span class="glyphicon glyphicon-remove"></span> {{ msg }}
-                    </div>
-                {% endfor %}
+        <div class="pf-layout">
 
+            {# ── Personal information ── #}
+            <div>
                 {{ form_start(profileForm) }}
-                <div class="profile-panel">
-                    <div class="profile-panel-header">
-                        <h3><span class="glyphicon glyphicon-info-sign"></span> Personal information</h3>
+                <div class="pf-panel">
+                    <div class="pf-panel__head">
+                        <svg viewBox="0 0 16 16" width="15" height="15" fill="currentColor" opacity=".7"><path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0 1c-3.3 0-6 1.8-6 4v1h12v-1c0-2.2-2.7-4-6-4z"/></svg>
+                        Personal information
                     </div>
-                    <div class="profile-panel-body">
+                    <div class="pf-panel__body">
                         {{ form_row(profileForm.firstName) }}
                         {{ form_row(profileForm.lastName) }}
                         {{ form_row(profileForm.email) }}
                         {{ form_row(profileForm.username) }}
                     </div>
+                    <div class="pf-actions">
+                        <button type="submit" class="pf-btn pf-btn--primary">
+                            <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><path d="M13 2H5L2 5v9h12V2h-1zm-5 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm2-9H5V3h5v1z"/></svg>
+                            Save changes
+                        </button>
+                    </div>
                 </div>
-                <button type="submit" class="btn btn-primary btn-save">
-                    <span class="glyphicon glyphicon-floppy-disk"></span> Save changes
-                </button>
                 {{ form_end(profileForm) }}
-
             </div>
 
-            <div class="col-sm-6">
-
+            {# ── Change password ── #}
+            <div>
                 {{ form_start(passwordForm) }}
-                <div class="profile-panel">
-                    <div class="profile-panel-header">
-                        <h3><span class="glyphicon glyphicon-lock"></span> Change password</h3>
+                <div class="pf-panel">
+                    <div class="pf-panel__head">
+                        <svg viewBox="0 0 16 16" width="15" height="15" fill="currentColor" opacity=".7"><path d="M11 6V4a3 3 0 0 0-6 0v2H3v9h10V6h-2zm-4-2a1 1 0 0 1 2 0v2H7V4zm1 7a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/></svg>
+                        Change password
                     </div>
-                    <div class="profile-panel-body">
+                    <div class="pf-panel__body">
                         {{ form_row(passwordForm.currentPassword) }}
                         {{ form_row(passwordForm.newPassword.first) }}
                         {{ form_row(passwordForm.newPassword.second) }}
                     </div>
+                    <div class="pf-actions">
+                        <button type="submit" class="pf-btn pf-btn--warning">
+                            <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><path d="M11 6V4a3 3 0 0 0-6 0v2H3v9h10V6h-2zm-4-2a1 1 0 0 1 2 0v2H7V4zm1 7a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/></svg>
+                            Change password
+                        </button>
+                    </div>
                 </div>
-                <button type="submit" class="btn btn-warning btn-save">
-                    <span class="glyphicon glyphicon-lock"></span> Change password
-                </button>
                 {{ form_end(passwordForm) }}
-
             </div>
 
         </div>
     </div>
+</div>
 {% endblock %}

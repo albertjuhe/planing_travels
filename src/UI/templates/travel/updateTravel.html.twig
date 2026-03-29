@@ -2,10 +2,323 @@
 
 {% block title %} · Update Travel{% endblock %}
 
+{% block css %}
+{{ parent() }}
+<link rel="stylesheet" href="{{ asset('css/leaflet@1.7.1/leaflet.css') }}"/>
+<link rel="stylesheet" href="/public/font-awesome-4.3.0/css/font-awesome.min.css"/>
+<link rel="stylesheet" href="/public/css/ionicons-2.0.1/css/ionicons.min.css"/>
+<link rel="stylesheet" href="/public/css/leaflet.awesome-markers.css">
+<style>
+/* ─────────────────────────────────────────
+   Page shell
+───────────────────────────────────────── */
+.ut-page {
+    background: #f4f6f8;
+    min-height: calc(100vh - 64px);
+    padding-bottom: 60px;
+}
+
+/* ─────────────────────────────────────────
+   Header
+───────────────────────────────────────── */
+.ut-header {
+    background: linear-gradient(135deg, #1a2e4a 0%, #2980b9 100%);
+    padding: 28px 0 24px;
+    margin-bottom: 32px;
+}
+.ut-header__inner {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+.ut-header__left {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+}
+.ut-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: rgba(255,255,255,0.7);
+    font-size: 13px;
+    text-decoration: none;
+    transition: color 0.15s;
+}
+.ut-back:hover { color: #fff; text-decoration: none; }
+.ut-header__title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #fff;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.ut-header__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.25);
+    color: rgba(255,255,255,0.9);
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 12px;
+    white-space: nowrap;
+    align-self: flex-start;
+}
+
+/* ─────────────────────────────────────────
+   Flash
+───────────────────────────────────────── */
+.ut-flash {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #eafaf1;
+    border: 1px solid #a9dfbf;
+    color: #1e8449;
+    border-radius: 8px;
+    padding: 11px 16px;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+/* ─────────────────────────────────────────
+   Layout: two-column
+───────────────────────────────────────── */
+.ut-container { padding-top: 0; }
+.ut-layout {
+    display: grid;
+    grid-template-columns: 380px 1fr;
+    gap: 24px;
+    align-items: start;
+}
+
+/* ─────────────────────────────────────────
+   Panels
+───────────────────────────────────────── */
+.ut-panel {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.07), 0 4px 16px rgba(0,0,0,0.05);
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+.ut-panel--map { margin-bottom: 0; }
+.ut-panel__head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 13px 18px;
+    background: #f8f9fa;
+    border-bottom: 1px solid #eaecef;
+    font-size: 13px;
+    font-weight: 700;
+    color: #2c3e50;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.ut-panel__head--map { justify-content: space-between; }
+.ut-panel__body { padding: 20px; }
+
+/* ─────────────────────────────────────────
+   Cover photo
+───────────────────────────────────────── */
+.ut-cover-preview {
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 14px;
+    height: 160px;
+    background: #f0f2f4;
+}
+.ut-cover-preview img {
+    width: 100%; height: 100%;
+    object-fit: cover; display: block;
+    transition: transform 0.3s;
+}
+.ut-cover-preview:hover img { transform: scale(1.03); }
+.ut-cover-label {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    background: rgba(0,0,0,0.45);
+    color: #fff;
+    font-size: 11px;
+    padding: 5px 10px;
+    font-weight: 500;
+}
+.ut-cover-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 120px;
+    border: 2px dashed #dde3ea;
+    border-radius: 8px;
+    color: #b0bec5;
+    font-size: 13px;
+    margin-bottom: 14px;
+}
+.ut-file-field { display: flex; flex-direction: column; gap: 6px; }
+.ut-file-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 14px;
+    background: #f4f6f8;
+    border: 1.5px solid #dde3ea;
+    border-radius: 7px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #2c3e50;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+    width: fit-content;
+}
+.ut-file-btn:hover { background: #eaecef; border-color: #c5cdd6; }
+.ut-file-input { display: none; }
+.ut-file-hint { font-size: 11px; color: #b0bec5; }
+
+/* ─────────────────────────────────────────
+   Form fields
+───────────────────────────────────────── */
+.ut-fields { display: flex; flex-direction: column; gap: 16px; }
+.ut-field { display: flex; flex-direction: column; gap: 5px; }
+.ut-field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+.ut-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: #2c3e50;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    margin: 0;
+}
+.ut-input,
+.ut-textarea {
+    width: 100%;
+    padding: 9px 12px;
+    font-size: 14px;
+    color: #2c3e50;
+    background: #f8f9fa;
+    border: 1.5px solid #dde3ea;
+    border-radius: 7px;
+    outline: none;
+    transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+    box-sizing: border-box;
+    font-family: inherit;
+}
+.ut-input:focus,
+.ut-textarea:focus {
+    border-color: #2980b9;
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(41,128,185,0.12);
+}
+.ut-textarea { resize: vertical; min-height: 90px; }
+
+/* Symfony date widget selects */
+.ut-date-widget select {
+    padding: 8px 10px;
+    font-size: 13px;
+    background: #f8f9fa;
+    border: 1.5px solid #dde3ea;
+    border-radius: 7px;
+    color: #2c3e50;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    margin-right: 4px;
+    margin-bottom: 4px;
+}
+.ut-date-widget select:focus {
+    border-color: #2980b9;
+    box-shadow: 0 0 0 3px rgba(41,128,185,0.12);
+}
+
+/* ─────────────────────────────────────────
+   Actions
+───────────────────────────────────────── */
+.ut-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 4px;
+}
+.ut-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 10px 22px;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.15s, color 0.15s, transform 0.1s;
+}
+.ut-btn:active { transform: scale(0.98); }
+.ut-btn--primary { background: #f39c12; color: #fff; }
+.ut-btn--primary:hover { background: #e67e22; color: #fff; text-decoration: none; }
+.ut-btn--ghost {
+    background: #f4f6f8;
+    color: #636e72;
+    border: 1.5px solid #dde3ea;
+}
+.ut-btn--ghost:hover { background: #eaecef; color: #2c3e50; text-decoration: none; }
+
+/* ─────────────────────────────────────────
+   Map
+───────────────────────────────────────── */
+#map { height: 520px; width: 100%; }
+.ut-map-center {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    background: #fff;
+    border: 1.5px solid #dde3ea;
+    border-radius: 16px;
+    color: #2c3e50;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+}
+.ut-map-center:hover { background: #f4f6f8; border-color: #c5cdd6; }
+
+/* ─────────────────────────────────────────
+   Responsive
+───────────────────────────────────────── */
+@media (max-width: 991px) {
+    .ut-layout { grid-template-columns: 1fr; }
+    #map { height: 360px; }
+}
+@media (max-width: 600px) {
+    .ut-field-row { grid-template-columns: 1fr; }
+    .ut-actions { flex-direction: column; }
+    .ut-btn { justify-content: center; }
+    .ut-header__title { font-size: 18px; }
+}
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="ut-page">
 
-    {# ── Page header ── #}
+    {# ── Header ── #}
     <div class="ut-header">
         <div class="container">
             <div class="ut-header__inner">
@@ -15,9 +328,13 @@
                         My Travels
                     </a>
                     <h1 class="ut-header__title">
-                        <svg viewBox="0 0 16 16" width="18" height="18" fill="currentColor" style="opacity:.8;margin-right:8px;flex-shrink:0"><path d="M11.7 1.3a1 1 0 0 1 1.4 0l1.6 1.6a1 1 0 0 1 0 1.4L5.5 13.5 1 15l1.5-4.5 9.2-9.2z"/></svg>
+                        <svg viewBox="0 0 16 16" width="18" height="18" fill="currentColor" style="opacity:.8;flex-shrink:0"><path d="M11.7 1.3a1 1 0 0 1 1.4 0l1.6 1.6a1 1 0 0 1 0 1.4L5.5 13.5 1 15l1.5-4.5 9.2-9.2z"/></svg>
                         {{ travelTitle }}
                     </h1>
+                    <span class="ut-header__badge">
+                        <svg viewBox="0 0 8 8" width="6" height="6"><circle cx="4" cy="4" r="4" fill="#f39c12"/></svg>
+                        Draft
+                    </span>
                 </div>
             </div>
         </div>
@@ -26,10 +343,9 @@
     {# ── Body ── #}
     <div class="container ut-container">
 
-        {# Flash messages #}
         {% for flashMessage in app.session.flashbag.get('notice') %}
             <div class="ut-flash">
-                <svg viewBox="0 0 16 16" width="15" height="15" fill="currentColor"><path d="M8 1a7 7 0 1 1 0 14A7 7 0 0 1 8 1zm0 3v4m0 2v1"/></svg>
+                <svg viewBox="0 0 16 16" width="15" height="15" fill="currentColor"><path d="M8 1a7 7 0 1 1 0 14A7 7 0 0 1 8 1zm3.3 4.3L7 9.6 4.7 7.3l-1 1L7 11.6l5.3-5.3-1-1z"/></svg>
                 {{ flashMessage }}
             </div>
         {% endfor %}
@@ -142,315 +458,6 @@
 </div>
 {% endblock %}
 
-{% block css %}
-{{ parent() }}
-<link rel="stylesheet" href="{{ asset('css/leaflet@1.7.1/leaflet.css') }}"/>
-<link rel="stylesheet" href="/public/font-awesome-4.3.0/css/font-awesome.min.css"/>
-<link rel="stylesheet" href="/public/css/ionicons-2.0.1/css/ionicons.min.css"/>
-<link rel="stylesheet" href="/public/css/leaflet.awesome-markers.css">
-<style>
-/* ─────────────────────────────────────────
-   Page shell
-───────────────────────────────────────── */
-.ut-page {
-    background: #f4f6f8;
-    min-height: calc(100vh - 64px);
-    padding-bottom: 60px;
-}
-
-/* ─────────────────────────────────────────
-   Header
-───────────────────────────────────────── */
-.ut-header {
-    background: linear-gradient(135deg, #1a2e4a 0%, #2980b9 100%);
-    padding: 28px 0 24px;
-    margin-bottom: 32px;
-}
-.ut-header__inner {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    flex-wrap: wrap;
-}
-.ut-header__left {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-}
-.ut-back {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    color: rgba(255,255,255,0.7);
-    font-size: 13px;
-    text-decoration: none;
-    transition: color 0.15s;
-}
-.ut-back:hover { color: #fff; text-decoration: none; }
-.ut-header__title {
-    font-size: 24px;
-    font-weight: 700;
-    color: #fff;
-    margin: 0;
-    display: flex;
-    align-items: center;
-}
-
-/* ─────────────────────────────────────────
-   Flash
-───────────────────────────────────────── */
-.ut-flash {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    background: #eafaf1;
-    border: 1px solid #a9dfbf;
-    color: #1e8449;
-    border-radius: 8px;
-    padding: 11px 16px;
-    font-size: 14px;
-    margin-bottom: 20px;
-}
-
-/* ─────────────────────────────────────────
-   Layout: two-column
-───────────────────────────────────────── */
-.ut-container { padding-top: 0; }
-.ut-layout {
-    display: grid;
-    grid-template-columns: 380px 1fr;
-    gap: 24px;
-    align-items: start;
-}
-
-/* ─────────────────────────────────────────
-   Panels
-───────────────────────────────────────── */
-.ut-panel {
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.07), 0 4px 16px rgba(0,0,0,0.05);
-    overflow: hidden;
-    margin-bottom: 20px;
-}
-.ut-panel--map { margin-bottom: 0; }
-.ut-panel__head {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 13px 18px;
-    background: #f8f9fa;
-    border-bottom: 1px solid #eaecef;
-    font-size: 13px;
-    font-weight: 700;
-    color: #2c3e50;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-.ut-panel__head--map {
-    justify-content: space-between;
-}
-.ut-panel__body {
-    padding: 20px;
-}
-
-/* ─────────────────────────────────────────
-   Cover photo
-───────────────────────────────────────── */
-.ut-cover-preview {
-    position: relative;
-    border-radius: 8px;
-    overflow: hidden;
-    margin-bottom: 14px;
-    height: 160px;
-    background: #f0f2f4;
-}
-.ut-cover-preview img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    transition: transform 0.3s;
-}
-.ut-cover-preview:hover img { transform: scale(1.03); }
-.ut-cover-label {
-    position: absolute;
-    bottom: 0; left: 0; right: 0;
-    background: rgba(0,0,0,0.45);
-    color: #fff;
-    font-size: 11px;
-    padding: 5px 10px;
-    font-weight: 500;
-}
-.ut-cover-empty {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    height: 120px;
-    border: 2px dashed #dde3ea;
-    border-radius: 8px;
-    color: #b0bec5;
-    font-size: 13px;
-    margin-bottom: 14px;
-}
-
-/* File upload */
-.ut-file-field { display: flex; flex-direction: column; gap: 6px; }
-.ut-file-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    padding: 8px 14px;
-    background: #f4f6f8;
-    border: 1.5px solid #dde3ea;
-    border-radius: 7px;
-    font-size: 13px;
-    font-weight: 600;
-    color: #2c3e50;
-    cursor: pointer;
-    transition: background 0.15s, border-color 0.15s;
-    width: fit-content;
-}
-.ut-file-btn:hover { background: #eaecef; border-color: #c5cdd6; }
-.ut-file-input { display: none; }
-.ut-file-hint { font-size: 11px; color: #b0bec5; }
-
-/* ─────────────────────────────────────────
-   Form fields
-───────────────────────────────────────── */
-.ut-fields { display: flex; flex-direction: column; gap: 16px; }
-.ut-field { display: flex; flex-direction: column; gap: 5px; }
-.ut-field-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-}
-.ut-label {
-    font-size: 12px;
-    font-weight: 700;
-    color: #2c3e50;
-    text-transform: uppercase;
-    letter-spacing: 0.4px;
-    margin: 0;
-}
-.ut-input,
-.ut-textarea {
-    width: 100%;
-    padding: 9px 12px;
-    font-size: 14px;
-    color: #2c3e50;
-    background: #f8f9fa;
-    border: 1.5px solid #dde3ea;
-    border-radius: 7px;
-    outline: none;
-    transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
-    box-sizing: border-box;
-    font-family: inherit;
-}
-.ut-input:focus,
-.ut-textarea:focus {
-    border-color: #2980b9;
-    background: #fff;
-    box-shadow: 0 0 0 3px rgba(41,128,185,0.12);
-}
-.ut-textarea { resize: vertical; min-height: 90px; }
-
-/* Symfony date widget selects */
-.ut-date-widget select {
-    padding: 8px 10px;
-    font-size: 13px;
-    background: #f8f9fa;
-    border: 1.5px solid #dde3ea;
-    border-radius: 7px;
-    color: #2c3e50;
-    outline: none;
-    transition: border-color 0.2s, box-shadow 0.2s;
-    margin-right: 4px;
-    margin-bottom: 4px;
-}
-.ut-date-widget select:focus {
-    border-color: #2980b9;
-    box-shadow: 0 0 0 3px rgba(41,128,185,0.12);
-}
-
-/* ─────────────────────────────────────────
-   Actions
-───────────────────────────────────────── */
-.ut-actions {
-    display: flex;
-    gap: 10px;
-    justify-content: flex-end;
-    margin-top: 4px;
-}
-.ut-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    padding: 10px 22px;
-    font-size: 14px;
-    font-weight: 600;
-    border-radius: 8px;
-    border: none;
-    cursor: pointer;
-    text-decoration: none;
-    transition: background 0.15s, color 0.15s, transform 0.1s;
-}
-.ut-btn:active { transform: scale(0.98); }
-.ut-btn--primary {
-    background: #f39c12;
-    color: #fff;
-}
-.ut-btn--primary:hover { background: #e67e22; color: #fff; text-decoration: none; }
-.ut-btn--ghost {
-    background: #f4f6f8;
-    color: #636e72;
-    border: 1.5px solid #dde3ea;
-}
-.ut-btn--ghost:hover { background: #eaecef; color: #2c3e50; text-decoration: none; }
-
-/* ─────────────────────────────────────────
-   Map
-───────────────────────────────────────── */
-#map {
-    height: 520px;
-    width: 100%;
-}
-.ut-map-center {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    padding: 5px 12px;
-    font-size: 12px;
-    font-weight: 600;
-    background: #fff;
-    border: 1.5px solid #dde3ea;
-    border-radius: 16px;
-    color: #2c3e50;
-    cursor: pointer;
-    transition: background 0.15s, border-color 0.15s;
-}
-.ut-map-center:hover { background: #f4f6f8; border-color: #c5cdd6; }
-
-/* ─────────────────────────────────────────
-   Responsive
-───────────────────────────────────────── */
-@media (max-width: 991px) {
-    .ut-layout {
-        grid-template-columns: 1fr;
-    }
-    #map { height: 360px; }
-}
-@media (max-width: 600px) {
-    .ut-field-row { grid-template-columns: 1fr; }
-    .ut-actions { flex-direction: column; }
-    .ut-btn { justify-content: center; }
-}
-</style>
-{% endblock %}
-
 {% block javascript %}
 {{ parent() }}
 <script src="{{ asset('js/leaflet@1.7.1/leaflet.js') }}"></script>
@@ -498,6 +505,7 @@
                 preview.innerHTML =
                     '<img src="' + e.target.result + '" alt="Preview" id="ut-cover-img" style="width:100%;height:100%;object-fit:cover;display:block;">' +
                     '<span class="ut-cover-label">New cover (unsaved)</span>';
+                preview.className = 'ut-cover-preview';
                 preview.style.height = '160px';
             };
             reader.readAsDataURL(this.files[0]);
