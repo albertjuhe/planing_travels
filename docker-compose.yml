@@ -22,10 +22,12 @@ services:
       - PHP_EXTENSION_XDEBUG:1
       - ENABLE_XDEBUG=1
       - XDEBUG_REMOTE_HOST=${DOCKER_HOST_IP:-localhost}
-    entrypoint: ["/bin/sh", "-c", "git config --global --add safe.directory /var/www/html && exec apache2-foreground"]
+    entrypoint: ["/bin/bash", "/var/www/html/Docker/entrypoint.sh"]
     depends_on:
-      - mysql
-      - elasticsearch
+      mysql:
+        condition: service_healthy
+      elasticsearch:
+        condition: service_healthy
     #command: sh /var/www/html/Docker/wait_to_start.sh
 
   mysql:
@@ -35,6 +37,11 @@ services:
       - MYSQL_ROOT_PASSWORD=root
     volumes:
       - ${PWD}/Docker/migrations:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
 
   adminer:
     image: adminer
