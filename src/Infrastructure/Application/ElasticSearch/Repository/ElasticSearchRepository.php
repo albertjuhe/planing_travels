@@ -14,7 +14,6 @@ class ElasticSearchRepository
 
     protected $indexManager;
     protected $index;
-    protected $typeDocument;
     protected $elasticSearchIndex;
 
     /**
@@ -31,14 +30,13 @@ class ElasticSearchRepository
         $this->indexManager = $indexManager;
     }
 
-    protected function getTypeDocument()
+    protected function getIndex(): \FOS\ElasticaBundle\Elastica\Index
     {
-        if ($this->typeDocument === null) {
+        if ($this->index === null) {
             $this->index = $this->elasticSearchIndex->getOne(static::DOCUMENT_INDEX);
-            $this->typeDocument = $this->index->getType(static::DOCUMENT_TYPE);
         }
 
-        return $this->typeDocument;
+        return $this->index;
     }
 
     public function find(string $id): iterable
@@ -51,6 +49,6 @@ class ElasticSearchRepository
         $terms = new Terms();
         $terms->setTerms($field, [$value]);
 
-        return $this->getTypeDocument()->getIndex()->search($terms)->getDocuments();
+        return $this->getIndex()->search($terms)->getDocuments();
     }
 }

@@ -82,7 +82,7 @@ class InMemoryTravelRepository implements TravelRepository
 
     public function getAll(): array
     {
-        return $this->travel;
+        return array_map(function ($row) { return $row['travel']; }, $this->travel);
     }
 
     public function find($id)
@@ -98,8 +98,8 @@ class InMemoryTravelRepository implements TravelRepository
     public function getAllTravelsByUser(int $userId): array
     {
         return array_map(
-            fn($row) => $row['travel'],
-            array_filter($this->travel, fn($row) => $row['userId'] === $userId)
+            function ($row) { return $row['travel']; },
+            array_filter($this->travel, function ($row) use ($userId) { return $row['userId'] === $userId; })
         );
     }
 }

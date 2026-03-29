@@ -98,47 +98,7 @@
             <p class="section-subheading">Handpicked adventures loved by our community</p>
         </div>
 
-        {% if travels is defined and travels|length > 0 %}
-        <div class="table-responsive">
-            <table class="table travels-table">
-                <thead>
-                    <tr>
-                        <th>Destination</th>
-                        <th>Dates</th>
-                        <th><span class="glyphicon glyphicon-star"></span> Rating</th>
-                        <th><span class="glyphicon glyphicon-eye-open"></span> Views</th>
-                        <th>Traveler</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for travel in travels %}
-                    <tr>
-                        <td>
-                            <a class="travel-link" href="{{ path('show_travel', {'slug': travel.slug}) }}">{{ travel.title }}</a>
-                            {% if travel.description %}
-                                <br><small class="text-muted">{{ travel.description|slice(0, 80) }}{% if travel.description|length > 80 %}…{% endif %}</small>
-                            {% endif %}
-                        </td>
-                        <td class="text-nowrap">{{ travel.startAt.date|date("d M Y") }} &rarr; {{ travel.endAt.date|date("d M Y") }}</td>
-                        <td>{{ travel.stars }}</td>
-                        <td>{{ travel.watch }}</td>
-                        <td><span class="glyphicon glyphicon-user"></span> {{ travel.username }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        {% else %}
-        <div class="empty-travels text-center">
-            <span class="glyphicon glyphicon-globe empty-icon"></span>
-            <p>No travels published yet. Be the first to share your adventure!</p>
-            {% if not app.user %}
-                <a href="{{ path('private_register') }}" class="btn btn-primary">Get Started</a>
-            {% else %}
-                <a href="{{ path('newTravel') }}" class="btn btn-primary">Add a Travel</a>
-            {% endif %}
-        </div>
-        {% endif %}
+        {{ render(controller('App\\UI\\Controller\\http\\BestTravelsListController::listBestTravels', { 'maxtravels': 10 })) }}
     </div>
 </div>
 
