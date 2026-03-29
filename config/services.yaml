@@ -34,6 +34,12 @@ services:
       class: App\Infrastructure\Application\QueryBus\QueryBus
 
     # Command bus handler
+    travel.unpublish_handler:
+      class: App\Application\UseCases\Travel\UnpublishTravelService
+      arguments: ['@doctrine.travel.repository','@doctrine.user.repository']
+      tags:
+        - { name: tactician.handler, command: App\Application\Command\Travel\UnpublishTravelCommand}
+
     travel.publish_handler:
       class: App\Application\UseCases\Travel\PublishTravelService
       arguments: ['@doctrine.travel.repository','@doctrine.user.repository']

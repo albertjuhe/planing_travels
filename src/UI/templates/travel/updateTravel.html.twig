@@ -2,149 +2,10 @@
 
 {% block title %} · Update Travel{% endblock %}
 
-{% block content %}
-<div class="ut-page">
-
-    {# ── Page header ── #}
-    <div class="ut-header">
-        <div class="container">
-            <div class="ut-header__inner">
-                <div class="ut-header__left">
-                    <a href="{{ path('main_private') }}" class="ut-back">
-                        <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3L5 8l5 5"/></svg>
-                        My Travels
-                    </a>
-                    <h1 class="ut-header__title">
-                        <svg viewBox="0 0 16 16" width="18" height="18" fill="currentColor" style="opacity:.8;margin-right:8px;flex-shrink:0"><path d="M11.7 1.3a1 1 0 0 1 1.4 0l1.6 1.6a1 1 0 0 1 0 1.4L5.5 13.5 1 15l1.5-4.5 9.2-9.2z"/></svg>
-                        {{ travelTitle }}
-                    </h1>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    {# ── Body ── #}
-    <div class="container ut-container">
-
-        {# Flash messages #}
-        {% for flashMessage in app.session.flashbag.get('notice') %}
-            <div class="ut-flash">
-                <svg viewBox="0 0 16 16" width="15" height="15" fill="currentColor"><path d="M8 1a7 7 0 1 1 0 14A7 7 0 0 1 8 1zm0 3v4m0 2v1"/></svg>
-                {{ flashMessage }}
-            </div>
-        {% endfor %}
-
-        <div class="ut-layout">
-
-            {# ── Left: form ── #}
-            <div class="ut-form-col">
-                {{ form_start(travelForm, {'attr': {'enctype': 'multipart/form-data', 'class': 'ut-form', 'id': 'ut-form'}}) }}
-
-                {# Cover photo panel #}
-                <div class="ut-panel">
-                    <div class="ut-panel__head">
-                        <svg viewBox="0 0 16 16" width="15" height="15" fill="currentColor" opacity=".7"><path d="M0 3h16v10H0V3zm1 1v8h14V4H1zm4 2a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm-1 5l2-3 2 2 2-3 3 4H3z"/></svg>
-                        Cover Photo
-                    </div>
-                    <div class="ut-panel__body">
-                        {% if currentPhoto %}
-                            <div class="ut-cover-preview" id="ut-cover-preview">
-                                <img src="{{ asset('uploads/travel_photos/' ~ currentPhoto) }}"
-                                     alt="Current cover" id="ut-cover-img">
-                                <span class="ut-cover-label">Current cover</span>
-                            </div>
-                        {% else %}
-                            <div class="ut-cover-empty" id="ut-cover-preview">
-                                <svg viewBox="0 0 48 48" width="40" height="40" fill="none" stroke="#b0bec5" stroke-width="1.5"><rect x="4" y="8" width="40" height="32" rx="3"/><circle cx="16" cy="20" r="4"/><path d="M4 36l10-12 8 8 6-7 12 11"/></svg>
-                                <span>No cover yet</span>
-                            </div>
-                        {% endif %}
-                        <div class="ut-file-field">
-                            {{ form_label(travelForm.photo, null, {'label_attr': {'class': 'ut-label'}}) }}
-                            <label class="ut-file-btn" for="{{ travelForm.photo.vars.id }}">
-                                <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><path d="M8 1v9M4 6l4-4 4 4M2 13h12"/></svg>
-                                Choose image
-                            </label>
-                            {{ form_widget(travelForm.photo, {'attr': {'class': 'ut-file-input', 'id': travelForm.photo.vars.id}}) }}
-                            <span class="ut-file-hint">JPEG, PNG, WebP · max 5 MB</span>
-                            {{ form_errors(travelForm.photo) }}
-                        </div>
-                    </div>
-                </div>
-
-                {# Details panel #}
-                <div class="ut-panel">
-                    <div class="ut-panel__head">
-                        <svg viewBox="0 0 16 16" width="15" height="15" fill="currentColor" opacity=".7"><path d="M2 2h12v12H2V2zm1 1v10h10V3H3zm2 2h6v1H5V5zm0 3h6v1H5V8zm0 3h4v1H5v-1z"/></svg>
-                        Travel Details
-                    </div>
-                    <div class="ut-panel__body ut-fields">
-
-                        <div class="ut-field">
-                            {{ form_label(travelForm.title, 'Title', {'label_attr': {'class': 'ut-label'}}) }}
-                            {{ form_widget(travelForm.title, {'attr': {'class': 'ut-input', 'placeholder': 'e.g. Summer in Japan'}}) }}
-                            {{ form_errors(travelForm.title) }}
-                        </div>
-
-                        <div class="ut-field-row">
-                            <div class="ut-field">
-                                {{ form_label(travelForm.startAt, 'Start date', {'label_attr': {'class': 'ut-label'}}) }}
-                                {{ form_widget(travelForm.startAt, {'attr': {'class': 'ut-date-widget'}}) }}
-                                {{ form_errors(travelForm.startAt) }}
-                            </div>
-                            <div class="ut-field">
-                                {{ form_label(travelForm.endAt, 'End date', {'label_attr': {'class': 'ut-label'}}) }}
-                                {{ form_widget(travelForm.endAt, {'attr': {'class': 'ut-date-widget'}}) }}
-                                {{ form_errors(travelForm.endAt) }}
-                            </div>
-                        </div>
-
-                        <div class="ut-field">
-                            {{ form_label(travelForm.description, 'Description', {'label_attr': {'class': 'ut-label'}}) }}
-                            {{ form_widget(travelForm.description, {'attr': {'class': 'ut-textarea', 'rows': '4', 'placeholder': 'Describe your travel experience…'}}) }}
-                            {{ form_errors(travelForm.description) }}
-                        </div>
-
-                    </div>
-                </div>
-
-                {# Actions #}
-                <div class="ut-actions">
-                    <a href="{{ path('main_private') }}" class="ut-btn ut-btn--ghost">Cancel</a>
-                    <button type="submit" class="ut-btn ut-btn--primary">
-                        <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><path d="M13 2H5L2 5v9h12V2h-1zm-5 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm2-9H5V3h5v1z"/></svg>
-                        Save changes
-                    </button>
-                </div>
-
-                {{ form_end(travelForm) }}
-            </div>
-
-            {# ── Right: map ── #}
-            <div class="ut-map-col">
-                <div class="ut-panel ut-panel--map">
-                    <div class="ut-panel__head ut-panel__head--map">
-                        <span>
-                            <svg viewBox="0 0 16 16" width="15" height="15" fill="currentColor" opacity=".7"><path d="M8 1a5 5 0 0 1 5 5c0 4-5 9-5 9S3 10 3 6a5 5 0 0 1 5-5zm0 3a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/></svg>
-                            Location
-                        </span>
-                        <button class="ut-map-center" id="ut-center" type="button">
-                            <svg viewBox="0 0 16 16" width="13" height="13" fill="currentColor"><path d="M8 5a3 3 0 1 1 0 6A3 3 0 0 1 8 5zM1 7h2m10 0h2M7 1v2m0 10v2"/></svg>
-                            Re-centre
-                        </button>
-                    </div>
-                    <div id="map"></div>
-                </div>
-            </div>
-
-        </div>
-    </div>
-</div>
-{% endblock %}
-
 {% block css %}
 {{ parent() }}
 <link rel="stylesheet" href="{{ asset('css/leaflet@1.7.1/leaflet.css') }}"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <link rel="stylesheet" href="/public/font-awesome-4.3.0/css/font-awesome.min.css"/>
 <link rel="stylesheet" href="/public/css/ionicons-2.0.1/css/ionicons.min.css"/>
 <link rel="stylesheet" href="/public/css/leaflet.awesome-markers.css">
@@ -168,7 +29,7 @@
 }
 .ut-header__inner {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
     gap: 12px;
     flex-wrap: wrap;
@@ -177,6 +38,7 @@
     display: flex;
     flex-direction: column;
     gap: 6px;
+    min-width: 0;
 }
 .ut-back {
     display: inline-flex;
@@ -195,6 +57,35 @@
     margin: 0;
     display: flex;
     align-items: center;
+    gap: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.ut-header__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 12px;
+    white-space: nowrap;
+    align-self: flex-start;
+    text-decoration: none;
+    transition: opacity 0.15s, transform 0.1s;
+    cursor: pointer;
+}
+.ut-header__badge:hover { opacity: 0.85; transform: translateY(-1px); text-decoration: none; }
+.ut-header__badge--draft {
+    background: rgba(243,156,18,0.2);
+    border: 1px solid rgba(243,156,18,0.4);
+    color: #fdebd0;
+}
+.ut-header__badge--published {
+    background: rgba(39,174,96,0.2);
+    border: 1px solid rgba(39,174,96,0.4);
+    color: #d5f5e3;
 }
 
 /* ─────────────────────────────────────────
@@ -248,12 +139,8 @@
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
-.ut-panel__head--map {
-    justify-content: space-between;
-}
-.ut-panel__body {
-    padding: 20px;
-}
+.ut-panel__head--map { justify-content: space-between; }
+.ut-panel__body { padding: 20px; }
 
 /* ─────────────────────────────────────────
    Cover photo
@@ -267,10 +154,8 @@
     background: #f0f2f4;
 }
 .ut-cover-preview img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
+    width: 100%; height: 100%;
+    object-fit: cover; display: block;
     transition: transform 0.3s;
 }
 .ut-cover-preview:hover img { transform: scale(1.03); }
@@ -296,8 +181,6 @@
     font-size: 13px;
     margin-bottom: 14px;
 }
-
-/* File upload */
 .ut-file-field { display: flex; flex-direction: column; gap: 6px; }
 .ut-file-btn {
     display: inline-flex;
@@ -358,22 +241,52 @@
 }
 .ut-textarea { resize: vertical; min-height: 90px; }
 
-/* Symfony date widget selects */
-.ut-date-widget select {
-    padding: 8px 10px;
-    font-size: 13px;
+/* Hide Symfony date selects — replaced by Flatpickr */
+.ut-date-widget { display: none; }
+
+/* Flatpickr input */
+.ut-datepicker-wrap { position: relative; }
+.ut-datepicker-wrap svg {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #b0bec5;
+    pointer-events: none;
+}
+.ut-datepicker {
+    width: 100%;
+    padding: 9px 12px 9px 32px;
+    font-size: 14px;
+    color: #2c3e50;
     background: #f8f9fa;
     border: 1.5px solid #dde3ea;
     border-radius: 7px;
-    color: #2c3e50;
     outline: none;
-    transition: border-color 0.2s, box-shadow 0.2s;
-    margin-right: 4px;
-    margin-bottom: 4px;
+    box-sizing: border-box;
+    font-family: inherit;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
 }
-.ut-date-widget select:focus {
+.ut-datepicker:focus {
     border-color: #2980b9;
+    background: #fff;
     box-shadow: 0 0 0 3px rgba(41,128,185,0.12);
+}
+.flatpickr-calendar {
+    border-radius: 10px !important;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.14) !important;
+    border: 1px solid #eaecef !important;
+    font-family: inherit !important;
+}
+.flatpickr-day.selected, .flatpickr-day.selected:hover {
+    background: #2980b9 !important;
+    border-color: #2980b9 !important;
+}
+.flatpickr-day.inRange {
+    background: rgba(41,128,185,0.12) !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
 }
 
 /* ─────────────────────────────────────────
@@ -399,10 +312,7 @@
     transition: background 0.15s, color 0.15s, transform 0.1s;
 }
 .ut-btn:active { transform: scale(0.98); }
-.ut-btn--primary {
-    background: #f39c12;
-    color: #fff;
-}
+.ut-btn--primary { background: #f39c12; color: #fff; }
 .ut-btn--primary:hover { background: #e67e22; color: #fff; text-decoration: none; }
 .ut-btn--ghost {
     background: #f4f6f8;
@@ -410,14 +320,15 @@
     border: 1.5px solid #dde3ea;
 }
 .ut-btn--ghost:hover { background: #eaecef; color: #2c3e50; text-decoration: none; }
+.ut-btn--publish { background: #27ae60; color: #fff; }
+.ut-btn--publish:hover { background: #219a52; color: #fff; text-decoration: none; }
+.ut-btn--unpublish { background: #ecf0f1; color: #636e72; border: 1.5px solid #dde3ea; }
+.ut-btn--unpublish:hover { background: #dde3ea; color: #2c3e50; text-decoration: none; }
 
 /* ─────────────────────────────────────────
    Map
 ───────────────────────────────────────── */
-#map {
-    height: 520px;
-    width: 100%;
-}
+#map { height: 520px; width: 100%; }
 .ut-map-center {
     display: inline-flex;
     align-items: center;
@@ -438,17 +349,185 @@
    Responsive
 ───────────────────────────────────────── */
 @media (max-width: 991px) {
-    .ut-layout {
-        grid-template-columns: 1fr;
-    }
+    .ut-layout { grid-template-columns: 1fr; }
     #map { height: 360px; }
 }
 @media (max-width: 600px) {
     .ut-field-row { grid-template-columns: 1fr; }
     .ut-actions { flex-direction: column; }
     .ut-btn { justify-content: center; }
+    .ut-header__title { font-size: 18px; }
 }
 </style>
+{% endblock %}
+
+{% block content %}
+<div class="ut-page">
+
+    {# ── Header ── #}
+    <div class="ut-header">
+        <div class="container">
+            <div class="ut-header__inner">
+                <div class="ut-header__left">
+                    <a href="{{ path('main_private') }}" class="ut-back">
+                        <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3L5 8l5 5"/></svg>
+                        My Travels
+                    </a>
+                    <h1 class="ut-header__title">
+                        <svg viewBox="0 0 16 16" width="18" height="18" fill="currentColor" style="opacity:.8;flex-shrink:0"><path d="M11.7 1.3a1 1 0 0 1 1.4 0l1.6 1.6a1 1 0 0 1 0 1.4L5.5 13.5 1 15l1.5-4.5 9.2-9.2z"/></svg>
+                        {{ travelTitle }}
+                    </h1>
+                    {% if isPublished %}
+                        <a href="{{ path('unpublishTravel', {'slug': travelSlug}) }}" class="ut-header__badge ut-header__badge--published">
+                            <svg viewBox="0 0 8 8" width="6" height="6"><circle cx="4" cy="4" r="4" fill="#27ae60"/></svg>
+                            Published · Set as Draft
+                        </a>
+                    {% else %}
+                        <a href="{{ path('publishTravel', {'slug': travelSlug}) }}" class="ut-header__badge ut-header__badge--draft">
+                            <svg viewBox="0 0 8 8" width="6" height="6"><circle cx="4" cy="4" r="4" fill="#f39c12"/></svg>
+                            Draft · Publish now
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {# ── Body ── #}
+    <div class="container ut-container">
+
+        {% for flashMessage in app.session.flashbag.get('notice') %}
+            <div class="ut-flash">
+                <svg viewBox="0 0 16 16" width="15" height="15" fill="currentColor"><path d="M8 1a7 7 0 1 1 0 14A7 7 0 0 1 8 1zm3.3 4.3L7 9.6 4.7 7.3l-1 1L7 11.6l5.3-5.3-1-1z"/></svg>
+                {{ flashMessage }}
+            </div>
+        {% endfor %}
+
+        <div class="ut-layout">
+
+            {# ── Left: form ── #}
+            <div class="ut-form-col">
+                {{ form_start(travelForm, {'attr': {'enctype': 'multipart/form-data', 'class': 'ut-form', 'id': 'ut-form'}}) }}
+
+                {# Cover photo panel #}
+                <div class="ut-panel">
+                    <div class="ut-panel__head">
+                        <svg viewBox="0 0 16 16" width="15" height="15" fill="currentColor" opacity=".7"><path d="M0 3h16v10H0V3zm1 1v8h14V4H1zm4 2a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm-1 5l2-3 2 2 2-3 3 4H3z"/></svg>
+                        Cover Photo
+                    </div>
+                    <div class="ut-panel__body">
+                        {% if currentPhoto %}
+                            <div class="ut-cover-preview" id="ut-cover-preview">
+                                <img src="{{ asset('uploads/travel_photos/' ~ currentPhoto) }}"
+                                     alt="Current cover" id="ut-cover-img">
+                                <span class="ut-cover-label">Current cover</span>
+                            </div>
+                        {% else %}
+                            <div class="ut-cover-empty" id="ut-cover-preview">
+                                <svg viewBox="0 0 48 48" width="40" height="40" fill="none" stroke="#b0bec5" stroke-width="1.5"><rect x="4" y="8" width="40" height="32" rx="3"/><circle cx="16" cy="20" r="4"/><path d="M4 36l10-12 8 8 6-7 12 11"/></svg>
+                                <span>No cover yet</span>
+                            </div>
+                        {% endif %}
+                        <div class="ut-file-field">
+                            {{ form_label(travelForm.photo, null, {'label_attr': {'class': 'ut-label'}}) }}
+                            <label class="ut-file-btn" for="{{ travelForm.photo.vars.id }}">
+                                <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><path d="M8 1v9M4 6l4-4 4 4M2 13h12"/></svg>
+                                Choose image
+                            </label>
+                            {{ form_widget(travelForm.photo, {'attr': {'class': 'ut-file-input', 'id': travelForm.photo.vars.id}}) }}
+                            <span class="ut-file-hint">JPEG, PNG, WebP · max 5 MB</span>
+                            {{ form_errors(travelForm.photo) }}
+                        </div>
+                    </div>
+                </div>
+
+                {# Details panel #}
+                <div class="ut-panel">
+                    <div class="ut-panel__head">
+                        <svg viewBox="0 0 16 16" width="15" height="15" fill="currentColor" opacity=".7"><path d="M2 2h12v12H2V2zm1 1v10h10V3H3zm2 2h6v1H5V5zm0 3h6v1H5V8zm0 3h4v1H5v-1z"/></svg>
+                        Travel Details
+                    </div>
+                    <div class="ut-panel__body ut-fields">
+
+                        <div class="ut-field">
+                            {{ form_label(travelForm.title, 'Title', {'label_attr': {'class': 'ut-label'}}) }}
+                            {{ form_widget(travelForm.title, {'attr': {'class': 'ut-input', 'placeholder': 'e.g. Summer in Japan'}}) }}
+                            {{ form_errors(travelForm.title) }}
+                        </div>
+
+                        <div class="ut-field-row">
+                            <div class="ut-field">
+                                {{ form_label(travelForm.startAt, 'Start date', {'label_attr': {'class': 'ut-label'}}) }}
+                                <div class="ut-datepicker-wrap">
+                                    <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><path d="M11 1v1H5V1H3v1H1v13h14V2h-2V1h-2zm2 12H3V6h10v7z"/></svg>
+                                    <input type="text" class="ut-datepicker" id="ut-start-picker" placeholder="Select date" readonly>
+                                </div>
+                                {{ form_widget(travelForm.startAt, {'attr': {'class': 'ut-date-widget'}}) }}
+                                {{ form_errors(travelForm.startAt) }}
+                            </div>
+                            <div class="ut-field">
+                                {{ form_label(travelForm.endAt, 'End date', {'label_attr': {'class': 'ut-label'}}) }}
+                                <div class="ut-datepicker-wrap">
+                                    <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><path d="M11 1v1H5V1H3v1H1v13h14V2h-2V1h-2zm2 12H3V6h10v7z"/></svg>
+                                    <input type="text" class="ut-datepicker" id="ut-end-picker" placeholder="Select date" readonly>
+                                </div>
+                                {{ form_widget(travelForm.endAt, {'attr': {'class': 'ut-date-widget'}}) }}
+                                {{ form_errors(travelForm.endAt) }}
+                            </div>
+                        </div>
+
+                        <div class="ut-field">
+                            {{ form_label(travelForm.description, 'Description', {'label_attr': {'class': 'ut-label'}}) }}
+                            {{ form_widget(travelForm.description, {'attr': {'class': 'ut-textarea', 'rows': '4', 'placeholder': 'Describe your travel experience…'}}) }}
+                            {{ form_errors(travelForm.description) }}
+                        </div>
+
+                    </div>
+                </div>
+
+                {# Actions #}
+                <div class="ut-actions">
+                    <a href="{{ path('main_private') }}" class="ut-btn ut-btn--ghost">Cancel</a>
+                    {% if isPublished %}
+                        <a href="{{ path('unpublishTravel', {'slug': travelSlug}) }}" class="ut-btn ut-btn--unpublish">
+                            <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><path d="M8 1a7 7 0 1 1 0 14A7 7 0 0 1 8 1zm-3 6h6v2H5V7z"/></svg>
+                            Set as Draft
+                        </a>
+                    {% else %}
+                        <a href="{{ path('publishTravel', {'slug': travelSlug}) }}" class="ut-btn ut-btn--publish">
+                            <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><path d="M8 1l7 14H1L8 1zm0 4v5M8 12v1"/></svg>
+                            Publish
+                        </a>
+                    {% endif %}
+                    <button type="submit" class="ut-btn ut-btn--primary">
+                        <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><path d="M13 2H5L2 5v9h12V2h-1zm-5 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm2-9H5V3h5v1z"/></svg>
+                        Save changes
+                    </button>
+                </div>
+
+                {{ form_end(travelForm) }}
+            </div>
+
+            {# ── Right: map ── #}
+            <div class="ut-map-col">
+                <div class="ut-panel ut-panel--map">
+                    <div class="ut-panel__head ut-panel__head--map">
+                        <span>
+                            <svg viewBox="0 0 16 16" width="15" height="15" fill="currentColor" opacity=".7"><path d="M8 1a5 5 0 0 1 5 5c0 4-5 9-5 9S3 10 3 6a5 5 0 0 1 5-5zm0 3a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/></svg>
+                            Location
+                        </span>
+                        <button class="ut-map-center" id="ut-center" type="button">
+                            <svg viewBox="0 0 16 16" width="13" height="13" fill="currentColor"><path d="M8 5a3 3 0 1 1 0 6A3 3 0 0 1 8 5zM1 7h2m10 0h2M7 1v2m0 10v2"/></svg>
+                            Re-centre
+                        </button>
+                    </div>
+                    <div id="map"></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 {% block javascript %}
@@ -456,6 +535,7 @@
 <script src="{{ asset('js/leaflet@1.7.1/leaflet.js') }}"></script>
 <script src="{{ asset('js/leaflet.awesome-markers.min.js') }}"></script>
 <script src="{{ asset('js/markersDefinition.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="{{ google_maps }}" async defer></script>
 <script>
 (function () {
@@ -487,6 +567,45 @@
         map.setView([lat, lng], 8);
     });
 
+    /* ── Flatpickr date pickers ── */
+    function readSelectsDate(fieldId) {
+        var y = document.getElementById(fieldId + '_year');
+        var m = document.getElementById(fieldId + '_month');
+        var d = document.getElementById(fieldId + '_day');
+        if (!y || !m || !d || !y.value || !m.value || !d.value) return null;
+        return new Date(parseInt(y.value), parseInt(m.value) - 1, parseInt(d.value));
+    }
+
+    function writeSelectsDate(fieldId, date) {
+        if (!date) return;
+        var y = document.getElementById(fieldId + '_year');
+        var m = document.getElementById(fieldId + '_month');
+        var d = document.getElementById(fieldId + '_day');
+        if (!y || !m || !d) return;
+        y.value = date.getFullYear();
+        m.value = date.getMonth() + 1;
+        d.value = date.getDate();
+    }
+
+    var startFieldId = '{{ travelForm.startAt.vars.id }}';
+    var endFieldId   = '{{ travelForm.endAt.vars.id }}';
+
+    flatpickr('#ut-start-picker', {
+        dateFormat: 'd M Y',
+        defaultDate: readSelectsDate(startFieldId),
+        onChange: function(dates) {
+            writeSelectsDate(startFieldId, dates[0]);
+        }
+    });
+
+    flatpickr('#ut-end-picker', {
+        dateFormat: 'd M Y',
+        defaultDate: readSelectsDate(endFieldId),
+        onChange: function(dates) {
+            writeSelectsDate(endFieldId, dates[0]);
+        }
+    });
+
     /* ── Live cover photo preview ── */
     var fileInput = document.querySelector('.ut-file-input');
     if (fileInput) {
@@ -498,6 +617,7 @@
                 preview.innerHTML =
                     '<img src="' + e.target.result + '" alt="Preview" id="ut-cover-img" style="width:100%;height:100%;object-fit:cover;display:block;">' +
                     '<span class="ut-cover-label">New cover (unsaved)</span>';
+                preview.className = 'ut-cover-preview';
                 preview.style.height = '160px';
             };
             reader.readAsDataURL(this.files[0]);
