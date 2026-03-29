@@ -52,7 +52,29 @@ class ElasticSearchIndex
     {
         $this->index = $this->client->getIndex($indexName);
         if (!$this->index->exists()) {
-            $this->index->create();
+            $this->index->create([
+                'mappings' => [
+                    'properties' => [
+                        'id'          => ['type' => 'keyword'],
+                        'title'       => ['type' => 'text'],
+                        'description' => ['type' => 'text'],
+                        'slug'        => ['type' => 'keyword'],
+                        'stars'       => ['type' => 'integer'],
+                        'watch'       => ['type' => 'integer'],
+                        'status'      => ['type' => 'integer'],
+                        'userId'      => ['type' => 'keyword'],
+                        'username'    => ['type' => 'keyword'],
+                        'photo'       => ['type' => 'keyword'],
+                        'publishedAt' => ['type' => 'date'],
+                        'createdAt'   => ['type' => 'date'],
+                        'updatedAt'   => ['type' => 'date'],
+                        'startAt'     => ['type' => 'date'],
+                        'endAt'       => ['type' => 'date'],
+                        'latitude'    => ['type' => 'float'],
+                        'longitud'    => ['type' => 'float'],
+                    ],
+                ],
+            ]);
         }
     }
 }

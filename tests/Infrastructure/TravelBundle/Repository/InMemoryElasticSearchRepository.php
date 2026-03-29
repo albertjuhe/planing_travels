@@ -8,7 +8,7 @@ use App\Domain\Travel\Repository\TravelReadModelRepository;
 
 class InMemoryElasticSearchRepository implements IndexerRepository, TravelReadModelRepository
 {
-    private $documents = [];
+    private array $documents = [];
 
     public function save(Travel $travel): void
     {
@@ -29,10 +29,10 @@ class InMemoryElasticSearchRepository implements IndexerRepository, TravelReadMo
     {
         $published = array_filter(
             $this->documents,
-            function ($doc) { return $doc['status'] === Travel::TRAVEL_PUBLISHED; }
+            fn($doc) => $doc['status'] === Travel::TRAVEL_PUBLISHED
         );
 
-        usort($published, function ($a, $b) use ($order) { return $b[$order] <=> $a[$order]; });
+        usort($published, fn($a, $b) => $b[$order] <=> $a[$order]);
 
         return array_slice(array_values($published), 0, $maxResults);
     }

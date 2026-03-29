@@ -22,22 +22,22 @@ class ElasticSearchDocumentDataTransformer
     public function read(): array
     {
         return [
-            'id' => $this->data->getId()->id(),
-            'title' => $this->data->getTitle(),
+            'id'          => $this->data->getId()->id(),
+            'title'       => $this->data->getTitle(),
             'description' => $this->data->getDescription(),
-            'createdAt' => $this->data->getCreatedAt(),
-            'updatedAt' => $this->data->getUpdatedAt(),
-            'slug' => $this->data->getSlug(),
-            'latitude' => $this->data->getGeoLocation()->lat(),
-            'longitud' => $this->data->getGeoLocation()->lng(),
-            'startAt' => $this->data->getStartAt(),
-            'endAt' => $this->data->getEndAt(),
-            'userId' => $this->data->getUser()->getId()->id(),
-            'username' => $this->data->getUser()->getUsername(),
-            'publishedAt' => $this->data->getPublishedAt(),
-            'status' => $this->data->getStatus(),
-            'stars' => $this->data->getStars(),
-            'watch' => $this->data->getWatch(),
+            'createdAt'   => $this->data->getCreatedAt() ? $this->data->getCreatedAt()->format('c') : null,
+            'updatedAt'   => $this->data->getUpdatedAt() ? $this->data->getUpdatedAt()->format('c') : null,
+            'slug'        => $this->data->getSlug(),
+            'latitude'    => $this->data->getGeoLocation()->lat(),
+            'longitud'    => $this->data->getGeoLocation()->lng(),
+            'startAt'     => $this->data->getStartAt() ? $this->data->getStartAt()->format('c') : null,
+            'endAt'       => $this->data->getEndAt() ? $this->data->getEndAt()->format('c') : null,
+            'userId'      => $this->data->getUser()->getId()->id(),
+            'username'    => $this->data->getUser()->getUsername(),
+            'publishedAt' => $this->data->getPublishedAt() ? $this->data->getPublishedAt()->format('c') : null,
+            'status'      => $this->data->getStatus(),
+            'stars'       => $this->data->getStars(),
+            'watch'       => $this->data->getWatch(),
         ];
     }
 }

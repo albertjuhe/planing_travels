@@ -7,19 +7,17 @@ use PHPUnit\Framework\TestCase;
 
 class BestTravelsListQueryTest extends TestCase
 {
-    public function testGetters(): void
+    public function testCreateBestTravelsListQuery()
     {
-        $query = new BestTravelsListQuery(10, 'stars');
+        $numberMaxOfTravels = mt_rand();
+        $orderedBy = uniqid();
 
-        $this->assertSame(10, $query->getNumberMaxOfTravels());
-        $this->assertSame('stars', $query->getOrderedBy());
-    }
+        $bestTravelsListQuery = new BestTravelsListQuery(
+            $numberMaxOfTravels,
+            $orderedBy
+        );
 
-    public function testDifferentValues(): void
-    {
-        $query = new BestTravelsListQuery(5, 'watch');
-
-        $this->assertSame(5, $query->getNumberMaxOfTravels());
-        $this->assertSame('watch', $query->getOrderedBy());
+        $this->assertEquals($numberMaxOfTravels, $bestTravelsListQuery->getNumberMaxOfTravels());
+        $this->assertEquals($orderedBy, $bestTravelsListQuery->getOrderedBy());
     }
 }

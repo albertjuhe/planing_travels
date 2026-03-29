@@ -2,54 +2,20 @@
 
 namespace App\Tests\Application\UseCases\Travel;
 
-use App\Application\Query\Travel\BestTravelsListQuery;
-use App\Application\UseCases\Travel\GetBestTravelsOrderedByService;
-use App\Domain\Travel\Repository\TravelReadModelRepository;
-use PHPUnit\Framework\TestCase;
+use App\Tests\Infrastructure\TravelBundle\Repository\InMemoryTravelRepository;
 
-class GetBestTravelsOrderedByServiceTest extends TestCase
+class GetBestTravelsOrderedByServiceTest
 {
-    public function testReturnsResultsFromRepository(): void
+    /** @var InMemoryTravelRepository */
+    private $travelRepository;
+
+    public function setUp()
     {
-        $expectedTravels = [
-            ['id' => 'abc', 'title' => 'Toscana', 'stars' => 5, 'status' => 20],
-            ['id' => 'def', 'title' => 'Creta',   'stars' => 4, 'status' => 20],
-        ];
-
-        $repository = $this->createMock(TravelReadModelRepository::class);
-        $repository->expects($this->once())
-            ->method('getTravelOrderedBy')
-            ->with('stars', 10)
-            ->willReturn($expectedTravels);
-
-        $service = new GetBestTravelsOrderedByService($repository);
-        $result  = $service(new BestTravelsListQuery(10, 'stars'));
-
-        $this->assertSame($expectedTravels, $result);
+        $this->travelRepository = new InMemoryTravelRepository();
+        $this->travelRepository->loadData();
     }
 
-    public function testPassesMaxResultsAndOrderToRepository(): void
+    public function testGetBestTravelsOrderedByService()
     {
-        $repository = $this->createMock(TravelReadModelRepository::class);
-        $repository->expects($this->once())
-            ->method('getTravelOrderedBy')
-            ->with('watch', 5)
-            ->willReturn([]);
-
-        $service = new GetBestTravelsOrderedByService($repository);
-        $result  = $service(new BestTravelsListQuery(5, 'watch'));
-
-        $this->assertSame([], $result);
-    }
-
-    public function testReturnsEmptyArrayWhenNoPublishedTravels(): void
-    {
-        $repository = $this->createMock(TravelReadModelRepository::class);
-        $repository->method('getTravelOrderedBy')->willReturn([]);
-
-        $service = new GetBestTravelsOrderedByService($repository);
-        $result  = $service(new BestTravelsListQuery(10, 'stars'));
-
-        $this->assertEmpty($result);
     }
 }

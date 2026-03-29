@@ -19,7 +19,7 @@
                         <br><small class="text-muted">{{ travel.description|slice(0, 80) }}{% if travel.description|length > 80 %}…{% endif %}</small>
                     {% endif %}
                 </td>
-                <td class="text-nowrap">{{ travel.startAt.date|date("d M Y") }} &rarr; {{ travel.endAt.date|date("d M Y") }}</td>
+                <td class="text-nowrap">{{ travel.startAt|date("d M Y") }} &rarr; {{ travel.endAt|date("d M Y") }}</td>
                 <td>{{ travel.stars }}</td>
                 <td>{{ travel.watch }}</td>
                 <td><span class="glyphicon glyphicon-user"></span> {{ travel.username }}</td>

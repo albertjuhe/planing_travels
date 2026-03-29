@@ -15,8 +15,8 @@ use PHPUnit\Framework\TestCase;
 
 class PopulateAndQueryIntegrationTest extends TestCase
 {
-    private $travelRepository;
-    private $elasticRepository;
+    private InMemoryTravelRepository $travelRepository;
+    private InMemoryElasticSearchRepository $elasticRepository;
 
     protected function setUp(): void
     {

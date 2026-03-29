@@ -94,7 +94,7 @@ services:
 
     # Tactician middleware Store domain events
     App\Application\Middleware\DomainEventsMiddleware:
-      arguments: ['@doctrine.travel_event.repository']
+      arguments: ['@doctrine.travel_event.repository', '@event_dispatcher', '@doctrine.travel.repository', '@elasticsearch.travel.repository']
 
 
     App\Domain\Event\Repository\EventStore:
