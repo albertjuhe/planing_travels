@@ -24,7 +24,7 @@ class PopulateTravelsToElasticSearchCommand extends Command
 
     protected function configure()
     {
-        $this->setName('populateTravels');
+        $this->setName('app:populate-travel-elasticsearch');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int

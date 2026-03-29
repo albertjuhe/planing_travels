@@ -11,31 +11,48 @@ use Symfony\Component\Console\Tester\CommandTester;
 class PopulateTravelsToElasticSearchCommandTest extends TestCase
 {
     private $populateIndexer;
-    /** @var CommandTester */
     private $commandTester;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->populateIndexer = $this->createMock(PopulateIndexer::class);
 
+        $command = new PopulateTravelsToElasticSearchCommand($this->populateIndexer);
         $application = new Application();
-        $application->add(
-            new PopulateTravelsToElasticSearchCommand($this->populateIndexer, 'populateTravels')
-        );
-        $commandPopulate = $application->find('populateTravels');
-        $this->commandTester = new CommandTester($commandPopulate);
+        $application->add($command);
+
+        $this->commandTester = new CommandTester($command);
     }
 
-    public function testExecutePopulate()
+    public function testExecuteCallsPopulateIndexer(): void
     {
         $this->populateIndexer->expects($this->once())->method('execute');
 
         $this->commandTester->execute([]);
+
+        $this->assertSame(0, $this->commandTester->getStatusCode());
     }
 
-    protected function tearDown()
+    public function testCommandNameIsCorrect(): void
+    {
+        $application = new Application();
+        $command = new PopulateTravelsToElasticSearchCommand($this->populateIndexer);
+        $application->add($command);
+
+        $this->assertSame('app:populate-travel-elasticsearch', $command->getName());
+    }
+
+    public function testExecuteReturnsSuccessCode(): void
+    {
+        $this->populateIndexer->method('execute')->willReturn(null);
+
+        $this->commandTester->execute([]);
+
+        $this->assertSame(0, $this->commandTester->getStatusCode());
+    }
+
+    protected function tearDown(): void
     {
         $this->populateIndexer = null;
-        $this->commandTester = null;
     }
 }
