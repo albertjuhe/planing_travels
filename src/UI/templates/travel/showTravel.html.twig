@@ -327,6 +327,84 @@
     color: rgba(255,255,255,0.6);
 }
 
+/* Connected user badge */
+.st-online-badge {
+    position: fixed;
+    right: 18px;
+    bottom: 18px;
+    z-index: 1200;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 14px;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.2);
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    text-decoration: none;
+    pointer-events: none;
+    transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.st-online-badge--connected {
+    background: linear-gradient(135deg, #1f9d55 0%, #17946e 100%);
+    border-color: rgba(255, 255, 255, 0.35);
+    box-shadow: 0 8px 22px rgba(16, 92, 69, 0.35);
+}
+
+.st-online-badge--disconnected {
+    background: linear-gradient(135deg, #6c7a89 0%, #566270 100%);
+    border-color: rgba(255, 255, 255, 0.25);
+    box-shadow: 0 8px 22px rgba(60, 70, 80, 0.35);
+}
+
+.st-online-badge--connecting {
+    background: linear-gradient(135deg, #f39c12 0%, #d68910 100%);
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 8px 22px rgba(211, 137, 16, 0.35);
+}
+
+.st-online-badge--connecting .st-online-badge__dot {
+    background: #fff4d2;
+    animation: st-online-pulse 0.8s infinite;
+}
+
+.st-online-badge:hover,
+.st-online-badge:focus {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.st-online-badge__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #e9fff3;
+    box-shadow: 0 0 0 0 rgba(233, 255, 243, 0.8);
+    animation: st-online-pulse 1.6s infinite;
+}
+
+.st-online-badge--disconnected .st-online-badge__dot {
+    background: #dde3ea;
+    animation: none;
+    box-shadow: none;
+}
+
+@keyframes st-online-pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(233, 255, 243, 0.85);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(233, 255, 243, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(233, 255, 243, 0);
+    }
+}
+
 /* ─────────────────────────────────────────
    Responsive
 ───────────────────────────────────────── */
@@ -339,6 +417,12 @@
 @media (max-width: 600px) {
     .st-hero__title { font-size: 20px; }
     .st-stats { flex-wrap: wrap; }
+    .st-online-badge {
+        right: 12px;
+        bottom: 12px;
+        padding: 8px 12px;
+        font-size: 12px;
+    }
 }
     </style>
 {% endblock %}
@@ -418,9 +502,10 @@
     </div>
 </div>
 
-<a class="st-online-badge" style="display:none" id="online-user">
+<a class="st-online-badge st-online-badge--disconnected" id="online-user">
+    <span class="st-online-badge__dot"></span>
     <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><path d="M3 8a5 5 0 1 1 10 0A5 5 0 0 1 3 8zm5-3a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/></svg>
-    Connected
+    <span id="online-user-label">Usuario desconectado</span>
 </a>
 {% endblock %}
 
@@ -443,7 +528,7 @@
     <script src="{{ asset('js/markersDefinition.js') }}"></script>
     <script src="{{ asset('js/mapPoint.js') }}"></script>
     <script src="{{ asset('js/locationGallery.js') }}"></script>
-    <script src="{{ asset('js/websocket/websockets.js') }}"></script>
+    <script src="{{ asset('js/websocket/websockets.js') }}?v={{ "now"|date('U') }}"></script>
     <script src="{{ asset('leaflet/leaflet-easyprint.js') }}"></script>
     <script>
         var mPoint = new mapPoint('{{ travel.id }}');
