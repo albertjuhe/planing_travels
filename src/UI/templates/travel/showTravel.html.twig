@@ -418,10 +418,14 @@
     </div>
 </div>
 
+{# WebSocket Status Badge #}
 <a class="st-online-badge" style="display:none" id="online-user">
     <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><path d="M3 8a5 5 0 1 1 10 0A5 5 0 0 1 3 8zm5-3a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/></svg>
     Connected
 </a>
+
+{# WebSocket Messages Container #}
+<div id="websocket-messages"></div>
 {% endblock %}
 
 {% block javascript %}
