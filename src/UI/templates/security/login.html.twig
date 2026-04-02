@@ -80,7 +80,7 @@
                     <span class="login-checkbox__mark"></span>
                     Keep me signed in
                 </label>
-                <a href="#" class="login-forgot">Forgot password?</a>
+                <a href="{{ path('forgot_password', {'_locale': app.request.locale|default('en')}) }}" class="login-forgot">Forgot password?</a>
             </div>
 
             <button class="login-submit" type="submit">
