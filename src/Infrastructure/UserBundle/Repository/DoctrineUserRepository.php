@@ -47,6 +47,23 @@ class DoctrineUserRepository extends ServiceEntityRepository implements UserRepo
     }
 
     /**
+     * Get user by email (case-insensitive).
+     *
+     * @param string $email
+     *
+     * @return User|null
+     */
+    public function userByEmail(string $email): ?User
+    {
+        return $this->createQueryBuilder('u')
+            ->where('LOWER(u.email) = :email')
+            ->setParameter('email', strtolower(trim($email)))
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    /**
      * Save user in the database.
      *
      * @param User $user
