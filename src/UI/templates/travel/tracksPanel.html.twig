@@ -1,12 +1,23 @@
-{# src/AppBunle/Resources/views/Travel/routePanel.html.twig #}
+{# src/AppBundle/Resources/views/Travel/tracksPanel.html.twig #}
 
-<div class="panel panel-info">
-    <div class="panel-heading">Tracks panel <button class="btn btn-warning  btn-xs" id="tracks">Hide/Show</button></div>
-    <div class="panel-body"  id="tracks" style="max-height: 500px;overflow-y: scroll;">
-
-
+<div class="st-panel">
+    <div class="st-panel__head">
+        <span class="st-panel__head-left">
+            <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor" opacity=".7"><path d="M1 12L4 6l3 4 2-3 3 5 2-3" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            GPX Tracks
+        </span>
+        <button class="st-btn st-btn--ghost" id="tracks-toggle">
+            <svg viewBox="0 0 16 16" width="11" height="11" fill="currentColor"><path d="M2 5h12M2 8h12M2 11h12"/></svg>
+            Toggle
+        </button>
     </div>
-    <div class="panel-footer">
-        <button type="button" class="btn btn-primary" id="calculate-route">Show</button>
+    <div class="st-panel__body">
+        <div id="tracks"></div>
+    </div>
+    <div class="st-panel-footer">
+        <button type="button" class="st-btn st-btn--primary" id="calculate-route">
+            <svg viewBox="0 0 16 16" width="11" height="11" fill="currentColor"><path d="M8 1v14M1 8h14" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+            Show tracks
+        </button>
     </div>
 </div>

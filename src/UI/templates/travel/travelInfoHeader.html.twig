@@ -1,16 +1,11 @@
-<div class="row">
-    <div class="col-sm-4">
-        <h3>{{travel.title }}</h3>
-        <h4>{{travel.description }}</h4>
-    </div>
-    <div class="col-sm-4">
-        <h4>from {{ travel.startAt|date("m/d/Y") }} to {{ travel.endAt|date("m/d/Y") }}</h4>
-
-        <h3>Travel made by: {{ travel.user.firstName }} {{ travel.user.lastname }} ({{ mode }})</h3>
-        <div id="panel-information"></div>
-    </div>
-    <div class="col-sm-4">
-        <span class="glyphicon glyphicon-star" aria-hidden="true"></span> Likes {{ travel.stars }}
-        <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> Watch {{ travel.watch }}
-    </div>
+<h1 class="st-hero__title">{{ travel.title }}</h1>
+{% if travel.description %}
+    <p class="st-hero__desc">{{ travel.description }}</p>
+{% endif %}
+<div class="st-hero__meta">
+    <span class="st-hero__meta-item">
+        <svg viewBox="0 0 16 16" width="13" height="13" fill="currentColor"><path d="M11 1v1H5V1H3v1H1v13h14V2h-2V1h-2zm2 12H3V6h10v7z"/></svg>
+        {{ travel.startAt|date("d M Y") }} – {{ travel.endAt|date("d M Y") }}
+    </span>
+    <span id="panel-information"></span>
 </div>

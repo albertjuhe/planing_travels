@@ -1,7 +1,21 @@
-<div class="panel panel-primary">
-    <div class="panel-heading">My favorite locations
-        <button type="button" style="margin-left:10px;" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#addpoint">Add location</button>
-        <button class="btn btn-warning btn-xs" id="center">Center Map</button>
+<div class="st-panel">
+    <div class="st-panel__head">
+        <span class="st-panel__head-left">
+            <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor" opacity=".7"><path d="M8 1a5 5 0 0 1 5 5c0 4-5 9-5 9S3 10 3 6a5 5 0 0 1 5-5zm0 3a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/></svg>
+            Locations
+        </span>
+        <div style="display:flex;gap:6px;align-items:center;">
+            <button type="button" class="st-btn st-btn--primary" data-toggle="modal" data-target="#addpoint">
+                <svg viewBox="0 0 16 16" width="11" height="11" fill="currentColor"><path d="M8 1v14M1 8h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                Add
+            </button>
+            <button class="st-btn st-btn--ghost" id="center">
+                <svg viewBox="0 0 16 16" width="11" height="11" fill="currentColor"><path d="M8 5a3 3 0 1 1 0 6A3 3 0 0 1 8 5zM1 7h2m10 0h2M7 1v2m0 10v2"/></svg>
+                Center
+            </button>
+        </div>
     </div>
-    <div class="panel-body"  id="mapPoints" style="max-height: 500px;overflow-y: scroll;"></div>
+    <div class="st-panel__body">
+        <div id="mapPoints"></div>
+    </div>
 </div>

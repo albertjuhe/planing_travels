@@ -1,17 +1,19 @@
-
-<div class="panel panel-info" id="location_media">
-    <div class="panel-heading">Create your image Gallery for <span id="location"></span></div>
-    <div class="panel-body">
-        <div class="row">
-
-            <div id="dz-ImageLocation"></img>
-        </div>
+<div class="st-panel" id="location_media">
+    <div class="st-panel__head">
+        <span class="st-panel__head-left">
+            <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor" opacity=".7"><path d="M0 3h16v10H0V3zm1 1v8h14V4H1zm4 2a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm-1 5l2-3 2 2 2-3 3 4H3z"/></svg>
+            Gallery —
+            <span id="location" class="st-gallery-title"></span>
+        </span>
     </div>
-    <div class="panel-footer">
-        <div>
-            <i class="fa fa-sticky-note-o" aria-hidden="true">Notes</i>
-            <div id="notes"></div>
-        </div>
+    <div class="st-panel__body--pad">
+        <div id="dz-ImageLocation"></div>
     </div>
+    <div class="st-panel-footer" style="flex-direction:column;align-items:flex-start;gap:6px;">
+        <div class="st-notes-label">
+            <svg viewBox="0 0 16 16" width="13" height="13" fill="currentColor"><path d="M2 2h12v12H2V2zm1 1v10h10V3H3zm2 2h6v1H5V5zm0 3h6v1H5V8zm0 3h4v1H5v-1z"/></svg>
+            Notes
+        </div>
+        <div id="notes"></div>
     </div>
 </div>
