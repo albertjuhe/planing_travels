@@ -1,11 +1,31 @@
-{# src/AppBunle/Resources/views/Travel/routePanel.html.twig #}
+{# src/AppBundle/Resources/views/Travel/routePanel.html.twig #}
 
-<div class="panel panel-info">
-    <div class="panel-heading">Route to points  <button class="btn btn-warning  btn-xs" id="itinerary">Hide/Show Itinerary</button></div>
-    <div class="panel-body"  id="routePoints" style="max-height: 500px;overflow-y: scroll;"></div>
-    <div class="panel-footer">
-        <button type="button" class="btn btn-primary" id="calculate-route">Calcula</button>
-        <button class="btn btn-danger" id="remove-route">Remove route</button>
-        <button class="btn btn-danger" id="reset">Reset</button>
+<div class="st-panel">
+    <div class="st-panel__head">
+        <span class="st-panel__head-left">
+            <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor" opacity=".7"><path d="M2 14L6 2l4 8 2-4 2 8" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Route
+        </span>
+        <button class="st-btn st-btn--ghost" id="itinerary">
+            <svg viewBox="0 0 16 16" width="11" height="11" fill="currentColor"><path d="M2 4h12M2 8h8M2 12h10"/></svg>
+            Itinerary
+        </button>
+    </div>
+    <div class="st-panel__body">
+        <div id="routePoints"></div>
+    </div>
+    <div class="st-panel-footer">
+        <button type="button" class="st-btn st-btn--primary" id="calculate-route">
+            <svg viewBox="0 0 16 16" width="11" height="11" fill="currentColor"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Calculate
+        </button>
+        <button class="st-btn st-btn--danger" id="remove-route">
+            <svg viewBox="0 0 16 16" width="11" height="11" fill="currentColor"><path d="M3 3l10 10M13 3L3 13" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+            Remove
+        </button>
+        <button class="st-btn st-btn--ghost" id="reset">
+            <svg viewBox="0 0 16 16" width="11" height="11" fill="currentColor"><path d="M2 8a6 6 0 1 1 1.5 4M2 12V8h4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Reset
+        </button>
     </div>
 </div>
