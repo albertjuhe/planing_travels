@@ -145,13 +145,19 @@
     border-radius: 12px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.08), 0 8px 32px rgba(0,0,0,0.08);
     overflow: hidden;
-    min-height: 500px;
+    height: 500px;
+    transition: grid-template-columns 0.3s ease;
+}
+.st-map-locations.sidebar-collapsed {
+    grid-template-columns: 1fr 0px;
 }
 
 .st-map-area {
     position: relative;
     display: flex;
     flex-direction: column;
+    min-width: 0;
+    height: 500px;
 }
 
 .st-locations-sidebar {
@@ -159,21 +165,63 @@
     flex-direction: column;
     border-left: 1px solid #eaecef;
     background: #fafbfc;
-    max-height: 600px;
+    overflow: hidden;
+    transition: width 0.3s ease, opacity 0.3s ease;
+    width: 320px;
+    min-width: 0;
+    height: 500px;
+}
+.st-map-locations.sidebar-collapsed .st-locations-sidebar {
+    opacity: 0;
+    width: 0;
+    border-left: none;
+}
+
+.st-locations-panel {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 
 .st-locations-sidebar .st-panel__head {
     background: #fff;
     border-bottom: 1px solid #eaecef;
-    position: sticky;
-    top: 0;
-    z-index: 10;
+    flex-shrink: 0;
+    white-space: nowrap;
 }
 
 .st-locations-sidebar #mapPoints {
-    flex: 1;
     overflow-y: auto;
-    max-height: none;
+    overflow-x: hidden;
+    flex: 1;
+    padding: 8px;
+}
+
+/* Collapse toggle button on the map header */
+.st-sidebar-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    font-size: 11px;
+    font-weight: 600;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.35);
+    background: rgba(255,255,255,0.15);
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.15s;
+    white-space: nowrap;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+}
+.st-sidebar-toggle:hover { background: rgba(255,255,255,0.25); }
+.st-sidebar-toggle__icon {
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
+}
+.sidebar-collapsed .st-sidebar-toggle__icon {
+    transform: rotate(180deg);
 }
 
 .st-details-row {
@@ -268,19 +316,15 @@
 }
 #map {
     flex: 1;
-    min-height: 450px;
     width: 100%;
     display: block;
+    min-height: 0;
 }
 
 /* ─────────────────────────────────────────
    Locations list
 ───────────────────────────────────────── */
-#mapPoints {
-    max-height: 460px;
-    overflow-y: auto;
-    padding: 8px;
-}
+/* #mapPoints scroll is handled by .st-locations-sidebar flex layout */
 #mapPoints::-webkit-scrollbar { width: 5px; }
 #mapPoints::-webkit-scrollbar-track { background: #f4f6f8; }
 #mapPoints::-webkit-scrollbar-thumb { background: #c5cdd6; border-radius: 3px; }
@@ -471,6 +515,10 @@
     .st-map-locations {
         grid-template-columns: 1fr;
         min-height: auto;
+        transition: none;
+    }
+    .st-map-locations.sidebar-collapsed {
+        grid-template-columns: 1fr;
     }
     .st-map-area {
         min-height: 350px;
@@ -481,8 +529,11 @@
     .st-locations-sidebar {
         border-left: none;
         border-top: 1px solid #eaecef;
-        max-height: 300px;
+        height: 300px;
+        width: 100% !important;
+        opacity: 1 !important;
     }
+    .st-sidebar-toggle { display: none; }
     .st-details-row { grid-template-columns: 1fr; }
     .pa-header__inner { flex-direction: column; align-items: flex-start; gap: 12px; }
     .pa-header__right { width: 100%; }
@@ -567,6 +618,10 @@
                             <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><path d="M8 1a5 5 0 0 1 5 5c0 4-5 9-5 9S3 10 3 6a5 5 0 0 1 5-5zm0 3a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/></svg>
                             Map
                         </span>
+                        <button class="st-sidebar-toggle" id="st-sidebar-toggle" type="button" title="Toggle locations panel">
+                            <svg class="st-sidebar-toggle__icon" viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3l-5 5 5 5"/></svg>
+                            <span id="st-sidebar-toggle-label">Hide</span>
+                        </button>
                     </div>
                     <div id="map"></div>
                 </div>
@@ -645,6 +700,19 @@
         map.addControl(new L.Control.Layers({'OSM':osm,'Google Hybrid':googleHybrid,'Google Satellite':googleSat,'Google Terrain':googleTerrain,'Road Map':googleRoadMap,'Traffic':googleTraffic}, {}));
 
         var centralMark = L.marker([{{ travel.geolocation.lat}},{{ travel.geolocation.lng }}], {icon: centerMarker}).addTo(map);
+
+        /* ── Locations sidebar collapse ── */
+        (function () {
+            var wrapper = document.querySelector('.st-map-locations');
+            var btn     = document.getElementById('st-sidebar-toggle');
+            var label   = document.getElementById('st-sidebar-toggle-label');
+
+            btn.addEventListener('click', function () {
+                var collapsed = wrapper.classList.toggle('sidebar-collapsed');
+                label.textContent = collapsed ? 'Show' : 'Hide';
+                setTimeout(function () { map.invalidateSize(); }, 310);
+            });
+        }());
 
         $('#center').click(function()          { map.setView([{{ travel.geolocation.lat}},{{ travel.geolocation.lng }}],8); });
         $('#remove-route').click(function()    { mPoint.removeRoute(); });
