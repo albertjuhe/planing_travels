@@ -175,6 +175,34 @@ create index IDX_CFBDFA1464D218E
 create index IDX_2D0B6BCEA76ED395
     on travel (user_id);
 
+create table if not exists migration_versions
+(
+    version     varchar(14) not null
+        primary key,
+    executed_at datetime    not null comment '(DC2Type:datetime_immutable)'
+)
+    collate = utf8mb4_unicode_ci;
+
+create table if not exists password_reset_tokens
+(
+    id         int auto_increment
+        primary key,
+    user_id    int          not null,
+    token_hash varchar(64)  not null,
+    created_at datetime     not null,
+    expires_at datetime     not null,
+    used_at    datetime     null,
+    constraint UNIQ_E151F57A4FA70B0
+        unique (token_hash),
+    constraint FK_E151F57A76ED395
+        foreign key (user_id) references users (id)
+            on delete cascade
+)
+    collate = utf8mb4_unicode_ci;
+
+create index IDX_E151F57A76ED395
+    on password_reset_tokens (user_id);
+
 create table if not exists travels_shared
 (
     travel_id int      not null,
@@ -265,4 +293,10 @@ INSERT INTO travelGuuid.location (id, mark_id, travel_id, created_at, updated_at
 ('3418cc74-ca56-4a97-91e3-56a5c18a498d',	'107551267',	'b10b8ae9-451c-4195-97c3-8c99dc63c123',	'2024-08-30 10:01:55',	'2024-08-30 10:01:55',	'Refuge du Lac Blanc, Tour du Pays du Mont-Blanc, Chamonix-Mont-Blanc, Bonneville, Alta Savoia, Alvèrnia-Roine-Alps, França metropolitana, 74400, França',	'',	'refuge-du-lac-blanc-tour-du-pays-du-mont-blanc-chamonix-mont-blanc-bonneville-alta-savoia-alvernia-roine-alps-franca-metropolitana-74400-franca',	'Caminata',	NULL,	3),
 ('98ed01d2-6945-4a58-87b4-1d8cf759112e',	'107120402',	'b10b8ae9-451c-4195-97c3-8c99dc63c123',	'2024-08-30 09:57:16',	'2024-08-30 09:57:16',	'Les Houches, Bonneville, Alta Savoia, Alvèrnia-Roine-Alps, França metropolitana, 74310, França',	'',	'les-houches-bonneville-alta-savoia-alvernia-roine-alps-franca-metropolitana-74310-franca',	'Allotjament per la cursa',	NULL,	1),
 ('b11c070a-9d56-4a9e-b31e-f083a2816a78',	'75293901',	'b10b8ae9-451c-4195-97c3-8c99dc63c123',	'2024-08-30 09:59:15',	'2024-08-30 09:59:15',	'Orsières, Entremont, Valais, Suïssa',	'',	'orsieres-entremont-valais-suissa',	'Sortida',	NULL,	4);
+
+INSERT INTO travelGuuid.migration_versions (version, executed_at) VALUES
+('20180120123701', '2018-01-20 12:37:01'),
+('20180203182434', '2018-02-03 18:24:34'),
+('20181021183748', '2018-10-21 18:37:48'),
+('20260402120000', '2026-04-02 12:00:00');
 

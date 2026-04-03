@@ -27,69 +27,79 @@
 }
 
 /* ─────────────────────────────────────────
-   Hero header
+   Header  (same as pa-header)
 ───────────────────────────────────────── */
-.st-hero {
+.pa-header {
     background: linear-gradient(135deg, #1a2e4a 0%, #2980b9 100%);
-    padding: 28px 0 24px;
-    margin-bottom: 28px;
+    padding: 36px 0 32px;
 }
-.st-hero__inner {
+.pa-header__inner {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     justify-content: space-between;
     gap: 16px;
     flex-wrap: wrap;
 }
-.st-hero__left { display: flex; flex-direction: column; gap: 8px; }
-.st-back {
+.pa-header__left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+.pa-header__icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: #f39c12;
+    color: #fff;
+    font-size: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 0 0 3px rgba(255,255,255,0.25);
+}
+.pa-header__titles { display: flex; flex-direction: column; gap: 4px; }
+.pa-header__back {
     display: inline-flex;
     align-items: center;
     gap: 5px;
-    color: rgba(255,255,255,0.65);
-    font-size: 13px;
+    color: rgba(255,255,255,0.6);
+    font-size: 12px;
     text-decoration: none;
     transition: color 0.15s;
+    margin-bottom: 2px;
 }
-.st-back:hover { color: #fff; text-decoration: none; }
-.st-hero__title {
+.pa-header__back:hover { color: #fff; text-decoration: none; }
+.pa-header__title {
     font-size: 26px;
     font-weight: 700;
     color: #fff;
     margin: 0;
     line-height: 1.2;
 }
-.st-hero__desc {
+.pa-header__sub {
     font-size: 14px;
     color: rgba(255,255,255,0.75);
     margin: 0;
-}
-.st-hero__meta {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 14px;
     flex-wrap: wrap;
-    margin-top: 4px;
 }
-.st-hero__meta-item {
+.pa-header__sub strong { color: #fff; }
+.pa-header__meta-item {
     display: inline-flex;
     align-items: center;
     gap: 5px;
-    font-size: 13px;
-    color: rgba(255,255,255,0.75);
 }
-.st-hero__right {
+.pa-header__right {
     display: flex;
-    flex-direction: column;
-    align-items: flex-end;
+    align-items: center;
     gap: 10px;
+    flex-wrap: wrap;
 }
-.st-stats {
-    display: flex;
-    gap: 10px;
-}
-.st-stat {
-    display: flex;
+.pa-stat-pill {
+    display: inline-flex;
     align-items: center;
     gap: 6px;
     background: rgba(255,255,255,0.12);
@@ -100,37 +110,126 @@
     font-weight: 600;
     color: #fff;
 }
-.st-author {
-    font-size: 12px;
-    color: rgba(255,255,255,0.6);
-    text-align: right;
-}
-.st-author strong { color: rgba(255,255,255,0.9); }
-.st-edit-btn {
+.pa-btn-new {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    padding: 7px 16px;
-    background: rgba(255,255,255,0.15);
-    border: 1.5px solid rgba(255,255,255,0.3);
-    border-radius: 20px;
-    font-size: 13px;
-    font-weight: 600;
+    gap: 8px;
+    background: #f39c12;
     color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: 24px;
     text-decoration: none;
-    transition: background 0.15s, border-color 0.15s;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    white-space: nowrap;
 }
-.st-edit-btn:hover { background: rgba(255,255,255,0.25); border-color: rgba(255,255,255,0.5); color: #fff; text-decoration: none; }
+.pa-btn-new:hover { background: #e67e22; color: #fff; text-decoration: none; transform: translateY(-1px); }
 
 /* ─────────────────────────────────────────
-   Layout
+   Layout - Split view: mapa + localizaciones visibles
 ───────────────────────────────────────── */
 .st-layout {
-    display: grid;
-    grid-template-columns: 320px 1fr;
+    display: flex;
+    flex-direction: column;
     gap: 20px;
-    align-items: start;
 }
+
+.st-map-locations {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 0;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08), 0 8px 32px rgba(0,0,0,0.08);
+    overflow: hidden;
+    height: 500px;
+    transition: grid-template-columns 0.3s ease;
+}
+.st-map-locations.sidebar-collapsed {
+    grid-template-columns: 1fr 0px;
+}
+
+.st-map-area {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    height: 500px;
+}
+
+.st-locations-sidebar {
+    display: flex;
+    flex-direction: column;
+    border-left: 1px solid #eaecef;
+    background: #fafbfc;
+    overflow: hidden;
+    transition: width 0.3s ease, opacity 0.3s ease;
+    width: 320px;
+    min-width: 0;
+    height: 500px;
+}
+.st-map-locations.sidebar-collapsed .st-locations-sidebar {
+    opacity: 0;
+    width: 0;
+    border-left: none;
+}
+
+.st-locations-panel {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.st-locations-sidebar .st-panel__head {
+    background: #fff;
+    border-bottom: 1px solid #eaecef;
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+.st-locations-sidebar #mapPoints {
+    overflow-y: auto;
+    overflow-x: hidden;
+    flex: 1;
+    padding: 8px;
+}
+
+/* Collapse toggle button on the map header */
+.st-sidebar-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    font-size: 11px;
+    font-weight: 600;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.35);
+    background: rgba(255,255,255,0.15);
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.15s;
+    white-space: nowrap;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+}
+.st-sidebar-toggle:hover { background: rgba(255,255,255,0.25); }
+.st-sidebar-toggle__icon {
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
+}
+.sidebar-collapsed .st-sidebar-toggle__icon {
+    transform: rotate(180deg);
+}
+
+.st-details-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+}
+
 .st-sidebar { display: flex; flex-direction: column; gap: 16px; }
 .st-main    { display: flex; flex-direction: column; gap: 16px; }
 
@@ -205,23 +304,27 @@
 .st-btn--ghost:hover { background: #eaecef; color: #2c3e50; text-decoration: none; }
 
 /* ─────────────────────────────────────────
-   Map
+   Map - Prominente con header integrado
 ───────────────────────────────────────── */
+.st-map-area .st-panel__head {
+    background: linear-gradient(135deg, #1a2e4a 0%, #2574a9 100%);
+    border-bottom: none;
+    color: #fff;
+}
+.st-map-area .st-panel__head svg {
+    opacity: 0.9;
+}
 #map {
-    height: 500px;
+    flex: 1;
     width: 100%;
     display: block;
-    border-radius: 0 0 12px 12px;
+    min-height: 0;
 }
 
 /* ─────────────────────────────────────────
    Locations list
 ───────────────────────────────────────── */
-#mapPoints {
-    max-height: 460px;
-    overflow-y: auto;
-    padding: 8px;
-}
+/* #mapPoints scroll is handled by .st-locations-sidebar flex layout */
 #mapPoints::-webkit-scrollbar { width: 5px; }
 #mapPoints::-webkit-scrollbar-track { background: #f4f6f8; }
 #mapPoints::-webkit-scrollbar-thumb { background: #c5cdd6; border-radius: 3px; }
@@ -409,14 +512,36 @@
    Responsive
 ───────────────────────────────────────── */
 @media (max-width: 991px) {
-    .st-layout { grid-template-columns: 1fr; }
-    #map { height: 360px; }
-    .st-hero__right { align-items: flex-start; }
-    .st-author { text-align: left; }
+    .st-map-locations {
+        grid-template-columns: 1fr;
+        min-height: auto;
+        transition: none;
+    }
+    .st-map-locations.sidebar-collapsed {
+        grid-template-columns: 1fr;
+    }
+    .st-map-area {
+        min-height: 350px;
+    }
+    #map {
+        min-height: 350px;
+    }
+    .st-locations-sidebar {
+        border-left: none;
+        border-top: 1px solid #eaecef;
+        height: 300px;
+        width: 100% !important;
+        opacity: 1 !important;
+    }
+    .st-sidebar-toggle { display: none; }
+    .st-details-row { grid-template-columns: 1fr; }
+    .pa-header__inner { flex-direction: column; align-items: flex-start; gap: 12px; }
+    .pa-header__right { width: 100%; }
 }
 @media (max-width: 600px) {
-    .st-hero__title { font-size: 20px; }
-    .st-stats { flex-wrap: wrap; }
+    .pa-header__title { font-size: 20px; }
+    .pa-header__left  { gap: 12px; }
+    .st-map-area, #map { min-height: 280px; }
     .st-online-badge {
         right: 12px;
         bottom: 12px;
@@ -430,33 +555,46 @@
 {% block content %}
 <div class="st-page">
 
-    {# ── Hero header ── #}
-    <div class="st-hero">
+    {# ── Header (pa-header) ── #}
+    <div class="pa-header">
         <div class="container">
-            <div class="st-hero__inner">
-                <div class="st-hero__left">
-                    <a href="{{ path('homepage') }}" class="st-back">
-                        <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3L5 8l5 5"/></svg>
-                        Home
-                    </a>
-                    {% include 'travel/travelInfoHeader.html.twig' with {'travel': travel, 'mode': 'Edit'} %}
-                </div>
-                <div class="st-hero__right">
-                    <div class="st-stats">
-                        <span class="st-stat">
-                            <svg viewBox="0 0 16 16" width="13" height="13" fill="currentColor"><path d="M8 1l1.8 3.6L14 5.3l-3 2.9.7 4.1L8 10.4l-3.7 1.9.7-4.1-3-2.9 4.2-.7z"/></svg>
-                            {{ travel.stars }}
-                        </span>
-                        <span class="st-stat">
-                            <svg viewBox="0 0 16 16" width="13" height="13" fill="currentColor"><path d="M8 3C4.5 3 1.5 6 1 8c.5 2 3.5 5 7 5s6.5-3 7-5c-.5-2-3.5-5-7-5zm0 8a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm0-5a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/></svg>
-                            {{ travel.watch }}
-                        </span>
+            <div class="pa-header__inner">
+                <div class="pa-header__left">
+                    <div class="pa-header__icon">✈</div>
+                    <div class="pa-header__titles">
+                        <a href="{{ path('homepage') }}" class="pa-header__back">
+                            <svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3L5 8l5 5"/></svg>
+                            Home
+                        </a>
+                        <h1 class="pa-header__title">{{ travel.title }}</h1>
+                        <p class="pa-header__sub">
+                            {% if travel.description %}
+                                <span>{{ travel.description }}</span>
+                            {% endif %}
+                            <span class="pa-header__meta-item">
+                                <svg viewBox="0 0 16 16" width="12" height="12" fill="currentColor"><path d="M11 1v1H5V1H3v1H1v13h14V2h-2V1h-2zm2 12H3V6h10v7z"/></svg>
+                                {{ travel.startAt|date("d M Y") }} – {{ travel.endAt|date("d M Y") }}
+                            </span>
+                            <span class="pa-header__meta-item">
+                                By <strong>{{ travel.user.firstName }} {{ travel.user.lastname }}</strong>
+                            </span>
+                            <span id="panel-information"></span>
+                        </p>
                     </div>
-                    <div class="st-author">By <strong>{{ travel.user.firstName }} {{ travel.user.lastname }}</strong></div>
-                    {% if mode is defined and mode == 'Edit' and app.user %}
-                        <a href="#" class="st-edit-btn">
-                            <svg viewBox="0 0 16 16" width="13" height="13" fill="currentColor"><path d="M11.5 2.5l2 2L5 13H3v-2L11.5 2.5zm1.4-1.4a1 1 0 0 1 1.4 1.4l-.7.7-2-2 .7-.7-.4.6z"/></svg>
-                            Edit
+                </div>
+                <div class="pa-header__right">
+                    <span class="pa-stat-pill">
+                        <svg viewBox="0 0 16 16" width="13" height="13" fill="currentColor"><path d="M8 1l1.8 3.6L14 5.3l-3 2.9.7 4.1L8 10.4l-3.7 1.9.7-4.1-3-2.9 4.2-.7z"/></svg>
+                        {{ travel.stars }}
+                    </span>
+                    <span class="pa-stat-pill">
+                        <svg viewBox="0 0 16 16" width="13" height="13" fill="currentColor"><path d="M8 3C4.5 3 1.5 6 1 8c.5 2 3.5 5 7 5s6.5-3 7-5c-.5-2-3.5-5-7-5zm0 8a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm0-5a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/></svg>
+                        {{ travel.watch }}
+                    </span>
+                    {% if app.user and app.user.userId == travel.user.userId %}
+                        <a href="{{ path('updateTravel', {'slug': travel.slug}) }}" class="pa-btn-new">
+                            <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><path d="M11.7 1.3a1 1 0 0 1 1.4 0l1.6 1.6a1 1 0 0 1 0 1.4L5.5 13.5 1 15l1.5-4.5 9.2-9.2z"/></svg>
+                            Edit travel
                         </a>
                     {% endif %}
                 </div>
@@ -471,28 +609,39 @@
 
         <div class="st-layout">
 
-            {# ── Sidebar ── #}
-            <div class="st-sidebar">
-                {% include 'travel/locationsPanel.html.twig' %}
-                {% include 'travel/routePanel.html.twig' %}
-                {% include 'travel/tracksPanel.html.twig' with {'gpxs': travel.gpx} %}
-            </div>
-
-            {# ── Main ── #}
-            <div class="st-main">
-                {# Map panel #}
-                <div class="st-panel">
+            {# ── Mapa + Localizaciones (split view) ── #}
+            <div class="st-map-locations">
+                {# Mapa (lado izquierdo, grande) #}
+                <div class="st-map-area">
                     <div class="st-panel__head">
                         <span class="st-panel__head-left">
-                            <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor" opacity=".7"><path d="M8 1a5 5 0 0 1 5 5c0 4-5 9-5 9S3 10 3 6a5 5 0 0 1 5-5zm0 3a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/></svg>
+                            <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><path d="M8 1a5 5 0 0 1 5 5c0 4-5 9-5 9S3 10 3 6a5 5 0 0 1 5-5zm0 3a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/></svg>
                             Map
                         </span>
+                        <button class="st-sidebar-toggle" id="st-sidebar-toggle" type="button" title="Toggle locations panel">
+                            <svg class="st-sidebar-toggle__icon" viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3l-5 5 5 5"/></svg>
+                            <span id="st-sidebar-toggle-label">Hide</span>
+                        </button>
                     </div>
                     <div id="map"></div>
                 </div>
 
-                {# Gallery / location info panel #}
-                {% include 'travel/infoLocationPanel.html.twig' with {'travel': travel} %}
+                {# Localizaciones (lado derecho, siempre visible) #}
+                <div class="st-locations-sidebar">
+                    {% include 'travel/locationsPanel.html.twig' %}
+                </div>
+            </div>
+
+            {# ── Detalles adicionales (rutas, tracks, galería) ── #}
+            <div class="st-details-row">
+                <div class="st-sidebar">
+                    {% include 'travel/routePanel.html.twig' %}
+                    {% include 'travel/tracksPanel.html.twig' with {'gpxs': travel.gpx} %}
+                </div>
+
+                <div class="st-main">
+                    {% include 'travel/infoLocationPanel.html.twig' with {'travel': travel} %}
+                </div>
             </div>
 
         </div>
@@ -551,6 +700,19 @@
         map.addControl(new L.Control.Layers({'OSM':osm,'Google Hybrid':googleHybrid,'Google Satellite':googleSat,'Google Terrain':googleTerrain,'Road Map':googleRoadMap,'Traffic':googleTraffic}, {}));
 
         var centralMark = L.marker([{{ travel.geolocation.lat}},{{ travel.geolocation.lng }}], {icon: centerMarker}).addTo(map);
+
+        /* ── Locations sidebar collapse ── */
+        (function () {
+            var wrapper = document.querySelector('.st-map-locations');
+            var btn     = document.getElementById('st-sidebar-toggle');
+            var label   = document.getElementById('st-sidebar-toggle-label');
+
+            btn.addEventListener('click', function () {
+                var collapsed = wrapper.classList.toggle('sidebar-collapsed');
+                label.textContent = collapsed ? 'Show' : 'Hide';
+                setTimeout(function () { map.invalidateSize(); }, 310);
+            });
+        }());
 
         $('#center').click(function()          { map.setView([{{ travel.geolocation.lat}},{{ travel.geolocation.lng }}],8); });
         $('#remove-route').click(function()    { mPoint.removeRoute(); });

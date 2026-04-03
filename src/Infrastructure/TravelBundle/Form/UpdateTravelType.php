@@ -18,8 +18,8 @@ class UpdateTravelType extends AbstractType
     {
         $builder
             ->add('title', TextType::class)
-            ->add('startAt', DateType::class)
-            ->add('endAt', DateType::class)
+            ->add('startAt', DateType::class, ['years' => range(1950, (int) date('Y') + 10)])
+            ->add('endAt', DateType::class, ['years' => range(1950, (int) date('Y') + 10)])
             ->add('description', TextareaType::class)
             ->add('photo', FileType::class, [
                 'label' => 'Cover image',
