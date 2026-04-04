@@ -58,6 +58,14 @@ App\Domain\Location\Model\Location:
             unique: false
             nullable: true
             precision: 0
+        visitAt:
+            type: date
+            scale: 0
+            length: null
+            unique: false
+            nullable: true
+            precision: 0
+            column: visit_at
     manyToOne:
         mark:
             targetEntity: App\Domain\Mark\Model\Mark

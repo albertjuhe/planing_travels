@@ -570,6 +570,280 @@
     color: rgba(255,255,255,0.6);
 }
 
+/* ─────────────────────────────────────────
+   View tabs (Map / Calendar)
+───────────────────────────────────────── */
+.st-view-tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 16px;
+    margin-top: 20px;
+}
+.st-view-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 20px;
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: 20px;
+    border: 1.5px solid #dde3ea;
+    background: #fff;
+    color: #636e72;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.st-view-tab:hover { background: #f4f6f8; color: #2c3e50; }
+.st-view-tab.is-active {
+    background: #2980b9;
+    color: #fff;
+    border-color: #2980b9;
+}
+.st-view-panel { display: none; }
+.st-view-panel.is-active { display: block; }
+
+/* ─────────────────────────────────────────
+   Calendar view
+───────────────────────────────────────── */
+.cal-wrap {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+}
+
+/* ── Unscheduled sidebar ── */
+.cal-unscheduled {
+    flex-shrink: 0;
+    width: 200px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.07), 0 4px 16px rgba(0,0,0,0.05);
+    overflow: hidden;
+    position: sticky;
+    top: 16px;
+}
+.cal-unscheduled__head {
+    padding: 11px 14px;
+    background: #f8f9fa;
+    border-bottom: 1px solid #eaecef;
+    font-size: 11px;
+    font-weight: 700;
+    color: #7f8c8d;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.cal-unscheduled__body {
+    padding: 8px;
+    min-height: 60px;
+    max-height: 420px;
+    overflow-y: auto;
+}
+.cal-unscheduled__empty {
+    font-size: 12px;
+    color: #b0bec5;
+    text-align: center;
+    padding: 16px 8px;
+}
+
+/* ── Calendar grid (week view) ── */
+.cal-main {
+    flex: 1;
+    min-width: 0;
+}
+.cal-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+.cal-nav__label {
+    font-size: 14px;
+    font-weight: 700;
+    color: #1a2e4a;
+}
+.cal-nav__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1.5px solid #dde3ea;
+    background: #fff;
+    color: #636e72;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.15s, color 0.15s;
+}
+.cal-nav__btn:hover { background: #2980b9; color: #fff; border-color: #2980b9; }
+.cal-nav__btn:disabled { opacity: 0.35; cursor: default; pointer-events: none; }
+.cal-grid {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.07), 0 4px 16px rgba(0,0,0,0.05);
+    overflow: hidden;
+}
+.cal-grid__header {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    border-bottom: 2px solid #eaecef;
+}
+.cal-grid__dow {
+    padding: 8px 4px;
+    text-align: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: #95a5a6;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.cal-grid__body {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+}
+.cal-grid__body .cal-day { display: none; }
+.cal-day {
+    border-right: 1px solid #f0f2f4;
+    border-bottom: 1px solid #f0f2f4;
+    min-height: 120px;
+    display: flex;
+    flex-direction: column;
+}
+.cal-day:nth-child(7n) { border-right: none; }
+.cal-day--out { background: #fafbfc; }
+.cal-day__head {
+    padding: 6px 8px 4px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 4px;
+    border-bottom: 1px solid #f0f2f4;
+    background: #f8f9fa;
+}
+.cal-day__num {
+    font-size: 15px;
+    font-weight: 700;
+    color: #1a2e4a;
+    line-height: 1;
+}
+.cal-day--out .cal-day__num { color: #c5cdd6; }
+.cal-day--today .cal-day__num {
+    background: #2980b9;
+    color: #fff;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+}
+.cal-day__body {
+    flex: 1;
+    padding: 4px 6px 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+.cal-add-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 1.5px solid #2980b9;
+    background: #fff;
+    color: #2980b9;
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 1;
+    transition: background 0.15s, color 0.15s;
+    flex-shrink: 0;
+    padding: 0;
+}
+.cal-add-btn:hover { background: #2980b9; color: #fff; }
+
+/* ── Location cards inside calendar ── */
+.cal-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    padding: 5px 7px;
+    border-radius: 6px;
+    border: 1px solid #eaecef;
+    background: #fff;
+    font-size: 11px;
+    color: #2c3e50;
+    user-select: none;
+    position: relative;
+}
+.cal-card:hover { border-color: #b0c4d8; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+.cal-card__icon { flex-shrink: 0; font-size: 12px; line-height: 1.3; }
+.cal-card__text { flex: 1; min-width: 0; }
+.cal-card__title { font-weight: 600; line-height: 1.3; word-break: break-word; }
+.cal-card__type { font-size: 10px; color: #95a5a6; }
+.cal-remove-btn {
+    flex-shrink: 0;
+    background: none;
+    border: none;
+    color: #c5cdd6;
+    font-size: 13px;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0 1px;
+    border-radius: 3px;
+    transition: color 0.15s;
+    align-self: flex-start;
+}
+.cal-remove-btn:hover { color: #e74c3c; }
+
+/* Sidebar cards (larger) */
+.cal-unscheduled .cal-card {
+    font-size: 12px;
+    padding: 7px 8px;
+    margin-bottom: 4px;
+}
+
+/* ── Picker dropdown ── */
+.cal-picker {
+    position: fixed;
+    z-index: 3000;
+    background: #fff;
+    border: 1px solid #dde3ea;
+    border-radius: 10px;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.15);
+    min-width: 200px;
+    max-width: 260px;
+    max-height: 280px;
+    overflow-y: auto;
+    padding: 6px;
+    display: none;
+}
+.cal-picker.is-open { display: block; }
+.cal-picker__empty {
+    font-size: 12px;
+    color: #b0bec5;
+    text-align: center;
+    padding: 14px 8px;
+}
+.cal-picker__item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    border-radius: 7px;
+    font-size: 12px;
+    color: #2c3e50;
+    cursor: pointer;
+    transition: background 0.12s;
+}
+.cal-picker__item:hover { background: #eaf4fd; }
+.cal-picker__item__icon { flex-shrink: 0; font-size: 13px; }
+.cal-picker__item__title { font-weight: 600; line-height: 1.3; }
+.cal-picker__item__type { font-size: 10px; color: #95a5a6; }
+
 /* Connected user badge */
 .st-online-badge {
     position: fixed;
@@ -752,6 +1026,21 @@
 
         <div id="infoTravel"></div>
 
+        {# ── View tab switcher ── #}
+        {% set canEdit = app.user is not null and (app.user.userId == travel.user.userId or travel.sharedusers|length > 0) %}
+        <div class="st-view-tabs">
+            <button class="st-view-tab is-active" data-tab="map" type="button">
+                <svg viewBox="0 0 16 16" width="13" height="13" fill="currentColor"><path d="M8 1a5 5 0 0 1 5 5c0 4-5 9-5 9S3 10 3 6a5 5 0 0 1 5-5zm0 3a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/></svg>
+                Map
+            </button>
+            <button class="st-view-tab" data-tab="calendar" type="button">
+                <svg viewBox="0 0 16 16" width="13" height="13" fill="currentColor"><path d="M11 1v1H5V1H3v1H1v13h14V2h-2V1h-2zm2 12H3V6h10v7z"/></svg>
+                Calendar
+            </button>
+        </div>
+
+        {# ── MAP panel ── #}
+        <div class="st-view-panel is-active" id="st-panel-map">
         <div class="st-layout">
 
             {# ── Mapa + Localizaciones (split view) ── #}
@@ -793,8 +1082,128 @@
 
         {% include 'travel/modalFormAddPoint.html.twig' with {'travel': travel} %}
 
-    </div>
-</div>
+        </div>{# /st-panel-map #}
+
+        {# ── CALENDAR panel ── #}
+        <div class="st-view-panel" id="st-panel-calendar">
+            <div class="cal-wrap">
+
+                {# Unscheduled sidebar #}
+                <div class="cal-unscheduled">
+                    <div class="cal-unscheduled__head">Locations</div>
+                    <div class="cal-unscheduled__body" id="cal-unscheduled">
+                        {% set hasUnscheduled = false %}
+                        {% for loc in travel.location %}
+                            {% if loc.visitAt is null %}
+                                {% set hasUnscheduled = true %}
+                                <div class="cal-card" id="cal-loc-{{ loc.id }}"
+                                     data-location-id="{{ loc.id }}"
+                                     data-title="{{ loc.title|e('html_attr') }}"
+                                     data-type="{{ loc.typeLocation is not null ? loc.typeLocation.title|e('html_attr') : '' }}"
+                                     data-icon="{{ loc.typeLocation is not null ? loc.typeLocation.icon|e('html_attr') : '' }}">
+                                    <span class="cal-card__icon">
+                                        {% if loc.typeLocation is not null %}<i class="{{ loc.typeLocation.icon }}"></i>{% else %}📍{% endif %}
+                                    </span>
+                                    <span class="cal-card__text">
+                                        <div class="cal-card__title">{{ loc.title }}</div>
+                                        {% if loc.typeLocation is not null %}<div class="cal-card__type">{{ loc.typeLocation.title }}</div>{% endif %}
+                                    </span>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                        {% if not hasUnscheduled %}
+                            <div class="cal-unscheduled__empty" id="cal-unscheduled-empty">All locations scheduled ✓</div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                {# Week calendar #}
+                <div class="cal-main">
+
+                    {# Nav bar — rendered by JS #}
+                    <div class="cal-nav">
+                        <button class="cal-nav__btn" id="cal-prev" type="button" title="Previous week">
+                            <svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3L5 8l5 5"/></svg>
+                        </button>
+                        <span class="cal-nav__label" id="cal-nav-label"></span>
+                        <button class="cal-nav__btn" id="cal-next" type="button" title="Next week">
+                            <svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3l5 5-5 5"/></svg>
+                        </button>
+                    </div>
+
+                    <div class="cal-grid">
+                        {# Day-of-week header #}
+                        <div class="cal-grid__header">
+                            {% for dow in ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'] %}
+                                <div class="cal-grid__dow">{{ dow }}</div>
+                            {% endfor %}
+                        </div>
+                        {# Day cells — all days of the trip pre-rendered, shown/hidden by JS week navigation #}
+                        <div class="cal-grid__body" id="cal-grid-body">
+                            {% set dayNames   = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'] %}
+                            {% set monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'] %}
+                            {% set startTs = travel.startAt|date('U') %}
+                            {% set endTs   = travel.endAt|date('U') %}
+                            {% set numDays = ((endTs - startTs) / 86400)|round(0, 'ceil') + 1 %}
+                            {# Find Monday of the week containing startAt (ISO: Mon=1) #}
+                            {% set startDow = travel.startAt|date('N') %}
+                            {% set gridStart = travel.startAt|date_modify('-' ~ (startDow - 1) ~ ' days') %}
+                            {% set endDow = travel.endAt|date('N') %}
+                            {% set gridEnd = travel.endAt|date_modify('+' ~ (7 - endDow) ~ ' days') %}
+                            {% set gridStartTs = gridStart|date('U') %}
+                            {% set gridEndTs   = gridEnd|date('U') %}
+                            {% set gridDays = ((gridEndTs - gridStartTs) / 86400)|round(0,'ceil') + 1 %}
+                            {% for i in 0..(gridDays - 1) %}
+                                {% set thisDate    = gridStart|date_modify('+' ~ i ~ ' days') %}
+                                {% set thisDateStr = thisDate|date('Y-m-d') %}
+                                {% set inTrip      = thisDate|date('U') >= startTs and thisDate|date('U') <= endTs %}
+                                <div class="cal-day{% if not inTrip %} cal-day--out{% endif %}"
+                                     id="cal-day-{{ thisDateStr }}"
+                                     data-date="{{ thisDateStr }}"
+                                     data-week="{{ thisDate|date('Y-W') }}">
+                                    <div class="cal-day__head">
+                                        <span class="cal-day__num">{{ thisDate|date('d') }}</span>
+                                        {% if canEdit and inTrip %}
+                                        <button class="cal-add-btn" type="button" data-date="{{ thisDateStr }}" title="Add location">+</button>
+                                        {% endif %}
+                                    </div>
+                                    <div class="cal-day__body">
+                                        {% if inTrip %}
+                                            {% for loc in travel.location %}
+                                                {% if loc.visitAt is not null and loc.visitAt|date('Y-m-d') == thisDateStr %}
+                                                    <div class="cal-card" id="cal-loc-{{ loc.id }}"
+                                                         data-location-id="{{ loc.id }}"
+                                                         data-title="{{ loc.title|e('html_attr') }}"
+                                                         data-type="{{ loc.typeLocation is not null ? loc.typeLocation.title|e('html_attr') : '' }}"
+                                                         data-icon="{{ loc.typeLocation is not null ? loc.typeLocation.icon|e('html_attr') : '' }}">
+                                                        <span class="cal-card__icon">
+                                                            {% if loc.typeLocation is not null %}<i class="{{ loc.typeLocation.icon }}"></i>{% else %}📍{% endif %}
+                                                        </span>
+                                                        <span class="cal-card__text">
+                                                            <div class="cal-card__title">{{ loc.title }}</div>
+                                                            {% if loc.typeLocation is not null %}<div class="cal-card__type">{{ loc.typeLocation.title }}</div>{% endif %}
+                                                        </span>
+                                                        {% if canEdit %}
+                                                        <button class="cal-remove-btn" type="button" data-location-id="{{ loc.id }}" title="Unschedule">&times;</button>
+                                                        {% endif %}
+                                                    </div>
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                </div>{# /cal-main #}
+
+            </div>
+        </div>{# /st-panel-calendar #}
+
+    </div>{# /container #}
+
+</div>{# /st-page #}
 
 {% if app.user and app.user.userId == travel.user.userId %}
 <div class="sh-overlay" id="sh-overlay" role="dialog" aria-modal="true" aria-labelledby="sh-modal-title">
@@ -835,6 +1244,7 @@
 
 {% block javascript %}
     {{ parent() }}
+    {% set canEdit = app.user is not null and (app.user.userId == travel.user.userId or travel.sharedusers|length > 0) %}
     <script src="{{ asset('js/jquery.ui.widget.js') }}"></script>
     <script src="{{ asset('js/jquery.iframe-transport.js') }}"></script>
     <script src="{{ asset('js/jquery.fileupload.js') }}"></script>
@@ -1064,6 +1474,208 @@
     }());
     </script>
     {% endif %}
+
+    <script>
+    (function () {
+        /* ── Tab switcher ── */
+        var tabs  = document.querySelectorAll('.st-view-tab');
+        var panels = document.querySelectorAll('.st-view-panel');
+        tabs.forEach(function (tab) {
+            tab.addEventListener('click', function () {
+                tabs.forEach(function (t) { t.classList.remove('is-active'); });
+                panels.forEach(function (p) { p.classList.remove('is-active'); });
+                tab.classList.add('is-active');
+                var target = document.getElementById('st-panel-' + tab.dataset.tab);
+                if (target) { target.classList.add('is-active'); }
+                if (tab.dataset.tab === 'map') {
+                    setTimeout(function () { if (typeof map !== 'undefined') { map.invalidateSize(); } }, 50);
+                }
+            });
+        });
+
+        {% if canEdit is defined and canEdit %}
+        /* ── Calendar: picker + week navigation ── */
+        var VISIT_DATE_URL = '{{ path('updateLocationVisitDate', {'locationId': '__LOC__'}) }}';
+        {% endif %}
+
+        /* ── Week navigation (all users) ── */
+        var allDays   = Array.from(document.querySelectorAll('#cal-grid-body .cal-day'));
+        var weeks     = [];
+        var weekMap   = {};
+        allDays.forEach(function (d) {
+            var w = d.dataset.week;
+            if (!weekMap[w]) { weekMap[w] = []; weeks.push(w); }
+            weekMap[w].push(d);
+        });
+        var currentWeekIdx = 0;
+
+        /* Start on the week that contains the first trip day */
+        var firstTripDay = allDays.find(function (d) { return !d.classList.contains('cal-day--out'); });
+        if (firstTripDay) {
+            var fw = firstTripDay.dataset.week;
+            var fi = weeks.indexOf(fw);
+            if (fi >= 0) { currentWeekIdx = fi; }
+        }
+
+        function showWeek(idx) {
+            allDays.forEach(function (d) { d.style.display = 'none'; });
+            var w = weeks[idx];
+            if (!w) return;
+            (weekMap[w] || []).forEach(function (d) { d.style.display = 'flex'; });
+            var days = weekMap[w];
+            var first = days[0].dataset.date;
+            var last  = days[days.length - 1].dataset.date;
+            var fmt = function (s) {
+                var p = s.split('-'); var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+                return months[parseInt(p[1],10)-1] + ' ' + parseInt(p[2],10) + ', ' + p[0];
+            };
+            document.getElementById('cal-nav-label').textContent = fmt(first) + ' – ' + fmt(last);
+            document.getElementById('cal-prev').disabled = (idx === 0);
+            document.getElementById('cal-next').disabled = (idx === weeks.length - 1);
+        }
+
+        if (allDays.length > 0) {
+            showWeek(currentWeekIdx);
+            document.getElementById('cal-prev').addEventListener('click', function () {
+                if (currentWeekIdx > 0) { currentWeekIdx--; showWeek(currentWeekIdx); }
+            });
+            document.getElementById('cal-next').addEventListener('click', function () {
+                if (currentWeekIdx < weeks.length - 1) { currentWeekIdx++; showWeek(currentWeekIdx); }
+            });
+        }
+
+        {% if canEdit is defined and canEdit %}
+        /* ── Picker ── */
+        var picker = document.createElement('div');
+        picker.className = 'cal-picker';
+        picker.id = 'cal-picker';
+        document.body.appendChild(picker);
+        var pickerDate = null;
+
+        function openPicker(btn) {
+            pickerDate = btn.dataset.date;
+            var unscheduled = document.querySelectorAll('#cal-unscheduled .cal-card');
+            picker.innerHTML = '';
+            if (unscheduled.length === 0) {
+                picker.innerHTML = '<div class="cal-picker__empty">No unscheduled locations</div>';
+            } else {
+                unscheduled.forEach(function (card) {
+                    var item = document.createElement('div');
+                    item.className = 'cal-picker__item';
+                    var iconAttr = card.dataset.icon || '';
+                    var iconHtml = iconAttr
+                        ? '<i class="cal-picker__item__icon ' + escAttr(iconAttr) + '"></i>'
+                        : '<span class="cal-picker__item__icon">📍</span>';
+                    item.innerHTML = iconHtml +
+                        '<span><div class="cal-picker__item__title">' + escHtml(card.dataset.title || '') + '</div>' +
+                        (card.dataset.type ? '<div class="cal-picker__item__type">' + escHtml(card.dataset.type) + '</div>' : '') +
+                        '</span>';
+                    item.addEventListener('click', function () {
+                        scheduleLocation(card, pickerDate);
+                        closePicker();
+                    });
+                    picker.appendChild(item);
+                });
+            }
+            var rect = btn.getBoundingClientRect();
+            picker.classList.add('is-open');
+            var pw = picker.offsetWidth;
+            var left = rect.left;
+            if (left + pw > window.innerWidth - 8) { left = window.innerWidth - pw - 8; }
+            picker.style.top  = (rect.bottom + window.scrollY + 4) + 'px';
+            picker.style.left = Math.max(4, left) + 'px';
+        }
+
+        function closePicker() { picker.classList.remove('is-open'); pickerDate = null; }
+
+        document.addEventListener('click', function (e) {
+            if (!picker.contains(e.target) && !e.target.closest('.cal-add-btn')) { closePicker(); }
+        });
+        document.addEventListener('click', function (e) {
+            var btn = e.target.closest('.cal-add-btn');
+            if (!btn) return;
+            e.stopPropagation();
+            if (picker.classList.contains('is-open') && pickerDate === btn.dataset.date) { closePicker(); }
+            else { openPicker(btn); }
+        });
+        document.addEventListener('click', function (e) {
+            var btn = e.target.closest('.cal-remove-btn');
+            if (!btn) return;
+            var card = document.getElementById('cal-loc-' + btn.dataset.locationId);
+            if (card) { unscheduleLocation(card); }
+        });
+
+        function scheduleLocation(card, date) {
+            var locationId = card.dataset.locationId;
+            var dayBody = document.querySelector('#cal-day-' + date + ' .cal-day__body');
+            if (!dayBody) return;
+            var scheduled = card.cloneNode(true);
+            scheduled.id = 'cal-loc-' + locationId;
+            var removeBtn = document.createElement('button');
+            removeBtn.className = 'cal-remove-btn'; removeBtn.type = 'button';
+            removeBtn.dataset.locationId = locationId; removeBtn.title = 'Unschedule';
+            removeBtn.innerHTML = '&times;';
+            scheduled.appendChild(removeBtn);
+            card.remove();
+            dayBody.appendChild(scheduled);
+            updateUnscheduledEmpty();
+            patchVisitDate(locationId, date, function () {
+                scheduled.remove();
+                document.getElementById('cal-unscheduled').appendChild(card);
+                updateUnscheduledEmpty();
+            });
+        }
+
+        function unscheduleLocation(card) {
+            var locationId = card.dataset.locationId;
+            var plain = card.cloneNode(true);
+            plain.id = 'cal-loc-' + locationId;
+            var oldBtn = plain.querySelector('.cal-remove-btn');
+            if (oldBtn) { oldBtn.remove(); }
+            card.remove();
+            document.getElementById('cal-unscheduled').appendChild(plain);
+            updateUnscheduledEmpty();
+            patchVisitDate(locationId, null, function () { location.reload(); });
+        }
+
+        function patchVisitDate(locationId, date, onError) {
+            var url = VISIT_DATE_URL.replace('__LOC__', locationId);
+            fetch(url, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+                body: JSON.stringify({ visitAt: date })
+            })
+            .then(function (r) {
+                if (!r.ok) { onError(); return; }
+                return r.text().then(function (text) {
+                    try {
+                        var d = JSON.parse(text);
+                        if (!d.success) { onError(); }
+                    } catch (e) {
+                        /* non-JSON but HTTP 2xx — treat as success */
+                    }
+                });
+            })
+            .catch(function () { /* network error — keep optimistic UI */ });
+        }
+
+        function updateUnscheduledEmpty() {
+            var body    = document.getElementById('cal-unscheduled');
+            var cards   = body.querySelectorAll('.cal-card');
+            var emptyEl = document.getElementById('cal-unscheduled-empty');
+            if (cards.length === 0 && !emptyEl) {
+                var div = document.createElement('div');
+                div.className = 'cal-unscheduled__empty'; div.id = 'cal-unscheduled-empty';
+                div.textContent = 'All locations scheduled ✓';
+                body.appendChild(div);
+            } else if (cards.length > 0 && emptyEl) { emptyEl.remove(); }
+        }
+
+        function escHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+        function escAttr(s) { return String(s).replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+        {% endif %}
+    }());
+    </script>
 {% endblock %}
 
 {% block aside %}{% endblock %}
