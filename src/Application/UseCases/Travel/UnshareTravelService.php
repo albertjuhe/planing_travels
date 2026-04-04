@@ -37,7 +37,6 @@ class UnshareTravelService implements UsesCasesService
             throw new UserDoesntExists('User "'.$command->getTargetUsername().'" does not exist');
         }
 
-        $travel->removeShareduser($targetUser);
         $targetUser->removeTravelsshared($travel);
         $this->userRepository->save($targetUser);
     }

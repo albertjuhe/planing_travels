@@ -429,6 +429,7 @@ class User implements UserInterface
     public function addTravelsshared(Travel $travelsshared)
     {
         $this->travelsshared[] = $travelsshared;
+        $travelsshared->addShareduser($this);
 
         return $this;
     }
@@ -436,6 +437,7 @@ class User implements UserInterface
     public function removeTravelsshared(Travel $travelsshared)
     {
         $this->travelsshared->removeElement($travelsshared);
+        $travelsshared->removeShareduser($this);
     }
 
     /**
