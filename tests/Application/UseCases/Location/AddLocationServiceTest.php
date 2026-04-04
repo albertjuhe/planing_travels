@@ -11,6 +11,7 @@ use App\Domain\Travel\Model\Travel;
 use App\Domain\TypeLocation\Model\TypeLocation;
 use App\Domain\User\Model\User;
 use App\Domain\User\ValueObject\UserId;
+use Doctrine\Common\Collections\ArrayCollection;
 
 class AddLocationServiceTest extends LocationService
 {
@@ -44,6 +45,7 @@ class AddLocationServiceTest extends LocationService
 
         $travel = $this->createMock(Travel::class);
         $travel->expects($this->once())->method('getUser')->willReturn($user2);
+        $travel->expects($this->once())->method('getSharedusers')->willReturn(new ArrayCollection());
 
         $this->userRepository->expects($this->once())->method('ofIdOrFail')->willReturn($user1);
         $this->travelRepository->expects($this->once())->method('ofIdOrFail')->willReturn($travel);
@@ -56,7 +58,8 @@ class AddLocationServiceTest extends LocationService
             $this->userRepository,
             $this->markRepository,
             $this->locationRepository,
-            $this->typeLocationRepository
+            $this->typeLocationRepository,
+            $this->webSocketNotifier
         );
         $location->expects($this->once())->method('setTravel')->with(
             $travel
@@ -99,6 +102,7 @@ class AddLocationServiceTest extends LocationService
 
         $travel = $this->createMock(Travel::class);
         $travel->expects($this->once())->method('getUser')->willReturn($user2);
+        $travel->expects($this->once())->method('getSharedusers')->willReturn(new ArrayCollection());
 
         $this->userRepository->expects($this->once())->method('ofIdOrFail')->willReturn($user1);
         $this->travelRepository->expects($this->once())->method('ofIdOrFail')->willReturn($travel);
@@ -108,7 +112,8 @@ class AddLocationServiceTest extends LocationService
             $this->userRepository,
             $this->markRepository,
             $this->locationRepository,
-            $this->typeLocationRepository
+            $this->typeLocationRepository,
+            $this->webSocketNotifier
         );
 
         $this->locationRepository->expects($this->never())->method('save');

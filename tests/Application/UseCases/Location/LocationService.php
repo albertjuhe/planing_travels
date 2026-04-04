@@ -7,6 +7,7 @@ use App\Domain\Mark\Repository\MarkRepository;
 use App\Domain\Travel\Repository\TravelRepository;
 use App\Domain\TypeLocation\Repository\TypeLocationRepository;
 use App\Domain\User\Repository\UserRepository;
+use App\Infrastructure\WebSocket\WebSocketNotifier;
 use PHPUnit\Framework\TestCase;
 
 class LocationService extends TestCase
@@ -16,6 +17,7 @@ class LocationService extends TestCase
     protected $markRepository;
     protected $locationRepository;
     protected $typeLocationRepository;
+    protected $webSocketNotifier;
 
     public function setUp()
     {
@@ -24,5 +26,6 @@ class LocationService extends TestCase
         $this->markRepository = $this->createMock(MarkRepository::class);
         $this->locationRepository = $this->createMock(LocationRepository::class);
         $this->typeLocationRepository = $this->createMock(TypeLocationRepository::class);
+        $this->webSocketNotifier = $this->createMock(WebSocketNotifier::class);
     }
 }

@@ -48,6 +48,7 @@ class ShareTravelService implements UsesCasesService
             return;
         }
 
+        $travel->addShareduser($targetUser);
         $targetUser->addTravelsshared($travel);
         $this->userRepository->save($targetUser);
     }
