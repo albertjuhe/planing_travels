@@ -7,50 +7,41 @@ var reconnectAttempts = 0;
 var maxReconnectAttempts = 10;
 var reconnectTimer = null;
 
-function updateConnectionBadge(state) {
-    console.log("updateConnectionBadge called with state:", state);
+function updateConnectionBadge(state, count, usernames) {
     var $badge = $('#online-user');
-    console.log("Badge found:", $badge.length > 0);
+    if (!$badge.length) return;
 
-    if (!$badge.length) {
-        console.log("Badge element not found");
-        return;
-    }
-
-    var $label = $('#online-user-label');
     $badge.show();
-
     $badge.removeClass('st-online-badge--connected st-online-badge--disconnected st-online-badge--connecting');
 
-    var labelText = 'Usuario desconectado';
-    var badgeClass = 'st-online-badge--disconnected';
-
     if (state === 'connected') {
-        labelText = 'Usuario conectado';
-        badgeClass = 'st-online-badge--connected';
+        $badge.addClass('st-online-badge--connected');
+        var n = (typeof count === 'number') ? count : 1;
+        var label = n + ' user' + (n !== 1 ? 's' : '') + ' online';
+        $('#online-user-label').text(label);
+        var $names = $('#online-user-names');
+        if ($names.length && usernames && usernames.length) {
+            $names.html(usernames.map(function (u) {
+                return '<div>&#128100; ' + u.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</div>';
+            }).join(''));
+        }
     } else if (state === 'connecting') {
-        labelText = 'Conectando…';
-        badgeClass = 'st-online-badge--connecting';
-    }
-
-    console.log("Setting badge class:", badgeClass, "label:", labelText);
-    $badge.addClass(badgeClass);
-    if ($label.length) {
-        $label.text(labelText);
+        $badge.addClass('st-online-badge--connecting');
+        $('#online-user-label').text('Connecting\u2026');
+        $('#online-user-names').html('');
+    } else {
+        $badge.addClass('st-online-badge--disconnected');
+        $('#online-user-label').text('Disconnected');
+        $('#online-user-names').html('');
     }
 }
 
 function getReconnectDelay() {
-    // Exponential backoff: 1s, 2s, 4s, 8s... max 30s
-    var delay = Math.min(1000 * Math.pow(2, reconnectAttempts), 30000);
-    return delay;
+    return Math.min(1000 * Math.pow(2, reconnectAttempts), 30000);
 }
 
 function connectWebSocket() {
-    console.log("connectWebSocket called");
-
     if (socket && (socket.readyState === WebSocket.OPEN || socket.readyState === WebSocket.CONNECTING)) {
-        console.log("Socket already open or connecting");
         return;
     }
 
@@ -59,7 +50,6 @@ function connectWebSocket() {
 
     try {
         socket = new WebSocket(WS_URL);
-        console.log("WebSocket object created");
     } catch (e) {
         console.log("WebSocket creation error:", e);
         updateConnectionBadge('disconnected');
@@ -67,24 +57,32 @@ function connectWebSocket() {
         return;
     }
 
-    socket.onopen = function (event) {
+    socket.onopen = function () {
         console.log("Websocket connected!");
         reconnectAttempts = 0;
-        socket.send("Hi from travel server!");
-        updateConnectionBadge('connected');
+        var username = (typeof WS_CURRENT_USERNAME !== 'undefined' && WS_CURRENT_USERNAME)
+            ? WS_CURRENT_USERNAME
+            : 'anonymous';
+        socket.send(JSON.stringify({ username: username }));
+        updateConnectionBadge('connected', 1, [username]);
     };
 
     socket.onmessage = function (event) {
+        var msg;
         try {
-            var msg = JSON.parse(event.data);
+            msg = JSON.parse(event.data);
         } catch (e) {
+            return;
+        }
+
+        if (msg.event === 'presence') {
+            updateConnectionBadge('connected', msg.count, msg.usernames);
             return;
         }
 
         if (msg.event === 'location_added') {
             var loc = msg.location;
 
-            // Skip if this is our own add (we already rendered it locally)
             var myId = (typeof WS_CURRENT_USER_ID !== 'undefined') ? String(WS_CURRENT_USER_ID) : '';
             if (myId && loc.addedByUserId && String(loc.addedByUserId) === myId) {
                 return;
@@ -143,9 +141,7 @@ function scheduleReconnect() {
     }
 }
 
-// Start connection when DOM is ready
 console.log("websockets.js loaded");
-$(document).ready(function() {
-    console.log("DOM ready, starting WebSocket connection");
+$(document).ready(function () {
     connectWebSocket();
 });
