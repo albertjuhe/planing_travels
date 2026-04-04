@@ -645,38 +645,11 @@
     padding: 16px 8px;
 }
 
-/* ── Calendar grid (week view) ── */
+/* ── Calendar grid (full view) ── */
 .cal-main {
     flex: 1;
     min-width: 0;
 }
-.cal-nav {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 12px;
-}
-.cal-nav__label {
-    font-size: 14px;
-    font-weight: 700;
-    color: #1a2e4a;
-}
-.cal-nav__btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    border: 1.5px solid #dde3ea;
-    background: #fff;
-    color: #636e72;
-    cursor: pointer;
-    font-size: 14px;
-    transition: background 0.15s, color 0.15s;
-}
-.cal-nav__btn:hover { background: #2980b9; color: #fff; border-color: #2980b9; }
-.cal-nav__btn:disabled { opacity: 0.35; cursor: default; pointer-events: none; }
 .cal-grid {
     background: #fff;
     border-radius: 12px;
@@ -701,7 +674,6 @@
     display: grid;
     grid-template-columns: repeat(7, 1fr);
 }
-.cal-grid__body .cal-day { display: none; }
 .cal-day {
     border-right: 1px solid #f0f2f4;
     border-bottom: 1px solid #f0f2f4;
@@ -1119,18 +1091,6 @@
 
                 {# Week calendar #}
                 <div class="cal-main">
-
-                    {# Nav bar — rendered by JS #}
-                    <div class="cal-nav">
-                        <button class="cal-nav__btn" id="cal-prev" type="button" title="Previous week">
-                            <svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3L5 8l5 5"/></svg>
-                        </button>
-                        <span class="cal-nav__label" id="cal-nav-label"></span>
-                        <button class="cal-nav__btn" id="cal-next" type="button" title="Next week">
-                            <svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3l5 5-5 5"/></svg>
-                        </button>
-                    </div>
-
                     <div class="cal-grid">
                         {# Day-of-week header #}
                         <div class="cal-grid__header">
@@ -1497,52 +1457,6 @@
         /* ── Calendar: picker + week navigation ── */
         var VISIT_DATE_URL = '{{ path('updateLocationVisitDate', {'locationId': '__LOC__'}) }}';
         {% endif %}
-
-        /* ── Week navigation (all users) ── */
-        var allDays   = Array.from(document.querySelectorAll('#cal-grid-body .cal-day'));
-        var weeks     = [];
-        var weekMap   = {};
-        allDays.forEach(function (d) {
-            var w = d.dataset.week;
-            if (!weekMap[w]) { weekMap[w] = []; weeks.push(w); }
-            weekMap[w].push(d);
-        });
-        var currentWeekIdx = 0;
-
-        /* Start on the week that contains the first trip day */
-        var firstTripDay = allDays.find(function (d) { return !d.classList.contains('cal-day--out'); });
-        if (firstTripDay) {
-            var fw = firstTripDay.dataset.week;
-            var fi = weeks.indexOf(fw);
-            if (fi >= 0) { currentWeekIdx = fi; }
-        }
-
-        function showWeek(idx) {
-            allDays.forEach(function (d) { d.style.display = 'none'; });
-            var w = weeks[idx];
-            if (!w) return;
-            (weekMap[w] || []).forEach(function (d) { d.style.display = 'flex'; });
-            var days = weekMap[w];
-            var first = days[0].dataset.date;
-            var last  = days[days.length - 1].dataset.date;
-            var fmt = function (s) {
-                var p = s.split('-'); var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-                return months[parseInt(p[1],10)-1] + ' ' + parseInt(p[2],10) + ', ' + p[0];
-            };
-            document.getElementById('cal-nav-label').textContent = fmt(first) + ' – ' + fmt(last);
-            document.getElementById('cal-prev').disabled = (idx === 0);
-            document.getElementById('cal-next').disabled = (idx === weeks.length - 1);
-        }
-
-        if (allDays.length > 0) {
-            showWeek(currentWeekIdx);
-            document.getElementById('cal-prev').addEventListener('click', function () {
-                if (currentWeekIdx > 0) { currentWeekIdx--; showWeek(currentWeekIdx); }
-            });
-            document.getElementById('cal-next').addEventListener('click', function () {
-                if (currentWeekIdx < weeks.length - 1) { currentWeekIdx++; showWeek(currentWeekIdx); }
-            });
-        }
 
         {% if canEdit is defined and canEdit %}
         /* ── Picker ── */
