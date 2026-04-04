@@ -607,176 +607,248 @@
 ───────────────────────────────────────── */
 .cal-wrap {
     display: flex;
-    gap: 16px;
+    gap: 20px;
     align-items: flex-start;
 }
 
 /* ── Unscheduled sidebar ── */
 .cal-unscheduled {
     flex-shrink: 0;
-    width: 200px;
+    width: 210px;
     background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.07), 0 4px 16px rgba(0,0,0,0.05);
+    border-radius: 14px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07), 0 8px 24px rgba(0,0,0,0.06);
     overflow: hidden;
     position: sticky;
     top: 16px;
 }
 .cal-unscheduled__head {
-    padding: 11px 14px;
-    background: #f8f9fa;
-    border-bottom: 1px solid #eaecef;
+    padding: 13px 16px 11px;
+    background: linear-gradient(135deg, #1a2e4a 0%, #2980b9 100%);
     font-size: 11px;
     font-weight: 700;
-    color: #7f8c8d;
+    color: rgba(255,255,255,0.9);
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.8px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+.cal-unscheduled__head::before {
+    content: '';
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #f39c12;
 }
 .cal-unscheduled__body {
-    padding: 8px;
+    padding: 10px;
     min-height: 60px;
-    max-height: 420px;
+    max-height: 480px;
     overflow-y: auto;
 }
+.cal-unscheduled__body::-webkit-scrollbar { width: 4px; }
+.cal-unscheduled__body::-webkit-scrollbar-thumb { background: #dde3ea; border-radius: 2px; }
 .cal-unscheduled__empty {
     font-size: 12px;
     color: #b0bec5;
     text-align: center;
-    padding: 16px 8px;
+    padding: 20px 8px;
+    line-height: 1.5;
 }
 
-/* ── Calendar grid (full view) ── */
+/* ── Calendar main area ── */
 .cal-main {
     flex: 1;
     min-width: 0;
 }
+
+/* Month label rows — injected between week rows */
+.cal-month-label {
+    grid-column: 1 / -1;
+    padding: 10px 14px 6px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #2980b9;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    background: #f0f7ff;
+    border-top: 2px solid #d6eaf8;
+    border-bottom: 1px solid #d6eaf8;
+}
+
 .cal-grid {
     background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.07), 0 4px 16px rgba(0,0,0,0.05);
+    border-radius: 14px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07), 0 8px 24px rgba(0,0,0,0.06);
     overflow: hidden;
+    border: 1px solid #eaecef;
 }
 .cal-grid__header {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    border-bottom: 2px solid #eaecef;
+    background: linear-gradient(135deg, #1a2e4a 0%, #2980b9 100%);
 }
 .cal-grid__dow {
-    padding: 8px 4px;
+    padding: 10px 6px;
     text-align: center;
     font-size: 11px;
     font-weight: 700;
-    color: #95a5a6;
+    color: rgba(255,255,255,0.75);
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.7px;
 }
+.cal-grid__dow:first-child { color: rgba(255,255,255,0.95); }
+.cal-grid__dow:last-child  { color: rgba(255,200,100,0.9); }
 .cal-grid__body {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
 }
+
+/* ── Day cells ── */
 .cal-day {
-    border-right: 1px solid #f0f2f4;
-    border-bottom: 1px solid #f0f2f4;
-    min-height: 120px;
+    border-right: 1px solid #eaecef;
+    border-bottom: 1px solid #eaecef;
+    min-height: 110px;
     display: flex;
     flex-direction: column;
+    transition: background 0.1s;
 }
 .cal-day:nth-child(7n) { border-right: none; }
-.cal-day--out { background: #fafbfc; }
+.cal-day--out {
+    background: #f9fafb;
+    opacity: 0.55;
+}
+.cal-day--weekend:not(.cal-day--out) {
+    background: #fdfaf5;
+}
+.cal-day--today:not(.cal-day--out) {
+    background: #f0f7ff;
+}
 .cal-day__head {
-    padding: 6px 8px 4px;
+    padding: 7px 8px 5px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    flex-wrap: wrap;
     gap: 4px;
-    border-bottom: 1px solid #f0f2f4;
-    background: #f8f9fa;
+    border-bottom: 1px solid #eaecef;
 }
 .cal-day__num {
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 700;
-    color: #1a2e4a;
+    color: #2c3e50;
     line-height: 1;
-}
-.cal-day--out .cal-day__num { color: #c5cdd6; }
-.cal-day--today .cal-day__num {
-    background: #2980b9;
-    color: #fff;
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
+    width: 26px;
+    height: 26px;
     display: flex;
     align-items: center;
     justify-content: center;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+.cal-day--out .cal-day__num { color: #c5cdd6; font-weight: 400; }
+.cal-day--today:not(.cal-day--out) .cal-day__num {
+    background: #2980b9;
+    color: #fff;
     font-size: 13px;
 }
+.cal-day--weekend:not(.cal-day--out) .cal-day__num { color: #e67e22; }
 .cal-day__body {
     flex: 1;
-    padding: 4px 6px 6px;
+    padding: 5px 6px 6px;
     display: flex;
     flex-direction: column;
     gap: 3px;
 }
+
+/* ── Add button ── */
 .cal-add-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 20px;
-    height: 20px;
+    width: 22px;
+    height: 22px;
     border-radius: 50%;
-    border: 1.5px solid #2980b9;
-    background: #fff;
+    border: none;
+    background: #e8f4fd;
     color: #2980b9;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 16px;
     line-height: 1;
-    transition: background 0.15s, color 0.15s;
+    transition: background 0.15s, color 0.15s, transform 0.1s;
     flex-shrink: 0;
     padding: 0;
+    font-weight: 300;
 }
-.cal-add-btn:hover { background: #2980b9; color: #fff; }
+.cal-add-btn:hover {
+    background: #2980b9;
+    color: #fff;
+    transform: scale(1.15);
+}
 
 /* ── Location cards inside calendar ── */
 .cal-card {
     display: flex;
     align-items: flex-start;
-    gap: 6px;
-    padding: 5px 7px;
-    border-radius: 6px;
-    border: 1px solid #eaecef;
-    background: #fff;
+    gap: 5px;
+    padding: 4px 6px;
+    border-radius: 5px;
+    border-left: 3px solid #2980b9;
+    background: #eaf4fd;
     font-size: 11px;
-    color: #2c3e50;
+    color: #1a2e4a;
     user-select: none;
     position: relative;
+    transition: background 0.12s, border-color 0.12s;
 }
-.cal-card:hover { border-color: #b0c4d8; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
-.cal-card__icon { flex-shrink: 0; font-size: 12px; line-height: 1.3; }
+.cal-card:hover { background: #d6eaf8; }
+.cal-card__icon { flex-shrink: 0; font-size: 11px; line-height: 1.4; opacity: 0.75; }
 .cal-card__text { flex: 1; min-width: 0; }
 .cal-card__title { font-weight: 600; line-height: 1.3; word-break: break-word; }
-.cal-card__type { font-size: 10px; color: #95a5a6; }
+.cal-card__type { font-size: 9px; color: #5d8aa8; margin-top: 1px; text-transform: uppercase; letter-spacing: 0.3px; }
 .cal-remove-btn {
     flex-shrink: 0;
     background: none;
     border: none;
-    color: #c5cdd6;
-    font-size: 13px;
+    color: #a8c8e0;
+    font-size: 12px;
     line-height: 1;
     cursor: pointer;
-    padding: 0 1px;
+    padding: 0;
     border-radius: 3px;
-    transition: color 0.15s;
+    transition: color 0.12s;
     align-self: flex-start;
+    margin-top: 1px;
 }
 .cal-remove-btn:hover { color: #e74c3c; }
 
-/* Sidebar cards (larger) */
+/* Type-based card accent colours */
+.cal-card[data-icon*="bed"]        { border-color: #8e44ad; background: #f5eef8; }
+.cal-card[data-icon*="bed"]:hover  { background: #ebdef0; }
+.cal-card[data-icon*="plane"]      { border-color: #27ae60; background: #eafaf1; }
+.cal-card[data-icon*="plane"]:hover{ background: #d5f5e3; }
+.cal-card[data-icon*="camera"]     { border-color: #e67e22; background: #fef9e7; }
+.cal-card[data-icon*="camera"]:hover{ background: #fdebd0; }
+.cal-card[data-icon*="cutlery"]    { border-color: #e74c3c; background: #fdedec; }
+.cal-card[data-icon*="cutlery"]:hover{ background: #fadbd8; }
+.cal-card[data-icon*="train"]      { border-color: #16a085; background: #e8f8f5; }
+.cal-card[data-icon*="train"]:hover{ background: #d1f2eb; }
+.cal-card[data-icon*="bus"]        { border-color: #d35400; background: #fdf2e9; }
+.cal-card[data-icon*="coffee"]     { border-color: #795548; background: #efebe9; }
+
+/* Sidebar cards */
 .cal-unscheduled .cal-card {
     font-size: 12px;
-    padding: 7px 8px;
-    margin-bottom: 4px;
+    padding: 7px 9px;
+    margin-bottom: 5px;
+    border-radius: 8px;
+    border-left-width: 4px;
+    background: #f4f6f8;
+    border-color: #b0bec5;
+    color: #2c3e50;
 }
+.cal-unscheduled .cal-card:hover { background: #eaecef; }
 
 /* ── Picker dropdown ── */
 .cal-picker {
@@ -784,11 +856,11 @@
     z-index: 3000;
     background: #fff;
     border: 1px solid #dde3ea;
-    border-radius: 10px;
-    box-shadow: 0 8px 28px rgba(0,0,0,0.15);
-    min-width: 200px;
-    max-width: 260px;
-    max-height: 280px;
+    border-radius: 12px;
+    box-shadow: 0 12px 36px rgba(0,0,0,0.18);
+    min-width: 210px;
+    max-width: 270px;
+    max-height: 300px;
     overflow-y: auto;
     padding: 6px;
     display: none;
@@ -798,7 +870,7 @@
     font-size: 12px;
     color: #b0bec5;
     text-align: center;
-    padding: 14px 8px;
+    padding: 16px 8px;
 }
 .cal-picker__item {
     display: flex;
@@ -1098,29 +1170,34 @@
                                 <div class="cal-grid__dow">{{ dow }}</div>
                             {% endfor %}
                         </div>
-                        {# Day cells — all days of the trip pre-rendered, shown/hidden by JS week navigation #}
+                        {# Day cells — all days of the trip pre-rendered #}
                         <div class="cal-grid__body" id="cal-grid-body">
-                            {% set dayNames   = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'] %}
-                            {% set monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'] %}
-                            {% set startTs = travel.startAt|date('U') %}
-                            {% set endTs   = travel.endAt|date('U') %}
-                            {% set numDays = ((endTs - startTs) / 86400)|round(0, 'ceil') + 1 %}
-                            {# Find Monday of the week containing startAt (ISO: Mon=1) #}
-                            {% set startDow = travel.startAt|date('N') %}
+                            {% set startTs    = travel.startAt|date('U') %}
+                            {% set endTs      = travel.endAt|date('U') %}
+                            {% set todayStr   = 'now'|date('Y-m-d') %}
+                            {% set monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'] %}
+                            {# Pad to Monday of first week #}
+                            {% set startDow  = travel.startAt|date('N') %}
                             {% set gridStart = travel.startAt|date_modify('-' ~ (startDow - 1) ~ ' days') %}
-                            {% set endDow = travel.endAt|date('N') %}
-                            {% set gridEnd = travel.endAt|date_modify('+' ~ (7 - endDow) ~ ' days') %}
-                            {% set gridStartTs = gridStart|date('U') %}
-                            {% set gridEndTs   = gridEnd|date('U') %}
-                            {% set gridDays = ((gridEndTs - gridStartTs) / 86400)|round(0,'ceil') + 1 %}
+                            {% set endDow    = travel.endAt|date('N') %}
+                            {% set gridEnd   = travel.endAt|date_modify('+' ~ (7 - endDow) ~ ' days') %}
+                            {% set gridDays  = (((gridEnd|date('U') - gridStart|date('U')) / 86400)|round(0,'ceil') + 1) %}
+                            {% set lastMonth = '' %}
                             {% for i in 0..(gridDays - 1) %}
                                 {% set thisDate    = gridStart|date_modify('+' ~ i ~ ' days') %}
                                 {% set thisDateStr = thisDate|date('Y-m-d') %}
                                 {% set inTrip      = thisDate|date('U') >= startTs and thisDate|date('U') <= endTs %}
-                                <div class="cal-day{% if not inTrip %} cal-day--out{% endif %}"
+                                {% set dow         = thisDate|date('N') %}{# 1=Mon 7=Sun #}
+                                {% set isWeekend   = dow >= 6 %}
+                                {% set isToday     = thisDateStr == todayStr %}
+                                {% set thisMonth   = thisDate|date('Y-n') %}
+                                {% if inTrip and thisMonth != lastMonth and dow == 1 %}
+                                    {% set lastMonth = thisMonth %}
+                                    <div class="cal-month-label">{{ monthNames[thisDate|date('n') - 1] }} {{ thisDate|date('Y') }}</div>
+                                {% endif %}
+                                <div class="cal-day{% if not inTrip %} cal-day--out{% endif %}{% if isWeekend %} cal-day--weekend{% endif %}{% if isToday %} cal-day--today{% endif %}"
                                      id="cal-day-{{ thisDateStr }}"
-                                     data-date="{{ thisDateStr }}"
-                                     data-week="{{ thisDate|date('Y-W') }}">
+                                     data-date="{{ thisDateStr }}">
                                     <div class="cal-day__head">
                                         <span class="cal-day__num">{{ thisDate|date('d') }}</span>
                                         {% if canEdit and inTrip %}
