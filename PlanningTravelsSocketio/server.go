@@ -26,6 +26,13 @@ var upgrader = websocket.Upgrader{
 type Client struct {
 	conn     *websocket.Conn
 	username string
+	writeMu  sync.Mutex
+}
+
+func (c *Client) writeMessage(messageType int, data []byte) error {
+	c.writeMu.Lock()
+	defer c.writeMu.Unlock()
+	return c.conn.WriteMessage(messageType, data)
 }
 
 // RoomManager manages WebSocket connections grouped by travelId.
@@ -71,7 +78,7 @@ func (rm *RoomManager) BroadcastToRoom(travelId string, messageType int, message
 		return
 	}
 	for client := range room {
-		if err := client.conn.WriteMessage(messageType, message); err != nil {
+		if err := client.writeMessage(messageType, message); err != nil {
 			log.Printf("[room:%s] broadcast error: %v", travelId, err)
 		}
 	}
@@ -94,7 +101,7 @@ func (rm *RoomManager) broadcastPresence(travelId string) {
 		"usernames": usernames,
 	})
 	for client := range room {
-		client.conn.WriteMessage(websocket.TextMessage, msg)
+		client.writeMessage(websocket.TextMessage, msg)
 	}
 }
 
@@ -120,7 +127,13 @@ var roomManager = NewRoomManager()
 func reader(travelId string, client *Client) {
 	defer func() {
 		roomManager.mutex.Lock()
-		roomManager.Leave(travelId, client)
+		if room, ok := roomManager.rooms[travelId]; ok {
+			delete(room, client)
+			if len(room) == 0 {
+				delete(roomManager.rooms, travelId)
+			}
+			log.Printf("[room:%s] %s left", travelId, client.username)
+		}
 		roomManager.broadcastPresence(travelId)
 		roomManager.mutex.Unlock()
 		client.conn.Close()
@@ -158,13 +171,13 @@ func reader(travelId string, client *Client) {
 }
 
 // ping sends periodic pings to keep the connection alive.
-func ping(conn *websocket.Conn, done chan struct{}) {
+func ping(client *Client, done chan struct{}) {
 	ticker := time.NewTicker(30 * time.Second)
 	defer ticker.Stop()
 	for {
 		select {
 		case <-ticker.C:
-			if err := conn.WriteMessage(websocket.PingMessage, nil); err != nil {
+			if err := client.writeMessage(websocket.PingMessage, nil); err != nil {
 				return
 			}
 		case <-done:
@@ -197,12 +210,16 @@ func wsEndpoint(w http.ResponseWriter, r *http.Request) {
 	client := &Client{conn: conn, username: "anonymous"}
 
 	roomManager.mutex.Lock()
-	roomManager.Join(travelId, client)
+	if roomManager.rooms[travelId] == nil {
+		roomManager.rooms[travelId] = make(map[*Client]bool)
+	}
+	roomManager.rooms[travelId][client] = true
+	log.Printf("[room:%s] %s joined. room size: %d", travelId, client.username, len(roomManager.rooms[travelId]))
 	roomManager.broadcastPresence(travelId)
 	roomManager.mutex.Unlock()
 
 	done := make(chan struct{})
-	go ping(conn, done)
+	go ping(client, done)
 
 	reader(travelId, client)
 
@@ -246,9 +263,7 @@ func main() {
 	setupRoutes()
 
 	server := &http.Server{
-		Addr:         ":5555",
-		ReadTimeout:  10 * time.Second,
-		WriteTimeout: 10 * time.Second,
+		Addr: ":5555",
 	}
 
 	go func() {
