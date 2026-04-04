@@ -337,6 +337,18 @@ class Travel extends AggregateRoot
         return $this->sharedusers;
     }
 
+    public function addShareduser(User $user): void
+    {
+        if (!$this->sharedusers->contains($user)) {
+            $this->sharedusers->add($user);
+        }
+    }
+
+    public function removeShareduser(User $user): void
+    {
+        $this->sharedusers->removeElement($user);
+    }
+
     /**
      * @param mixed $sharedusers
      */

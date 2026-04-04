@@ -17,4 +17,17 @@ export const getTravelsByUser = async(user) => {
     } catch (error) {
         throw error;
     }
-}
+};
+
+export const shareTravel = async (travelId, username) => {
+    try {
+        const resp = await fetch(`${baseUrl}api/travel/${travelId}/share`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username }),
+        });
+        return resp.json();
+    } catch (error) {
+        throw error;
+    }
+};

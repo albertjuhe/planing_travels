@@ -34,6 +34,18 @@ services:
       class: App\Infrastructure\Application\QueryBus\QueryBus
 
     # Command bus handler
+    travel.share_handler:
+      class: App\Application\UseCases\Travel\ShareTravelService
+      arguments: ['@doctrine.travel.repository','@doctrine.user.repository']
+      tags:
+        - { name: tactician.handler, command: App\Application\Command\Travel\ShareTravelCommand}
+
+    travel.unshare_handler:
+      class: App\Application\UseCases\Travel\UnshareTravelService
+      arguments: ['@doctrine.travel.repository','@doctrine.user.repository']
+      tags:
+        - { name: tactician.handler, command: App\Application\Command\Travel\UnshareTravelCommand}
+
     travel.unpublish_handler:
       class: App\Application\UseCases\Travel\UnpublishTravelService
       arguments: ['@doctrine.travel.repository','@doctrine.user.repository']
@@ -60,7 +72,7 @@ services:
 
     location.add_handler:
       class: App\Application\UseCases\Location\AddLocationService
-      arguments:  ['@doctrine.travel.repository','@doctrine.user.repository', '@doctrine.mark.repository', '@doctrine.location.repository' ]
+      arguments:  ['@doctrine.travel.repository','@doctrine.user.repository', '@doctrine.mark.repository', '@doctrine.location.repository', '@App\Infrastructure\TypeLocationBundle\Repository\DoctrineTypeLocation', '@App\Infrastructure\WebSocket\WebSocketNotifier']
       tags:
         - { name: tactician.handler, command: App\Application\Command\Location\AddLocationCommand}
 
@@ -101,6 +113,11 @@ services:
       alias: App\Infrastructure\EventBundle\Repository\DummyEventStore
 
     tactician.middleware.domainEventStore: '@App\Infrastructure\Middleware\DomainEventsMiddleware'
+
+    App\Infrastructure\WebSocket\WebSocketNotifier:
+      arguments:
+        $wsServerUrl: '%env(string:WEBSOCKET_SERVER_URL)%'
+        $logger: '@logger'
 
     # Repository travel
     App\Infrastructure\TravelBundle\Repository\DoctrineTravelRepository:

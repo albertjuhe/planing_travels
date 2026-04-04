@@ -3,14 +3,11 @@
 namespace App\Application\UseCases\Travel;
 
 use App\Application\Query\Travel\GetMyTravelsQuery;
-use App\Domain\Travel\Repository\TravelReadModelRepository;
 use App\Domain\Travel\Repository\TravelRepository;
 
 class GetAllMyTravelsService
 {
-    /**
-     * @var TravelRepository;
-     */
+    /** @var TravelRepository */
     private $travelRepository;
 
     public function __construct(TravelRepository $travelRepository)
@@ -20,10 +17,15 @@ class GetAllMyTravelsService
 
     public function __invoke(GetMyTravelsQuery $getMyTravelsQuery)
     {
-        $user = $getMyTravelsQuery->getUser();
+        $user   = $getMyTravelsQuery->getUser();
+        $userId = $user->userId()->id();
 
-        return $this->travelRepository->getAllTravelsByUser(
-            $user->userId()->id()
-        );
+        $owned  = $this->travelRepository->getAllTravelsByUser($userId);
+        $shared = $this->travelRepository->getSharedTravelsByUser($userId);
+
+        return [
+            'owned'  => $owned,
+            'shared' => $shared,
+        ];
     }
 }

@@ -88,4 +88,17 @@ class DoctrineTravelRepository extends ServiceEntityRepository implements Travel
             ->getQuery()
             ->getResult();
     }
+
+    public function getSharedTravelsByUser(int $userId): array
+    {
+        return $this->createQueryBuilder('t')
+            ->select('t')
+            ->innerJoin('t.sharedusers', 'u')
+            ->where('u.id = :userId')
+            ->andWhere('t.user != :userId')
+            ->setParameter('userId', $userId)
+            ->orderBy('t.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
 }

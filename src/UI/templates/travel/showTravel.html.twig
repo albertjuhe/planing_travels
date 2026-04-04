@@ -127,6 +127,146 @@
     white-space: nowrap;
 }
 .pa-btn-new:hover { background: #e67e22; color: #fff; text-decoration: none; transform: translateY(-1px); }
+.pa-btn-share { background: rgba(255,255,255,0.18); border: 1.5px solid rgba(255,255,255,0.4); }
+.pa-btn-share:hover { background: rgba(255,255,255,0.28); color: #fff; }
+
+/* ─── Share modal ─── */
+.sh-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+}
+.sh-overlay.is-open { display: flex; }
+.sh-modal {
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 16px 48px rgba(0,0,0,0.22);
+    width: 100%;
+    max-width: 420px;
+    padding: 28px 28px 24px;
+    position: relative;
+}
+.sh-modal__title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #1a2e4a;
+    margin: 0 0 6px;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+.sh-modal__sub {
+    font-size: 13px;
+    color: #7f8c8d;
+    margin: 0 0 20px;
+}
+.sh-modal__field { display: flex; flex-direction: column; gap: 5px; margin-bottom: 16px; }
+.sh-modal__label { font-size: 12px; font-weight: 700; color: #2c3e50; text-transform: uppercase; letter-spacing: 0.4px; }
+.sh-modal__input {
+    width: 100%;
+    padding: 10px 13px;
+    font-size: 14px;
+    border: 1.5px solid #dde3ea;
+    border-radius: 8px;
+    outline: none;
+    background: #f8f9fa;
+    box-sizing: border-box;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+.sh-modal__input:focus { border-color: #2980b9; background: #fff; box-shadow: 0 0 0 3px rgba(41,128,185,0.12); }
+.sh-modal__actions { display: flex; gap: 10px; justify-content: flex-end; }
+.sh-modal__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+}
+.sh-modal__btn:active { transform: scale(0.97); }
+.sh-modal__btn--cancel { background: #f4f6f8; color: #636e72; border: 1.5px solid #dde3ea; }
+.sh-modal__btn--cancel:hover { background: #eaecef; color: #2c3e50; }
+.sh-modal__btn--submit { background: #2980b9; color: #fff; }
+.sh-modal__btn--submit:hover { background: #1e6fa8; }
+.sh-modal__btn--submit:disabled { opacity: 0.6; cursor: not-allowed; }
+.sh-modal__close {
+    position: absolute;
+    top: 14px; right: 16px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: #b0bec5;
+    cursor: pointer;
+    line-height: 1;
+    padding: 2px 6px;
+    border-radius: 4px;
+    transition: color 0.15s;
+}
+.sh-modal__close:hover { color: #636e72; }
+.sh-modal__feedback {
+    font-size: 13px;
+    padding: 9px 13px;
+    border-radius: 7px;
+    margin-bottom: 14px;
+    display: none;
+}
+.sh-modal__users {
+    margin-bottom: 16px;
+}
+.sh-modal__users-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: #2c3e50;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    margin-bottom: 8px;
+}
+.sh-modal__users-empty {
+    font-size: 13px;
+    color: #b0bec5;
+    padding: 8px 0;
+}
+.sh-user-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 7px 10px;
+    border-radius: 7px;
+    background: #f8f9fa;
+    border: 1px solid #eaecef;
+    margin-bottom: 5px;
+    font-size: 13px;
+    color: #2c3e50;
+}
+.sh-user-row__name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sh-user-row__name small { color: #7f8c8d; margin-left: 4px; font-size: 11px; }
+.sh-user-revoke {
+    flex-shrink: 0;
+    background: none;
+    border: 1px solid #e74c3c;
+    color: #e74c3c;
+    border-radius: 5px;
+    padding: 2px 8px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+}
+.sh-user-revoke:hover { background: #e74c3c; color: #fff; }
+.sh-modal__divider {
+    border: none;
+    border-top: 1px solid #eaecef;
+    margin: 14px 0;
+}
 
 /* ─────────────────────────────────────────
    Layout - Split view: mapa + localizaciones visibles
@@ -592,6 +732,11 @@
                         {{ travel.watch }}
                     </span>
                     {% if app.user and app.user.userId == travel.user.userId %}
+                        <button type="button" class="pa-btn-new pa-btn-share" id="st-share-btn"
+                                data-travel-id="{{ travel.id }}">
+                            <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><path d="M12 10a2 2 0 0 0-1.6.8L5.9 8.4a2 2 0 0 0 0-1.8l4.5-2.4A2 2 0 1 0 9.6 2.2L5.1 4.6a2 2 0 1 0 0 5.8l4.5 2.4A2 2 0 1 0 12 10z"/></svg>
+                            Share
+                        </button>
                         <a href="{{ path('updateTravel', {'slug': travel.slug}) }}" class="pa-btn-new">
                             <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><path d="M11.7 1.3a1 1 0 0 1 1.4 0l1.6 1.6a1 1 0 0 1 0 1.4L5.5 13.5 1 15l1.5-4.5 9.2-9.2z"/></svg>
                             Edit travel
@@ -651,6 +796,36 @@
     </div>
 </div>
 
+{% if app.user and app.user.userId == travel.user.userId %}
+<div class="sh-overlay" id="sh-overlay" role="dialog" aria-modal="true" aria-labelledby="sh-modal-title">
+    <div class="sh-modal">
+        <button class="sh-modal__close" id="sh-modal-close" type="button" aria-label="Close">&times;</button>
+        <h2 class="sh-modal__title" id="sh-modal-title">
+            <svg viewBox="0 0 16 16" width="18" height="18" fill="currentColor"><path d="M12 10a2 2 0 0 0-1.6.8L5.9 8.4a2 2 0 0 0 0-1.8l4.5-2.4A2 2 0 1 0 9.6 2.2L5.1 4.6a2 2 0 1 0 0 5.8l4.5 2.4A2 2 0 1 0 12 10z"/></svg>
+            Share travel
+        </h2>
+        <p class="sh-modal__sub">Enter the username of the person you want to share <strong>{{ travel.title }}</strong> with.</p>
+        <div class="sh-modal__feedback" id="sh-feedback"></div>
+        <div class="sh-modal__users" id="sh-users-section">
+            <div class="sh-modal__users-title">Currently shared with</div>
+            <div id="sh-users-list"><div class="sh-modal__users-empty">Loading…</div></div>
+        </div>
+        <hr class="sh-modal__divider">
+        <div class="sh-modal__field">
+            <label class="sh-modal__label" for="sh-username">Username</label>
+            <input class="sh-modal__input" type="text" id="sh-username" placeholder="e.g. johndoe" autocomplete="off">
+        </div>
+        <div class="sh-modal__actions">
+            <button class="sh-modal__btn sh-modal__btn--cancel" id="sh-cancel" type="button">Cancel</button>
+            <button class="sh-modal__btn sh-modal__btn--submit" id="sh-submit" type="button">
+                <svg viewBox="0 0 16 16" width="13" height="13" fill="currentColor"><path d="M12 10a2 2 0 0 0-1.6.8L5.9 8.4a2 2 0 0 0 0-1.8l4.5-2.4A2 2 0 1 0 9.6 2.2L5.1 4.6a2 2 0 1 0 0 5.8l4.5 2.4A2 2 0 1 0 12 10z"/></svg>
+                Share
+            </button>
+        </div>
+    </div>
+</div>
+{% endif %}
+
 <a class="st-online-badge st-online-badge--disconnected" id="online-user">
     <span class="st-online-badge__dot"></span>
     <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><path d="M3 8a5 5 0 1 1 10 0A5 5 0 0 1 3 8zm5-3a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/></svg>
@@ -660,7 +835,6 @@
 
 {% block javascript %}
     {{ parent() }}
-    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
     <script src="{{ asset('js/jquery.ui.widget.js') }}"></script>
     <script src="{{ asset('js/jquery.iframe-transport.js') }}"></script>
     <script src="{{ asset('js/jquery.fileupload.js') }}"></script>
@@ -677,6 +851,10 @@
     <script src="{{ asset('js/markersDefinition.js') }}"></script>
     <script src="{{ asset('js/mapPoint.js') }}"></script>
     <script src="{{ asset('js/locationGallery.js') }}"></script>
+    <script>
+        var WS_TRAVEL_ID = '{{ travel.id }}';
+        var WS_CURRENT_USER_ID = '{{ app.user ? app.user.id : '' }}';
+    </script>
     <script src="{{ asset('js/websocket/websockets.js') }}?v={{ "now"|date('U') }}"></script>
     <script src="{{ asset('leaflet/leaflet-easyprint.js') }}"></script>
     <script>
@@ -733,6 +911,159 @@
             hideControlContainer: true
         }).addTo(map);
     </script>
+
+    {% if app.user and app.user.userId == travel.user.userId %}
+    <script>
+    (function () {
+        var overlay  = document.getElementById('sh-overlay');
+        var closeBtn = document.getElementById('sh-modal-close');
+        var cancelBtn= document.getElementById('sh-cancel');
+        var submitBtn= document.getElementById('sh-submit');
+        var input    = document.getElementById('sh-username');
+        var feedback = document.getElementById('sh-feedback');
+        var openBtn  = document.getElementById('st-share-btn');
+        var travelId = openBtn ? openBtn.getAttribute('data-travel-id') : null;
+        var shareUrl       = '{{ path('shareTravelAPI',      {'travelId': '__ID__'}) }}'.replace('__ID__', travelId);
+        var sharedUsersUrl = '{{ path('getSharedUsersAPI',   {'travelId': '__ID__'}) }}'.replace('__ID__', travelId);
+        var unshareBaseUrl = '{{ path('unshareTravelAPI',    {'travelId': '__ID__', 'username': '__USER__'}) }}';
+
+        function unshareUrl(username) {
+            return unshareBaseUrl.replace('__ID__', travelId).replace('__USER__', encodeURIComponent(username));
+        }
+
+        function loadSharedUsers() {
+            var list = document.getElementById('sh-users-list');
+            list.innerHTML = '<div class="sh-modal__users-empty">Loading…</div>';
+            fetch(sharedUsersUrl, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+                .then(function (r) { return r.json(); })
+                .then(function (data) { renderSharedUsers(data.users || []); })
+                .catch(function () { list.innerHTML = '<div class="sh-modal__users-empty">Could not load.</div>'; });
+        }
+
+        function renderSharedUsers(users) {
+            var list = document.getElementById('sh-users-list');
+            if (!users.length) {
+                list.innerHTML = '<div class="sh-modal__users-empty">Not shared with anyone yet.</div>';
+                return;
+            }
+            list.innerHTML = users.map(function (u) {
+                var display = escHtml(u.firstName || '') + ' ' + escHtml(u.lastName || '');
+                return '<div class="sh-user-row" id="sh-user-' + escHtml(u.username) + '">' +
+                    '<span class="sh-user-row__name">' + escHtml(u.username) + '<small>' + display.trim() + '</small></span>' +
+                    '<button class="sh-user-revoke" data-username="' + escHtml(u.username) + '" type="button">Revoke</button>' +
+                    '</div>';
+            }).join('');
+            list.querySelectorAll('.sh-user-revoke').forEach(function (btn) {
+                btn.addEventListener('click', function () { doRevoke(this.getAttribute('data-username')); });
+            });
+        }
+
+        function doRevoke(username) {
+            fetch(unshareUrl(username), {
+                method: 'DELETE',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            })
+            .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, data: d }; }); })
+            .then(function (result) {
+                if (result.ok) {
+                    var row = document.getElementById('sh-user-' + username);
+                    if (row) { row.remove(); }
+                    var list = document.getElementById('sh-users-list');
+                    if (!list.querySelector('.sh-user-row')) {
+                        list.innerHTML = '<div class="sh-modal__users-empty">Not shared with anyone yet.</div>';
+                    }
+                } else {
+                    showFeedback('error', result.data.error || 'Could not revoke access.');
+                }
+            })
+            .catch(function () { showFeedback('error', 'Network error revoking access.'); });
+        }
+
+        function openModal() {
+            overlay.classList.add('is-open');
+            input.value = '';
+            feedback.className = 'sh-modal__feedback';
+            feedback.textContent = '';
+            loadSharedUsers();
+            setTimeout(function () { input.focus(); }, 50);
+        }
+
+        function closeModal() {
+            overlay.classList.remove('is-open');
+        }
+
+        if (openBtn) { openBtn.addEventListener('click', openModal); }
+        if (closeBtn) { closeBtn.addEventListener('click', closeModal); }
+        if (cancelBtn) { cancelBtn.addEventListener('click', closeModal); }
+
+        overlay.addEventListener('click', function (e) {
+            if (e.target === overlay) { closeModal(); }
+        });
+
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') { closeModal(); }
+        });
+
+        input.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') { doShare(); }
+        });
+
+        submitBtn.addEventListener('click', doShare);
+
+        function doShare() {
+            var username = input.value.trim();
+            if (!username) {
+                showFeedback('error', 'Please enter a username.');
+                input.focus();
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Sharing…';
+
+            fetch(shareUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+                body: JSON.stringify({ username: username })
+            })
+            .then(function (res) {
+                return res.text().then(function (text) {
+                    var data = null;
+                    try { data = JSON.parse(text); } catch (e) {}
+                    return { ok: res.ok, status: res.status, data: data, raw: text };
+                });
+            })
+            .then(function (result) {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<svg viewBox="0 0 16 16" width="13" height="13" fill="currentColor"><path d="M12 10a2 2 0 0 0-1.6.8L5.9 8.4a2 2 0 0 0 0-1.8l4.5-2.4A2 2 0 1 0 9.6 2.2L5.1 4.6a2 2 0 1 0 0 5.8l4.5 2.4A2 2 0 1 0 12 10z"/></svg> Share';
+                if (result.ok) {
+                    showFeedback('success', 'Travel shared with <strong>' + escHtml(username) + '</strong>.');
+                    input.value = '';
+                    loadSharedUsers();
+                } else if (result.data && result.data.error) {
+                    showFeedback('error', result.data.error);
+                } else {
+                    showFeedback('error', 'Server error ' + result.status + (result.raw ? ': ' + result.raw.substring(0, 120) : ''));
+                }
+            })
+            .catch(function (err) {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<svg viewBox="0 0 16 16" width="13" height="13" fill="currentColor"><path d="M12 10a2 2 0 0 0-1.6.8L5.9 8.4a2 2 0 0 0 0-1.8l4.5-2.4A2 2 0 1 0 9.6 2.2L5.1 4.6a2 2 0 1 0 0 5.8l4.5 2.4A2 2 0 1 0 12 10z"/></svg> Share';
+                showFeedback('error', 'Network error: ' + (err && err.message ? err.message : String(err)));
+            });
+        }
+
+        function showFeedback(type, html) {
+            feedback.className = 'sh-modal__feedback is-' + type;
+            feedback.innerHTML = html;
+        }
+
+        function escHtml(str) {
+            return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+        }
+    }());
+    </script>
+    {% endif %}
 {% endblock %}
 
 {% block aside %}{% endblock %}

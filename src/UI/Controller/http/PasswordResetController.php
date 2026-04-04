@@ -52,12 +52,12 @@ class PasswordResetController extends AbstractController
                 }
 
                 if (function_exists('mail')) {
-                    $subject = 'TravelShare - Password reset';
+                    $subject = 'JuheTravel - Password reset';
                     $message = "You requested a password reset.\n\n";
                     $message .= "Open this link to continue:\n".$resetUrl."\n\n";
                     $message .= "If you did not request this, just ignore this email.";
 
-                    @mail($user->getEmail(), $subject, $message, 'From: no-reply@travelshare.local');
+                    @mail($user->getEmail(), $subject, $message, 'From: no-reply@juhetravel.local');
                 }
             }
 
