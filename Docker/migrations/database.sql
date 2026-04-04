@@ -114,6 +114,7 @@ create table if not exists location
         primary key,
     mark_id         varchar(150) null,
     travel_id       char(36)     null comment '(DC2Type:TravelId)',
+    visit_at        date         null,
     created_at      datetime     not null,
     updated_at      datetime     not null,
     title           varchar(255) not null,

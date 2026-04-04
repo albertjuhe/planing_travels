@@ -51,6 +51,9 @@ class Location extends AggregateRoot
     /** @var int */
     private $stars;
 
+    /** @var \DateTime|null */
+    private $visitAt;
+
     public function __construct()
     {
         $this->id = new LocationId();
@@ -348,6 +351,18 @@ class Location extends AggregateRoot
     public function setStars($stars)
     {
         $this->stars = $stars;
+    }
+
+    public function getVisitAt(): ?\DateTime
+    {
+        return $this->visitAt;
+    }
+
+    public function setVisitAt(?\DateTime $visitAt): self
+    {
+        $this->visitAt = $visitAt;
+
+        return $this;
     }
 
     public function __toString(): string

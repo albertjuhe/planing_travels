@@ -303,22 +303,28 @@ mapPoint.prototype.handleDrop = function (e) {
 };
 
 mapPoint.prototype.handleDragEnter = function (e) {
-    console.log('Enter dragging');
+    $('#routePoints').addClass('drop-target--active');
 };
 
 mapPoint.prototype.handleDragOver = function (e) {
     if (e.preventDefault) {
-        e.preventDefault(); // Necessary. Allows us to drop.
+        e.preventDefault();
     }
     var _dataTransfer = e.originalEvent.dataTransfer;
     _dataTransfer.dropEffect = 'move';
+    $('#routePoints').addClass('drop-target--active');
     return false;
 };
 
 mapPoint.prototype.handleDragEnd = function (e) {
+    $('#routePoints').removeClass('drop-target--active');
 };
 
 mapPoint.prototype.handleDragLeave = function (e) {
+    /* Only remove highlight when leaving the container entirely, not a child */
+    if (!$('#routePoints')[0].contains(e.relatedTarget || e.toElement)) {
+        $('#routePoints').removeClass('drop-target--active');
+    }
 };
 
 //Rest API for Traveling
