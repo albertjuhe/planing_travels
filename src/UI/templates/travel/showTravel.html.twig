@@ -470,6 +470,20 @@
 #mapPoints::-webkit-scrollbar-thumb { background: #c5cdd6; border-radius: 3px; }
 
 /* ─────────────────────────────────────────
+   Route drop-zone highlight
+───────────────────────────────────────── */
+#routePoints {
+    border-radius: 8px;
+    transition: background 0.15s, box-shadow 0.15s, outline 0.15s;
+}
+#routePoints.drop-target--active {
+    background: #eaf4fd;
+    outline: 2.5px dashed #2980b9;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 4px rgba(41,128,185,0.12);
+}
+
+/* ─────────────────────────────────────────
    Route panel
 ───────────────────────────────────────── */
 #routePoints {
