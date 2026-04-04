@@ -15,7 +15,7 @@ class GetAllMyTravelsServiceTest extends TravelService
         parent::setUp();
     }
 
-    public function testReturnsAllTravelsForUser(): void
+    public function testReturnsOwnedTravelsForUser(): void
     {
         $user = UserMother::random();
         $travel1 = TravelMother::random();
@@ -26,40 +26,69 @@ class GetAllMyTravelsServiceTest extends TravelService
         $this->travelRepository->save($travel2);
 
         $service = new GetAllMyTravelsService($this->travelRepository);
-        $query = new GetMyTravelsQuery($user);
+        $result = $service->__invoke(new GetMyTravelsQuery($user));
 
-        $result = $service->__invoke($query);
-
-        $this->assertCount(2, $result);
-        $this->assertContainsOnlyInstancesOf(Travel::class, $result);
+        $this->assertArrayHasKey('owned', $result);
+        $this->assertArrayHasKey('shared', $result);
+        $this->assertCount(2, $result['owned']);
+        $this->assertContainsOnlyInstancesOf(Travel::class, $result['owned']);
     }
 
-    public function testReturnsEmptyArrayWhenUserHasNoTravels(): void
+    public function testReturnsEmptyOwnedWhenUserHasNoTravels(): void
     {
         $user = UserMother::random();
 
         $service = new GetAllMyTravelsService($this->travelRepository);
-        $query = new GetMyTravelsQuery($user);
+        $result = $service->__invoke(new GetMyTravelsQuery($user));
 
-        $result = $service->__invoke($query);
-
-        $this->assertEmpty($result);
+        $this->assertEmpty($result['owned']);
+        $this->assertEmpty($result['shared']);
     }
 
-    public function testDoesNotReturnTravelsFromOtherUsers(): void
+    public function testDoesNotReturnOtherUsersTravelsAsOwned(): void
     {
         $user = UserMother::random();
         $otherUser = UserMother::random();
-
         $travel = TravelMother::random();
         $travel->setUser($otherUser);
         $this->travelRepository->save($travel);
 
         $service = new GetAllMyTravelsService($this->travelRepository);
-        $query = new GetMyTravelsQuery($user);
+        $result = $service->__invoke(new GetMyTravelsQuery($user));
 
-        $result = $service->__invoke($query);
+        $this->assertEmpty($result['owned']);
+    }
 
-        $this->assertEmpty($result);
+    public function testReturnsSharedTravelsForUser(): void
+    {
+        $owner = UserMother::random();
+        $sharedUser = UserMother::random();
+
+        $travel = TravelMother::random();
+        $travel->setUser($owner);
+        $sharedUser->addTravelsshared($travel);
+        $this->travelRepository->save($travel);
+
+        $service = new GetAllMyTravelsService($this->travelRepository);
+        $result = $service->__invoke(new GetMyTravelsQuery($sharedUser));
+
+        $this->assertEmpty($result['owned']);
+        $this->assertCount(1, $result['shared']);
+        $this->assertSame($travel, $result['shared'][0]);
+    }
+
+    public function testOwnedTravelsNotReturnedAsShared(): void
+    {
+        $user = UserMother::random();
+        $travel = TravelMother::random();
+        $travel->setUser($user);
+        $user->addTravelsshared($travel);
+        $this->travelRepository->save($travel);
+
+        $service = new GetAllMyTravelsService($this->travelRepository);
+        $result = $service->__invoke(new GetMyTravelsQuery($user));
+
+        $this->assertCount(1, $result['owned']);
+        $this->assertEmpty($result['shared']);
     }
 }

@@ -103,7 +103,7 @@ App\Domain\User\Model\User:
                 schema: null
                 joinColumns:
                     -
-                        name: travel_id
+                        name: user_id
                         unique: false
                         nullable: false
                         onDelete: null
@@ -111,7 +111,7 @@ App\Domain\User\Model\User:
                         referencedColumnName: id
                 inverseJoinColumns:
                     -
-                        name: user_id
+                        name: travel_id
                         unique: false
                         nullable: false
                         onDelete: null

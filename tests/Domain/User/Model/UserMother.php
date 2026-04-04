@@ -18,6 +18,9 @@ class UserMother
 
     public static function random(): User
     {
-        return self::create()::byId(mt_rand());
+        $user = self::create()::byId(mt_rand(1, 999999));
+        $user->setUsername(uniqid('user_', true));
+
+        return $user;
     }
 }

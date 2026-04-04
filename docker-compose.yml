@@ -22,11 +22,20 @@ services:
       - PHP_EXTENSION_XDEBUG:1
       - ENABLE_XDEBUG=1
       - XDEBUG_REMOTE_HOST=${DOCKER_HOST_IP:-localhost}
+      - WEBSOCKET_SERVER_URL=http://websocket:5555
     entrypoint: ["/bin/sh", "-c", "git config --global --add safe.directory /var/www/html && exec apache2-foreground"]
     depends_on:
       - mysql
       - elasticsearch
+      - websocket
     #command: sh /var/www/html/Docker/wait_to_start.sh
+
+  websocket:
+    build:
+      context: ${PWD}/PlanningTravelsSocketio
+      dockerfile: Dockerfile
+    ports:
+      - "5555:5555"
 
   mysql:
     image: mysql:5.7

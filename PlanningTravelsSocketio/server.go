@@ -3,10 +3,12 @@ package main
 import (
 	"context"
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 	"os"
 	"os/signal"
+	"strings"
 	"sync"
 	"syscall"
 	"time"
@@ -14,66 +16,87 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-// Upgrader configuration for WebSocket connections
 var upgrader = websocket.Upgrader{
 	ReadBufferSize:  1024,
 	WriteBufferSize: 1024,
-	// Allow connections from any origin (adjust for production)
-	CheckOrigin: func(r *http.Request) bool { return true },
+	CheckOrigin:     func(r *http.Request) bool { return true },
 }
 
-// ConnectionManager handles all active WebSocket connections
-type ConnectionManager struct {
-	connections map[*websocket.Conn]bool
-	mutex       sync.RWMutex
+// RoomManager manages WebSocket connections grouped by travelId.
+type RoomManager struct {
+	rooms map[string]map[*websocket.Conn]bool
+	mutex sync.RWMutex
 }
 
-func NewConnectionManager() *ConnectionManager {
-	return &ConnectionManager{
-		connections: make(map[*websocket.Conn]bool),
+func NewRoomManager() *RoomManager {
+	return &RoomManager{
+		rooms: make(map[string]map[*websocket.Conn]bool),
 	}
 }
 
-func (cm *ConnectionManager) Add(conn *websocket.Conn) {
-	cm.mutex.Lock()
-	defer cm.mutex.Unlock()
-	cm.connections[conn] = true
-	log.Printf("Connection added. Total connections: %d", len(cm.connections))
+func (rm *RoomManager) Join(travelId string, conn *websocket.Conn) {
+	rm.mutex.Lock()
+	defer rm.mutex.Unlock()
+	if rm.rooms[travelId] == nil {
+		rm.rooms[travelId] = make(map[*websocket.Conn]bool)
+	}
+	rm.rooms[travelId][conn] = true
+	log.Printf("[room:%s] connection joined. room size: %d", travelId, len(rm.rooms[travelId]))
 }
 
-func (cm *ConnectionManager) Remove(conn *websocket.Conn) {
-	cm.mutex.Lock()
-	defer cm.mutex.Unlock()
-	delete(cm.connections, conn)
-	log.Printf("Connection removed. Total connections: %d", len(cm.connections))
+func (rm *RoomManager) Leave(travelId string, conn *websocket.Conn) {
+	rm.mutex.Lock()
+	defer rm.mutex.Unlock()
+	if room, ok := rm.rooms[travelId]; ok {
+		delete(room, conn)
+		if len(room) == 0 {
+			delete(rm.rooms, travelId)
+		}
+		log.Printf("[room:%s] connection left", travelId)
+	}
 }
 
-func (cm *ConnectionManager) Broadcast(messageType int, message []byte) {
-	cm.mutex.RLock()
-	defer cm.mutex.RUnlock()
-	for conn := range cm.connections {
+func (rm *RoomManager) BroadcastToRoom(travelId string, messageType int, message []byte) {
+	rm.mutex.RLock()
+	defer rm.mutex.RUnlock()
+	room, ok := rm.rooms[travelId]
+	if !ok {
+		log.Printf("[room:%s] broadcast skipped: no connections", travelId)
+		return
+	}
+	for conn := range room {
 		if err := conn.WriteMessage(messageType, message); err != nil {
-			log.Printf("Broadcast error: %v", err)
+			log.Printf("[room:%s] broadcast error: %v", travelId, err)
 		}
 	}
+	log.Printf("[room:%s] broadcast sent to %d connection(s)", travelId, len(room))
 }
 
-func (cm *ConnectionManager) Count() int {
-	cm.mutex.RLock()
-	defer cm.mutex.RUnlock()
-	return len(cm.connections)
+func (rm *RoomManager) TotalConnections() int {
+	rm.mutex.RLock()
+	defer rm.mutex.RUnlock()
+	total := 0
+	for _, room := range rm.rooms {
+		total += len(room)
+	}
+	return total
 }
 
-var manager = NewConnectionManager()
+func (rm *RoomManager) TotalRooms() int {
+	rm.mutex.RLock()
+	defer rm.mutex.RUnlock()
+	return len(rm.rooms)
+}
 
-// reader listens for new messages on a WebSocket connection
-func reader(conn *websocket.Conn) {
+var rooms = NewRoomManager()
+
+// reader keeps the connection alive and removes it on disconnect.
+func reader(travelId string, conn *websocket.Conn) {
 	defer func() {
-		manager.Remove(conn)
+		rooms.Leave(travelId, conn)
 		conn.Close()
 	}()
 
-	// Set read deadline and pong handler for connection health
 	conn.SetReadDeadline(time.Now().Add(60 * time.Second))
 	conn.SetPongHandler(func(string) error {
 		conn.SetReadDeadline(time.Now().Add(60 * time.Second))
@@ -81,29 +104,20 @@ func reader(conn *websocket.Conn) {
 	})
 
 	for {
-		messageType, p, err := conn.ReadMessage()
+		_, _, err := conn.ReadMessage()
 		if err != nil {
 			if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
-				log.Printf("Read error: %v", err)
+				log.Printf("[room:%s] read error: %v", travelId, err)
 			}
-			return
-		}
-
-		log.Printf("Received: %s", string(p))
-
-		// Echo the message back
-		if err := conn.WriteMessage(messageType, p); err != nil {
-			log.Printf("Write error: %v", err)
 			return
 		}
 	}
 }
 
-// ping sends periodic pings to keep connection alive
+// ping sends periodic pings to keep the connection alive.
 func ping(conn *websocket.Conn, done chan struct{}) {
 	ticker := time.NewTicker(30 * time.Second)
 	defer ticker.Stop()
-
 	for {
 		select {
 		case <-ticker.C:
@@ -116,43 +130,68 @@ func ping(conn *websocket.Conn, done chan struct{}) {
 	}
 }
 
+// GET / — status page
 func homePage(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/plain")
-	fmt.Fprintf(w, "WebSocket Server - Planning Travels\nActive connections: %d", manager.Count())
+	fmt.Fprintf(w, "WebSocket Server — Planning Travels\nActive rooms: %d\nTotal connections: %d\n",
+		rooms.TotalRooms(), rooms.TotalConnections())
 }
 
+// GET /ws/{travelId} — WebSocket upgrade; client joins the travel room
 func wsEndpoint(w http.ResponseWriter, r *http.Request) {
-	ws, err := upgrader.Upgrade(w, r, nil)
+	travelId := strings.TrimPrefix(r.URL.Path, "/ws/")
+	if travelId == "" {
+		http.Error(w, "travelId required", http.StatusBadRequest)
+		return
+	}
+
+	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
-		log.Printf("Upgrade error: %v", err)
+		log.Printf("upgrade error: %v", err)
 		return
 	}
 
-	manager.Add(ws)
-	log.Printf("User connected from %s", r.RemoteAddr)
+	rooms.Join(travelId, conn)
 
-	// Send welcome message
-	if err := ws.WriteMessage(websocket.TextMessage, []byte("Hi User!")); err != nil {
-		log.Printf("Welcome message error: %v", err)
-		manager.Remove(ws)
-		ws.Close()
-		return
-	}
-
-	// Start ping goroutine to keep connection alive
 	done := make(chan struct{})
-	go ping(ws, done)
+	go ping(conn, done)
 
-	// Listen for messages (blocking)
-	reader(ws)
+	reader(travelId, conn)
 
-	// Signal ping goroutine to stop
 	close(done)
 }
 
+// POST /travel/{travelId}/broadcast — PHP calls this to push an event to all room members
+func broadcastEndpoint(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	travelId := strings.TrimPrefix(r.URL.Path, "/travel/")
+	travelId = strings.TrimSuffix(travelId, "/broadcast")
+	if travelId == "" {
+		http.Error(w, "travelId required", http.StatusBadRequest)
+		return
+	}
+
+	body, err := io.ReadAll(r.Body)
+	if err != nil {
+		http.Error(w, "cannot read body", http.StatusBadRequest)
+		return
+	}
+	defer r.Body.Close()
+
+	rooms.BroadcastToRoom(travelId, websocket.TextMessage, body)
+
+	w.WriteHeader(http.StatusOK)
+	fmt.Fprint(w, "ok")
+}
+
 func setupRoutes() {
+	http.HandleFunc("/ws/", wsEndpoint)
+	http.HandleFunc("/travel/", broadcastEndpoint)
 	http.HandleFunc("/", homePage)
-	http.HandleFunc("/ws", wsEndpoint)
 }
 
 func main() {
@@ -164,24 +203,23 @@ func main() {
 		WriteTimeout: 10 * time.Second,
 	}
 
-	// Graceful shutdown
 	go func() {
 		sigChan := make(chan os.Signal, 1)
 		signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM)
 		<-sigChan
 
-		log.Println("Shutting down server...")
+		log.Println("shutting down server...")
 		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 		defer cancel()
 
 		if err := server.Shutdown(ctx); err != nil {
-			log.Printf("Shutdown error: %v", err)
+			log.Printf("shutdown error: %v", err)
 		}
 	}()
 
 	log.Println("WebSocket server started at :5555")
 	if err := server.ListenAndServe(); err != http.ErrServerClosed {
-		log.Fatalf("Server error: %v", err)
+		log.Fatalf("server error: %v", err)
 	}
-	log.Println("Server stopped")
+	log.Println("server stopped")
 }

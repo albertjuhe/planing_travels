@@ -19,8 +19,11 @@ class ShowMyTravelsController extends QueryController
     {
         $user = $this->guard();
         $getMyTravelQuery = new GetMyTravelsQuery($user);
-        $travels = $this->ask($getMyTravelQuery);
+        $result = $this->ask($getMyTravelQuery);
 
-        return $this->render('private/index.html.twig', ['travels' => $travels]);
+        return $this->render('private/index.html.twig', [
+            'travels'        => $result['owned'],
+            'sharedTravels'  => $result['shared'],
+        ]);
     }
 }

@@ -11,6 +11,7 @@ use App\Domain\Travel\Repository\TravelRepository;
 use App\Domain\TypeLocation\Repository\TypeLocationRepository;
 use App\Domain\User\Repository\UserRepository;
 use App\Domain\User\ValueObject\UserId;
+use App\Infrastructure\WebSocket\WebSocketNotifier;
 
 class AddLocationService implements UsesCasesService
 {
@@ -36,18 +37,25 @@ class AddLocationService implements UsesCasesService
      */
     private $typeLocationRepository;
 
+    /**
+     * @var WebSocketNotifier
+     */
+    private $webSocketNotifier;
+
     public function __construct(
         TravelRepository $travelRepository,
         UserRepository $userRepository,
         MarkRepository $markRepository,
         LocationRepository $locationRepository,
-        TypeLocationRepository $typeLocationRepository
+        TypeLocationRepository $typeLocationRepository,
+        WebSocketNotifier $webSocketNotifier
     ) {
         $this->travelRepository = $travelRepository;
         $this->userRepository = $userRepository;
         $this->markRepository = $markRepository;
         $this->locationRepository = $locationRepository;
         $this->typeLocationRepository = $typeLocationRepository;
+        $this->webSocketNotifier = $webSocketNotifier;
     }
 
     /**
@@ -69,7 +77,14 @@ class AddLocationService implements UsesCasesService
 
         $travel = $this->travelRepository->ofIdOrFail($travelId);
 
-        if (!$travel->getUser()->getId()->equalsTo($user->getId())) {
+        $isOwner = $travel->getUser()->getId()->equalsTo($user->getId());
+        $isSharedUser = $travel->getSharedusers()->exists(
+            function ($key, $sharedUser) use ($user) {
+                return $sharedUser->getId()->equalsTo($user->getId());
+            }
+        );
+
+        if (!$isOwner && !$isSharedUser) {
             throw new InvalidTravelUser('This user is not allowed to modify the travel');
         }
         $locationType = $this->typeLocationRepository->idOrFail($locationType);
@@ -82,5 +97,17 @@ class AddLocationService implements UsesCasesService
         $location->setTypeLocation($locationType);
 
         $this->locationRepository->save($location);
+
+        $this->webSocketNotifier->notifyLocationAdded(
+            $travelId,
+            [
+                'id'            => $location->getId()->id(),
+                'title'         => $location->getTitle(),
+                'latitude'      => $location->getMark()->getGeoLocation()->lat(),
+                'longitude'     => $location->getMark()->getGeoLocation()->lng(),
+                'slug'          => $location->getSlug(),
+                'addedByUserId' => $userId,
+            ]
+        );
     }
 }

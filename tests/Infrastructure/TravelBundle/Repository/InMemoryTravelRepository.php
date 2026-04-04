@@ -97,9 +97,27 @@ class InMemoryTravelRepository implements TravelRepository
 
     public function getAllTravelsByUser(int $userId): array
     {
-        return array_map(
+        return array_values(array_map(
             function ($row) { return $row['travel']; },
             array_filter($this->travel, function ($row) use ($userId) { return $row['userId'] === $userId; })
-        );
+        ));
+    }
+
+    public function getSharedTravelsByUser(int $userId): array
+    {
+        return array_values(array_filter(
+            array_map(function ($row) { return $row['travel']; }, $this->travel),
+            function (Travel $travel) use ($userId) {
+                if ((int) $travel->getUser()->getId()->id() === $userId) {
+                    return false;
+                }
+                foreach ($travel->getSharedusers() as $sharedUser) {
+                    if ((int) $sharedUser->getId()->id() === $userId) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        ));
     }
 }

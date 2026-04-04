@@ -4,7 +4,7 @@
 
 {% block content %}
 
-{# ── Stats ── #}
+{# ── Stats (owned only) ── #}
 {% set total      = travels|length %}
 {% set published  = travels|filter(t => t.status == 20)|length %}
 {% set drafts     = travels|filter(t => t.status != 20)|length %}
@@ -128,6 +128,13 @@
                             <svg viewBox="0 0 16 16" width="12" height="12" fill="currentColor" opacity=".5"><path d="M8 3C4 3 1 8 1 8s3 5 7 5 7-5 7-5-3-5-7-5zm0 8a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/></svg>
                             {{ travel.watch }}
                         </span>
+                        {% set sharedCount = travel.sharedusers|length %}
+                        {% if sharedCount > 0 %}
+                        <span class="pa-card__meta-item pa-card__meta-shared" title="Shared with {{ sharedCount }} user{{ sharedCount > 1 ? 's' : '' }}">
+                            <svg viewBox="0 0 16 16" width="12" height="12" fill="currentColor"><path d="M12 10a2 2 0 0 0-1.6.8L5.9 8.4a2 2 0 0 0 0-1.8l4.5-2.4A2 2 0 1 0 9.6 2.2L5.1 4.6a2 2 0 1 0 0 5.8l4.5 2.4A2 2 0 1 0 12 10z"/></svg>
+                            {{ sharedCount }}
+                        </span>
+                        {% endif %}
                         {% if travel.updatedAt %}
                         <span class="pa-card__meta-item pa-card__meta-item--muted">
                             Updated {{ travel.updatedAt|date("d M") }}
@@ -162,6 +169,7 @@
         {% else %}
 
         {# ── Empty state ── #}
+        {% if sharedTravels is not defined or sharedTravels|length == 0 %}
         <div class="pa-empty">
             <div class="pa-empty__icon">
                 <svg viewBox="0 0 80 80" width="80" height="80" fill="none" stroke="#c5cdd6" stroke-width="2">
@@ -176,7 +184,62 @@
                 Create your first travel
             </a>
         </div>
+        {% endif %}
 
+        {% endif %}
+
+        {# ── Shared with me ── #}
+        {% if sharedTravels is defined and sharedTravels|length > 0 %}
+        <div class="pa-section-header">
+            <svg viewBox="0 0 16 16" width="16" height="16" fill="currentColor"><path d="M12 10a2 2 0 0 0-1.6.8L5.9 8.4a2 2 0 0 0 0-1.8l4.5-2.4A2 2 0 1 0 9.6 2.2L5.1 4.6a2 2 0 1 0 0 5.8l4.5 2.4A2 2 0 1 0 12 10z"/></svg>
+            Shared with me
+            <span class="pa-section-count">{{ sharedTravels|length }}</span>
+        </div>
+        <div class="pa-grid">
+            {% for travel in sharedTravels %}
+            <div class="pa-card pa-card--shared">
+
+                <div class="pa-card__cover">
+                    {% if travel.photo %}
+                        <img src="{{ asset('uploads/travel_photos/' ~ travel.photo) }}"
+                             class="pa-card__img" alt="{{ travel.title }}">
+                    {% else %}
+                        <div class="pa-card__placeholder"></div>
+                    {% endif %}
+                    <span class="pa-card__status pa-card__status--shared">
+                        <svg viewBox="0 0 16 16" width="10" height="10" fill="currentColor"><path d="M12 10a2 2 0 0 0-1.6.8L5.9 8.4a2 2 0 0 0 0-1.8l4.5-2.4A2 2 0 1 0 9.6 2.2L5.1 4.6a2 2 0 1 0 0 5.8l4.5 2.4A2 2 0 1 0 12 10z"/></svg>
+                        Shared
+                    </span>
+                </div>
+
+                <div class="pa-card__body">
+                    <h3 class="pa-card__title">
+                        <a href="{{ path('show_travel', {'slug': travel.slug}) }}">{{ travel.title }}</a>
+                    </h3>
+                    {% if travel.startAt and travel.endAt %}
+                    <p class="pa-card__dates">
+                        <svg viewBox="0 0 16 16" width="12" height="12" fill="currentColor" style="margin-right:4px;opacity:.6"><path d="M11 1v1H5V1H3v1H1v13h14V2h-2V1h-2zm2 12H3V6h10v7z"/></svg>
+                        {{ travel.startAt|date("d M Y") }} → {{ travel.endAt|date("d M Y") }}
+                    </p>
+                    {% endif %}
+                    {% if travel.description %}
+                    <p class="pa-card__desc">{{ travel.description|truncate(90) }}</p>
+                    {% endif %}
+                    <p class="pa-card__owner">
+                        By <strong>{{ travel.user.firstName }} {{ travel.user.lastName }}</strong>
+                    </p>
+                </div>
+
+                <div class="pa-card__footer">
+                    <a href="{{ path('show_travel', {'slug': travel.slug}) }}" class="pa-card__action pa-card__action--view">
+                        <svg viewBox="0 0 16 16" width="13" height="13" fill="currentColor"><path d="M8 3C4 3 1 8 1 8s3 5 7 5 7-5 7-5-3-5-7-5zm0 8a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/></svg>
+                        View
+                    </a>
+                </div>
+
+            </div>
+            {% endfor %}
+        </div>
         {% endif %}
 
     </div>
@@ -475,6 +538,10 @@
     color: #b2bec3;
     font-size: 11px;
 }
+.pa-card__meta-shared {
+    color: #2980b9;
+    font-weight: 600;
+}
 
 /* Footer */
 .pa-card__footer {
@@ -501,6 +568,37 @@
 .pa-card__action--publish:hover { background: #eaf4fd; color: #1a5276; text-decoration: none; }
 .pa-card__action--view   { color: #27ae60; }
 .pa-card__action--view:hover   { background: #eafaf1; color: #1e8449; text-decoration: none; }
+
+/* shared card */
+.pa-card__status--shared {
+    background: rgba(41,128,185,0.15);
+    color: #1a5276;
+    border: 1px solid rgba(41,128,185,0.3);
+}
+.pa-card--shared { border: 1.5px solid #d6eaf8; }
+.pa-card__owner {
+    font-size: 12px;
+    color: #7f8c8d;
+    margin: 4px 0 0;
+}
+.pa-card__owner strong { color: #2c3e50; }
+.pa-section-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 15px;
+    font-weight: 700;
+    color: #1a2e4a;
+    margin: 36px 0 16px;
+}
+.pa-section-count {
+    background: #2980b9;
+    color: #fff;
+    border-radius: 10px;
+    padding: 1px 8px;
+    font-size: 12px;
+    font-weight: 600;
+}
 
 /* ─────────────────────────────────────────
    Empty state

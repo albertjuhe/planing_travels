@@ -1,4 +1,7 @@
-var WS_URL = "ws://localhost:5555/ws";
+var WS_BASE = "ws://localhost:5555";
+var WS_URL = (typeof WS_TRAVEL_ID !== 'undefined' && WS_TRAVEL_ID)
+    ? WS_BASE + "/ws/" + WS_TRAVEL_ID
+    : WS_BASE + "/ws";
 var socket = null;
 var reconnectAttempts = 0;
 var maxReconnectAttempts = 10;
@@ -69,6 +72,47 @@ function connectWebSocket() {
         reconnectAttempts = 0;
         socket.send("Hi from travel server!");
         updateConnectionBadge('connected');
+    };
+
+    socket.onmessage = function (event) {
+        try {
+            var msg = JSON.parse(event.data);
+        } catch (e) {
+            return;
+        }
+
+        if (msg.event === 'location_added') {
+            var loc = msg.location;
+
+            // Skip if this is our own add (we already rendered it locally)
+            var myId = (typeof WS_CURRENT_USER_ID !== 'undefined') ? String(WS_CURRENT_USER_ID) : '';
+            if (myId && loc.addedByUserId && String(loc.addedByUserId) === myId) {
+                return;
+            }
+
+            if (typeof mPoint === 'undefined' || typeof map === 'undefined') {
+                return;
+            }
+
+            var popup = '<b>' + loc.title + '</b>';
+            var marker = L.marker([loc.latitude, loc.longitude]).bindPopup(popup).addTo(map);
+
+            var locationPoint = mPoint.createLocation(
+                loc.id,
+                loc.latitude,
+                loc.longitude,
+                loc.title,
+                loc.id,
+                '',
+                '',
+                loc.title,
+                marker
+            );
+            mPoint.addPoint(locationPoint);
+
+            $('#infoTravel').html('<p class="alert alert-info">A collaborator added a new location.</p>');
+            $('#infoTravel').show().delay(5000).fadeOut();
+        }
     };
 
     socket.onclose = function (event) {
