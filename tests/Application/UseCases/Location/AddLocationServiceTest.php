@@ -5,9 +5,11 @@ namespace App\Tests\Application\UseCases\Location;
 use App\Application\Command\Location\AddLocationCommand;
 use App\Application\UseCases\Location\AddLocationService;
 use App\Domain\Location\Model\Location;
+use App\Domain\Location\ValueObject\LocationId;
 use App\Domain\Mark\Model\Mark;
 use App\Domain\Travel\Exceptions\InvalidTravelUser;
 use App\Domain\Travel\Model\Travel;
+use App\Domain\Travel\ValueObject\GeoLocation;
 use App\Domain\TypeLocation\Model\TypeLocation;
 use App\Domain\User\Model\User;
 use App\Domain\User\ValueObject\UserId;
@@ -52,6 +54,16 @@ class AddLocationServiceTest extends LocationService
 
         $this->typeLocationRepository->expects($this->once())->method('idOrFail')->willReturn($typeLocation);
         $this->markRepository->expects($this->once())->method('ofIdOrSave')->willReturn($mark);
+
+        $geoLocation = $this->createMock(GeoLocation::class);
+        $geoLocation->method('lat')->willReturn(0.0);
+        $geoLocation->method('lng')->willReturn(0.0);
+        $mark->method('getGeoLocation')->willReturn($geoLocation);
+
+        $location->method('getId')->willReturn(new LocationId());
+        $location->method('getTitle')->willReturn('');
+        $location->method('getSlug')->willReturn('');
+        $location->method('getMark')->willReturn($mark);
 
         $addLocationService = new AddLocationService(
             $this->travelRepository,
