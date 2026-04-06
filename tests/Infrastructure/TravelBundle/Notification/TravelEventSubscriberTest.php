@@ -5,7 +5,6 @@ namespace App\Tests\Infrastructure\TravelBundle\Notification;
 use App\Domain\Travel\Events\TravelWasPublished;
 use App\Domain\Travel\Events\TravelWasAdded;
 use App\Domain\Travel\Model\Travel;
-use App\Domain\Travel\Repository\IndexerRepository;
 use App\Domain\Travel\Repository\TravelRepository;
 use App\Infrastructure\TravelBundle\Notification\TravelEventSubscriber;
 use App\Tests\Domain\Travel\Model\TravelMother;
@@ -14,17 +13,12 @@ use PHPUnit\Framework\TestCase;
 class TravelEventSubscriberTest extends TestCase
 {
     private $travelRepository;
-    private $indexerRepository;
     private TravelEventSubscriber $subscriber;
 
     public function setUp(): void
     {
-        $this->travelRepository  = $this->createMock(TravelRepository::class);
-        $this->indexerRepository = $this->createMock(IndexerRepository::class);
-        $this->subscriber = new TravelEventSubscriber(
-            $this->travelRepository,
-            $this->indexerRepository
-        );
+        $this->travelRepository = $this->createMock(TravelRepository::class);
+        $this->subscriber = new TravelEventSubscriber($this->travelRepository);
     }
 
     public function testIsSubscribedToTravelWasPublished(): void
@@ -41,7 +35,7 @@ class TravelEventSubscriberTest extends TestCase
         $this->assertTrue($this->subscriber->isSubscribedTo($event));
     }
 
-    public function testHandlePublishedTravelIndexesInElasticSearch(): void
+    public function testHandlePublishedTravelLoadsTravel(): void
     {
         $travel = TravelMother::random();
         $travel->publish();
@@ -53,19 +47,13 @@ class TravelEventSubscriberTest extends TestCase
             ->with($travel->getId()->id())
             ->willReturn($travel);
 
-        $this->indexerRepository
-            ->expects($this->once())
-            ->method('save')
-            ->with($travel);
-
         $event = new TravelWasPublished($travelData, 1);
         $this->subscriber->handle($event);
     }
 
-    public function testHandleTravelWasAddedDoesNotIndex(): void
+    public function testHandleTravelWasAddedDoesNothing(): void
     {
         $this->travelRepository->expects($this->never())->method('ofIdOrFail');
-        $this->indexerRepository->expects($this->never())->method('save');
 
         $event = $this->createMock(TravelWasAdded::class);
         $this->subscriber->handle($event);

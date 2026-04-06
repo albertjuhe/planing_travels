@@ -17,13 +17,21 @@ services:
     # this creates a service per class whose id is the fully-qualified class name
     App\:
       resource: '../src/*'
-      exclude: '../src/{Entity,Migrations,Tests,Infrastructure/Application/ElasticSearch,Infrastructure/TravelBundle/Repository/ElasticSearch*,Infrastructure/TravelBundle/DataTransformer/ElasticSearch*,Infrastructure/Middleware/ElasticSearchMiddleware.php,Infrastructure/Application/ElasticSearch/Notification,UI/Controller/Command/ElasticSearch*,UI/Controller/Command/PopulateTravelsToElasticSearchCommand.php,Application/UseCases/Travel/PopulateIndexer.php}'
+      exclude:
+        - '../src/{Entity,Migrations,Tests}'
+        - '../src/Infrastructure/Application/ElasticSearch'
+        - '../src/Infrastructure/TravelBundle/Repository/ElasticSearch*.php'
+        - '../src/Infrastructure/TravelBundle/DataTransformer/ElasticSearch*.php'
+        - '../src/Infrastructure/Middleware/ElasticSearchMiddleware.php'
+        - '../src/UI/Controller/Command/ElasticSearch*.php'
+        - '../src/UI/Controller/Command/PopulateTravelsToElasticSearchCommand.php'
+        - '../src/Application/UseCases/Travel/PopulateIndexer.php'
 
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class
     App\UI\Controller\:
       resource: '../src/UI/Controller'
-      exclude: '../src/UI/Controller/Command/ElasticSearch*,../src/UI/Controller/Command/PopulateTravelsToElasticSearchCommand.php'
+      exclude: '../src/UI/Controller/Command'
       tags: ['controller.service_arguments']
 
     twig.extension.text:
