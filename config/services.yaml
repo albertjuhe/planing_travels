@@ -17,12 +17,21 @@ services:
     # this creates a service per class whose id is the fully-qualified class name
     App\:
       resource: '../src/*'
-      exclude: '../src/{Entity,Migrations,Tests}'
+      exclude:
+        - '../src/{Entity,Migrations,Tests}'
+        - '../src/Infrastructure/Application/ElasticSearch'
+        - '../src/Infrastructure/TravelBundle/Repository/ElasticSearch*.php'
+        - '../src/Infrastructure/TravelBundle/DataTransformer/ElasticSearch*.php'
+        - '../src/Infrastructure/Middleware/ElasticSearchMiddleware.php'
+        - '../src/UI/Controller/Command/ElasticSearch*.php'
+        - '../src/UI/Controller/Command/PopulateTravelsToElasticSearchCommand.php'
+        - '../src/Application/UseCases/Travel/PopulateIndexer.php'
 
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class
     App\UI\Controller\:
       resource: '../src/UI/Controller'
+      exclude: '../src/UI/Controller/Command'
       tags: ['controller.service_arguments']
 
     twig.extension.text:
@@ -66,7 +75,7 @@ services:
 
     travel.add_handler:
       class: App\Application\UseCases\Travel\AddTravelService
-      arguments: ['@doctrine.travel.repository','@doctrine.user.repository','@elasticsearch.travel.repository']
+      arguments: ['@doctrine.travel.repository','@doctrine.user.repository']
       tags:
         - { name: tactician.handler, command: App\Application\Command\Travel\AddTravelCommand}
 
@@ -85,7 +94,7 @@ services:
     # Query Bus
     travel.get_best_travels:
       class: App\Application\UseCases\Travel\GetBestTravelsOrderedByService
-      arguments: ['@elasticsearch.travel.read_model.repository']
+      arguments: ['@doctrine.travel.read_model.repository']
       tags: [messenger.message_handler]
 
     travel.show_handler:
@@ -106,7 +115,7 @@ services:
 
     # Tactician middleware Store domain events
     App\Application\Middleware\DomainEventsMiddleware:
-      arguments: ['@doctrine.travel_event.repository', '@event_dispatcher', '@doctrine.travel.repository', '@elasticsearch.travel.repository']
+      arguments: ['@doctrine.travel_event.repository', '@event_dispatcher', '@doctrine.travel.repository']
 
 
     App\Domain\Event\Repository\EventStore:
@@ -125,7 +134,8 @@ services:
 
     doctrine.travel.repository: '@App\Infrastructure\TravelBundle\Repository\DoctrineTravelRepository'
 
-    elasticsearch.travel.read_model.repository: '@App\Infrastructure\TravelBundle\Repository\ElasticSearchReadModelRepository'
+    #elasticsearch.travel.read_model.repository: '@App\Infrastructure\TravelBundle\Repository\ElasticSearchReadModelRepository'
+    doctrine.travel.read_model.repository: '@App\Infrastructure\TravelBundle\Repository\DoctrineTravelReadModelRepository'
 
     # Repository User
     App\Infrastructure\UserBundle\Repository\DoctrineUserRepository:
@@ -155,28 +165,28 @@ services:
 
     doctrine.travel_event.repository: '@App\Infrastructure\EventBundle\Repository\DummyEventStore'
 
-    # Tactician middleware Store elasticsearch
-    App\Application\Middleware\ElasticSearchMiddleware:
-      arguments: ['@elasticsearch.travel.repository']
+    # Tactician middleware Store elasticsearch (disabled)
+    #App\Application\Middleware\ElasticSearchMiddleware:
+    #  arguments: ['@elasticsearch.travel.repository']
 
-    tactician.middleware.elasticSearchTravel: '@App\Infrastructure\Middleware\ElasticSearchMiddleware'
+    #tactician.middleware.elasticSearchTravel: '@App\Infrastructure\Middleware\ElasticSearchMiddleware'
 
-    # Elasticsearch Repository
-    elasticsearch.travel.repository: '@App\Infrastructure\TravelBundle\Repository\ElasticSearchTravelRepository'
+    # Elasticsearch Repository (disabled)
+    #elasticsearch.travel.repository: '@App\Infrastructure\TravelBundle\Repository\ElasticSearchTravelRepository'
 
-    # Listener postpersist
-    elasticsearch.listener:
-      class: App\Infrastructure\Application\ElasticSearch\Notification\ElasticSearchListener
-      tags:
-        - { name: doctrine.event_listener, event: postPersist }
-        - { name: doctrine.event_listener, event: postUpdate }
+    # Listener postpersist (disabled)
+    #elasticsearch.listener:
+    #  class: App\Infrastructure\Application\ElasticSearch\Notification\ElasticSearchListener
+    #  tags:
+    #    - { name: doctrine.event_listener, event: postPersist }
+    #    - { name: doctrine.event_listener, event: postUpdate }
 
-    App\Application\UseCases\Travel\PopulateIndexer:
-      arguments:  ['@doctrine.travel.repository', '@elasticsearch.travel.repository' ]
+    #App\Application\UseCases\Travel\PopulateIndexer:
+    #  arguments:  ['@doctrine.travel.repository', '@elasticsearch.travel.repository' ]
 
-    Elastica\Client:
-      class: Elastica\Client
-      arguments:
-        $config:
-          host: '%env(string:ELASTICSEARCH_HOST)%'
-          port: '%env(string:ELASTICSEARCH_PORT)%'
+    #Elastica\Client:
+    #  class: Elastica\Client
+    #  arguments:
+    #    $config:
+    #      host: '%env(string:ELASTICSEARCH_HOST)%'
+    #      port: '%env(string:ELASTICSEARCH_PORT)%'

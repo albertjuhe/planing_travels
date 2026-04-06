@@ -5,7 +5,6 @@ namespace App\Infrastructure\Middleware;
 use App\Domain\Event\DomainEventPublisher;
 use App\Domain\Event\PersistDomainEventSubscriber;
 use App\Domain\Event\Repository\EventStore;
-use App\Domain\Travel\Repository\IndexerRepository;
 use App\Domain\Travel\Repository\TravelRepository;
 use App\EventSubscriber\SymfonyEventSubscriber;
 use App\Infrastructure\TravelBundle\Notification\TravelEventSubscriber;
@@ -19,8 +18,7 @@ class DomainEventsMiddleware implements Middleware
     public function __construct(
         EventStore $eventStore,
         EventDispatcherInterface $dispatcher,
-        TravelRepository $travelRepository,
-        IndexerRepository $indexerRepository
+        TravelRepository $travelRepository
     ) {
         $this->eventStore = $eventStore;
 
@@ -30,7 +28,7 @@ class DomainEventsMiddleware implements Middleware
         $symfonyEventSubscriber = new SymfonyEventSubscriber($dispatcher);
         DomainEventPublisher::instance()->subscribe($symfonyEventSubscriber);
 
-        $travelEventSubscriber = new TravelEventSubscriber($travelRepository, $indexerRepository);
+        $travelEventSubscriber = new TravelEventSubscriber($travelRepository);
         DomainEventPublisher::instance()->subscribe($travelEventSubscriber);
     }
 
