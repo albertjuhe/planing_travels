@@ -24,7 +24,7 @@ class GetBestTravelsAPIController extends QueryController
      */
     public function listBestTravels(Request $request, int $maxtravels)
     {
-        $query = new BestTravelsListQuery($maxtravels, 'stars');
+        $query = new BestTravelsListQuery($maxtravels, 'createdAt');
         $travels = $this->ask($query);
         $url = $this->generateUrl('getBestTravels', ['maxtravels' => $maxtravels]);
         $data = [
