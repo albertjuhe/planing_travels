@@ -2,13 +2,17 @@
 
 namespace App\Tests\Application\UseCases\User;
 
+use App\Application\UseCases\User\UpdateProfileService;
 use App\Domain\User\Model\User;
 
 class UpdateProfileServiceTest extends UserService
 {
+    private $updateProfileService;
+
     public function setUp()
     {
         parent::setUp();
+        $this->updateProfileService = new UpdateProfileService($this->userRepository);
     }
 
     public function testUpdateProfileSavesChanges(): void
@@ -18,12 +22,12 @@ class UpdateProfileServiceTest extends UserService
         $user->setEmail('original@example.com');
         $user->setFirstName('Original');
         $user->setLastName('Name');
-        $this->userRepository->save($user);
+        $this->updateProfileService->execute($user);
 
         $user->setFirstName('Updated');
         $user->setLastName('User');
         $user->setEmail('updated@example.com');
-        $this->userRepository->save($user);
+        $this->updateProfileService->execute($user);
 
         $saved = $this->userRepository->UserByUsername('original');
         $this->assertEquals('Updated', $saved->getFirstName());
@@ -35,12 +39,12 @@ class UpdateProfileServiceTest extends UserService
     {
         $user = User::fromId(1);
         $user->setUsername('oldname');
-        $this->userRepository->save($user);
+        $this->updateProfileService->execute($user);
 
         $this->assertNotNull($this->userRepository->UserByUsername('oldname'));
 
         $user->setUsername('newname');
-        $this->userRepository->save($user);
+        $this->updateProfileService->execute($user);
 
         $this->assertNotNull($this->userRepository->UserByUsername('newname'));
     }
@@ -50,10 +54,10 @@ class UpdateProfileServiceTest extends UserService
         $user = User::fromId(1);
         $user->setUsername('johndoe');
         $user->setPassword('old_hash');
-        $this->userRepository->save($user);
+        $this->updateProfileService->execute($user);
 
         $user->setPassword('new_hash');
-        $this->userRepository->save($user);
+        $this->updateProfileService->execute($user);
 
         $saved = $this->userRepository->UserByUsername('johndoe');
         $this->assertEquals('new_hash', $saved->getPassword());
@@ -65,12 +69,12 @@ class UpdateProfileServiceTest extends UserService
         $user1 = User::fromId(1);
         $user1->setUsername('user1');
         $user1->setEmail('user1@example.com');
-        $this->userRepository->save($user1);
+        $this->updateProfileService->execute($user1);
 
         $user2 = User::fromId(2);
         $user2->setUsername('user2');
         $user2->setEmail('user2@example.com');
-        $this->userRepository->save($user2);
+        $this->updateProfileService->execute($user2);
 
         $saved1 = $this->userRepository->UserByUsername('user1');
         $saved2 = $this->userRepository->UserByUsername('user2');
