@@ -19,7 +19,6 @@
 
     <!-- Custom styles for this template -->
     {% block css %}
-        {{ encore_entry_link_tags('app') }}
         <link href="{{ asset('css/carousel.css') }}" rel="stylesheet"/>
     {% endblock %}
 
@@ -38,7 +37,6 @@
 {% endblock %}
 
 {% block javascript %}
-{{ encore_entry_script_tags('app') }}
 <script src="{{ asset('js/jquery.min.js') }}"></script>
 <script src="{{ asset('bootstrap/js/bootstrap.min.js') }}"></script>
 {% endblock %}
