@@ -1,149 +1,72 @@
-# Travel experience
-The goal of this application is to have a place to investigate and research development/infrastructure technics, all inside Symfony:
-- SOLID, Hexagonal, DDD
-- CQRS
-- Docker
-- Github Actions
-- FrontEnd: Jquery, Reactjs,...
-- ElastichSearch
-- Redis
-- Diferent Testing Approaches
-- Websockets (golang)
+# Travel Experience
 
-## Start application with docker
-```
-$make up
-```
-```
-http://localhost:8000/public/index.php
-```
-## Docker
+A personal sandbox for experimenting with backend architecture, infrastructure patterns, and full-stack development techniques. The domain is a collaborative travel planning app — create trips, add locations on a map, schedule them in a calendar, share with other users, and upload photos.
 
-#### Make commands 
+## Tech Stack
 
-Up application
-```
-$make up
-```
-Down application
-```
-$make down
-```
-Exec comamnd in the container
-```
-$make exec CDM='ls'
-```
+### Backend — PHP / Symfony 4
+- **Symfony 4** — framework, routing, security, forms, console
+- **Doctrine ORM** — MySQL persistence with UUID primary keys (`ramsey/uuid-doctrine`), embeddables, custom mapping types, and Gedmo extensions (sluggable, timestampable)
+- **CQRS + Command Bus** — commands and queries dispatched through `league/tactician` with Doctrine transactional middleware
+- **Hexagonal Architecture / DDD** — domain, application, and infrastructure layers; no framework leaking into the domain
+- **JMS Serializer** — flexible serialization for API responses
+- **Symfony Messenger** — async message handling
+- **Guzzle** — HTTP client for internal service communication (PHP → Go WebSocket server)
+- **Symfony Security** — form-based authentication, role system, travel ownership and sharing model
+- **Twig** — server-rendered templates with component includes
+- **KnpMarkdownBundle** — markdown support for travel descriptions
+- **FOSElasticaBundle** — Elasticsearch integration for search (currently disabled in docker-compose)
 
-#### Container bash
-```
-$make bash
-```
+### WebSocket Server — Go
+A standalone Go service (`PlanningTravelsSocketio/`) that manages real-time collaboration:
+- **gorilla/websocket** — WebSocket upgrade and connection management
+- Room-based pub/sub: each travel has its own room; clients join via `GET /ws/{travelId}`
+- PHP broadcasts events to connected clients via `POST /travel/{travelId}/broadcast`
+- Ping/pong keepalive, graceful shutdown
 
-## MySQL 
+### Frontend
+- **jQuery** + vanilla JS — map interactions, drag-and-drop, file uploads (`jquery.fileupload`), sortable lists
+- **Leaflet.js** — interactive map with multiple tile layers (OSM, Google Maps, satellite, terrain, traffic), routing machine, GPX track rendering, fullscreen, and print
+- **Webpack Encore** — asset bundling
+- **React** (via Encore) — used for select components
 
-### connection
+### Infrastructure
+- **Docker Compose** — multi-container setup: PHP/Apache app, Go WebSocket server, MySQL 5.7, Adminer
+- **GitHub Actions** — CI pipeline (`.github/workflows/validation.yml`)
+- **Xdebug** — remote debugging configured in the PHP container
+- **Adminer** — database UI at `localhost:8080`
 
-```
-DATABASE_URL=mysql://root:root@mysql:3306/travelGuuid
-```
+### Code Quality
+- **PHPStan** — static analysis
+- **PHP CodeSniffer** + **PHP CS Fixer** — coding standards
+- **PHPMD** — mess detection
+- **PHPUnit** — unit and functional tests with fixtures
 
-### mysql admin
+## Running Locally
 
-```
- adminer:
-    image: adminer
-    ports:
-      - 8080:8080
-    depends_on:
-      - mysql
+```bash
+make up
 ```
 
-is mapped in 8080 port to acces it with:
+App: `http://localhost:8000`  
+Adminer: `http://localhost:8080` (server: `mysql`, user: `root`, password: `root`)  
+WebSocket server: `ws://localhost:5555`
 
-``
-http://localhost:8080/?server=mysql&username=root
-``
-
-Server: mysql (service name in the docker-compose)
-
-## Elasticsearch
-
-Check if is alive
-``
-http://elasticsearch:9201
-``
-
-## Symfony 4
-
-wiki: https://github.com/albertjuhe/planing_travels/wiki
-
-Building Travel Experience: Plan travels colaborative, sharing travel content, upload photos, comment travels and vote the best travel.
-Create a map and add Locations, Routes, GPS tracks.
-
-## Reactjs
-
-### Install
-Symfony 4 install https://www.cloudways.com/blog/symfony-react-using-webpack-encore/
-
-```
-composer require symfony/webpack-encore-pack
+```bash
+make down       # stop containers
+make bash       # shell into the app container
+make exec CMD='php bin/console cache:clear'
 ```
 
-### Yarn Install
+## Architecture Notes
+
+The codebase follows a strict layered structure under `src/`:
 
 ```
-curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
-echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
-apt-get update
-apt-get install yarn
+src/
+├── Domain/        # entities, value objects, repository interfaces — no framework dependencies
+├── Application/   # commands, queries, handlers
+└── UI/            # controllers, templates, forms
 ```
 
-Manage react with yarn
-
-```
-yarn add react react-dom prop-types babel-preset-react --dev
-yarn add babel-polyfill babel-preset-env --dev
-```
-
-Symfony 4 integration https://www.thinktocode.com/2018/06/21/symfony-4-and-reactjs/
-
-### Problems
-
-React Native Error: ENOSPC: System limit for number of file watchers reached
-https://stackoverflow.com/questions/55763428/react-native-error-enospc-system-limit-for-number-of-file-watchers-reached
-
-Manifest.json creation
-https://stackoverflow.com/questions/51393459/symfony-error-an-exception-has-been-thrown-during-the-rendering-of-a-template
-
-### Comands
-
-```
-yarn encore dev
-```
-
-## DDD articles
-* Don't Use Entities in Symfony Forms. Use Custom Data Objects Instead (https://blog.martinhujer.cz/symfony-forms-with-request-objects/)
-* RigorTalks (https://carlosbuenosvinos.com/category/rigor-talks/)
-* Emmbedables objects https://www.doctrine-project.org/projects/doctrine-orm/en/2.6/tutorials/embeddables.html
-* Mapping types https://www.doctrine-project.org/projects/doctrine-orm/en/2.6/cookbook/advanced-field-value-conversion-using-custom-mapping-types.html
-* Command Bus: https://matthiasnoback.nl/2015/01/responsibilities-of-the-command-bus/
-* Transactional https://tactician.thephpleague.com/plugins/doctrine/
-* Redis Cache https://www.digitalocean.com/community/tutorials/how-to-install-and-secure-redis-on-ubuntu-18-04
-* ElasticSearch and Kibana https://www.admintome.com/blog/install-elasticsearch-on-ubuntu-18-04-1/
-* DDD Sample Cargo Eric Evans https://github.com/codeliner/php-ddd-cargo-sample
-* Protobuf php https://mattallan.me/posts/protobuf-php-services/
-
-## Demo
-[Travel Planing](http://35.167.24.186/travelexperience/web/app.php/)
-
-
-## TODO
-1) Redis
-1) Comments travels and descriptions with markdown
-1) OERPUB Blob travel
-1) GraphQL Integration
-1) JWT JAson web tockens
-1) Protobuf Services in PHP
-
-
-
+Commands are dispatched through the tactician command bus, which wraps handlers in a Doctrine transaction. Queries return read models directly from the repository. The Go WebSocket server is intentionally decoupled — PHP calls it over HTTP after persisting a change, and the Go server fans the event out to all connected browser clients in that travel's room.
