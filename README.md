@@ -63,11 +63,6 @@ is mapped in 8080 port to acces it with:
 ``
 http://localhost:8080/?server=mysql&username=root
 ``
-```
-server: mysql
-user: root
-password: root
-```
 
 Server: mysql (service name in the docker-compose)
 
