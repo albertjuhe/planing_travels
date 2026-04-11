@@ -48,8 +48,16 @@ class UpdateTravelService implements UsesCasesService
         /** @var User */
         $user = $command->user();
 
-        //Only the owner can modify the travel
-        if (!$travel->getUser()->getId()->equalsTo($user->getId())) {
+        $isOwner = $travel->getUser()->getId()->equalsTo($user->getId());
+        $isSharedUser = false;
+        foreach ($travel->getSharedusers() as $sharedUser) {
+            if ($sharedUser->getId()->equalsTo($user->getId())) {
+                $isSharedUser = true;
+                break;
+            }
+        }
+
+        if (!$isOwner && !$isSharedUser) {
             throw new InvalidTravelUser();
         }
         $this->travelRepository->save($travel);
