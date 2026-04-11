@@ -1027,6 +1027,9 @@
 {% block content %}
 <div class="st-page">
 
+    {% set isOwner = app.user is not null and app.user.userId == travel.user.userId %}
+    {% set canEdit = isOwner or (app.user is not null and travel.sharedusers|filter(u => u.userId == app.user.userId)|length > 0) %}
+
     {# ── Header (pa-header) ── #}
     <div class="pa-header">
         <div class="container">
@@ -1069,6 +1072,8 @@
                             <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><path d="M12 10a2 2 0 0 0-1.6.8L5.9 8.4a2 2 0 0 0 0-1.8l4.5-2.4A2 2 0 1 0 9.6 2.2L5.1 4.6a2 2 0 1 0 0 5.8l4.5 2.4A2 2 0 1 0 12 10z"/></svg>
                             Share
                         </button>
+                    {% endif %}
+                    {% if canEdit %}
                         <a href="{{ path('updateTravel', {'slug': travel.slug}) }}" class="pa-btn-new">
                             <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><path d="M11.7 1.3a1 1 0 0 1 1.4 0l1.6 1.6a1 1 0 0 1 0 1.4L5.5 13.5 1 15l1.5-4.5 9.2-9.2z"/></svg>
                             Edit travel
@@ -1085,7 +1090,6 @@
         <div id="infoTravel"></div>
 
         {# ── View tab switcher ── #}
-        {% set isOwner = app.user is not null and app.user.userId == travel.user.userId %}
         <div class="st-view-tabs">
             <button class="st-view-tab is-active" data-tab="map" type="button">
                 <svg viewBox="0 0 16 16" width="13" height="13" fill="currentColor"><path d="M8 1a5 5 0 0 1 5 5c0 4-5 9-5 9S3 10 3 6a5 5 0 0 1 5-5zm0 3a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/></svg>
@@ -1120,7 +1124,7 @@
 
                 {# Localizaciones (lado derecho, siempre visible) #}
                 <div class="st-locations-sidebar">
-                    {% include 'travel/locationsPanel.html.twig' with {'isOwner': isOwner} %}
+                    {% include 'travel/locationsPanel.html.twig' with {'isOwner': canEdit} %}
                 </div>
             </div>
 
@@ -1138,7 +1142,7 @@
 
         </div>
 
-        {% if isOwner %}
+        {% if canEdit %}
         {% include 'travel/modalFormAddPoint.html.twig' with {'travel': travel} %}
         {% endif %}
 
@@ -1216,7 +1220,7 @@
                                      data-date="{{ thisDateStr }}">
                                     <div class="cal-day__head">
                                         <span class="cal-day__num">{{ thisDate|date('d') }}</span>
-                                        {% if isOwner and inTrip %}
+                                        {% if canEdit and inTrip %}
                                         <button class="cal-add-btn" type="button" data-date="{{ thisDateStr }}" title="Add location">+</button>
                                         {% endif %}
                                     </div>
@@ -1236,7 +1240,7 @@
                                                             <div class="cal-card__title">{{ loc.title }}</div>
                                                             {% if loc.typeLocation is not null %}<div class="cal-card__type">{{ loc.typeLocation.title }}</div>{% endif %}
                                                         </span>
-                                                        {% if isOwner %}
+                                                        {% if canEdit %}
                                                         <button class="cal-remove-btn" type="button" data-location-id="{{ loc.id }}" title="Unschedule">&times;</button>
                                                         {% endif %}
                                                     </div>
@@ -1298,6 +1302,7 @@
 {% block javascript %}
     {{ parent() }}
     {% set isOwner = app.user is not null and app.user.userId == travel.user.userId %}
+    {% set canEdit = isOwner or (app.user is not null and travel.sharedusers|filter(u => u.userId == app.user.userId)|length > 0) %}
     <script src="{{ asset('js/jquery.ui.widget.js') }}"></script>
     <script src="{{ asset('js/jquery.iframe-transport.js') }}"></script>
     <script src="{{ asset('js/jquery.fileupload.js') }}"></script>
@@ -1322,7 +1327,7 @@
     <script src="{{ asset('leaflet/leaflet-easyprint.js') }}"></script>
     <script>
         var mPoint = new mapPoint('{{ travel.id }}');
-        mPoint.addPlugin('locationGallery',new locationGallery('{{ asset('uploads/gallery/') }}', {{ isOwner ? 'true' : 'false' }}));
+        mPoint.addPlugin('locationGallery',new locationGallery('{{ asset('uploads/gallery/') }}', {{ canEdit ? 'true' : 'false' }}));
 
         var map = L.map('map',{
             center: [{{ travel.geolocation.lat}},{{ travel.geolocation.lng }}],
@@ -1565,12 +1570,12 @@
             });
         });
 
-        {% if isOwner %}
+        {% if canEdit %}
         /* ── Calendar: picker + week navigation ── */
         var VISIT_DATE_URL = '{{ path('updateLocationVisitDate', {'locationId': '__LOC__'}) }}';
         {% endif %}
 
-        {% if isOwner %}
+        {% if canEdit %}
         /* ── Picker ── */
         var picker = document.createElement('div');
         picker.className = 'cal-picker';

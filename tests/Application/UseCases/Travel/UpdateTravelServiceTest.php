@@ -29,6 +29,20 @@ class UpdateTravelServiceTest extends TravelService
         $this->assertEquals($travel->getTitle(), $newTitle);
     }
 
+    public function testSharedUserCanUpdateTravel(): void
+    {
+        $travel = $this->travelRepository->findTravelBySlug(InMemoryTravelRepository::TRAVEL_1);
+        $newTitle = uniqid('', true);
+        $sharedUser = UserMother::random();
+        $travel->addShareduser($sharedUser);
+        $travel->setTitle($newTitle);
+
+        $updateTravelService = new UpdateTravelService($this->travelRepository);
+        $updateTravelCommand = new UpdateTravelCommand($travel, $sharedUser);
+        $updateTravelService->handle($updateTravelCommand);
+        $this->assertEquals($travel->getTitle(), $newTitle);
+    }
+
     public function testDoesntUpdateTravelIsNotTheOwnerTravel(): void
     {
         $this->expectException(InvalidTravelUser::class);
