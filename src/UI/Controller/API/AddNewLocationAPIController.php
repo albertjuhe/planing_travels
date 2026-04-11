@@ -54,11 +54,6 @@ class AddNewLocationAPIController extends CommandController
         $addLocationCommand = new AddLocationCommand($data['travel'], $location, $userId, $mark, $data['IdType']);
         $this->commandBus->handle($addLocationCommand);
 
-        $response = new JsonResponse(
-            $response['data'] = $data
-        );
-        $response->setContent(Response::HTTP_CREATED);
-
-        return $response;
+        return new JsonResponse(['id' => $location->getId()->id()], Response::HTTP_CREATED);
     }
 }

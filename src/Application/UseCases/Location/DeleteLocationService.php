@@ -11,6 +11,7 @@ use App\Domain\Location\Model\Location;
 use App\Domain\Location\Repository\LocationRepository;
 use App\Domain\User\Repository\UserRepository;
 use App\Domain\User\ValueObject\UserId;
+use App\Infrastructure\WebSocket\WebSocketNotifier;
 
 class DeleteLocationService implements UsesCasesService
 {
@@ -25,17 +26,18 @@ class DeleteLocationService implements UsesCasesService
     private $locationRepository;
 
     /**
-     * DeleteLocationService constructor.
-     *
-     * @param UserRepository     $userRepository
-     * @param LocationRepository $locationRepository
+     * @var WebSocketNotifier
      */
+    private $webSocketNotifier;
+
     public function __construct(
         UserRepository $userRepository,
-        LocationRepository $locationRepository
+        LocationRepository $locationRepository,
+        WebSocketNotifier $webSocketNotifier
     ) {
         $this->userRepository = $userRepository;
         $this->locationRepository = $locationRepository;
+        $this->webSocketNotifier = $webSocketNotifier;
     }
 
     public function handle(DeleteLocationCommand $deleteLocationCommand)
@@ -55,5 +57,11 @@ class DeleteLocationService implements UsesCasesService
         DomainEventPublisher::instance()->publish(new LocationWasRemoved($locationId, $travelId, $userId));
 
         $this->locationRepository->remove($location);
+
+        $this->webSocketNotifier->notifyLocationRemoved(
+            $travelId,
+            $locationId,
+            (string) $userId
+        );
     }
 }

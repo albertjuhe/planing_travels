@@ -1322,7 +1322,7 @@
     <script src="{{ asset('leaflet/leaflet-easyprint.js') }}"></script>
     <script>
         var mPoint = new mapPoint('{{ travel.id }}');
-        mPoint.addPlugin('locationGallery',new locationGallery('{{ asset('uploads/gallery/') }}'));
+        mPoint.addPlugin('locationGallery',new locationGallery('{{ asset('uploads/gallery/') }}', {{ isOwner ? 'true' : 'false' }}));
 
         var map = L.map('map',{
             center: [{{ travel.geolocation.lat}},{{ travel.geolocation.lng }}],
@@ -1379,7 +1379,6 @@
     <script>
     (function () {
         var overlay  = document.getElementById('sh-overlay');
-        var closeBtn = document.getElementById('sh-modal-close');
         var cancelBtn= document.getElementById('sh-cancel');
         var submitBtn= document.getElementById('sh-submit');
         var input    = document.getElementById('sh-username');
@@ -1523,6 +1522,25 @@
 
         function escHtml(str) {
             return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+        }
+
+        var editImageFile = document.getElementById('edit-image-file');
+        if (editImageFile) {
+            editImageFile.addEventListener('change', function () {
+                var preview = document.getElementById('edit-image-preview');
+                if (!preview) { return; }
+                preview.innerHTML = '';
+                var file = this.files[0];
+                if (!file) { return; }
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    var img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.style.cssText = 'max-height:80px;border-radius:6px;border:1px solid #dde3ea;';
+                    preview.appendChild(img);
+                };
+                reader.readAsDataURL(file);
+            });
         }
     }());
     </script>

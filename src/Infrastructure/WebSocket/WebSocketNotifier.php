@@ -27,6 +27,26 @@ class WebSocketNotifier
         ]);
     }
 
+    public function notifyLocationRemoved(string $travelId, string $locationId, string $byUserId): void
+    {
+        $this->broadcast($travelId, [
+            'event'      => 'location_removed',
+            'travelId'   => $travelId,
+            'locationId' => $locationId,
+            'byUserId'   => $byUserId,
+        ]);
+    }
+
+    public function notifyLocationUpdated(string $travelId, array $locationData, string $byUserId): void
+    {
+        $this->broadcast($travelId, [
+            'event'    => 'location_updated',
+            'travelId' => $travelId,
+            'location' => $locationData,
+            'byUserId' => $byUserId,
+        ]);
+    }
+
     private function broadcast(string $travelId, array $payload): void
     {
         $url = $this->wsServerUrl.'/travel/'.$travelId.'/broadcast';

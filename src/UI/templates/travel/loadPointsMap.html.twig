@@ -18,6 +18,7 @@ var objLocation;
     '{{ location.mark.title }}',
     '{{ location.mark.id }}',
     '{{ location.typeLocation.icon }}',
-    '','{{ location.title}}',currentMark);
+    '{{ location.description|e('js') }}','{{ location.title|e('js') }}',currentMark,
+    '{{ location.url|e('js') }}','{{ location.typeLocation.id }}');
     mPoint.addPoint(objLocation);
 {% endfor %}

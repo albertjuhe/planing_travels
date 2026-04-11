@@ -17,6 +17,7 @@ var mapPoint = function (travelId) {
     this.dragableAndDropable = __bind(this.dragableAndDropable, this);
     this.deleteMark = __bind(this.deleteMark, this);
     this.showGallery = __bind(this.showGallery, this);
+    this.editMark = __bind(this.editMark, this);
 
 
     mapPoint.prototype.plugin = {};
@@ -86,7 +87,7 @@ mapPoint.prototype.panelItinerary = function () {
 };
 
 //Create a location point object
-mapPoint.prototype.createLocation = function (id, latitude, longitude, placeAddress, place_id, typeIcon, description, address, currentMark) {
+mapPoint.prototype.createLocation = function (id, latitude, longitude, placeAddress, place_id, typeIcon, description, address, currentMark, url, IdType) {
     const l = {};
     l.id = id;
     l.latitude = latitude;
@@ -97,6 +98,8 @@ mapPoint.prototype.createLocation = function (id, latitude, longitude, placeAddr
     l.description = description;
     l.address = address;  //Our title
     l.currentMark = currentMark;
+    l.url = url || '';
+    l.IdType = IdType || '';
 
     return l;
 };
@@ -107,24 +110,23 @@ mapPoint.prototype.addPoint = function (locationPoint) {
     let goButton = this.createButton('go', 'btn-warning', 'fa-home', locationPoint.place_id);
     let infoButton = this.createButton('info', 'btn-info', 'fa-info', locationPoint.place_id);
     let notaButton = this.createButton('nota', 'btn-success', 'fa-sticky-note', locationPoint.place_id);
+    let editButton = this.createButton('edit', 'btn-primary', 'fa-pencil', locationPoint.place_id);
 
     const layerLoc = '<div class="row point-view" id="layer_' + locationPoint.place_id + '">' +
         '<div class="col-sm-7" draggable="true" id="' + locationPoint.place_id + '">' +
         '<span class="title-point">' +
         '<i class="' + locationPoint.typeIcon + '" style="font-size: 16px; line-height: 1.5em;margin-right:3px"></i><b>' + locationPoint.address + '</b></span><br><i style="font-size:11px">' + locationPoint.placeAddress + '</i></div>' +
         '<div class="col-sm-5">' +
-        goButton + infoButton + removeButton + notaButton +
+        goButton + infoButton + editButton + removeButton + notaButton +
         '</div>' +
         '</div>';
 
     $('#mapPoints').append(layerLoc);
-    const currentPoint = "#" + locationPoint.place_id;
-    $(currentPoint).data('location', locationPoint);
-    $(currentPoint).bind(
-        {
-            'dragstart': this.handleDragStart
-        }
-    );
+    var currentEl = document.getElementById(locationPoint.place_id);
+    if (currentEl) {
+        $.data(currentEl, 'location', locationPoint);
+        $(currentEl).bind({'dragstart': this.handleDragStart});
+    }
 
     const layerPoint = "#layer_" + locationPoint.place_id;
     $(layerPoint).bind(
@@ -150,10 +152,12 @@ mapPoint.prototype.addPoint = function (locationPoint) {
     removeButton = $('*[data-place="' + locationPoint.place_id + '"][data-function="remove"]');
     infoButton = $('*[data-place="' + locationPoint.place_id + '"][data-function="info"]');
     notaButton = $('*[data-place="' + locationPoint.place_id + '"][data-function="nota"]');
+    var editBtn = $('*[data-place="' + locationPoint.place_id + '"][data-function="edit"]');
     $(goButton).bind({'click': this.goMark});
     $(removeButton).bind({'click': this.deleteMark});
     $(infoButton).bind({'click': this.info});
     $(notaButton).bind({'click': this.nota});
+    $(editBtn).bind({'click': this.editMark});
 };
 
 mapPoint.prototype.save = function (locationPoint, currentMark) {
@@ -165,19 +169,43 @@ mapPoint.prototype.save = function (locationPoint, currentMark) {
 };
 
 mapPoint.prototype.createButton = function (title, type, button_type, place_id) {
-    return '<button data-place="' + place_id + '" style="margin:1px" data-function="' + title + '" data-target="' + '#' + title + '" data-toggle="modal" type="button" class="btn ' + type + ' btn-xs">' + title + '</button>';
+    var toggle = (title === 'edit') ? '' : 'data-toggle="modal" data-target="#' + title + '"';
+    return '<button data-place="' + place_id + '" style="margin:1px" data-function="' + title + '" ' + toggle + ' type="button" class="btn ' + type + ' btn-xs">' + title + '</button>';
 };
 
 mapPoint.prototype.info = function (e) {
     var current = $(e.target);
     var placeToGo = current.data('place');
-    var l = $('#' + placeToGo).data('location');
+    var el = document.getElementById(placeToGo);
+    var l = el ? $.data(el, 'location') : null;
+    if (!l) { return; }
 
     $('#location').html(l.placeAddress);
-    $('#location_media').show();
-    $('#fileupload').data('location', l.id);
+    $('#location_media').addClass('is-visible').show();
     this.showGallery(l.id);
-    // this.showNotes(l.id);
+};
+
+mapPoint.prototype.editMark = function (e) {
+    var current = $(e.target);
+    var placeToGo = current.data('place');
+    var el = document.getElementById(placeToGo);
+    var l = el ? $.data(el, 'location') : null;
+    if (!l) { return; }
+
+    $('#edit-location-id').val(l.id);
+    $('#edit-title').val(l.address);
+    $('#edit-link').val(l.url || '');
+    $('#edit-comment').val(l.description || '');
+    var typeSelect = document.getElementById('edit-pointtype');
+    if (typeSelect && l.IdType) {
+        for (var i = 0; i < typeSelect.options.length; i++) {
+            if (typeSelect.options[i].value == l.IdType) {
+                typeSelect.selectedIndex = i;
+                break;
+            }
+        }
+    }
+    $('#editlocation').modal('show');
 };
 /*
 Deprecated
@@ -214,7 +242,9 @@ mapPoint.prototype.showGallery = function (l) {
 mapPoint.prototype.goMark = function (e) {
     var current = $(e.target);
     var placeToGo = current.data('place');
-    var l = $('#' + placeToGo).data('location');
+    var el = document.getElementById(placeToGo);
+    var l = el ? $.data(el, 'location') : null;
+    if (!l) { return; }
     map.setView([l.latitude, l.longitude], 30);
 };
 
@@ -222,7 +252,9 @@ mapPoint.prototype.goMark = function (e) {
 mapPoint.prototype.deleteMark = function (e) {
     var current = $(e.target);
     var placeToGo = current.data('place');
-    var l = $('#' + placeToGo).data('location');
+    var el = document.getElementById(placeToGo);
+    var l = el ? $.data(el, 'location') : null;
+    if (!l) { return; }
     map.removeLayer(l.currentMark);
     $('#layer_' + placeToGo).remove();
     this.rest('DELETE', null, l.id);
@@ -231,7 +263,9 @@ mapPoint.prototype.deleteMark = function (e) {
 mapPoint.prototype.nota = function (e) {
     var current = $(e.target);
     var placeToGo = current.data('place');
-    var l = $('#' + placeToGo).data('location');
+    var el = document.getElementById(placeToGo);
+    var l = el ? $.data(el, 'location') : null;
+    if (!l) { return; }
 
     $("#addnota").attr("data-target", l.id);
     $('#addnota').modal();
@@ -339,12 +373,23 @@ mapPoint.prototype.rest = function (typeRest, data, locationPoint) {
             dataType: 'json',
             data: data,
             success: function (data, testStatus, jqXHR) {
-                locationPoint.id = data;
+                locationPoint.id = data && data.id ? data.id : data;
                 _self.addPoint(locationPoint);
                 $('#infoForm').html('<p class="alert alert-success">Location Added</p>');
                 $("#infoForm").show().delay(5000).fadeOut();
-                console.log('Added point ' + data);
-                // socket.emit('add',data);
+                var fileInput = document.getElementById('add-image-file');
+                if (fileInput && fileInput.files && fileInput.files.length > 0 && locationPoint.id) {
+                    var formData = new FormData();
+                    formData.append('file', fileInput.files[0]);
+                    $.ajax({
+                        type: 'POST',
+                        url: '../../api/location/' + locationPoint.id + '/image',
+                        data: formData,
+                        processData: false,
+                        contentType: false
+                    });
+                    fileInput.value = '';
+                }
             },
             error: function (data, testStatus, jqXHR) {
                 $('#infoForm').html('<p class="alert alert-danger">Error: Location not Added</p>');
@@ -468,6 +513,72 @@ mapPoint.prototype.getMark = function (pointtype, latitude, longitude, placeAdre
     }
 
     return {mark: currentMark, type: typeIcon};
+};
+
+mapPoint.prototype.saveEdit = function () {
+    var _self = this;
+    var locationId = document.getElementById('edit-location-id').value;
+    var title = document.getElementById('edit-title').value;
+    var link = document.getElementById('edit-link').value;
+    var comment = document.getElementById('edit-comment').value;
+    var typeSelect = document.getElementById('edit-pointtype');
+    var typeLocationId = typeSelect ? typeSelect.options[typeSelect.selectedIndex].value : null;
+
+    var payload = {
+        title: title,
+        url: link,
+        description: comment,
+        typeLocationId: typeLocationId
+    };
+
+    var fileInput = document.getElementById('edit-image-file');
+    var hasFile = fileInput && fileInput.files && fileInput.files.length > 0;
+
+    $.ajax({
+        type: 'PATCH',
+        contentType: 'application/json',
+        url: '../../api/location/' + locationId,
+        dataType: 'json',
+        data: JSON.stringify(payload),
+        success: function () {
+            $('#infoTravel').html('<p class="alert alert-success">Location Updated</p>');
+            $('#infoTravel').show().delay(5000).fadeOut();
+            $('#mapPoints .point-view').each(function () {
+                var inner = this.querySelector('[id]');
+                if (inner) {
+                    var l = $.data(inner, 'location');
+                    if (l && l.id === locationId) {
+                        var b = inner.querySelector('.title-point b');
+                        if (b) { b.textContent = title; }
+                        l.address = title;
+                        l.url = link;
+                        l.description = comment;
+                    }
+                }
+            });
+
+            if (hasFile) {
+                var formData = new FormData();
+                formData.append('file', fileInput.files[0]);
+                $.ajax({
+                    type: 'POST',
+                    url: '../../api/location/' + locationId + '/image',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    complete: function () {
+                        $('#editlocation').modal('hide');
+                    }
+                });
+            } else {
+                $('#editlocation').modal('hide');
+            }
+        },
+        error: function () {
+            $('#infoTravel').html('<p class="alert alert-danger">Error: Location not Updated</p>');
+            $('#infoTravel').show().delay(5000).fadeOut();
+        }
+    });
 };
 
 mapPoint.prototype.codeAddress = function () {
