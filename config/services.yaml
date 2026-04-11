@@ -87,7 +87,7 @@ services:
 
     location.delete_handler:
       class: App\Application\UseCases\Location\DeleteLocationService
-      arguments:  ['@doctrine.user.repository', '@doctrine.location.repository' ]
+      arguments:  ['@doctrine.user.repository', '@doctrine.location.repository', '@App\Infrastructure\WebSocket\WebSocketNotifier']
       tags:
         - { name: tactician.handler, command: App\Application\Command\Location\DeleteLocationCommand}
 

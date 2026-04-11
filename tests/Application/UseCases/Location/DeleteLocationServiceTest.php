@@ -4,9 +4,9 @@ namespace App\Tests\Application\UseCases\Location;
 
 use App\Application\Command\Location\DeleteLocationCommand;
 use App\Application\UseCases\Location\DeleteLocationService;
+use App\Domain\Location\Exceptions\LocationDoesntExists;
 use App\Domain\Location\Model\Location;
 use App\Domain\User\ValueObject\UserId;
-use App\Domain\Location\Exceptions\LocationDoesntExists;
 
 class DeleteLocationServiceTest extends LocationService
 {
@@ -17,18 +17,14 @@ class DeleteLocationServiceTest extends LocationService
 
     public function testDeleteLocation(): void
     {
-        $locationId = mt_rand();
-        $travelId = mt_rand();
-
+        $locationId = (string) mt_rand();
+        $travelId = (string) mt_rand();
         $userId = new UserId(mt_rand());
 
-        $deleteLocationCommand = new DeleteLocationCommand(
-            $locationId,
-            $travelId,
-            $userId
-        );
+        $deleteLocationCommand = new DeleteLocationCommand($locationId, $travelId, $userId);
 
         $location = $this->createMock(Location::class);
+
         $this->locationRepository
             ->expects($this->once())
             ->method('findById')
@@ -45,27 +41,56 @@ class DeleteLocationServiceTest extends LocationService
             ->method('remove')
             ->with($location);
 
+        $this->webSocketNotifier
+            ->expects($this->once())
+            ->method('notifyLocationRemoved')
+            ->with($travelId, $locationId, (string) $userId);
+
         $deleteLocationService = new DeleteLocationService(
             $this->userRepository,
-            $this->locationRepository
+            $this->locationRepository,
+            $this->webSocketNotifier
         );
 
         $deleteLocationService->handle($deleteLocationCommand);
     }
 
-    public function testDeleteNonExistedLocation(): void
+    public function testDeleteLocationNotifiesWithCorrectTravelId(): void
     {
-        $this->expectException(LocationDoesntExists::class);
-        $locationId = mt_rand();
-        $travelId = mt_rand();
-
+        $locationId = (string) mt_rand();
+        $travelId = 'travel-uuid-123';
         $userId = new UserId(mt_rand());
 
-        $deleteLocationCommand = new DeleteLocationCommand(
-            $locationId,
-            $travelId,
-            $userId
+        $deleteLocationCommand = new DeleteLocationCommand($locationId, $travelId, $userId);
+
+        $location = $this->createMock(Location::class);
+
+        $this->locationRepository->method('findById')->willReturn($location);
+        $this->userRepository->method('ofIdOrFail');
+
+        $this->webSocketNotifier
+            ->expects($this->once())
+            ->method('notifyLocationRemoved')
+            ->with($travelId, $locationId, (string) $userId);
+
+        $deleteLocationService = new DeleteLocationService(
+            $this->userRepository,
+            $this->locationRepository,
+            $this->webSocketNotifier
         );
+
+        $deleteLocationService->handle($deleteLocationCommand);
+    }
+
+    public function testDeleteNonExistentLocationThrows(): void
+    {
+        $this->expectException(LocationDoesntExists::class);
+
+        $locationId = (string) mt_rand();
+        $travelId = (string) mt_rand();
+        $userId = new UserId(mt_rand());
+
+        $deleteLocationCommand = new DeleteLocationCommand($locationId, $travelId, $userId);
 
         $this->locationRepository
             ->expects($this->once())
@@ -82,9 +107,14 @@ class DeleteLocationServiceTest extends LocationService
             ->expects($this->never())
             ->method('remove');
 
+        $this->webSocketNotifier
+            ->expects($this->never())
+            ->method('notifyLocationRemoved');
+
         $deleteLocationService = new DeleteLocationService(
             $this->userRepository,
-            $this->locationRepository
+            $this->locationRepository,
+            $this->webSocketNotifier
         );
 
         $deleteLocationService->handle($deleteLocationCommand);

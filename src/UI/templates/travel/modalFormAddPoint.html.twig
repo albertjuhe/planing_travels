@@ -58,6 +58,12 @@
                             </select>
                         </div>
 
+                        <div style="display:flex;flex-direction:column;gap:5px;">
+                            <label style="font-size:12px;font-weight:700;color:#2c3e50;text-transform:uppercase;letter-spacing:.4px;margin:0;">Image (optional)</label>
+                            <input id="add-image-file" type="file" accept="image/*"
+                                style="font-size:14px;"/>
+                        </div>
+
                         <input id="latPoint" type="hidden" value=""/>
                         <input id="lngPoint" type="hidden" value=""/>
                         <input id="placeId"  type="hidden" value=""/>
@@ -73,6 +79,75 @@
                 <button type="button" class="st-btn st-btn--primary" onclick="mPoint.codeAddress()">
                     <svg viewBox="0 0 16 16" width="12" height="12" fill="currentColor"><path d="M8 1a5 5 0 0 1 5 5c0 4-5 9-5 9S3 10 3 6a5 5 0 0 1 5-5zm0 3a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/></svg>
                     Add location
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="editlocation">
+    <div class="modal-dialog">
+        <div class="modal-content" style="border-radius:12px;border:none;box-shadow:0 20px 60px rgba(0,0,0,0.2);">
+
+            <div class="modal-header" style="background:#f8f9fa;border-bottom:1px solid #eaecef;border-radius:12px 12px 0 0;padding:16px 20px;">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="opacity:.5;font-size:20px;line-height:1;">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" style="font-size:16px;font-weight:700;color:#1a2e4a;display:flex;align-items:center;gap:8px;">
+                    <svg viewBox="0 0 16 16" width="16" height="16" fill="currentColor" style="color:#f39c12"><path d="M11.7 1.3a1 1 0 0 1 1.4 0l1.6 1.6a1 1 0 0 1 0 1.4L5.5 13.5 1 15l1.5-4.5 9.2-9.2z"/></svg>
+                    Edit location
+                </h4>
+            </div>
+
+            <div class="modal-body" style="padding:20px;">
+                <input type="hidden" id="edit-location-id" value=""/>
+
+                <form>
+                    <fieldset style="border:none;padding:0;margin:0;display:flex;flex-direction:column;gap:14px;">
+
+                        <div style="display:flex;flex-direction:column;gap:5px;">
+                            <label style="font-size:12px;font-weight:700;color:#2c3e50;text-transform:uppercase;letter-spacing:.4px;margin:0;">Title</label>
+                            <input id="edit-title" type="text" value="" placeholder="Location title"
+                                style="padding:9px 12px;font-size:14px;border:1.5px solid #dde3ea;border-radius:8px;outline:none;background:#f8f9fa;color:#2c3e50;"/>
+                        </div>
+
+                        <div style="display:flex;flex-direction:column;gap:5px;">
+                            <label style="font-size:12px;font-weight:700;color:#2c3e50;text-transform:uppercase;letter-spacing:.4px;margin:0;">URL</label>
+                            <input id="edit-link" type="url" value="" placeholder="https://…"
+                                style="padding:9px 12px;font-size:14px;border:1.5px solid #dde3ea;border-radius:8px;outline:none;background:#f8f9fa;color:#2c3e50;"/>
+                        </div>
+
+                        <div style="display:flex;flex-direction:column;gap:5px;">
+                            <label style="font-size:12px;font-weight:700;color:#2c3e50;text-transform:uppercase;letter-spacing:.4px;margin:0;">Comment</label>
+                            <textarea id="edit-comment" placeholder="Add a note…" rows="3"
+                                style="padding:9px 12px;font-size:14px;border:1.5px solid #dde3ea;border-radius:8px;outline:none;background:#f8f9fa;color:#2c3e50;resize:vertical;font-family:inherit;"></textarea>
+                        </div>
+
+                        <div style="display:flex;flex-direction:column;gap:5px;">
+                            <label style="font-size:12px;font-weight:700;color:#2c3e50;text-transform:uppercase;letter-spacing:.4px;margin:0;">Type</label>
+                            <select id="edit-pointtype"
+                                style="padding:9px 12px;font-size:14px;border:1.5px solid #dde3ea;border-radius:8px;outline:none;background:#f8f9fa;color:#2c3e50;cursor:pointer;">
+                                {{ render(controller('App\\UI\\Controller\\http\\GetAllLocationsTypeController::getAllLocationsType')) }}
+                            </select>
+                        </div>
+
+                        <div style="display:flex;flex-direction:column;gap:5px;">
+                            <label style="font-size:12px;font-weight:700;color:#2c3e50;text-transform:uppercase;letter-spacing:.4px;margin:0;">Add image</label>
+                            <input id="edit-image-file" type="file" accept="image/*"
+                                style="padding:9px 12px;font-size:14px;border:1.5px solid #dde3ea;border-radius:8px;outline:none;background:#f8f9fa;color:#2c3e50;"/>
+                            <div id="edit-image-preview" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:6px;"></div>
+                        </div>
+
+                    </fieldset>
+                </form>
+            </div>
+
+            <div class="modal-footer" style="background:#f8f9fa;border-top:1px solid #eaecef;border-radius:0 0 12px 12px;padding:14px 20px;display:flex;justify-content:flex-end;gap:8px;">
+                <button type="button" class="st-btn st-btn--ghost" data-dismiss="modal">Cancel</button>
+                <button type="button" class="st-btn st-btn--warning" onclick="mPoint.saveEdit()">
+                    <svg viewBox="0 0 16 16" width="12" height="12" fill="currentColor"><path d="M11.7 1.3a1 1 0 0 1 1.4 0l1.6 1.6a1 1 0 0 1 0 1.4L5.5 13.5 1 15l1.5-4.5 9.2-9.2z"/></svg>
+                    Save changes
                 </button>
             </div>
 

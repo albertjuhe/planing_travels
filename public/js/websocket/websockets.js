@@ -113,6 +113,58 @@ function connectWebSocket() {
             $('#infoTravel').html('<p class="alert alert-info">A collaborator added a new location.</p>');
             $('#infoTravel').show().delay(5000).fadeOut();
         }
+
+        if (msg.event === 'location_removed') {
+            var myId = (typeof WS_CURRENT_USER_ID !== 'undefined') ? String(WS_CURRENT_USER_ID) : '';
+            if (myId && msg.byUserId && String(msg.byUserId) === myId) {
+                return;
+            }
+
+            if (typeof mPoint === 'undefined') { return; }
+
+            var placeId = msg.locationId;
+            var el = document.getElementById(placeId);
+            if (el) {
+                var l = $.data(el, 'location');
+                if (l && l.currentMark && typeof map !== 'undefined') {
+                    map.removeLayer(l.currentMark);
+                }
+            }
+            var layer = document.getElementById('layer_' + placeId);
+            if (layer) { layer.parentNode.removeChild(layer); }
+
+            $('#infoTravel').html('<p class="alert alert-warning">A collaborator removed a location.</p>');
+            $('#infoTravel').show().delay(5000).fadeOut();
+        }
+
+        if (msg.event === 'location_updated') {
+            var myId = (typeof WS_CURRENT_USER_ID !== 'undefined') ? String(WS_CURRENT_USER_ID) : '';
+            if (myId && msg.byUserId && String(msg.byUserId) === myId) {
+                return;
+            }
+
+            if (typeof mPoint === 'undefined') { return; }
+
+            var loc = msg.location;
+            var placeId = loc.id;
+            var el = document.getElementById(placeId);
+            if (el) {
+                var l = $.data(el, 'location');
+                if (l) {
+                    l.address = loc.title;
+                    l.url = loc.url || '';
+                    l.description = loc.description || '';
+                    l.IdType = loc.typeLocationId || l.IdType;
+                    l.typeIcon = loc.typeIcon || l.typeIcon;
+                    $.data(el, 'location', l);
+                }
+                var titleEl = el.querySelector('.title-point b');
+                if (titleEl) { titleEl.textContent = loc.title; }
+            }
+
+            $('#infoTravel').html('<p class="alert alert-info">A collaborator updated a location.</p>');
+            $('#infoTravel').show().delay(5000).fadeOut();
+        }
     };
 
     socket.onclose = function (event) {
