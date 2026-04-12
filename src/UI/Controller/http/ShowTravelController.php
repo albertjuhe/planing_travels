@@ -3,6 +3,7 @@
 namespace App\UI\Controller\http;
 
 use App\Application\Query\Travel\ShowTravelBySlugQuery;
+use App\Domain\User\Model\User;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ShowTravelController extends QueryController
@@ -15,7 +16,11 @@ class ShowTravelController extends QueryController
      */
     public function showTravel(string $slug)
     {
-        $query = new ShowTravelBySlugQuery($slug);
+        /** @var User|null $currentUser */
+        $currentUser = $this->security->getUser();
+        $userId = $currentUser ? $currentUser->getId()->id() : null;
+
+        $query = new ShowTravelBySlugQuery($slug, $userId);
         $travel = $this->ask($query);
 
         return $this->render(

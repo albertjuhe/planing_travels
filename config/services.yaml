@@ -97,9 +97,8 @@ services:
       arguments: ['@doctrine.travel.read_model.repository']
       tags: [messenger.message_handler]
 
-    travel.show_handler:
-      class: App\Application\UseCases\Travel\ShowTravelService
-      arguments: ['@doctrine.travel.repository']
+    App\Application\UseCases\Travel\ShowTravelService:
+      arguments: ['@doctrine.travel.repository', '@doctrine.orm.entity_manager']
       tags: [messenger.message_handler]
 
     travel.gey_my_travels:
