@@ -4,6 +4,13 @@
 
 <!-- Hero Section -->
 <div class="hero-section">
+    <div class="hero-slides">
+        <div class="hero-slide" style="background-image: url('{{ asset('uploads/travel_photos/traditional-toscana-italy-landscape-hills-fields-sky_1028938-185353-3021269073-69cf6b57b5c42.jpg') }}')"></div>
+        <div class="hero-slide" style="background-image: url('{{ asset('uploads/travel_photos/eilean-donan-castle-69d0edbada27b.jpeg') }}')"></div>
+        <div class="hero-slide" style="background-image: url('{{ asset('uploads/travel_photos/snowy-mountains-chamonix-mont-blanc-hautesavoie-alps-france_652249-3513-2563027050-69cf6b69db17b.jpg') }}')"></div>
+        <div class="hero-slide" style="background-image: url('{{ asset('uploads/travel_photos/Islands-Near-Crete-Your-Ultimate-Guide-to-Exploring-Hidden-Gems-680x290-197739012-69cf6bc58fb06.jpg') }}')"></div>
+        <div class="hero-slide" style="background-image: url('{{ asset('uploads/travel_photos/Calella-de-Palafrugell--Francesc-Tur--Arxiu-Imatges-PTCBG-447089835-69c84173ed8b2.jpg') }}')"></div>
+    </div>
     <div class="hero-overlay"></div>
     <div class="container hero-content">
         <div class="row">
@@ -171,11 +178,34 @@
         /* ── Hero ── */
         .hero-section {
             position: relative;
-            background: linear-gradient(135deg, #1a3a5c 0%, #2980b9 60%, #6dd5fa 100%);
             min-height: 480px;
             display: flex;
             align-items: center;
             overflow: hidden;
+        }
+        .hero-slides {
+            position: absolute;
+            inset: 0;
+        }
+        .hero-slide {
+            position: absolute;
+            inset: 0;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            animation: heroFade 20s infinite;
+        }
+        .hero-slide:nth-child(1) { animation-delay: 0s; }
+        .hero-slide:nth-child(2) { animation-delay: 4s; }
+        .hero-slide:nth-child(3) { animation-delay: 8s; }
+        .hero-slide:nth-child(4) { animation-delay: 12s; }
+        .hero-slide:nth-child(5) { animation-delay: 16s; }
+        @keyframes heroFade {
+            0%   { opacity: 0; }
+            5%   { opacity: 1; }
+            20%  { opacity: 1; }
+            25%  { opacity: 0; }
+            100% { opacity: 0; }
         }
         .hero-overlay {
             position: absolute;
