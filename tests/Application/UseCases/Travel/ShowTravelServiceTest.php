@@ -7,6 +7,7 @@ use App\Application\UseCases\Travel\ShowTravelService;
 use App\Domain\Travel\Exceptions\TravelDoesntExists;
 use App\Domain\Travel\Model\Travel;
 use App\Tests\Infrastructure\TravelBundle\Repository\InMemoryTravelRepository;
+use Doctrine\ORM\EntityManagerInterface;
 
 class ShowTravelServiceTest extends TravelService
 {
@@ -18,8 +19,10 @@ class ShowTravelServiceTest extends TravelService
     public function testShowTravelBySlug(): void
     {
         $showTravelBySlugQuery = new ShowTravelBySlugQuery(InMemoryTravelRepository::TRAVEL_1);
+        $entityManager = $this->createMock(EntityManagerInterface::class);
         $showTravelService = new ShowTravelService(
-            $this->travelRepository
+            $this->travelRepository,
+            $entityManager
         );
 
         $travel = $showTravelService->__invoke($showTravelBySlugQuery);
@@ -33,8 +36,10 @@ class ShowTravelServiceTest extends TravelService
     {
         $this->expectException(TravelDoesntExists::class);
         $showTravelBySlugQuery = new ShowTravelBySlugQuery(uniqid());
+        $entityManager = $this->createMock(EntityManagerInterface::class);
         $showTravelService = new ShowTravelService(
-            $this->travelRepository
+            $this->travelRepository,
+            $entityManager
         );
 
         $showTravelService->__invoke($showTravelBySlugQuery);

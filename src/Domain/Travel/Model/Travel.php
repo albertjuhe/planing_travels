@@ -297,6 +297,11 @@ class Travel extends AggregateRoot
         $this->watch = $watch;
     }
 
+    public function incrementWatch(): void
+    {
+        $this->watch = ($this->watch ?? 0) + 1;
+    }
+
     /**
      * @return Gpx
      */
