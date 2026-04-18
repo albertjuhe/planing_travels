@@ -196,8 +196,8 @@ mapPoint.prototype.createButton = function (title, type, button_type, place_id) 
 };
 
 mapPoint.prototype.info = function (e) {
-    var current = $(e.target);
-    var placeToGo = current.data('place');
+    var current = $(e.target).closest('[data-place]');
+    var placeToGo = current.data('place') || $(e.currentTarget).data('place');
     var el = document.getElementById(placeToGo);
     var l = el ? $.data(el, 'location') : null;
     if (!l) { return; }
@@ -208,8 +208,8 @@ mapPoint.prototype.info = function (e) {
 };
 
 mapPoint.prototype.editMark = function (e) {
-    var current = $(e.target);
-    var placeToGo = current.data('place');
+    var current = $(e.target).closest('[data-place]');
+    var placeToGo = current.data('place') || $(e.currentTarget).data('place');
     var el = document.getElementById(placeToGo);
     var l = el ? $.data(el, 'location') : null;
     if (!l) { return; }
@@ -262,8 +262,8 @@ mapPoint.prototype.showGallery = function (l) {
 
 
 mapPoint.prototype.goMark = function (e) {
-    var current = $(e.target);
-    var placeToGo = current.data('place');
+    var current = $(e.target).closest('[data-place]');
+    var placeToGo = current.data('place') || $(e.currentTarget).data('place');
     var el = document.getElementById(placeToGo);
     var l = el ? $.data(el, 'location') : null;
     if (!l) { return; }
@@ -272,8 +272,8 @@ mapPoint.prototype.goMark = function (e) {
 
 
 mapPoint.prototype.deleteMark = function (e) {
-    var current = $(e.target);
-    var placeToGo = current.data('place');
+    var current = $(e.target).closest('[data-place]');
+    var placeToGo = current.data('place') || $(e.currentTarget).data('place');
     var el = document.getElementById(placeToGo);
     var l = el ? $.data(el, 'location') : null;
     if (!l) { return; }
@@ -283,8 +283,10 @@ mapPoint.prototype.deleteMark = function (e) {
 };
 
 mapPoint.prototype.nota = function (e) {
-    var current = $(e.target).closest('[data-place]');
+    var current = $(e.target).closest('[data-function="nota"]');
+    if (!current.length) { current = $(e.target).closest('[data-place]'); }
     var placeToGo = current.data('place');
+    if (!placeToGo) { placeToGo = $(e.currentTarget).data('place'); }
     var el = document.getElementById(placeToGo);
     var l = el ? $.data(el, 'location') : null;
     if (!l) { return; }
@@ -344,7 +346,7 @@ mapPoint.prototype.nota = function (e) {
 /* ── Notes modal static helpers ── */
 mapPoint._loadNotes = function (locationId) {
     var list = document.getElementById('notes-list');
-    fetch('/api/location/' + locationId + '/notes', {
+    fetch('../../api/location/' + locationId + '/notes', {
         headers: { 'X-Requested-With': 'XMLHttpRequest' }
     })
     .then(function (r) { return r.json(); })
@@ -399,7 +401,7 @@ mapPoint._saveNote = function (locationId, content) {
     var feedback = document.getElementById('notes-feedback');
     var btn = document.getElementById('notes-save-btn');
     btn.disabled = true;
-    fetch('/api/location/' + locationId + '/notes', {
+    fetch('../../api/location/' + locationId + '/notes', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
         body: JSON.stringify({ content: content })
@@ -425,7 +427,7 @@ mapPoint._saveNote = function (locationId, content) {
 };
 
 mapPoint._deleteNote = function (noteId, locationId) {
-    fetch('/api/location/' + locationId + '/notes/' + noteId, {
+    fetch('../../api/location/' + locationId + '/notes/' + noteId, {
         method: 'DELETE',
         headers: { 'X-Requested-With': 'XMLHttpRequest' }
     })
