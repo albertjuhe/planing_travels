@@ -31,6 +31,10 @@ var mapPoint = function (travelId) {
         'dragleave': this.handleDragLeave
     });
 
+    /* Close any open dropdown when clicking outside */
+    $(document).on('click.ptmenu', function () {
+        document.querySelectorAll('.pt-menu__dropdown.is-open').forEach(function (d) { d.classList.remove('is-open'); });
+    });
 
 };
 
@@ -106,58 +110,76 @@ mapPoint.prototype.createLocation = function (id, latitude, longitude, placeAddr
 
 mapPoint.prototype.addPoint = function (locationPoint) {
 
-    let removeButton = this.createButton('remove', 'btn-danger', 'fa-trash', locationPoint.place_id);
-    let goButton = this.createButton('go', 'btn-warning', 'fa-home', locationPoint.place_id);
-    let infoButton = this.createButton('info', 'btn-info', 'fa-info', locationPoint.place_id);
-    let notaButton = this.createButton('nota', 'btn-success', 'fa-sticky-note', locationPoint.place_id);
-    let editButton = this.createButton('edit', 'btn-primary', 'fa-pencil', locationPoint.place_id);
+    var pid = locationPoint.place_id;
 
-    const layerLoc = '<div class="row point-view" id="layer_' + locationPoint.place_id + '">' +
-        '<div class="col-sm-7" draggable="true" id="' + locationPoint.place_id + '">' +
-        '<span class="title-point">' +
-        '<i class="' + locationPoint.typeIcon + '" style="font-size: 16px; line-height: 1.5em;margin-right:3px"></i><b>' + locationPoint.address + '</b></span><br><i style="font-size:11px">' + locationPoint.placeAddress + '</i></div>' +
-        '<div class="col-sm-5">' +
-        goButton + infoButton + editButton + removeButton + notaButton +
-        '</div>' +
+    var layerLoc =
+        '<div class="point-view" id="layer_' + pid + '">' +
+            '<div class="point-view__drag" draggable="true" id="' + pid + '">' +
+                '<div class="point-view__icon">' +
+                    '<i class="' + locationPoint.typeIcon + '"></i>' +
+                '</div>' +
+                '<div class="point-view__content">' +
+                    '<span class="title-point"><b>' + locationPoint.address + '</b></span>' +
+                    '<span class="address-point">' + locationPoint.placeAddress + '</span>' +
+                '</div>' +
+            '</div>' +
+            '<div class="point-view__actions">' +
+                '<div class="pt-menu" data-place="' + pid + '">' +
+                    '<button type="button" class="pt-menu__trigger" data-place="' + pid + '" data-function="menu">' +
+                        '<svg viewBox="0 0 16 16" width="16" height="16" fill="currentColor"><circle cx="8" cy="3" r="1.5"/><circle cx="8" cy="8" r="1.5"/><circle cx="8" cy="13" r="1.5"/></svg>' +
+                    '</button>' +
+                    '<div class="pt-menu__dropdown" id="ptmenu_' + pid + '">' +
+                        '<button type="button" class="pt-menu__item" data-place="' + pid + '" data-function="go">' +
+                            '<svg viewBox="0 0 16 16" width="16" height="16" fill="currentColor"><path d="M8 1a5 5 0 0 1 5 5c0 4-5 9-5 9S3 10 3 6a5 5 0 0 1 5-5zm0 3a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/></svg>' +
+                            'Center on map' +
+                        '</button>' +
+                        '<button type="button" class="pt-menu__item" data-place="' + pid + '" data-function="info">' +
+                            '<svg viewBox="0 0 16 16" width="16" height="16" fill="currentColor"><path d="M0 3h16v10H0V3zm1 1v8h14V4H1zm4 2a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm-1 5l2-3 2 2 2-3 3 4H3z"/></svg>' +
+                            'View gallery' +
+                        '</button>' +
+                        '<button type="button" class="pt-menu__item" data-place="' + pid + '" data-function="nota">' +
+                            '<svg viewBox="0 0 16 16" width="16" height="16" fill="currentColor"><path d="M2 2h12v12H2V2zm1 1v10h10V3H3zm2 2h6v1H5V5zm0 3h6v1H5V8zm0 3h4v1H5v-1z"/></svg>' +
+                            'Add notes' +
+                        '</button>' +
+                        '<button type="button" class="pt-menu__item" data-place="' + pid + '" data-function="edit">' +
+                            '<svg viewBox="0 0 16 16" width="16" height="16" fill="currentColor"><path d="M11.7 1.3a1 1 0 0 1 1.4 0l1.6 1.6a1 1 0 0 1 0 1.4L5.5 13.5 1 15l1.5-4.5 9.2-9.2z"/></svg>' +
+                            'Edit location' +
+                        '</button>' +
+                        '<div class="pt-menu__divider"></div>' +
+                        '<button type="button" class="pt-menu__item pt-menu__item--danger" data-place="' + pid + '" data-function="remove">' +
+                            '<svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M3 4h10l-1 10H4L3 4zm4 0V2h2v2M1 4h14"/></svg>' +
+                            'Delete location' +
+                        '</button>' +
+                    '</div>' +
+                '</div>' +
+            '</div>' +
         '</div>';
 
     $('#mapPoints').append(layerLoc);
-    var currentEl = document.getElementById(locationPoint.place_id);
+    var currentEl = document.getElementById(pid);
     if (currentEl) {
         $.data(currentEl, 'location', locationPoint);
         $(currentEl).bind({'dragstart': this.handleDragStart});
     }
 
-    const layerPoint = "#layer_" + locationPoint.place_id;
-    $(layerPoint).bind(
-        {
-            'mouseover': function (e) {
-                e.stopPropagation();
+    // Hide empty state
+    var emptyState = document.getElementById('loc-empty-state');
+    if (emptyState) { emptyState.style.display = 'none'; }
 
-                //var dades = $(e.target).data('location');
-                //  dades.currentMark.togglePopup();
-                //dades.currentMark.setIcon(SelectedIcon);
-            },
-            'mouseout': function (e) {
-                e.stopPropagation();
+    $('*[data-place="' + pid + '"][data-function="go"]').bind({'click': this.goMark});
+    $('*[data-place="' + pid + '"][data-function="remove"]').bind({'click': this.deleteMark});
+    $('*[data-place="' + pid + '"][data-function="info"]').bind({'click': this.info});
+    $('*[data-place="' + pid + '"][data-function="nota"]').bind({'click': this.nota});
+    $('*[data-place="' + pid + '"][data-function="edit"]').bind({'click': this.editMark});
 
-            }
-
-        }
-    );
-
-
-    //Buttons Accions
-    goButton = $('*[data-place="' + locationPoint.place_id + '"][data-function="go"]');
-    removeButton = $('*[data-place="' + locationPoint.place_id + '"][data-function="remove"]');
-    infoButton = $('*[data-place="' + locationPoint.place_id + '"][data-function="info"]');
-    notaButton = $('*[data-place="' + locationPoint.place_id + '"][data-function="nota"]');
-    var editBtn = $('*[data-place="' + locationPoint.place_id + '"][data-function="edit"]');
-    $(goButton).bind({'click': this.goMark});
-    $(removeButton).bind({'click': this.deleteMark});
-    $(infoButton).bind({'click': this.info});
-    $(notaButton).bind({'click': this.nota});
-    $(editBtn).bind({'click': this.editMark});
+    /* Toggle dropdown */
+    $('button[data-function="menu"][data-place="' + pid + '"]').bind('click', function (e) {
+        e.stopPropagation();
+        var drop = document.getElementById('ptmenu_' + pid);
+        var isOpen = drop.classList.contains('is-open');
+        document.querySelectorAll('.pt-menu__dropdown.is-open').forEach(function (d) { d.classList.remove('is-open'); });
+        if (!isOpen) { drop.classList.add('is-open'); }
+    });
 };
 
 mapPoint.prototype.save = function (locationPoint, currentMark) {
@@ -261,14 +283,162 @@ mapPoint.prototype.deleteMark = function (e) {
 };
 
 mapPoint.prototype.nota = function (e) {
-    var current = $(e.target);
+    var current = $(e.target).closest('[data-place]');
     var placeToGo = current.data('place');
     var el = document.getElementById(placeToGo);
     var l = el ? $.data(el, 'location') : null;
     if (!l) { return; }
 
-    $("#addnota").attr("data-target", l.id);
-    $('#addnota').modal();
+    var modal = document.getElementById('notesModal');
+    if (!modal) { return; }
+    modal.setAttribute('data-location-id', l.id);
+    document.getElementById('notes-modal-title').textContent = l.address;
+    document.getElementById('notes-list').innerHTML = '<div class="notes-loading">Loading notes…</div>';
+    document.getElementById('note-content-input').value = '';
+    var feedback = document.getElementById('notes-feedback');
+    if (feedback) { feedback.style.display = 'none'; feedback.textContent = ''; }
+    modal.classList.add('is-open');
+    mapPoint._loadNotes(l.id);
+
+    /* Wire up save button and close controls once (idempotent via flag) */
+    if (!modal._notesWired) {
+        modal._notesWired = true;
+
+        var saveBtn = document.getElementById('notes-save-btn');
+        var textarea = document.getElementById('note-content-input');
+        var closeBtn = document.getElementById('nm-close');
+        var overlay  = modal;
+
+        saveBtn.addEventListener('click', function () {
+            var content = textarea.value.trim();
+            if (!content) {
+                if (feedback) { feedback.textContent = 'Please write something first.'; feedback.style.display = 'block'; }
+                return;
+            }
+            var locId = overlay.getAttribute('data-location-id');
+            mapPoint._saveNote(locId, content);
+        });
+
+        textarea.addEventListener('keydown', function (ev) {
+            if (ev.key === 'Enter' && (ev.ctrlKey || ev.metaKey)) {
+                saveBtn.click();
+            }
+        });
+
+        closeBtn.addEventListener('click', function () {
+            overlay.classList.remove('is-open');
+        });
+
+        overlay.addEventListener('click', function (ev) {
+            if (ev.target === overlay) { overlay.classList.remove('is-open'); }
+        });
+
+        document.addEventListener('keydown', function (ev) {
+            if (ev.key === 'Escape' && overlay.classList.contains('is-open')) {
+                overlay.classList.remove('is-open');
+            }
+        });
+    }
+};
+
+/* ── Notes modal static helpers ── */
+mapPoint._loadNotes = function (locationId) {
+    var list = document.getElementById('notes-list');
+    fetch('/api/location/' + locationId + '/notes', {
+        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+    })
+    .then(function (r) { return r.json(); })
+    .then(function (data) {
+        var notes = data.notes || [];
+        if (!notes.length) {
+            list.innerHTML = '<div class="notes-empty">No notes yet. Add the first one below.</div>';
+            return;
+        }
+        list.innerHTML = notes.map(function (n) {
+            return '<div class="note-item" id="note-item-' + n.id + '">' +
+                '<div class="note-item__body">' + mapPoint._renderNoteContent(n.content) + '</div>' +
+                '<button class="note-item__delete" data-note-id="' + n.id + '" data-location-id="' + locationId + '" title="Delete">&#x2715;</button>' +
+            '</div>';
+        }).join('');
+        list.querySelectorAll('.note-item__delete').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                mapPoint._deleteNote(this.dataset.noteId, this.dataset.locationId);
+            });
+        });
+    })
+    .catch(function () {
+        list.innerHTML = '<div class="notes-empty">Could not load notes.</div>';
+    });
+};
+
+mapPoint._renderNoteContent = function (content) {
+    if (!content) { return ''; }
+    var ytMatch = content.match(/(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]{11})/);
+    if (ytMatch) {
+        var videoId = ytMatch[1];
+        return '<div class="note-embed"><iframe src="https://www.youtube.com/embed/' + videoId + '" frameborder="0" allowfullscreen></iframe></div>' +
+               '<p class="note-text">' + mapPoint._linkify(mapPoint._escHtml(content)) + '</p>';
+    }
+    var vmMatch = content.match(/(?:https?:\/\/)?(?:www\.)?vimeo\.com\/(\d+)/);
+    if (vmMatch) {
+        return '<div class="note-embed"><iframe src="https://player.vimeo.com/video/' + vmMatch[1] + '" frameborder="0" allowfullscreen></iframe></div>' +
+               '<p class="note-text">' + mapPoint._linkify(mapPoint._escHtml(content)) + '</p>';
+    }
+    return '<p class="note-text">' + mapPoint._linkify(mapPoint._escHtml(content)) + '</p>';
+};
+
+mapPoint._linkify = function (text) {
+    return text.replace(/(https?:\/\/[^\s<>"]+)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>');
+};
+
+mapPoint._escHtml = function (s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+};
+
+mapPoint._saveNote = function (locationId, content) {
+    var feedback = document.getElementById('notes-feedback');
+    var btn = document.getElementById('notes-save-btn');
+    btn.disabled = true;
+    fetch('/api/location/' + locationId + '/notes', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+        body: JSON.stringify({ content: content })
+    })
+    .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, data: d }; }); })
+    .then(function (result) {
+        btn.disabled = false;
+        if (result.ok) {
+            document.getElementById('note-content-input').value = '';
+            feedback.style.display = 'none';
+            var modal = document.getElementById('notesModal');
+            mapPoint._loadNotes(modal.getAttribute('data-location-id'));
+        } else {
+            feedback.textContent = (result.data && result.data.error) || 'Could not save note.';
+            feedback.style.display = 'block';
+        }
+    })
+    .catch(function () {
+        btn.disabled = false;
+        feedback.textContent = 'Network error.';
+        feedback.style.display = 'block';
+    });
+};
+
+mapPoint._deleteNote = function (noteId, locationId) {
+    fetch('/api/location/' + locationId + '/notes/' + noteId, {
+        method: 'DELETE',
+        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+    })
+    .then(function (r) {
+        if (r.ok) {
+            var el = document.getElementById('note-item-' + noteId);
+            if (el) { el.remove(); }
+            var list = document.getElementById('notes-list');
+            if (list && !list.querySelector('.note-item')) {
+                list.innerHTML = '<div class="notes-empty">No notes yet. Add the first one below.</div>';
+            }
+        }
+    });
 };
 
 

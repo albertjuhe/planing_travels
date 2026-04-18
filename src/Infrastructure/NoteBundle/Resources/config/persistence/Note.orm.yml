@@ -18,14 +18,14 @@ App\Domain\Note\Model\Note:
             scale: 0
             length: 255
             unique: false
-            nullable: false
+            nullable: true
             precision: 0
         description:
-            type: string
+            type: text
             scale: 0
-            length: 255
+            length: null
             unique: false
-            nullable: false
+            nullable: true
             precision: 0
     manyToOne:
         location:

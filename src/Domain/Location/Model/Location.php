@@ -58,6 +58,7 @@ class Location extends AggregateRoot
     {
         $this->id = new LocationId();
         $this->images = new ArrayCollection();
+        $this->notas = new ArrayCollection();
         $this->updatedAt = new \DateTime();
         $this->createdAt = new \DateTime();
         $this->publishEvent();
@@ -402,6 +403,11 @@ class Location extends AggregateRoot
     public function getImages()
     {
         return $this->images;
+    }
+
+    public function getNotas()
+    {
+        return $this->notas ?? new ArrayCollection();
     }
 
     public function toArray()

@@ -1,21 +1,40 @@
-<div class="st-locations-panel">
-    <div class="st-panel__head">
-        <span class="st-panel__head-left">
-            <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor" opacity=".7"><path d="M8 1a5 5 0 0 1 5 5c0 4-5 9-5 9S3 10 3 6a5 5 0 0 1 5-5zm0 3a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/></svg>
-            Locations
-        </span>
-        <div style="display:flex;gap:6px;align-items:center;">
+<div class="loc-panel">
+    <div class="loc-panel__header">
+        <div class="loc-panel__title">
+            <span class="loc-panel__icon">
+                <svg viewBox="0 0 16 16" width="18" height="18" fill="currentColor"><path d="M8 1a5 5 0 0 1 5 5c0 4-5 9-5 9S3 10 3 6a5 5 0 0 1 5-5zm0 3a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/></svg>
+            </span>
+            <span>
+                <strong>Locations</strong>
+                <small id="loc-count"></small>
+            </span>
+        </div>
+        <div class="loc-panel__actions">
             {% if isOwner is defined and isOwner %}
-            <button type="button" class="st-btn st-btn--primary" data-toggle="modal" data-target="#addpoint">
-                <svg viewBox="0 0 16 16" width="11" height="11" fill="currentColor"><path d="M8 1v14M1 8h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-                Add
+            <button type="button" class="loc-btn loc-btn--add" data-toggle="modal" data-target="#addpoint" title="Add location">
+                <svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 3v10M3 8h10"/></svg>
             </button>
             {% endif %}
-            <button class="st-btn st-btn--ghost" id="center">
-                <svg viewBox="0 0 16 16" width="11" height="11" fill="currentColor"><path d="M8 5a3 3 0 1 1 0 6A3 3 0 0 1 8 5zM1 7h2m10 0h2M7 1v2m0 10v2"/></svg>
-                Center
+            <button class="loc-btn loc-btn--center" id="center" title="Center map">
+                <svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="3"/><path d="M8 1v3M8 12v3M1 8h3M12 8h3"/></svg>
             </button>
         </div>
     </div>
-    <div id="mapPoints"></div>
+    <div class="loc-panel__search">
+        <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="7" r="4"/><path d="M10 10l3 3"/></svg>
+        <input type="text" class="loc-panel__search-input" id="loc-search" placeholder="Search locations...">
+    </div>
+    <div class="loc-panel__list" id="mapPoints">
+        <div class="loc-empty" id="loc-empty-state">
+            <svg viewBox="0 0 16 16" width="32" height="32" fill="currentColor" opacity="0.3"><path d="M8 1a5 5 0 0 1 5 5c0 4-5 9-5 9S3 10 3 6a5 5 0 0 1 5-5zm0 3a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/></svg>
+            <p>No locations yet</p>
+            <small>Add your first location to get started</small>
+        </div>
+    </div>
+    <div class="loc-panel__footer">
+        <small class="loc-panel__hint">
+            <svg viewBox="0 0 16 16" width="12" height="12" fill="currentColor"><path d="M8 1a7 7 0 1 1 0 14A7 7 0 0 1 8 1zm0 3a1 1 0 0 0-1 1v4a1 1 0 0 0 2 0V5a1 1 0 0 0-1-1zm0 8a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/></svg>
+            Drag locations to Route panel
+        </small>
+    </div>
 </div>

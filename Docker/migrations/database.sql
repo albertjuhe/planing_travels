@@ -163,8 +163,8 @@ create table if not exists note
     id          int auto_increment
         primary key,
     location_id char(36)     null comment '(DC2Type:LocationId)',
-    title       varchar(255) not null,
-    description varchar(255) not null,
+    title       varchar(255) null,
+    description longtext     null,
     constraint FK_CFBDFA1464D218E
         foreign key (location_id) references location (id)
 )
