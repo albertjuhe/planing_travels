@@ -973,9 +973,8 @@
     min-width: 0;
 }
 
-/* Month label rows — injected between week rows */
+/* Month label rows */
 .cal-month-label {
-    grid-column: 1 / -1;
     padding: 10px 14px 6px;
     font-size: 12px;
     font-weight: 700;
@@ -994,41 +993,20 @@
     overflow: hidden;
     border: 1px solid #eaecef;
 }
-.cal-grid__header {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    background: linear-gradient(135deg, #1a2e4a 0%, #2980b9 100%);
-}
-.cal-grid__dow {
-    padding: 10px 6px;
-    text-align: center;
-    font-size: 11px;
-    font-weight: 700;
-    color: rgba(255,255,255,0.75);
-    text-transform: uppercase;
-    letter-spacing: 0.7px;
-}
-.cal-grid__dow:first-child { color: rgba(255,255,255,0.95); }
-.cal-grid__dow:last-child  { color: rgba(255,200,100,0.9); }
 .cal-grid__body {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-}
-
-/* ── Day cells ── */
-.cal-day {
-    border-right: 1px solid #eaecef;
-    border-bottom: 1px solid #eaecef;
-    min-height: 110px;
     display: flex;
     flex-direction: column;
+}
+
+/* ── Day rows ── */
+.cal-day {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #eaecef;
+    min-height: 44px;
     transition: background 0.1s;
 }
-.cal-day:nth-child(7n) { border-right: none; }
-.cal-day--out {
-    background: #f9fafb;
-    opacity: 0.55;
-}
+.cal-day:last-child { border-bottom: none; }
 .cal-day--weekend:not(.cal-day--out) {
     background: #fdfaf5;
 }
@@ -1036,13 +1014,23 @@
     background: #f0f7ff;
 }
 .cal-day__head {
-    padding: 7px 8px 5px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 4px;
-    border-bottom: 1px solid #eaecef;
+    gap: 6px;
+    padding: 8px 12px;
+    flex-shrink: 0;
+    width: 160px;
 }
+.cal-day__dow {
+    font-size: 11px;
+    font-weight: 600;
+    color: #7f8c8d;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    width: 32px;
+    flex-shrink: 0;
+}
+.cal-day--weekend:not(.cal-day--out) .cal-day__dow { color: #e67e22; }
 .cal-day__num {
     font-size: 14px;
     font-weight: 700;
@@ -1056,7 +1044,6 @@
     border-radius: 50%;
     flex-shrink: 0;
 }
-.cal-day--out .cal-day__num { color: #c5cdd6; font-weight: 400; }
 .cal-day--today:not(.cal-day--out) .cal-day__num {
     background: #2980b9;
     color: #fff;
@@ -1065,10 +1052,12 @@
 .cal-day--weekend:not(.cal-day--out) .cal-day__num { color: #e67e22; }
 .cal-day__body {
     flex: 1;
-    padding: 5px 6px 6px;
+    padding: 5px 6px;
     display: flex;
-    flex-direction: column;
-    gap: 3px;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px;
+    min-width: 0;
 }
 
 /* ── Add button ── */
@@ -1564,6 +1553,10 @@
                 <svg viewBox="0 0 16 16" width="13" height="13" fill="currentColor"><path d="M11 1v1H5V1H3v1H1v13h14V2h-2V1h-2zm2 12H3V6h10v7z"/></svg>
                 Calendar
             </button>
+            <a class="st-view-tab" href="{{ path('show_travel_calendar', {slug: travel.slug}) }}" style="text-decoration:none;">
+                <svg viewBox="0 0 16 16" width="13" height="13" fill="currentColor"><path d="M2 14L6 2l4 8 2-4 2 8" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Calendar + Route
+            </a>
         </div>
 
         {# ── MAP panel ── #}
@@ -1646,72 +1639,59 @@
                     </div>
                 </div>
 
-                {# Week calendar #}
+                {# Day list calendar #}
                 <div class="cal-main">
                     <div class="cal-grid">
-                        {# Day-of-week header #}
-                        <div class="cal-grid__header">
-                            {% for dow in ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'] %}
-                                <div class="cal-grid__dow">{{ dow }}</div>
-                            {% endfor %}
-                        </div>
-                        {# Day cells — all days of the trip pre-rendered #}
                         <div class="cal-grid__body" id="cal-grid-body">
                             {% set startTs    = travel.startAt|date('U') %}
                             {% set endTs      = travel.endAt|date('U') %}
                             {% set todayStr   = 'now'|date('Y-m-d') %}
                             {% set monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'] %}
-                            {# Pad to Monday of first week #}
-                            {% set startDow  = travel.startAt|date('N') %}
-                            {% set gridStart = travel.startAt|date_modify('-' ~ (startDow - 1) ~ ' days') %}
-                            {% set endDow    = travel.endAt|date('N') %}
-                            {% set gridEnd   = travel.endAt|date_modify('+' ~ (7 - endDow) ~ ' days') %}
-                            {% set gridDays  = (((gridEnd|date('U') - gridStart|date('U')) / 86400)|round(0,'ceil') + 1) %}
-                            {% set lastMonth = '' %}
-                            {% for i in 0..(gridDays - 1) %}
-                                {% set thisDate    = gridStart|date_modify('+' ~ i ~ ' days') %}
+                            {% set dowNames   = { 1: 'Mon', 2: 'Tue', 3: 'Wed', 4: 'Thu', 5: 'Fri', 6: 'Sat', 7: 'Sun' } %}
+                            {% set tripDays   = (((endTs - startTs) / 86400)|round(0,'ceil') + 1) %}
+                            {% set lastMonth  = '' %}
+                            {% for i in 0..(tripDays - 1) %}
+                                {% set thisDate    = travel.startAt|date_modify('+' ~ i ~ ' days') %}
                                 {% set thisDateStr = thisDate|date('Y-m-d') %}
-                                {% set inTrip      = thisDate|date('U') >= startTs and thisDate|date('U') <= endTs %}
-                                {% set dow         = thisDate|date('N') %}{# 1=Mon 7=Sun #}
+                                {% set dow         = thisDate|date('N') %}
                                 {% set isWeekend   = dow >= 6 %}
                                 {% set isToday     = thisDateStr == todayStr %}
                                 {% set thisMonth   = thisDate|date('Y-n') %}
-                                {% if inTrip and thisMonth != lastMonth and dow == 1 %}
+                                {% if thisMonth != lastMonth %}
                                     {% set lastMonth = thisMonth %}
                                     <div class="cal-month-label">{{ monthNames[thisDate|date('n') - 1] }} {{ thisDate|date('Y') }}</div>
                                 {% endif %}
-                                <div class="cal-day{% if not inTrip %} cal-day--out{% endif %}{% if isWeekend %} cal-day--weekend{% endif %}{% if isToday %} cal-day--today{% endif %}"
+                                <div class="cal-day{% if isWeekend %} cal-day--weekend{% endif %}{% if isToday %} cal-day--today{% endif %}"
                                      id="cal-day-{{ thisDateStr }}"
                                      data-date="{{ thisDateStr }}">
                                     <div class="cal-day__head">
+                                        <span class="cal-day__dow">{{ dowNames[dow] }}</span>
                                         <span class="cal-day__num">{{ thisDate|date('d') }}</span>
-                                        {% if canEdit and inTrip %}
+                                        {% if canEdit %}
                                         <button class="cal-add-btn" type="button" data-date="{{ thisDateStr }}" title="Add location">+</button>
                                         {% endif %}
                                     </div>
                                     <div class="cal-day__body">
-                                        {% if inTrip %}
-                                            {% for loc in travel.location %}
-                                                {% if loc.visitAt is not null and loc.visitAt|date('Y-m-d') == thisDateStr %}
-                                                    <div class="cal-card" id="cal-loc-{{ loc.id }}"
-                                                         data-location-id="{{ loc.id }}"
-                                                         data-title="{{ loc.title|e('html_attr') }}"
-                                                         data-type="{{ loc.typeLocation is not null ? loc.typeLocation.title|e('html_attr') : '' }}"
-                                                         data-icon="{{ loc.typeLocation is not null ? loc.typeLocation.icon|e('html_attr') : '' }}">
-                                                        <span class="cal-card__icon">
-                                                            {% if loc.typeLocation is not null %}<i class="{{ loc.typeLocation.icon }}"></i>{% else %}📍{% endif %}
-                                                        </span>
-                                                        <span class="cal-card__text">
-                                                            <div class="cal-card__title">{{ loc.title }}</div>
-                                                            {% if loc.typeLocation is not null %}<div class="cal-card__type">{{ loc.typeLocation.title }}</div>{% endif %}
-                                                        </span>
-                                                        {% if canEdit %}
-                                                        <button class="cal-remove-btn" type="button" data-location-id="{{ loc.id }}" title="Unschedule">&times;</button>
-                                                        {% endif %}
-                                                    </div>
-                                                {% endif %}
-                                            {% endfor %}
-                                        {% endif %}
+                                        {% for loc in travel.location %}
+                                            {% if loc.visitAt is not null and loc.visitAt|date('Y-m-d') == thisDateStr %}
+                                                <div class="cal-card" id="cal-loc-{{ loc.id }}"
+                                                     data-location-id="{{ loc.id }}"
+                                                     data-title="{{ loc.title|e('html_attr') }}"
+                                                     data-type="{{ loc.typeLocation is not null ? loc.typeLocation.title|e('html_attr') : '' }}"
+                                                     data-icon="{{ loc.typeLocation is not null ? loc.typeLocation.icon|e('html_attr') : '' }}">
+                                                    <span class="cal-card__icon">
+                                                        {% if loc.typeLocation is not null %}<i class="{{ loc.typeLocation.icon }}"></i>{% else %}📍{% endif %}
+                                                    </span>
+                                                    <span class="cal-card__text">
+                                                        <div class="cal-card__title">{{ loc.title }}</div>
+                                                        {% if loc.typeLocation is not null %}<div class="cal-card__type">{{ loc.typeLocation.title }}</div>{% endif %}
+                                                    </span>
+                                                    {% if canEdit %}
+                                                    <button class="cal-remove-btn" type="button" data-location-id="{{ loc.id }}" title="Unschedule">&times;</button>
+                                                    {% endif %}
+                                                </div>
+                                            {% endif %}
+                                        {% endfor %}
                                     </div>
                                 </div>
                             {% endfor %}
