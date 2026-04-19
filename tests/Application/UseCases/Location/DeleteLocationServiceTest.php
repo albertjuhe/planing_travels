@@ -34,7 +34,8 @@ class DeleteLocationServiceTest extends LocationService
         $this->userRepository
             ->expects($this->once())
             ->method('ofIdOrFail')
-            ->with($userId);
+            ->with($userId)
+            ->willReturn($this->createConfiguredMock(\App\Domain\User\Model\User::class, ['getUsername' => 'testuser']));
 
         $this->locationRepository
             ->expects($this->once())
@@ -44,7 +45,7 @@ class DeleteLocationServiceTest extends LocationService
         $this->webSocketNotifier
             ->expects($this->once())
             ->method('notifyLocationRemoved')
-            ->with($travelId, $locationId, (string) $userId);
+            ->with($travelId, $locationId, (string) $userId, 'testuser');
 
         $deleteLocationService = new DeleteLocationService(
             $this->userRepository,
@@ -66,12 +67,13 @@ class DeleteLocationServiceTest extends LocationService
         $location = $this->createMock(Location::class);
 
         $this->locationRepository->method('findById')->willReturn($location);
-        $this->userRepository->method('ofIdOrFail');
+        $this->userRepository->method('ofIdOrFail')
+            ->willReturn($this->createConfiguredMock(\App\Domain\User\Model\User::class, ['getUsername' => 'testuser']));
 
         $this->webSocketNotifier
             ->expects($this->once())
             ->method('notifyLocationRemoved')
-            ->with($travelId, $locationId, (string) $userId);
+            ->with($travelId, $locationId, (string) $userId, 'testuser');
 
         $deleteLocationService = new DeleteLocationService(
             $this->userRepository,
