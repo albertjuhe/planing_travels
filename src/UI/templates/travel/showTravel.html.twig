@@ -1616,7 +1616,7 @@
                     <div class="cal-unscheduled__body" id="cal-unscheduled">
                         {% set hasUnscheduled = false %}
                         {% for loc in travel.location %}
-                            {% if loc.visitAt is null %}
+                            {% if not loc.hasAnyVisitDate %}
                                 {% set hasUnscheduled = true %}
                                 <div class="cal-card" id="cal-loc-{{ loc.id }}"
                                      data-location-id="{{ loc.id }}"
@@ -1673,9 +1673,10 @@
                                     </div>
                                     <div class="cal-day__body">
                                         {% for loc in travel.location %}
-                                            {% if loc.visitAt is not null and loc.visitAt|date('Y-m-d') == thisDateStr %}
-                                                <div class="cal-card" id="cal-loc-{{ loc.id }}"
+                                            {% if loc.hasVisitDateOn(thisDateStr) %}
+                                                <div class="cal-card" id="cal-loc-{{ loc.id }}-{{ thisDateStr }}"
                                                      data-location-id="{{ loc.id }}"
+                                                     data-date="{{ thisDateStr }}"
                                                      data-title="{{ loc.title|e('html_attr') }}"
                                                      data-type="{{ loc.typeLocation is not null ? loc.typeLocation.title|e('html_attr') : '' }}"
                                                      data-icon="{{ loc.typeLocation is not null ? loc.typeLocation.icon|e('html_attr') : '' }}">
@@ -1687,7 +1688,7 @@
                                                         {% if loc.typeLocation is not null %}<div class="cal-card__type">{{ loc.typeLocation.title }}</div>{% endif %}
                                                     </span>
                                                     {% if canEdit %}
-                                                    <button class="cal-remove-btn" type="button" data-location-id="{{ loc.id }}" title="Unschedule">&times;</button>
+                                                    <button class="cal-remove-btn" type="button" data-location-id="{{ loc.id }}" data-date="{{ thisDateStr }}" title="Remove from this day">&times;</button>
                                                     {% endif %}
                                                 </div>
                                             {% endif %}
@@ -2085,6 +2086,18 @@
         {% if canEdit %}
         /* ── Calendar: picker + week navigation ── */
         var VISIT_DATE_URL = '{{ path('updateLocationVisitDate', {'locationId': '__LOC__'}) }}';
+
+        /* Build a registry of all locations for the picker */
+        var ALL_LOCATIONS = [
+            {% for loc in travel.location %}
+            {
+                id: '{{ loc.id }}',
+                title: {{ loc.title|json_encode|raw }},
+                type: {{ (loc.typeLocation is not null ? loc.typeLocation.title : '')|json_encode|raw }},
+                icon: {{ (loc.typeLocation is not null ? loc.typeLocation.icon : '')|json_encode|raw }}
+            }{{ not loop.last ? ',' : '' }}
+            {% endfor %}
+        ];
         {% endif %}
 
         {% if canEdit %}
@@ -2097,24 +2110,32 @@
 
         function openPicker(btn) {
             pickerDate = btn.dataset.date;
-            var unscheduled = document.querySelectorAll('#cal-unscheduled .cal-card');
             picker.innerHTML = '';
-            if (unscheduled.length === 0) {
-                picker.innerHTML = '<div class="cal-picker__empty">No unscheduled locations</div>';
+            var dayBody = document.querySelector('#cal-day-' + pickerDate + ' .cal-day__body');
+            var alreadyOnDay = [];
+            if (dayBody) {
+                dayBody.querySelectorAll('.cal-card').forEach(function (c) {
+                    alreadyOnDay.push(c.dataset.locationId);
+                });
+            }
+            var available = ALL_LOCATIONS.filter(function (loc) {
+                return alreadyOnDay.indexOf(loc.id) === -1;
+            });
+            if (available.length === 0) {
+                picker.innerHTML = '<div class="cal-picker__empty">All locations already on this day</div>';
             } else {
-                unscheduled.forEach(function (card) {
+                available.forEach(function (loc) {
                     var item = document.createElement('div');
                     item.className = 'cal-picker__item';
-                    var iconAttr = card.dataset.icon || '';
-                    var iconHtml = iconAttr
-                        ? '<i class="cal-picker__item__icon ' + escAttr(iconAttr) + '"></i>'
+                    var iconHtml = loc.icon
+                        ? '<i class="cal-picker__item__icon ' + escAttr(loc.icon) + '"></i>'
                         : '<span class="cal-picker__item__icon">📍</span>';
                     item.innerHTML = iconHtml +
-                        '<span><div class="cal-picker__item__title">' + escHtml(card.dataset.title || '') + '</div>' +
-                        (card.dataset.type ? '<div class="cal-picker__item__type">' + escHtml(card.dataset.type) + '</div>' : '') +
+                        '<span><div class="cal-picker__item__title">' + escHtml(loc.title) + '</div>' +
+                        (loc.type ? '<div class="cal-picker__item__type">' + escHtml(loc.type) + '</div>' : '') +
                         '</span>';
                     item.addEventListener('click', function () {
-                        scheduleLocation(card, pickerDate);
+                        addLocationToDay(loc, pickerDate);
                         closePicker();
                     });
                     picker.appendChild(item);
@@ -2144,49 +2165,90 @@
         document.addEventListener('click', function (e) {
             var btn = e.target.closest('.cal-remove-btn');
             if (!btn) return;
-            var card = document.getElementById('cal-loc-' + btn.dataset.locationId);
-            if (card) { unscheduleLocation(card); }
+            var locId = btn.dataset.locationId;
+            var date = btn.dataset.date;
+            if (date) {
+                removeLocationFromDay(locId, date);
+            } else {
+                var card = btn.closest('.cal-card');
+                if (card) { removeLocationFromDay(card.dataset.locationId, card.dataset.date); }
+            }
         });
 
-        function scheduleLocation(card, date) {
-            var locationId = card.dataset.locationId;
+        function addLocationToDay(loc, date) {
             var dayBody = document.querySelector('#cal-day-' + date + ' .cal-day__body');
             if (!dayBody) return;
-            var scheduled = card.cloneNode(true);
-            scheduled.id = 'cal-loc-' + locationId;
-            var removeBtn = document.createElement('button');
-            removeBtn.className = 'cal-remove-btn'; removeBtn.type = 'button';
-            removeBtn.dataset.locationId = locationId; removeBtn.title = 'Unschedule';
-            removeBtn.innerHTML = '&times;';
-            scheduled.appendChild(removeBtn);
-            card.remove();
-            dayBody.appendChild(scheduled);
-            updateUnscheduledEmpty();
-            patchVisitDate(locationId, date, function () {
-                scheduled.remove();
-                document.getElementById('cal-unscheduled').appendChild(card);
+            var card = document.createElement('div');
+            card.className = 'cal-card';
+            card.id = 'cal-loc-' + loc.id + '-' + date;
+            card.dataset.locationId = loc.id;
+            card.dataset.date = date;
+            card.dataset.title = loc.title;
+            card.dataset.type = loc.type || '';
+            card.dataset.icon = loc.icon || '';
+            var iconHtml = loc.icon
+                ? '<i class="' + escAttr(loc.icon) + '"></i>'
+                : '📍';
+            card.innerHTML =
+                '<span class="cal-card__icon">' + iconHtml + '</span>' +
+                '<span class="cal-card__text">' +
+                    '<div class="cal-card__title">' + escHtml(loc.title) + '</div>' +
+                    (loc.type ? '<div class="cal-card__type">' + escHtml(loc.type) + '</div>' : '') +
+                '</span>' +
+                '<button class="cal-remove-btn" type="button" data-location-id="' + loc.id + '" data-date="' + date + '" title="Remove from this day">&times;</button>';
+            dayBody.appendChild(card);
+
+            var unschedCard = document.getElementById('cal-loc-' + loc.id);
+            if (unschedCard && unschedCard.closest('#cal-unscheduled')) {
+                unschedCard.remove();
                 updateUnscheduledEmpty();
+            }
+
+            patchVisitDate(loc.id, { action: 'add', date: date }, function () {
+                card.remove();
             });
         }
 
-        function unscheduleLocation(card) {
-            var locationId = card.dataset.locationId;
-            var plain = card.cloneNode(true);
-            plain.id = 'cal-loc-' + locationId;
-            var oldBtn = plain.querySelector('.cal-remove-btn');
-            if (oldBtn) { oldBtn.remove(); }
-            card.remove();
-            document.getElementById('cal-unscheduled').appendChild(plain);
-            updateUnscheduledEmpty();
-            patchVisitDate(locationId, null, function () { location.reload(); });
+        function removeLocationFromDay(locationId, date) {
+            var card = document.getElementById('cal-loc-' + locationId + '-' + date);
+            if (card) { card.remove(); }
+
+            var hasOtherDays = document.querySelector('.cal-day__body .cal-card[data-location-id="' + locationId + '"]');
+            if (!hasOtherDays) {
+                var loc = ALL_LOCATIONS.filter(function (l) { return l.id === locationId; })[0];
+                if (loc) {
+                    var unschedCard = document.createElement('div');
+                    unschedCard.className = 'cal-card';
+                    unschedCard.id = 'cal-loc-' + locationId;
+                    unschedCard.dataset.locationId = locationId;
+                    unschedCard.dataset.title = loc.title;
+                    unschedCard.dataset.type = loc.type || '';
+                    unschedCard.dataset.icon = loc.icon || '';
+                    var iconHtml = loc.icon
+                        ? '<i class="' + escAttr(loc.icon) + '"></i>'
+                        : '📍';
+                    unschedCard.innerHTML =
+                        '<span class="cal-card__icon">' + iconHtml + '</span>' +
+                        '<span class="cal-card__text">' +
+                            '<div class="cal-card__title">' + escHtml(loc.title) + '</div>' +
+                            (loc.type ? '<div class="cal-card__type">' + escHtml(loc.type) + '</div>' : '') +
+                        '</span>';
+                    document.getElementById('cal-unscheduled').appendChild(unschedCard);
+                    updateUnscheduledEmpty();
+                }
+            }
+
+            patchVisitDate(locationId, { action: 'remove', date: date }, function () {
+                location.reload();
+            });
         }
 
-        function patchVisitDate(locationId, date, onError) {
+        function patchVisitDate(locationId, payload, onError) {
             var url = VISIT_DATE_URL.replace('__LOC__', locationId);
             fetch(url, {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
-                body: JSON.stringify({ visitAt: date })
+                body: JSON.stringify(payload)
             })
             .then(function (r) {
                 if (!r.ok) { onError(); return; }

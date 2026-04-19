@@ -58,29 +58,58 @@ class UpdateLocationVisitDateAPIController extends AbstractController
         }
 
         $data = json_decode($request->getContent(), true);
-        $visitAt = isset($data['visitAt']) ? $data['visitAt'] : false;
+        $action = isset($data['action']) ? $data['action'] : null;
 
-        if ($visitAt === null || $visitAt === '') {
-            $location->setVisitAt(null);
-        } elseif ($visitAt !== false) {
+        if ($action === 'add' && isset($data['date'])) {
             try {
-                $date = new \DateTime($visitAt);
+                $date = new \DateTime($data['date']);
+                $location->addVisitDate($date);
                 $location->setVisitAt($date);
             } catch (\Exception $e) {
                 return new JsonResponse(['error' => 'Invalid date format'], 400);
+            }
+        } elseif ($action === 'remove' && isset($data['date'])) {
+            try {
+                $date = new \DateTime($data['date']);
+                $location->removeVisitDate($date);
+                $dates = $location->getVisitDateStrings();
+                $location->setVisitAt(!empty($dates) ? new \DateTime($dates[0]) : null);
+            } catch (\Exception $e) {
+                return new JsonResponse(['error' => 'Invalid date format'], 400);
+            }
+        } elseif ($action === 'clear') {
+            $location->clearVisitDates();
+            $location->setVisitAt(null);
+        } else {
+            $visitAt = isset($data['visitAt']) ? $data['visitAt'] : false;
+
+            if ($visitAt === null || $visitAt === '') {
+                $location->clearVisitDates();
+                $location->setVisitAt(null);
+            } elseif ($visitAt !== false) {
+                try {
+                    $date = new \DateTime($visitAt);
+                    $location->addVisitDate($date);
+                    $location->setVisitAt($date);
+                } catch (\Exception $e) {
+                    return new JsonResponse(['error' => 'Invalid date format'], 400);
+                }
             }
         }
 
         $this->em->flush();
 
-        $this->webSocketNotifier->notifyVisitDateChanged(
+        $this->webSocketNotifier->notifyVisitDatesChanged(
             $travel->getId()->id(),
             $locationId,
-            $location->getVisitAt() ? $location->getVisitAt()->format('Y-m-d') : null,
+            $location->getVisitDateStrings(),
             (string) $user->getId()->id(),
             $user->getUsername()
         );
 
-        return new JsonResponse(['success' => true]);
+        return new JsonResponse([
+            'success' => true,
+            'visitDates' => $location->getVisitDateStrings(),
+        ]);
     }
 }

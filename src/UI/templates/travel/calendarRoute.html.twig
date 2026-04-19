@@ -209,7 +209,7 @@
                         <div class="cr-day__body">
                             {% set hasLocs = false %}
                             {% for loc in travel.location %}
-                                {% if loc.visitAt is not null and loc.visitAt|date('Y-m-d') == thisDateStr %}
+                                {% if loc.hasVisitDateOn(thisDateStr) %}
                                     {% set hasLocs = true %}
                                     <div class="cr-loc"
                                          data-lat="{{ loc.mark.geolocation.lat }}"

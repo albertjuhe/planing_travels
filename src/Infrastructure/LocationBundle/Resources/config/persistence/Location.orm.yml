@@ -98,6 +98,15 @@ App\Domain\Location\Model\Location:
                     referencedColumnName: id
             orphanRemoval: false
     oneToMany:
+        visitDates:
+            targetEntity: App\Domain\Location\Model\LocationVisitDate
+            cascade:
+                - all
+            fetch: EAGER
+            mappedBy: location
+            orphanRemoval: true
+            orderBy:
+                visitDate: ASC
         notas:
             targetEntity: App\Domain\Note\Model\Note
             cascade:

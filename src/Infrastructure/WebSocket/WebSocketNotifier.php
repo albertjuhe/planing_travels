@@ -61,6 +61,18 @@ class WebSocketNotifier
         ]);
     }
 
+    public function notifyVisitDatesChanged(string $travelId, string $locationId, array $visitDates, string $byUserId, string $byUsername): void
+    {
+        $this->broadcast($travelId, [
+            'event'      => 'visit_dates_changed',
+            'travelId'   => $travelId,
+            'locationId' => $locationId,
+            'visitDates' => $visitDates,
+            'byUserId'   => $byUserId,
+            'byUsername'  => $byUsername,
+        ]);
+    }
+
     public function notifyImageUploaded(string $travelId, string $locationId, string $filename, string $byUserId, string $byUsername): void
     {
         $this->broadcast($travelId, [
