@@ -132,6 +132,22 @@ create table if not exists location
 )
     collate = utf8mb4_unicode_ci;
 
+create table if not exists location_visit_date
+(
+    id          int auto_increment
+        primary key,
+    location_id char(36)     not null comment '(DC2Type:LocationId)',
+    visit_date  date         not null,
+    constraint FK_LVD_LOCATION
+        foreign key (location_id) references location (id) on delete cascade,
+    constraint UNIQ_LVD_LOC_DATE
+        unique (location_id, visit_date)
+)
+    collate = utf8mb4_unicode_ci;
+
+create index IDX_LVD_LOCATION
+    on location_visit_date (location_id);
+
 create table if not exists images
 (
     id          int auto_increment
@@ -163,8 +179,8 @@ create table if not exists note
     id          int auto_increment
         primary key,
     location_id char(36)     null comment '(DC2Type:LocationId)',
-    title       varchar(255) not null,
-    description varchar(255) not null,
+    title       varchar(255) null,
+    description longtext     null,
     constraint FK_CFBDFA1464D218E
         foreign key (location_id) references location (id)
 )

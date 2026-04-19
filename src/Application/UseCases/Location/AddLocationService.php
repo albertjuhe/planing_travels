@@ -107,6 +107,7 @@ class AddLocationService implements UsesCasesService
                 'longitude'     => $location->getMark()->getGeoLocation()->lng(),
                 'slug'          => $location->getSlug(),
                 'addedByUserId' => $userId,
+                'addedByUsername' => $user->getUsername(),
             ]
         );
     }

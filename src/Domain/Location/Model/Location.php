@@ -11,6 +11,7 @@ use App\Domain\Mark\Model\Mark;
 use App\Domain\Travel\Model\Travel;
 use App\Domain\TypeLocation\Model\TypeLocation;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 class Location extends AggregateRoot
 {
@@ -54,10 +55,15 @@ class Location extends AggregateRoot
     /** @var \DateTime|null */
     private $visitAt;
 
+    /** @var Collection|LocationVisitDate[] */
+    private $visitDates;
+
     public function __construct()
     {
         $this->id = new LocationId();
         $this->images = new ArrayCollection();
+        $this->notas = new ArrayCollection();
+        $this->visitDates = new ArrayCollection();
         $this->updatedAt = new \DateTime();
         $this->createdAt = new \DateTime();
         $this->publishEvent();
@@ -402,6 +408,74 @@ class Location extends AggregateRoot
     public function getImages()
     {
         return $this->images;
+    }
+
+    public function getNotas()
+    {
+        return $this->notas ?? new ArrayCollection();
+    }
+
+    /**
+     * @return Collection|LocationVisitDate[]
+     */
+    public function getVisitDates(): Collection
+    {
+        return $this->visitDates ?? new ArrayCollection();
+    }
+
+    public function addVisitDate(\DateTime $date): LocationVisitDate
+    {
+        foreach ($this->getVisitDates() as $vd) {
+            if ($vd->getVisitDate()->format('Y-m-d') === $date->format('Y-m-d')) {
+                return $vd;
+            }
+        }
+        $visitDate = new LocationVisitDate($this, $date);
+        $this->getVisitDates()->add($visitDate);
+
+        return $visitDate;
+    }
+
+    public function removeVisitDate(\DateTime $date): void
+    {
+        foreach ($this->getVisitDates() as $vd) {
+            if ($vd->getVisitDate()->format('Y-m-d') === $date->format('Y-m-d')) {
+                $this->getVisitDates()->removeElement($vd);
+                break;
+            }
+        }
+    }
+
+    public function clearVisitDates(): void
+    {
+        $this->getVisitDates()->clear();
+    }
+
+    public function getVisitDateStrings(): array
+    {
+        $dates = [];
+        foreach ($this->getVisitDates() as $vd) {
+            $dates[] = $vd->getVisitDate()->format('Y-m-d');
+        }
+        sort($dates);
+
+        return $dates;
+    }
+
+    public function hasVisitDateOn(string $dateStr): bool
+    {
+        foreach ($this->getVisitDates() as $vd) {
+            if ($vd->getVisitDate()->format('Y-m-d') === $dateStr) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function hasAnyVisitDate(): bool
+    {
+        return !$this->getVisitDates()->isEmpty();
     }
 
     public function toArray()

@@ -1,0 +1,24 @@
+App\Domain\Location\Model\LocationVisitDate:
+    type: entity
+    table: location_visit_date
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        visitDate:
+            type: date
+            nullable: false
+            column: visit_date
+    manyToOne:
+        location:
+            targetEntity: App\Domain\Location\Model\Location
+            cascade: {}
+            fetch: LAZY
+            inversedBy: visitDates
+            joinColumns:
+                location_id:
+                    referencedColumnName: id
+                    onDelete: CASCADE
+            orphanRemoval: false

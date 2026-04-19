@@ -101,7 +101,8 @@ class UpdateLocationAPIController extends AbstractController
                 'typeIcon'    => $location->getTypeLocation() ? $location->getTypeLocation()->getIcon() : '',
                 'updatedByUserId' => (string) $user->getId()->id(),
             ],
-            (string) $user->getId()->id()
+            (string) $user->getId()->id(),
+            $user->getUsername()
         );
 
         return new JsonResponse(['success' => true]);

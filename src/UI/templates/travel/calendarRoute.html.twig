@@ -1,0 +1,474 @@
+{% extends 'old_base.html.twig' %}
+
+{% block title %}Calendar – {{ travel.title }}{% endblock %}
+
+{% block navbar %}
+    {% include 'default/navbarPublic.html.twig' %}
+{% endblock %}
+
+{% block css %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/leaflet@1.7.1/leaflet.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('font-awesome-4.3.0/css/font-awesome.min.css') }}"/>
+    <style>
+*, *::before, *::after { box-sizing: border-box; }
+
+.cr-page {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 24px 20px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Header */
+.cr-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+}
+.cr-header__left { display: flex; align-items: center; gap: 16px; }
+.cr-header__title { font-size: 22px; font-weight: 800; color: #1a2e4a; margin: 0; }
+.cr-header__sub { font-size: 13px; color: #7f8c8d; margin: 4px 0 0; }
+.cr-back {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 16px; font-size: 13px; font-weight: 600;
+    border-radius: 8px; border: 1px solid #dde3ea;
+    background: #fff; color: #2c3e50; text-decoration: none;
+    transition: all 0.15s;
+}
+.cr-back:hover { background: #f4f6f8; text-decoration: none; }
+
+/* Layout: calendar + map side by side */
+.cr-layout {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+}
+.cr-cal { flex: 1; min-width: 0; max-height: 80vh; overflow-y: auto; }
+.cr-map-wrap { flex: 1; min-width: 0; position: sticky; top: 20px; }
+
+/* Calendar panel */
+.cr-cal {
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07), 0 8px 24px rgba(0,0,0,0.06);
+    overflow: auto;
+}
+.cr-cal__head {
+    padding: 14px 18px;
+    background: linear-gradient(135deg, #1a2e4a 0%, #2574a9 100%);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    display: flex; align-items: center; gap: 8px;
+}
+.cr-cal__body {
+    display: flex; flex-direction: column;
+}
+.cr-day {
+    display: flex; align-items: center; gap: 16px;
+    padding: 12px 18px;
+    border-bottom: 1px solid #eaecef;
+    cursor: pointer; transition: background 0.1s;
+}
+.cr-day:last-child { border-bottom: none; }
+.cr-day:hover { background: #f8f9fb; }
+.cr-day--selected { background: #eaf4fd !important; outline: 2px solid #2980b9; outline-offset: -2px; }
+.cr-day__date {
+    flex-shrink: 0; width: 120px;
+    display: flex; align-items: center; gap: 10px;
+}
+.cr-day__date-num {
+    width: 36px; height: 36px; border-radius: 10px;
+    background: #f0f4ff; color: #1a2e4a;
+    font-size: 15px; font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+}
+.cr-day--selected .cr-day__date-num { background: #2980b9; color: #fff; }
+.cr-day__date-info {
+    display: flex; flex-direction: column;
+}
+.cr-day__date-dow {
+    font-size: 12px; font-weight: 700; color: #2c3e50;
+    text-transform: uppercase; letter-spacing: 0.3px;
+}
+.cr-day__date-month {
+    font-size: 11px; color: #7f8c8d; font-weight: 500;
+}
+.cr-day__body {
+    flex: 1; display: flex; flex-wrap: wrap; gap: 6px;
+    min-height: 28px; align-items: center;
+}
+.cr-day__empty {
+    font-size: 12px; color: #c5cdd6; font-style: italic;
+}
+.cr-loc {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 5px 10px; border-radius: 8px;
+    font-size: 12px; font-weight: 500; color: #2c3e50;
+    background: #f0f4ff; border: 1px solid #dde3ea;
+    white-space: nowrap;
+}
+.cr-loc i { color: #6366f1; font-size: 12px; }
+.cr-travel-time {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 11px; color: #9ca3af; font-weight: 500;
+    padding: 0 2px;
+}
+.cr-travel-time svg { flex-shrink: 0; }
+
+/* Map panel */
+.cr-map {
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07), 0 8px 24px rgba(0,0,0,0.06);
+    overflow: hidden;
+}
+.cr-map__head {
+    padding: 14px 18px;
+    background: linear-gradient(135deg, #1a2e4a 0%, #2574a9 100%);
+    color: #fff;
+    display: flex; align-items: center; justify-content: space-between;
+}
+.cr-map__title {
+    font-size: 14px; font-weight: 700;
+    display: flex; align-items: center; gap: 8px;
+}
+.cr-map__info { font-size: 12px; opacity: 0.8; }
+.cr-map__btns { display: flex; gap: 6px; }
+.cr-map-btn {
+    padding: 6px 14px; font-size: 12px; font-weight: 600;
+    border: 1px solid rgba(255,255,255,0.3); border-radius: 8px;
+    background: rgba(255,255,255,0.1); color: #fff;
+    cursor: pointer; transition: all 0.15s; white-space: nowrap;
+}
+.cr-map-btn:hover { background: rgba(255,255,255,0.2); }
+.cr-map-btn.is-active { background: #fff; color: #1a2e4a; border-color: #fff; }
+#cr-route-map { height: 500px; }
+
+/* Legend */
+.cr-legend {
+    padding: 12px 18px; border-top: 1px solid #eaecef;
+    display: flex; flex-wrap: wrap; gap: 12px;
+    font-size: 12px; color: #636e72;
+}
+.cr-legend__item { display: flex; align-items: center; gap: 5px; }
+.cr-legend__dot {
+    width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
+}
+    </style>
+{% endblock %}
+
+{% block content %}
+{% set isOwner = app.user is not null and app.user.userId == travel.user.userId %}
+{% set canEdit = isOwner or (app.user is not null and travel.sharedusers|filter(u => u.userId == app.user.userId)|length > 0) %}
+
+<div class="cr-page">
+    <div class="cr-header">
+        <div class="cr-header__left">
+            <div>
+                <h1 class="cr-header__title">{{ travel.title }} – Calendar & Route</h1>
+                <p class="cr-header__sub">{{ travel.startAt|date("d M Y") }} – {{ travel.endAt|date("d M Y") }}</p>
+            </div>
+        </div>
+        <a class="cr-back" href="{{ path('show_travel', {slug: travel.slug}) }}">
+            <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 2L4 8l6 6"/></svg>
+            Back to travel
+        </a>
+    </div>
+
+    <div class="cr-layout">
+        {# Calendar #}
+        <div class="cr-cal">
+            <div class="cr-cal__head">
+                <svg viewBox="0 0 16 16" width="16" height="16" fill="currentColor"><path d="M11 1v1H5V1H3v1H1v13h14V2h-2V1h-2zm2 12H3V6h10v7z"/></svg>
+                Calendar
+            </div>
+            <div class="cr-cal__body" id="cr-cal-body">
+                {% set startTs   = travel.startAt|date('U') %}
+                {% set endTs     = travel.endAt|date('U') %}
+                {% set tripDays  = (((endTs - startTs) / 86400)|round(0,'ceil') + 1) %}
+                {% set dowNames  = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'] %}
+                {% set monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'] %}
+
+                {% for i in 0..tripDays-1 %}
+                    {% set thisDate    = travel.startAt|date_modify('+' ~ i ~ ' days') %}
+                    {% set thisDateStr = thisDate|date('Y-m-d') %}
+                    {% set dowIdx      = thisDate|date('N') - 1 %}
+                    {% set monthIdx    = thisDate|date('n') - 1 %}
+
+                    <div class="cr-day" data-date="{{ thisDateStr }}">
+                        <div class="cr-day__date">
+                            <span class="cr-day__date-num">{{ thisDate|date('d') }}</span>
+                            <span class="cr-day__date-info">
+                                <span class="cr-day__date-dow">{{ dowNames[dowIdx] }}</span>
+                                <span class="cr-day__date-month">{{ monthNames[monthIdx] }} {{ thisDate|date('Y') }}</span>
+                            </span>
+                        </div>
+                        <div class="cr-day__body">
+                            {% set hasLocs = false %}
+                            {% for loc in travel.location %}
+                                {% if loc.hasVisitDateOn(thisDateStr) %}
+                                    {% set hasLocs = true %}
+                                    <div class="cr-loc"
+                                         data-lat="{{ loc.mark.geolocation.lat }}"
+                                         data-lng="{{ loc.mark.geolocation.lng }}"
+                                         data-title="{{ loc.title|e('html_attr') }}">
+                                        {% if loc.typeLocation is not null %}<i class="{{ loc.typeLocation.icon }}"></i>{% endif %}
+                                        {{ loc.title }}
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                            {% if not hasLocs %}
+                                <span class="cr-day__empty">No locations</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        {# Map #}
+        <div class="cr-map-wrap">
+        <div class="cr-map">
+            <div class="cr-map__head">
+                <span class="cr-map__title">
+                    <svg viewBox="0 0 16 16" width="16" height="16" fill="currentColor"><path d="M2 14L6 2l4 8 2-4 2 8" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    Route Map
+                </span>
+                <div class="cr-map__btns">
+                    <button class="cr-map-btn is-active" id="btn-all" type="button">All days</button>
+                    <button class="cr-map-btn" id="btn-day" type="button" disabled>Select a day</button>
+                    <button class="cr-map-btn" id="btn-full" type="button">Full trip</button>
+                </div>
+            </div>
+            <div id="cr-route-map"></div>
+            <div class="cr-legend" id="cr-legend"></div>
+            <div style="padding:8px 18px 12px;font-size:12px;color:#7f8c8d;" id="cr-info">Click a day on the calendar to see its route</div>
+        </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    <script src="{{ asset('js/leaflet@1.7.1/leaflet.js') }}"></script>
+    <script>
+    (function () {
+        var COLORS = ['#e74c3c','#2980b9','#27ae60','#8e44ad','#f39c12','#1abc9c','#d35400','#c0392b','#2c3e50','#16a085'];
+        var routeMap = L.map('cr-route-map', {
+            center: [{{ travel.geolocation.lat }}, {{ travel.geolocation.lng }}],
+            zoom: 7, attributionControl: false
+        });
+        L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+            maxZoom: 20, subdomains: ['mt0','mt1','mt2','mt3']
+        }).addTo(routeMap);
+
+        var routeLayer = L.layerGroup().addTo(routeMap);
+        var markersLayer = L.layerGroup().addTo(routeMap);
+        var info = document.getElementById('cr-info');
+        var legend = document.getElementById('cr-legend');
+        var btnAll = document.getElementById('btn-all');
+        var btnDay = document.getElementById('btn-day');
+        var btnFull = document.getElementById('btn-full');
+        var selectedDay = null;
+        var mode = 'all';
+
+        function collectByDay() {
+            var days = {};
+            document.querySelectorAll('.cr-day').forEach(function (dayEl) {
+                var date = dayEl.dataset.date;
+                var locs = [];
+                dayEl.querySelectorAll('.cr-loc').forEach(function (loc) {
+                    var lat = parseFloat(loc.dataset.lat);
+                    var lng = parseFloat(loc.dataset.lng);
+                    if (!isNaN(lat) && !isNaN(lng)) {
+                        locs.push({ lat: lat, lng: lng, title: loc.dataset.title || '' });
+                    }
+                });
+                if (locs.length) days[date] = locs;
+            });
+            return days;
+        }
+
+        function clear() {
+            routeLayer.clearLayers();
+            markersLayer.clearLayers();
+            legend.innerHTML = '';
+        }
+
+        function addDayToMap(date, points, color, showLine) {
+            var latlngs = [];
+            points.forEach(function (pt, i) {
+                var ll = [pt.lat, pt.lng];
+                latlngs.push(ll);
+                var m = L.circleMarker(ll, {
+                    radius: 9, fillColor: color, color: '#fff', weight: 2.5, fillOpacity: 0.9
+                });
+                m.bindPopup('<strong>' + date + '</strong><br>' + (i + 1) + '. ' + pt.title);
+                m.bindTooltip(String(i + 1), { permanent: true, direction: 'center',
+                    className: 'cr-marker-label', offset: [0, 0] });
+                markersLayer.addLayer(m);
+            });
+            if (showLine && latlngs.length >= 2) {
+                routeLayer.addLayer(L.polyline(latlngs, {
+                    color: color, weight: 4, opacity: 0.85, dashArray: '10, 8'
+                }));
+            }
+            return latlngs;
+        }
+
+        function updateLegend(days, colors) {
+            var keys = Object.keys(days);
+            legend.innerHTML = keys.map(function (d, i) {
+                return '<span class="cr-legend__item"><span class="cr-legend__dot" style="background:' +
+                    colors[i % colors.length] + '"></span>' + d + ' (' + days[d].length + ')</span>';
+            }).join('');
+        }
+
+        function renderAll() {
+            clear();
+            var days = collectByDay();
+            var keys = Object.keys(days);
+            if (!keys.length) { info.textContent = 'No scheduled locations'; return; }
+            var allBounds = [];
+            keys.forEach(function (d, i) {
+                var color = COLORS[i % COLORS.length];
+                var ll = addDayToMap(d, days[d], color, true);
+                allBounds = allBounds.concat(ll);
+            });
+            if (allBounds.length) routeMap.fitBounds(allBounds, { padding: [30, 30] });
+            info.textContent = keys.length + ' day' + (keys.length !== 1 ? 's' : '') +
+                ' \u00b7 ' + allBounds.length + ' location' + (allBounds.length !== 1 ? 's' : '');
+            updateLegend(days, COLORS);
+        }
+
+        function renderDay(date) {
+            clear();
+            var days = collectByDay();
+            if (!days[date]) { info.textContent = 'No locations on ' + date; return; }
+            var single = {}; single[date] = days[date];
+            var ll = addDayToMap(date, days[date], '#2980b9', true);
+            if (ll.length) routeMap.fitBounds(ll, { padding: [50, 50] });
+            info.textContent = date + ' \u00b7 ' + days[date].length + ' location' + (days[date].length !== 1 ? 's' : '');
+            updateLegend(single, ['#2980b9']);
+        }
+
+        function renderFull() {
+            clear();
+            var days = collectByDay();
+            var keys = Object.keys(days);
+            if (!keys.length) { info.textContent = 'No scheduled locations'; return; }
+            var allBounds = [], allLatlngs = [];
+            keys.forEach(function (d, i) {
+                var color = COLORS[i % COLORS.length];
+                days[d].forEach(function (pt, j) {
+                    var ll = [pt.lat, pt.lng];
+                    allLatlngs.push(ll); allBounds.push(ll);
+                    var m = L.circleMarker(ll, {
+                        radius: 9, fillColor: color, color: '#fff', weight: 2.5, fillOpacity: 0.9
+                    });
+                    m.bindPopup('<strong>' + d + '</strong><br>' + (j + 1) + '. ' + pt.title);
+                    markersLayer.addLayer(m);
+                });
+            });
+            if (allLatlngs.length >= 2) {
+                routeLayer.addLayer(L.polyline(allLatlngs, {
+                    color: '#1a2e4a', weight: 4, opacity: 0.9
+                }));
+            }
+            if (allBounds.length) routeMap.fitBounds(allBounds, { padding: [30, 30] });
+            info.textContent = 'Full trip \u00b7 ' + allBounds.length + ' location' + (allBounds.length !== 1 ? 's' : '');
+            updateLegend(days, COLORS);
+        }
+
+        function render() {
+            if (mode === 'day' && selectedDay) renderDay(selectedDay);
+            else if (mode === 'full') renderFull();
+            else renderAll();
+        }
+
+        function setActive(btn) {
+            [btnAll, btnDay, btnFull].forEach(function (b) { b.classList.remove('is-active'); });
+            btn.classList.add('is-active');
+        }
+
+        /* Day click */
+        document.querySelectorAll('.cr-day').forEach(function (dayEl) {
+            dayEl.addEventListener('click', function () {
+                document.querySelectorAll('.cr-day--selected').forEach(function (d) { d.classList.remove('cr-day--selected'); });
+                dayEl.classList.add('cr-day--selected');
+                selectedDay = dayEl.dataset.date;
+                mode = 'day';
+                setActive(btnDay);
+                btnDay.textContent = selectedDay;
+                btnDay.disabled = false;
+                render();
+            });
+        });
+
+        btnAll.addEventListener('click', function () {
+            mode = 'all'; selectedDay = null; setActive(btnAll);
+            btnDay.textContent = 'Select a day'; btnDay.disabled = true;
+            document.querySelectorAll('.cr-day--selected').forEach(function (d) { d.classList.remove('cr-day--selected'); });
+            render();
+        });
+        btnFull.addEventListener('click', function () {
+            mode = 'full'; selectedDay = null; setActive(btnFull);
+            btnDay.textContent = 'Select a day'; btnDay.disabled = true;
+            document.querySelectorAll('.cr-day--selected').forEach(function (d) { d.classList.remove('cr-day--selected'); });
+            render();
+        });
+
+        render();
+
+        /* Travel time between consecutive locations per day */
+        function formatDuration(seconds) {
+            var h = Math.floor(seconds / 3600);
+            var m = Math.round((seconds % 3600) / 60);
+            return h > 0 ? h + 'h ' + m + 'min' : m + 'min';
+        }
+
+        function fetchTravelTimes() {
+            document.querySelectorAll('.cr-day').forEach(function (dayEl) {
+                var locs = dayEl.querySelectorAll('.cr-loc');
+                if (locs.length < 2) return;
+
+                var coords = [];
+                locs.forEach(function (loc) {
+                    coords.push(parseFloat(loc.dataset.lng) + ',' + parseFloat(loc.dataset.lat));
+                });
+
+                var url = 'https://router.project-osrm.org/route/v1/driving/' +
+                    coords.join(';') + '?overview=false&steps=false';
+
+                fetch(url)
+                    .then(function (r) { return r.json(); })
+                    .then(function (data) {
+                        if (data.code !== 'Ok' || !data.routes || !data.routes[0]) return;
+                        var legs = data.routes[0].legs;
+                        for (var i = 0; i < legs.length; i++) {
+                            var badge = document.createElement('span');
+                            badge.className = 'cr-travel-time';
+                            badge.innerHTML = '<svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 8h10M10 5l3 3-3 3"/></svg>' +
+                                formatDuration(legs[i].duration);
+                            locs[i].after(badge);
+                        }
+                    })
+                    .catch(function () {});
+            });
+        }
+
+        fetchTravelTimes();
+    }());
+    </script>
+    <style>
+    .cr-marker-label {
+        background: none !important; border: none !important; box-shadow: none !important;
+        font-size: 11px !important; font-weight: 700 !important; color: #fff !important;
+    }
+    .cr-marker-label::before { display: none !important; }
+    </style>
+{% endblock %}

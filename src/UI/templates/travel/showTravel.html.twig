@@ -303,8 +303,8 @@
 .st-locations-sidebar {
     display: flex;
     flex-direction: column;
-    border-left: 1px solid #eaecef;
-    background: #fafbfc;
+    border-left: 1px solid #e5e7eb;
+    background: #ffffff;
     overflow: hidden;
     transition: width 0.3s ease, opacity 0.3s ease;
     width: 320px;
@@ -315,6 +315,152 @@
     opacity: 0;
     width: 0;
     border-left: none;
+}
+
+/* ─────────────────────────────────────────
+   Locations Panel - Modern Design
+───────────────────────────────────────── */
+.loc-panel {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background: #fff;
+}
+.loc-panel__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px;
+    background: #fff;
+    border-bottom: 1px solid #f3f4f6;
+}
+.loc-panel__title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.loc-panel__icon {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    border-radius: 10px;
+    color: #fff;
+}
+.loc-panel__title strong {
+    font-size: 15px;
+    font-weight: 700;
+    color: #111827;
+    display: block;
+}
+.loc-panel__title small {
+    font-size: 12px;
+    color: #9ca3af;
+    font-weight: 400;
+}
+.loc-panel__actions {
+    display: flex;
+    gap: 8px;
+}
+.loc-btn {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+.loc-btn--add {
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    color: #fff;
+}
+.loc-btn--add:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+}
+.loc-btn--center {
+    background: #f3f4f6;
+    color: #6b7280;
+}
+.loc-btn--center:hover {
+    background: #e5e7eb;
+    color: #374151;
+}
+.loc-panel__search {
+    padding: 0 16px 12px;
+    position: relative;
+}
+.loc-panel__search svg {
+    position: absolute;
+    left: 28px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #9ca3af;
+    pointer-events: none;
+}
+.loc-panel__search-input {
+    width: 100%;
+    padding: 10px 12px 10px 38px;
+    font-size: 13px;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    background: #f9fafb;
+    outline: none;
+    transition: all 0.15s;
+    box-sizing: border-box;
+}
+.loc-panel__search-input:focus {
+    background: #fff;
+    border-color: #6366f1;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+.loc-panel__search-input::placeholder {
+    color: #9ca3af;
+}
+.loc-panel__list {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 8px 12px;
+}
+.loc-panel__list::-webkit-scrollbar { width: 6px; }
+.loc-panel__list::-webkit-scrollbar-track { background: transparent; }
+.loc-panel__list::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 3px; }
+.loc-panel__list::-webkit-scrollbar-thumb:hover { background: #d1d5db; }
+.loc-panel__footer {
+    padding: 12px 16px;
+    border-top: 1px solid #f3f4f6;
+    background: #fafafa;
+}
+.loc-panel__hint {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: #9ca3af;
+}
+.loc-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    text-align: center;
+    color: #9ca3af;
+}
+.loc-empty p {
+    margin: 12px 0 4px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #6b7280;
+}
+.loc-empty small {
+    font-size: 12px;
 }
 
 .st-locations-panel {
@@ -545,32 +691,181 @@
 }
 
 /* ─────────────────────────────────────────
-   Point card (injected by JS)
+   Location Card (injected by JS)
 ───────────────────────────────────────── */
 .point-view {
     display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    padding: 10px 12px;
-    border-radius: 8px;
-    border: 1px solid #eaecef;
-    margin-bottom: 6px;
-    cursor: move;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    border-radius: 12px;
+    margin-bottom: 8px;
     background: #fff;
-    transition: border-color 0.15s, box-shadow 0.15s;
+    border: 1px solid #f3f4f6;
+    transition: all 0.2s;
+    position: relative;
+}
+.point-view::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 3px;
+    height: 24px;
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    border-radius: 0 3px 3px 0;
+    opacity: 0;
+    transition: opacity 0.2s;
 }
 .point-view:hover {
-    border-color: #c5cdd6;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    border-color: #e5e7eb;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
-.address-point { font-size: 12px; color: #7f8c8d; }
-.title-point   { font-size: 13px; font-weight: 600; color: #2c3e50; }
+.point-view:hover::before {
+    opacity: 1;
+}
+.point-view__drag {
+    flex: 1;
+    min-width: 0;
+    cursor: grab;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.point-view__drag:active { cursor: grabbing; }
+.point-view__icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f3f4f6;
+    border-radius: 10px;
+    flex-shrink: 0;
+}
+.point-view__icon i {
+    font-size: 16px;
+    color: #6366f1;
+}
+.point-view__content {
+    flex: 1;
+    min-width: 0;
+}
+.point-view__actions {
+    flex-shrink: 0;
+}
+.title-point {
+    font-size: 14px;
+    font-weight: 600;
+    color: #111827;
+    display: block;
+    margin-bottom: 2px;
+}
+.title-point i {
+    display: none;
+}
+.title-point b {
+    font-weight: 600;
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.address-point {
+    font-size: 12px;
+    color: #9ca3af;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+}
 .sortable-placeholder {
-    border: 2px dashed #c5cdd6;
+    border: 2px dashed #6366f1;
+    border-radius: 12px;
+    background: #f5f3ff;
+    height: 64px;
+    margin-bottom: 8px;
+}
+
+/* Point menu dropdown */
+.pt-menu { position: relative; }
+.pt-menu__trigger {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
     border-radius: 8px;
-    background: #f8f9fa;
-    height: 44px;
-    margin-bottom: 6px;
+    color: #9ca3af;
+    cursor: pointer;
+    transition: all 0.15s;
+    padding: 0;
+}
+.pt-menu__trigger:hover {
+    background: #f3f4f6;
+    color: #6b7280;
+}
+.pt-menu__dropdown {
+    display: none;
+    position: absolute;
+    top: calc(100% + 4px);
+    right: 0;
+    z-index: 100;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+    min-width: 200px;
+    padding: 8px;
+    animation: menuFadeIn 0.15s ease;
+}
+@keyframes menuFadeIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.pt-menu__dropdown.is-open { display: block; }
+.pt-menu__item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 10px 12px;
+    border: none;
+    background: none;
+    font-size: 13px;
+    font-weight: 500;
+    color: #374151;
+    cursor: pointer;
+    border-radius: 8px;
+    text-align: left;
+    transition: all 0.1s;
+}
+.pt-menu__item:hover {
+    background: #f9fafb;
+}
+.pt-menu__item svg {
+    color: #9ca3af;
+    flex-shrink: 0;
+}
+.pt-menu__item:hover svg {
+    color: #6b7280;
+}
+.pt-menu__item--danger {
+    color: #dc2626;
+}
+.pt-menu__item--danger:hover {
+    background: #fef2f2;
+}
+.pt-menu__item--danger svg {
+    color: #dc2626;
+}
+.pt-menu__divider {
+    height: 1px;
+    background: #f3f4f6;
+    margin: 8px 0;
 }
 
 /* ─────────────────────────────────────────
@@ -678,9 +973,8 @@
     min-width: 0;
 }
 
-/* Month label rows — injected between week rows */
+/* Month label rows */
 .cal-month-label {
-    grid-column: 1 / -1;
     padding: 10px 14px 6px;
     font-size: 12px;
     font-weight: 700;
@@ -699,41 +993,20 @@
     overflow: hidden;
     border: 1px solid #eaecef;
 }
-.cal-grid__header {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    background: linear-gradient(135deg, #1a2e4a 0%, #2980b9 100%);
-}
-.cal-grid__dow {
-    padding: 10px 6px;
-    text-align: center;
-    font-size: 11px;
-    font-weight: 700;
-    color: rgba(255,255,255,0.75);
-    text-transform: uppercase;
-    letter-spacing: 0.7px;
-}
-.cal-grid__dow:first-child { color: rgba(255,255,255,0.95); }
-.cal-grid__dow:last-child  { color: rgba(255,200,100,0.9); }
 .cal-grid__body {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-}
-
-/* ── Day cells ── */
-.cal-day {
-    border-right: 1px solid #eaecef;
-    border-bottom: 1px solid #eaecef;
-    min-height: 110px;
     display: flex;
     flex-direction: column;
+}
+
+/* ── Day rows ── */
+.cal-day {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #eaecef;
+    min-height: 44px;
     transition: background 0.1s;
 }
-.cal-day:nth-child(7n) { border-right: none; }
-.cal-day--out {
-    background: #f9fafb;
-    opacity: 0.55;
-}
+.cal-day:last-child { border-bottom: none; }
 .cal-day--weekend:not(.cal-day--out) {
     background: #fdfaf5;
 }
@@ -741,13 +1014,23 @@
     background: #f0f7ff;
 }
 .cal-day__head {
-    padding: 7px 8px 5px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 4px;
-    border-bottom: 1px solid #eaecef;
+    gap: 6px;
+    padding: 8px 12px;
+    flex-shrink: 0;
+    width: 160px;
 }
+.cal-day__dow {
+    font-size: 11px;
+    font-weight: 600;
+    color: #7f8c8d;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    width: 32px;
+    flex-shrink: 0;
+}
+.cal-day--weekend:not(.cal-day--out) .cal-day__dow { color: #e67e22; }
 .cal-day__num {
     font-size: 14px;
     font-weight: 700;
@@ -761,7 +1044,6 @@
     border-radius: 50%;
     flex-shrink: 0;
 }
-.cal-day--out .cal-day__num { color: #c5cdd6; font-weight: 400; }
 .cal-day--today:not(.cal-day--out) .cal-day__num {
     background: #2980b9;
     color: #fff;
@@ -770,10 +1052,12 @@
 .cal-day--weekend:not(.cal-day--out) .cal-day__num { color: #e67e22; }
 .cal-day__body {
     flex: 1;
-    padding: 5px 6px 6px;
+    padding: 5px 6px;
     display: flex;
-    flex-direction: column;
-    gap: 3px;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px;
+    min-width: 0;
 }
 
 /* ── Add button ── */
@@ -981,6 +1265,176 @@
 }
 
 /* ─────────────────────────────────────────
+   Notes Modal
+───────────────────────────────────────── */
+.nm-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 3000;
+    align-items: center;
+    justify-content: center;
+}
+.nm-overlay.is-open { display: flex; }
+.nm-modal {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    width: 100%;
+    max-width: 520px;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    animation: nmSlideIn 0.2s ease;
+}
+@keyframes nmSlideIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.nm-modal__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px 16px;
+    border-bottom: 1px solid #f3f4f6;
+}
+.nm-modal__title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #111827;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.nm-modal__title-icon {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    border-radius: 10px;
+    color: #fff;
+}
+.nm-modal__close {
+    background: #f3f4f6;
+    border: none;
+    font-size: 18px;
+    color: #6b7280;
+    cursor: pointer;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+}
+.nm-modal__close:hover { background: #e5e7eb; color: #374151; }
+.nm-modal__body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px 24px;
+    min-height: 150px;
+    max-height: 350px;
+}
+.nm-modal__footer {
+    padding: 16px 24px 20px;
+    border-top: 1px solid #f3f4f6;
+    background: #fafafa;
+    border-radius: 0 0 16px 16px;
+}
+.notes-loading, .notes-empty {
+    text-align: center;
+    color: #9ca3af;
+    font-size: 14px;
+    padding: 40px 20px;
+}
+.note-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 16px;
+    background: #f9fafb;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    border: 1px solid #f3f4f6;
+}
+.note-item__body { flex: 1; min-width: 0; }
+.note-item__body .note-text {
+    margin: 0;
+    font-size: 14px;
+    color: #374151;
+    line-height: 1.6;
+    word-break: break-word;
+}
+.note-item__body .note-text a { color: #6366f1; }
+.note-item__body .note-embed {
+    margin-bottom: 12px;
+    border-radius: 10px;
+    overflow: hidden;
+}
+.note-item__body .note-embed iframe { width: 100%; height: 200px; border: none; }
+.note-item__delete {
+    flex-shrink: 0;
+    background: none;
+    border: none;
+    color: #d1d5db;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 6px;
+    transition: all 0.15s;
+}
+.note-item__delete:hover { color: #dc2626; background: #fef2f2; }
+.nm-form { display: flex; gap: 12px; }
+.nm-form__textarea {
+    flex: 1;
+    min-height: 44px;
+    padding: 12px 14px;
+    font-size: 14px;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    resize: none;
+    outline: none;
+    background: #fff;
+    transition: all 0.15s;
+    font-family: inherit;
+}
+.nm-form__textarea:focus {
+    border-color: #6366f1;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+.nm-form__btn {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    color: #fff;
+    transition: all 0.15s;
+}
+.nm-form__btn:hover { transform: scale(1.05); box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4); }
+.nm-form__btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+.notes-feedback {
+    display: none;
+    font-size: 13px;
+    color: #dc2626;
+    padding: 10px 14px;
+    background: #fef2f2;
+    border-radius: 10px;
+    margin-bottom: 12px;
+}
+
+/* ─────────────────────────────────────────
    Responsive
 ───────────────────────────────────────── */
 @media (max-width: 991px) {
@@ -1099,6 +1553,10 @@
                 <svg viewBox="0 0 16 16" width="13" height="13" fill="currentColor"><path d="M11 1v1H5V1H3v1H1v13h14V2h-2V1h-2zm2 12H3V6h10v7z"/></svg>
                 Calendar
             </button>
+            <a class="st-view-tab" href="{{ path('show_travel_calendar', {slug: travel.slug}) }}" style="text-decoration:none;">
+                <svg viewBox="0 0 16 16" width="13" height="13" fill="currentColor"><path d="M2 14L6 2l4 8 2-4 2 8" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Calendar + Route
+            </a>
         </div>
 
         {# ── MAP panel ── #}
@@ -1158,7 +1616,7 @@
                     <div class="cal-unscheduled__body" id="cal-unscheduled">
                         {% set hasUnscheduled = false %}
                         {% for loc in travel.location %}
-                            {% if loc.visitAt is null %}
+                            {% if not loc.hasAnyVisitDate %}
                                 {% set hasUnscheduled = true %}
                                 <div class="cal-card" id="cal-loc-{{ loc.id }}"
                                      data-location-id="{{ loc.id }}"
@@ -1181,72 +1639,60 @@
                     </div>
                 </div>
 
-                {# Week calendar #}
+                {# Day list calendar #}
                 <div class="cal-main">
                     <div class="cal-grid">
-                        {# Day-of-week header #}
-                        <div class="cal-grid__header">
-                            {% for dow in ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'] %}
-                                <div class="cal-grid__dow">{{ dow }}</div>
-                            {% endfor %}
-                        </div>
-                        {# Day cells — all days of the trip pre-rendered #}
                         <div class="cal-grid__body" id="cal-grid-body">
                             {% set startTs    = travel.startAt|date('U') %}
                             {% set endTs      = travel.endAt|date('U') %}
                             {% set todayStr   = 'now'|date('Y-m-d') %}
                             {% set monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'] %}
-                            {# Pad to Monday of first week #}
-                            {% set startDow  = travel.startAt|date('N') %}
-                            {% set gridStart = travel.startAt|date_modify('-' ~ (startDow - 1) ~ ' days') %}
-                            {% set endDow    = travel.endAt|date('N') %}
-                            {% set gridEnd   = travel.endAt|date_modify('+' ~ (7 - endDow) ~ ' days') %}
-                            {% set gridDays  = (((gridEnd|date('U') - gridStart|date('U')) / 86400)|round(0,'ceil') + 1) %}
-                            {% set lastMonth = '' %}
-                            {% for i in 0..(gridDays - 1) %}
-                                {% set thisDate    = gridStart|date_modify('+' ~ i ~ ' days') %}
+                            {% set dowNames   = { 1: 'Mon', 2: 'Tue', 3: 'Wed', 4: 'Thu', 5: 'Fri', 6: 'Sat', 7: 'Sun' } %}
+                            {% set tripDays   = (((endTs - startTs) / 86400)|round(0,'ceil') + 1) %}
+                            {% set lastMonth  = '' %}
+                            {% for i in 0..(tripDays - 1) %}
+                                {% set thisDate    = travel.startAt|date_modify('+' ~ i ~ ' days') %}
                                 {% set thisDateStr = thisDate|date('Y-m-d') %}
-                                {% set inTrip      = thisDate|date('U') >= startTs and thisDate|date('U') <= endTs %}
-                                {% set dow         = thisDate|date('N') %}{# 1=Mon 7=Sun #}
+                                {% set dow         = thisDate|date('N') %}
                                 {% set isWeekend   = dow >= 6 %}
                                 {% set isToday     = thisDateStr == todayStr %}
                                 {% set thisMonth   = thisDate|date('Y-n') %}
-                                {% if inTrip and thisMonth != lastMonth and dow == 1 %}
+                                {% if thisMonth != lastMonth %}
                                     {% set lastMonth = thisMonth %}
                                     <div class="cal-month-label">{{ monthNames[thisDate|date('n') - 1] }} {{ thisDate|date('Y') }}</div>
                                 {% endif %}
-                                <div class="cal-day{% if not inTrip %} cal-day--out{% endif %}{% if isWeekend %} cal-day--weekend{% endif %}{% if isToday %} cal-day--today{% endif %}"
+                                <div class="cal-day{% if isWeekend %} cal-day--weekend{% endif %}{% if isToday %} cal-day--today{% endif %}"
                                      id="cal-day-{{ thisDateStr }}"
                                      data-date="{{ thisDateStr }}">
                                     <div class="cal-day__head">
+                                        <span class="cal-day__dow">{{ dowNames[dow] }}</span>
                                         <span class="cal-day__num">{{ thisDate|date('d') }}</span>
-                                        {% if canEdit and inTrip %}
+                                        {% if canEdit %}
                                         <button class="cal-add-btn" type="button" data-date="{{ thisDateStr }}" title="Add location">+</button>
                                         {% endif %}
                                     </div>
                                     <div class="cal-day__body">
-                                        {% if inTrip %}
-                                            {% for loc in travel.location %}
-                                                {% if loc.visitAt is not null and loc.visitAt|date('Y-m-d') == thisDateStr %}
-                                                    <div class="cal-card" id="cal-loc-{{ loc.id }}"
-                                                         data-location-id="{{ loc.id }}"
-                                                         data-title="{{ loc.title|e('html_attr') }}"
-                                                         data-type="{{ loc.typeLocation is not null ? loc.typeLocation.title|e('html_attr') : '' }}"
-                                                         data-icon="{{ loc.typeLocation is not null ? loc.typeLocation.icon|e('html_attr') : '' }}">
-                                                        <span class="cal-card__icon">
-                                                            {% if loc.typeLocation is not null %}<i class="{{ loc.typeLocation.icon }}"></i>{% else %}📍{% endif %}
-                                                        </span>
-                                                        <span class="cal-card__text">
-                                                            <div class="cal-card__title">{{ loc.title }}</div>
-                                                            {% if loc.typeLocation is not null %}<div class="cal-card__type">{{ loc.typeLocation.title }}</div>{% endif %}
-                                                        </span>
-                                                        {% if canEdit %}
-                                                        <button class="cal-remove-btn" type="button" data-location-id="{{ loc.id }}" title="Unschedule">&times;</button>
-                                                        {% endif %}
-                                                    </div>
-                                                {% endif %}
-                                            {% endfor %}
-                                        {% endif %}
+                                        {% for loc in travel.location %}
+                                            {% if loc.hasVisitDateOn(thisDateStr) %}
+                                                <div class="cal-card" id="cal-loc-{{ loc.id }}-{{ thisDateStr }}"
+                                                     data-location-id="{{ loc.id }}"
+                                                     data-date="{{ thisDateStr }}"
+                                                     data-title="{{ loc.title|e('html_attr') }}"
+                                                     data-type="{{ loc.typeLocation is not null ? loc.typeLocation.title|e('html_attr') : '' }}"
+                                                     data-icon="{{ loc.typeLocation is not null ? loc.typeLocation.icon|e('html_attr') : '' }}">
+                                                    <span class="cal-card__icon">
+                                                        {% if loc.typeLocation is not null %}<i class="{{ loc.typeLocation.icon }}"></i>{% else %}📍{% endif %}
+                                                    </span>
+                                                    <span class="cal-card__text">
+                                                        <div class="cal-card__title">{{ loc.title }}</div>
+                                                        {% if loc.typeLocation is not null %}<div class="cal-card__type">{{ loc.typeLocation.title }}</div>{% endif %}
+                                                    </span>
+                                                    {% if canEdit %}
+                                                    <button class="cal-remove-btn" type="button" data-location-id="{{ loc.id }}" data-date="{{ thisDateStr }}" title="Remove from this day">&times;</button>
+                                                    {% endif %}
+                                                </div>
+                                            {% endif %}
+                                        {% endfor %}
                                     </div>
                                 </div>
                             {% endfor %}
@@ -1297,6 +1743,37 @@
     <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><path d="M3 8a5 5 0 1 1 10 0A5 5 0 0 1 3 8zm5-3a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/></svg>
     <span id="online-user-label">Usuario desconectado</span>
 </a>
+
+{# ── Notes Modal ── #}
+<div class="nm-overlay" id="notesModal" role="dialog" aria-modal="true">
+    <div class="nm-modal">
+        <div class="nm-modal__header">
+            <h3 class="nm-modal__title">
+                <span class="nm-modal__title-icon">
+                    <svg viewBox="0 0 16 16" width="18" height="18" fill="currentColor"><path d="M2 2h12v12H2V2zm1 1v10h10V3H3zm2 2h6v1H5V5zm0 3h6v1H5V8zm0 3h4v1H5v-1z"/></svg>
+                </span>
+                <span id="notes-modal-title">Notes</span>
+            </h3>
+            <button class="nm-modal__close" id="nm-close" type="button" aria-label="Close">
+                <svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg>
+            </button>
+        </div>
+        <div class="nm-modal__body">
+            <div id="notes-list">
+                <div class="notes-empty">No notes yet. Add the first one below.</div>
+            </div>
+        </div>
+        <div class="nm-modal__footer">
+            <div class="notes-feedback" id="notes-feedback"></div>
+            <div class="nm-form">
+                <textarea class="nm-form__textarea" id="note-content-input" placeholder="Write a note..." rows="1"></textarea>
+                <button class="nm-form__btn" id="notes-save-btn" type="button" title="Save note">
+                    <svg viewBox="0 0 16 16" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 10v4H2v-4M8 2v9M4 6l4-4 4 4"/></svg>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 {% block javascript %}
@@ -1358,6 +1835,42 @@
                 label.textContent = collapsed ? 'Show' : 'Hide';
                 setTimeout(function () { map.invalidateSize(); }, 310);
             });
+        }());
+
+        /* ── Locations search & count ── */
+        (function () {
+            var searchInput = document.getElementById('loc-search');
+            var countEl = document.getElementById('loc-count');
+            var emptyState = document.getElementById('loc-empty-state');
+            var mapPointsEl = document.getElementById('mapPoints');
+
+            function updateCount() {
+                var points = mapPointsEl.querySelectorAll('.point-view');
+                var count = points.length;
+                if (countEl) {
+                    countEl.textContent = count + ' place' + (count !== 1 ? 's' : '');
+                }
+                if (emptyState) {
+                    emptyState.style.display = count === 0 ? 'flex' : 'none';
+                }
+            }
+
+            var observer = new MutationObserver(updateCount);
+            observer.observe(mapPointsEl, { childList: true });
+            updateCount();
+
+            if (searchInput) {
+                searchInput.addEventListener('input', function () {
+                    var query = this.value.toLowerCase().trim();
+                    var points = mapPointsEl.querySelectorAll('.point-view');
+                    points.forEach(function (point) {
+                        var title = point.querySelector('.title-point b');
+                        var address = point.querySelector('.address-point');
+                        var text = (title ? title.textContent : '') + ' ' + (address ? address.textContent : '');
+                        point.style.display = text.toLowerCase().includes(query) ? '' : 'none';
+                    });
+                });
+            }
         }());
 
         $('#center').click(function()          { map.setView([{{ travel.geolocation.lat}},{{ travel.geolocation.lng }}],8); });
@@ -1573,6 +2086,18 @@
         {% if canEdit %}
         /* ── Calendar: picker + week navigation ── */
         var VISIT_DATE_URL = '{{ path('updateLocationVisitDate', {'locationId': '__LOC__'}) }}';
+
+        /* Build a registry of all locations for the picker */
+        var ALL_LOCATIONS = [
+            {% for loc in travel.location %}
+            {
+                id: '{{ loc.id }}',
+                title: {{ loc.title|json_encode|raw }},
+                type: {{ (loc.typeLocation is not null ? loc.typeLocation.title : '')|json_encode|raw }},
+                icon: {{ (loc.typeLocation is not null ? loc.typeLocation.icon : '')|json_encode|raw }}
+            }{{ not loop.last ? ',' : '' }}
+            {% endfor %}
+        ];
         {% endif %}
 
         {% if canEdit %}
@@ -1585,24 +2110,32 @@
 
         function openPicker(btn) {
             pickerDate = btn.dataset.date;
-            var unscheduled = document.querySelectorAll('#cal-unscheduled .cal-card');
             picker.innerHTML = '';
-            if (unscheduled.length === 0) {
-                picker.innerHTML = '<div class="cal-picker__empty">No unscheduled locations</div>';
+            var dayBody = document.querySelector('#cal-day-' + pickerDate + ' .cal-day__body');
+            var alreadyOnDay = [];
+            if (dayBody) {
+                dayBody.querySelectorAll('.cal-card').forEach(function (c) {
+                    alreadyOnDay.push(c.dataset.locationId);
+                });
+            }
+            var available = ALL_LOCATIONS.filter(function (loc) {
+                return alreadyOnDay.indexOf(loc.id) === -1;
+            });
+            if (available.length === 0) {
+                picker.innerHTML = '<div class="cal-picker__empty">All locations already on this day</div>';
             } else {
-                unscheduled.forEach(function (card) {
+                available.forEach(function (loc) {
                     var item = document.createElement('div');
                     item.className = 'cal-picker__item';
-                    var iconAttr = card.dataset.icon || '';
-                    var iconHtml = iconAttr
-                        ? '<i class="cal-picker__item__icon ' + escAttr(iconAttr) + '"></i>'
+                    var iconHtml = loc.icon
+                        ? '<i class="cal-picker__item__icon ' + escAttr(loc.icon) + '"></i>'
                         : '<span class="cal-picker__item__icon">📍</span>';
                     item.innerHTML = iconHtml +
-                        '<span><div class="cal-picker__item__title">' + escHtml(card.dataset.title || '') + '</div>' +
-                        (card.dataset.type ? '<div class="cal-picker__item__type">' + escHtml(card.dataset.type) + '</div>' : '') +
+                        '<span><div class="cal-picker__item__title">' + escHtml(loc.title) + '</div>' +
+                        (loc.type ? '<div class="cal-picker__item__type">' + escHtml(loc.type) + '</div>' : '') +
                         '</span>';
                     item.addEventListener('click', function () {
-                        scheduleLocation(card, pickerDate);
+                        addLocationToDay(loc, pickerDate);
                         closePicker();
                     });
                     picker.appendChild(item);
@@ -1632,49 +2165,90 @@
         document.addEventListener('click', function (e) {
             var btn = e.target.closest('.cal-remove-btn');
             if (!btn) return;
-            var card = document.getElementById('cal-loc-' + btn.dataset.locationId);
-            if (card) { unscheduleLocation(card); }
+            var locId = btn.dataset.locationId;
+            var date = btn.dataset.date;
+            if (date) {
+                removeLocationFromDay(locId, date);
+            } else {
+                var card = btn.closest('.cal-card');
+                if (card) { removeLocationFromDay(card.dataset.locationId, card.dataset.date); }
+            }
         });
 
-        function scheduleLocation(card, date) {
-            var locationId = card.dataset.locationId;
+        function addLocationToDay(loc, date) {
             var dayBody = document.querySelector('#cal-day-' + date + ' .cal-day__body');
             if (!dayBody) return;
-            var scheduled = card.cloneNode(true);
-            scheduled.id = 'cal-loc-' + locationId;
-            var removeBtn = document.createElement('button');
-            removeBtn.className = 'cal-remove-btn'; removeBtn.type = 'button';
-            removeBtn.dataset.locationId = locationId; removeBtn.title = 'Unschedule';
-            removeBtn.innerHTML = '&times;';
-            scheduled.appendChild(removeBtn);
-            card.remove();
-            dayBody.appendChild(scheduled);
-            updateUnscheduledEmpty();
-            patchVisitDate(locationId, date, function () {
-                scheduled.remove();
-                document.getElementById('cal-unscheduled').appendChild(card);
+            var card = document.createElement('div');
+            card.className = 'cal-card';
+            card.id = 'cal-loc-' + loc.id + '-' + date;
+            card.dataset.locationId = loc.id;
+            card.dataset.date = date;
+            card.dataset.title = loc.title;
+            card.dataset.type = loc.type || '';
+            card.dataset.icon = loc.icon || '';
+            var iconHtml = loc.icon
+                ? '<i class="' + escAttr(loc.icon) + '"></i>'
+                : '📍';
+            card.innerHTML =
+                '<span class="cal-card__icon">' + iconHtml + '</span>' +
+                '<span class="cal-card__text">' +
+                    '<div class="cal-card__title">' + escHtml(loc.title) + '</div>' +
+                    (loc.type ? '<div class="cal-card__type">' + escHtml(loc.type) + '</div>' : '') +
+                '</span>' +
+                '<button class="cal-remove-btn" type="button" data-location-id="' + loc.id + '" data-date="' + date + '" title="Remove from this day">&times;</button>';
+            dayBody.appendChild(card);
+
+            var unschedCard = document.getElementById('cal-loc-' + loc.id);
+            if (unschedCard && unschedCard.closest('#cal-unscheduled')) {
+                unschedCard.remove();
                 updateUnscheduledEmpty();
+            }
+
+            patchVisitDate(loc.id, { action: 'add', date: date }, function () {
+                card.remove();
             });
         }
 
-        function unscheduleLocation(card) {
-            var locationId = card.dataset.locationId;
-            var plain = card.cloneNode(true);
-            plain.id = 'cal-loc-' + locationId;
-            var oldBtn = plain.querySelector('.cal-remove-btn');
-            if (oldBtn) { oldBtn.remove(); }
-            card.remove();
-            document.getElementById('cal-unscheduled').appendChild(plain);
-            updateUnscheduledEmpty();
-            patchVisitDate(locationId, null, function () { location.reload(); });
+        function removeLocationFromDay(locationId, date) {
+            var card = document.getElementById('cal-loc-' + locationId + '-' + date);
+            if (card) { card.remove(); }
+
+            var hasOtherDays = document.querySelector('.cal-day__body .cal-card[data-location-id="' + locationId + '"]');
+            if (!hasOtherDays) {
+                var loc = ALL_LOCATIONS.filter(function (l) { return l.id === locationId; })[0];
+                if (loc) {
+                    var unschedCard = document.createElement('div');
+                    unschedCard.className = 'cal-card';
+                    unschedCard.id = 'cal-loc-' + locationId;
+                    unschedCard.dataset.locationId = locationId;
+                    unschedCard.dataset.title = loc.title;
+                    unschedCard.dataset.type = loc.type || '';
+                    unschedCard.dataset.icon = loc.icon || '';
+                    var iconHtml = loc.icon
+                        ? '<i class="' + escAttr(loc.icon) + '"></i>'
+                        : '📍';
+                    unschedCard.innerHTML =
+                        '<span class="cal-card__icon">' + iconHtml + '</span>' +
+                        '<span class="cal-card__text">' +
+                            '<div class="cal-card__title">' + escHtml(loc.title) + '</div>' +
+                            (loc.type ? '<div class="cal-card__type">' + escHtml(loc.type) + '</div>' : '') +
+                        '</span>';
+                    document.getElementById('cal-unscheduled').appendChild(unschedCard);
+                    updateUnscheduledEmpty();
+                }
+            }
+
+            patchVisitDate(locationId, { action: 'remove', date: date }, function () {
+                location.reload();
+            });
         }
 
-        function patchVisitDate(locationId, date, onError) {
+        function patchVisitDate(locationId, payload, onError) {
             var url = VISIT_DATE_URL.replace('__LOC__', locationId);
             fetch(url, {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
-                body: JSON.stringify({ visitAt: date })
+                body: JSON.stringify(payload)
             })
             .then(function (r) {
                 if (!r.ok) { onError(); return; }

@@ -33,18 +33,49 @@ locationGallery.prototype.getLocationImages = function (location) {
         contentType: 'application/json',
         url: '../../api/locations/' + location,
         dataType: 'json',
-        success: function (data, testStatus, jqXHR) {
+        success: function (data) {
             $.each(data.images, function (index, value) {
                 $('#' + _self.galleryZone).append('<img class="travelimg" src="' + _self.pathGallery + value.filename + '" style="max-width:100%;margin-bottom:6px;border-radius:6px;"/>');
             });
-            $.each(data.notes, function (index, value) {
-                $('#' + _self.notesZone).append('<p id="note' + value.id + '" style="margin: 10px;">' + '<span class="title-point">' + value.title + '</span> ' + '<i style="font-size:11px">' + value.description + '</i> </p>');
-            });
         },
-        error: function (data, testStatus, jqXHR) {
-            console.log('error');
-        }
+        error: function () {}
     });
+
+    /* Load notes via the dedicated endpoint */
+    fetch('../../api/location/' + location + '/notes', {
+        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+    })
+    .then(function (r) { return r.ok ? r.json() : null; })
+    .then(function (data) {
+        if (!data || !data.notes || !data.notes.length) { return; }
+        data.notes.forEach(function (n) {
+            var html = locationGallery._renderNoteContent(n.content);
+            $('#' + _self.notesZone).append('<div class="note-item" style="margin-bottom:6px;">' + html + '</div>');
+        });
+    })
+    .catch(function () {});
+};
+
+/* ── Shared rich-content renderer (mirrors mapPoint._renderNoteContent) ── */
+locationGallery._escHtml = function (s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+};
+locationGallery._linkify = function (text) {
+    return text.replace(/(https?:\/\/[^\s<>"]+)/g, '<a href="$1" target="_blank" rel="noopener">$1</a>');
+};
+locationGallery._renderNoteContent = function (content) {
+    if (!content) { return ''; }
+    var ytMatch = content.match(/(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]{11})/);
+    if (ytMatch) {
+        return '<div class="note-embed"><iframe src="https://www.youtube.com/embed/' + ytMatch[1] + '" frameborder="0" allowfullscreen></iframe></div>' +
+               '<p class="note-text">' + locationGallery._linkify(locationGallery._escHtml(content)) + '</p>';
+    }
+    var vmMatch = content.match(/(?:https?:\/\/)?(?:www\.)?vimeo\.com\/(\d+)/);
+    if (vmMatch) {
+        return '<div class="note-embed"><iframe src="https://player.vimeo.com/video/' + vmMatch[1] + '" frameborder="0" allowfullscreen></iframe></div>' +
+               '<p class="note-text">' + locationGallery._linkify(locationGallery._escHtml(content)) + '</p>';
+    }
+    return '<p class="note-text">' + locationGallery._linkify(locationGallery._escHtml(content)) + '</p>';
 };
 
 locationGallery.prototype.uploadImage = function (locationId) {

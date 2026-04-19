@@ -12,23 +12,11 @@ class Note
 
     private $location;
 
-    /**
-     * Get id.
-     *
-     * @return int
-     */
     public function getId()
     {
         return $this->id;
     }
 
-    /**
-     * Set title.
-     *
-     * @param string $title
-     *
-     * @return Note
-     */
     public function setTitle($title)
     {
         $this->title = $title;
@@ -36,23 +24,11 @@ class Note
         return $this;
     }
 
-    /**
-     * Get title.
-     *
-     * @return string
-     */
     public function getTitle()
     {
         return $this->title;
     }
 
-    /**
-     * Set description.
-     *
-     * @param string $description
-     *
-     * @return Note
-     */
     public function setDescription($description)
     {
         $this->description = $description;
@@ -60,23 +36,23 @@ class Note
         return $this;
     }
 
-    /**
-     * Get description.
-     *
-     * @return string
-     */
     public function getDescription()
     {
         return $this->description;
     }
 
-    /**
-     * Set location.
-     *
-     * @param \App\Domain\Location\Model\Location $location
-     *
-     * @return Note
-     */
+    public function setContent(string $content): self
+    {
+        $this->description = $content;
+
+        return $this;
+    }
+
+    public function getContent(): ?string
+    {
+        return $this->description;
+    }
+
     public function setLocation($location = null)
     {
         $this->location = $location;
@@ -84,11 +60,6 @@ class Note
         return $this;
     }
 
-    /**
-     * Get location.
-     *
-     * @return \App\Domain\Location\Model\Location
-     */
     public function getLocation()
     {
         return $this->location;
