@@ -4,6 +4,7 @@ namespace App\UI\Controller\API;
 
 use App\Domain\Images\Model\Images;
 use App\Infrastructure\LocationBundle\Repository\DoctrineLocationRepository;
+use App\Infrastructure\WebSocket\WebSocketNotifier;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -16,15 +17,18 @@ class UploadLocationImageAPIController extends AbstractController
     private $locationRepository;
     private $security;
     private $em;
+    private $webSocketNotifier;
 
     public function __construct(
         DoctrineLocationRepository $locationRepository,
         Security $security,
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
+        WebSocketNotifier $webSocketNotifier
     ) {
         $this->locationRepository = $locationRepository;
         $this->security = $security;
         $this->em = $em;
+        $this->webSocketNotifier = $webSocketNotifier;
     }
 
     /**
@@ -85,6 +89,14 @@ class UploadLocationImageAPIController extends AbstractController
 
         $this->em->persist($image);
         $this->em->flush();
+
+        $this->webSocketNotifier->notifyImageUploaded(
+            $travel->getId()->id(),
+            $locationId,
+            $filename,
+            (string) $user->getId()->id(),
+            $user->getUsername()
+        );
 
         return new JsonResponse([
             'success' => true,

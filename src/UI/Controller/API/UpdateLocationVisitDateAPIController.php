@@ -3,6 +3,7 @@
 namespace App\UI\Controller\API;
 
 use App\Infrastructure\LocationBundle\Repository\DoctrineLocationRepository;
+use App\Infrastructure\WebSocket\WebSocketNotifier;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -15,12 +16,14 @@ class UpdateLocationVisitDateAPIController extends AbstractController
     private $locationRepository;
     private $security;
     private $em;
+    private $webSocketNotifier;
 
-    public function __construct(DoctrineLocationRepository $locationRepository, Security $security, EntityManagerInterface $em)
+    public function __construct(DoctrineLocationRepository $locationRepository, Security $security, EntityManagerInterface $em, WebSocketNotifier $webSocketNotifier)
     {
         $this->locationRepository = $locationRepository;
         $this->security = $security;
         $this->em = $em;
+        $this->webSocketNotifier = $webSocketNotifier;
     }
 
     /**
@@ -69,6 +72,14 @@ class UpdateLocationVisitDateAPIController extends AbstractController
         }
 
         $this->em->flush();
+
+        $this->webSocketNotifier->notifyVisitDateChanged(
+            $travel->getId()->id(),
+            $locationId,
+            $location->getVisitAt() ? $location->getVisitAt()->format('Y-m-d') : null,
+            (string) $user->getId()->id(),
+            $user->getUsername()
+        );
 
         return new JsonResponse(['success' => true]);
     }

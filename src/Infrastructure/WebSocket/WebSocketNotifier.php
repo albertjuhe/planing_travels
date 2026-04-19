@@ -27,23 +27,74 @@ class WebSocketNotifier
         ]);
     }
 
-    public function notifyLocationRemoved(string $travelId, string $locationId, string $byUserId): void
+    public function notifyLocationRemoved(string $travelId, string $locationId, string $byUserId, string $byUsername): void
     {
         $this->broadcast($travelId, [
             'event'      => 'location_removed',
             'travelId'   => $travelId,
             'locationId' => $locationId,
             'byUserId'   => $byUserId,
+            'byUsername'  => $byUsername,
         ]);
     }
 
-    public function notifyLocationUpdated(string $travelId, array $locationData, string $byUserId): void
+    public function notifyLocationUpdated(string $travelId, array $locationData, string $byUserId, string $byUsername): void
     {
         $this->broadcast($travelId, [
             'event'    => 'location_updated',
             'travelId' => $travelId,
             'location' => $locationData,
             'byUserId' => $byUserId,
+            'byUsername' => $byUsername,
+        ]);
+    }
+
+    public function notifyVisitDateChanged(string $travelId, string $locationId, ?string $visitAt, string $byUserId, string $byUsername): void
+    {
+        $this->broadcast($travelId, [
+            'event'      => 'visit_date_changed',
+            'travelId'   => $travelId,
+            'locationId' => $locationId,
+            'visitAt'    => $visitAt,
+            'byUserId'   => $byUserId,
+            'byUsername'  => $byUsername,
+        ]);
+    }
+
+    public function notifyImageUploaded(string $travelId, string $locationId, string $filename, string $byUserId, string $byUsername): void
+    {
+        $this->broadcast($travelId, [
+            'event'      => 'image_uploaded',
+            'travelId'   => $travelId,
+            'locationId' => $locationId,
+            'filename'   => $filename,
+            'byUserId'   => $byUserId,
+            'byUsername'  => $byUsername,
+        ]);
+    }
+
+    public function notifyNoteAdded(string $travelId, string $locationId, int $noteId, string $content, string $byUserId, string $byUsername): void
+    {
+        $this->broadcast($travelId, [
+            'event'      => 'note_added',
+            'travelId'   => $travelId,
+            'locationId' => $locationId,
+            'noteId'     => $noteId,
+            'content'    => $content,
+            'byUserId'   => $byUserId,
+            'byUsername'  => $byUsername,
+        ]);
+    }
+
+    public function notifyNoteDeleted(string $travelId, string $locationId, int $noteId, string $byUserId, string $byUsername): void
+    {
+        $this->broadcast($travelId, [
+            'event'      => 'note_deleted',
+            'travelId'   => $travelId,
+            'locationId' => $locationId,
+            'noteId'     => $noteId,
+            'byUserId'   => $byUserId,
+            'byUsername'  => $byUsername,
         ]);
     }
 

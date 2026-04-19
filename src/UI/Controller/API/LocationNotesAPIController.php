@@ -4,6 +4,7 @@ namespace App\UI\Controller\API;
 
 use App\Domain\Note\Model\Note;
 use App\Infrastructure\LocationBundle\Repository\DoctrineLocationRepository;
+use App\Infrastructure\WebSocket\WebSocketNotifier;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -16,15 +17,18 @@ class LocationNotesAPIController extends AbstractController
     private $locationRepository;
     private $em;
     private $security;
+    private $webSocketNotifier;
 
     public function __construct(
         DoctrineLocationRepository $locationRepository,
         EntityManagerInterface $em,
-        Security $security
+        Security $security,
+        WebSocketNotifier $webSocketNotifier
     ) {
         $this->locationRepository = $locationRepository;
         $this->em = $em;
         $this->security = $security;
+        $this->webSocketNotifier = $webSocketNotifier;
     }
 
     /**
@@ -85,6 +89,15 @@ class LocationNotesAPIController extends AbstractController
         $this->em->persist($note);
         $this->em->flush();
 
+        $this->webSocketNotifier->notifyNoteAdded(
+            $travel->getId()->id(),
+            $locationId,
+            $note->getId(),
+            $note->getContent(),
+            (string) $user->getId()->id(),
+            $user->getUsername()
+        );
+
         return new JsonResponse([
             'id'      => $note->getId(),
             'content' => $note->getContent(),
@@ -126,6 +139,14 @@ class LocationNotesAPIController extends AbstractController
 
         $this->em->remove($noteToRemove);
         $this->em->flush();
+
+        $this->webSocketNotifier->notifyNoteDeleted(
+            $travel->getId()->id(),
+            $locationId,
+            $noteId,
+            (string) $user->getId()->id(),
+            $user->getUsername()
+        );
 
         return new JsonResponse(['success' => true]);
     }

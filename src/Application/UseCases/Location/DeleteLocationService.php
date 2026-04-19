@@ -48,7 +48,7 @@ class DeleteLocationService implements UsesCasesService
         $travelId = $deleteLocationCommand->getTravelId();
 
         $location = $this->locationRepository->findById($locationId);
-        $this->userRepository->ofIdOrFail($userId);
+        $user = $this->userRepository->ofIdOrFail($userId);
 
         if (!$location instanceof Location) {
             throw new LocationDoesntExists();
@@ -61,7 +61,8 @@ class DeleteLocationService implements UsesCasesService
         $this->webSocketNotifier->notifyLocationRemoved(
             $travelId,
             $locationId,
-            (string) $userId
+            (string) $userId,
+            $user->getUsername()
         );
     }
 }

@@ -110,7 +110,7 @@ function connectWebSocket() {
             );
             mPoint.addPoint(locationPoint);
 
-            $('#infoTravel').html('<p class="alert alert-info">A collaborator added a new location.</p>');
+            $('#infoTravel').html('<p class="alert alert-info"><strong>' + (loc.addedByUsername || 'A collaborator') + '</strong> added a new location.</p>');
             $('#infoTravel').show().delay(5000).fadeOut();
         }
 
@@ -133,7 +133,7 @@ function connectWebSocket() {
             var layer = document.getElementById('layer_' + placeId);
             if (layer) { layer.parentNode.removeChild(layer); }
 
-            $('#infoTravel').html('<p class="alert alert-warning">A collaborator removed a location.</p>');
+            $('#infoTravel').html('<p class="alert alert-warning"><strong>' + (msg.byUsername || 'A collaborator') + '</strong> removed a location.</p>');
             $('#infoTravel').show().delay(5000).fadeOut();
         }
 
@@ -162,7 +162,64 @@ function connectWebSocket() {
                 if (titleEl) { titleEl.textContent = loc.title; }
             }
 
-            $('#infoTravel').html('<p class="alert alert-info">A collaborator updated a location.</p>');
+            $('#infoTravel').html('<p class="alert alert-info"><strong>' + (msg.byUsername || 'A collaborator') + '</strong> updated a location.</p>');
+            $('#infoTravel').show().delay(5000).fadeOut();
+        }
+
+        if (msg.event === 'visit_date_changed') {
+            var myId = (typeof WS_CURRENT_USER_ID !== 'undefined') ? String(WS_CURRENT_USER_ID) : '';
+            if (myId && msg.byUserId && String(msg.byUserId) === myId) {
+                return;
+            }
+
+            $('#infoTravel').html('<p class="alert alert-info"><strong>' + (msg.byUsername || 'A collaborator') + '</strong> changed a visit date. Refresh to see updates.</p>');
+            $('#infoTravel').show().delay(5000).fadeOut();
+        }
+
+        if (msg.event === 'image_uploaded') {
+            var myId = (typeof WS_CURRENT_USER_ID !== 'undefined') ? String(WS_CURRENT_USER_ID) : '';
+            if (myId && msg.byUserId && String(msg.byUserId) === myId) {
+                return;
+            }
+
+            $('#infoTravel').html('<p class="alert alert-info"><strong>' + (msg.byUsername || 'A collaborator') + '</strong> uploaded an image.</p>');
+            $('#infoTravel').show().delay(5000).fadeOut();
+        }
+
+        if (msg.event === 'note_added') {
+            var myId = (typeof WS_CURRENT_USER_ID !== 'undefined') ? String(WS_CURRENT_USER_ID) : '';
+            if (myId && msg.byUserId && String(msg.byUserId) === myId) {
+                return;
+            }
+
+            var notesModal = document.getElementById('notesModal');
+            if (notesModal && notesModal.classList.contains('is-open') &&
+                notesModal.getAttribute('data-location-id') === msg.locationId) {
+                mapPoint._loadNotes(msg.locationId);
+            }
+
+            $('#infoTravel').html('<p class="alert alert-info"><strong>' + (msg.byUsername || 'A collaborator') + '</strong> added a note.</p>');
+            $('#infoTravel').show().delay(5000).fadeOut();
+        }
+
+        if (msg.event === 'note_deleted') {
+            var myId = (typeof WS_CURRENT_USER_ID !== 'undefined') ? String(WS_CURRENT_USER_ID) : '';
+            if (myId && msg.byUserId && String(msg.byUserId) === myId) {
+                return;
+            }
+
+            var notesModal = document.getElementById('notesModal');
+            if (notesModal && notesModal.classList.contains('is-open') &&
+                notesModal.getAttribute('data-location-id') === msg.locationId) {
+                var noteEl = document.getElementById('note-item-' + msg.noteId);
+                if (noteEl) { noteEl.remove(); }
+                var list = document.getElementById('notes-list');
+                if (list && !list.querySelector('.note-item')) {
+                    list.innerHTML = '<div class="notes-empty">No notes yet. Add the first one below.</div>';
+                }
+            }
+
+            $('#infoTravel').html('<p class="alert alert-info"><strong>' + (msg.byUsername || 'A collaborator') + '</strong> deleted a note.</p>');
             $('#infoTravel').show().delay(5000).fadeOut();
         }
     };
