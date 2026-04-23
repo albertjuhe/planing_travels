@@ -56,6 +56,9 @@ WebSocket server: `ws://localhost:5555`
 make down       # stop containers
 make bash       # shell into the app container
 make exec CMD='php bin/console cache:clear'
+mkdir -p public/build
+echo "{}" > public/build/manifest.json
+echo '{"entrypoints": {}}' > public/build/entrypoints.json
 ```
 
 ## Architecture Notes
