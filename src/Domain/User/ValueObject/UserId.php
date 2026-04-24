@@ -13,7 +13,7 @@ class UserId extends IdentifiableDomainObject
 
     public function equalsTo(UserId $anUserId)
     {
-        return $anUserId->id === (int) $this->id;
+        return $anUserId->id == $this->id;
     }
 
     public function __toString()
