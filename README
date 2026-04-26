@@ -49,9 +49,6 @@ Create database
 > php  bin/console make:entity User
 Edit src/Entity/User.php add properties and methods
 Add to database
-php bin/console doctrine:migrations:diff
-php bin/console doctrine:migrations:migrate
-
 ## Assets
 
 Working with assets in templates
@@ -68,6 +65,12 @@ Populates elasticsearch with the current travels
 ## Unit testing
 
 > php vendor/bin/phpunit
+
+## Deployment
+> php bin/console doctrine:migrations:diff
+> php bin/console doctrine:migrations:migrate
+> chown -R www-data:www-data uploads/
+> chmod -R 775 uploads/
 
 
 
