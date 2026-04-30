@@ -1,14 +1,16 @@
-const WS_URL = 'ws://localhost:5555';
+const WS_URL = process.env.WEBSOCKET_URL || 'ws://localhost:5555';
 
 /**
  * Connect to the travel-specific WebSocket room.
  *
  * @param {string}   travelId          - The travel UUID to join
+ * @param {string}   userId            - The current user ID
+ * @param {string}   username          - The current username
  * @param {Function} onLocationAdded   - Called with location data when a collaborator adds a location
  * @returns {WebSocket}                - The open connection; call ws.close() on unmount
  */
-export const connectToTravelRoom = (travelId, onLocationAdded) => {
-    const ws = new WebSocket(`${WS_URL}/ws/${travelId}`);
+export const connectToTravelRoom = (travelId, userId, username, onLocationAdded) => {
+    const ws = new WebSocket(`${WS_URL}/ws/${travelId}?userId=${userId}&username=${encodeURIComponent(username)}`);
 
     ws.onopen = () => {
         console.log(`[ws] joined travel room: ${travelId}`);

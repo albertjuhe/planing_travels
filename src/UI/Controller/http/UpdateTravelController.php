@@ -65,6 +65,7 @@ class UpdateTravelController extends CommandController
                     );
                     $travel->setPhoto($newFilename);
                 } catch (FileException $e) {
+                    $this->addFlash('error', 'Error uploading photo: ' . $e->getMessage());
                 }
             }
 

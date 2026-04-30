@@ -7,7 +7,7 @@ use App\Domain\Travel\Model\Travel;
 
 class TravelWasUpdated implements DomainEvent
 {
-    public const ADD_TRAVEL_EVENT_REQUEST = 'add_travel_request_event';
+    public const UPDATE_TRAVEL_EVENT_REQUEST = 'update_travel_request_event';
 
     /** @var Travel */
     private $travel;
@@ -15,7 +15,7 @@ class TravelWasUpdated implements DomainEvent
     private $occuredOn;
 
     /**
-     * travelWasAdded constructor.
+     * TravelWasUpdated constructor.
      *
      * @param array $travel
      */
@@ -34,7 +34,7 @@ class TravelWasUpdated implements DomainEvent
     }
 
     /**
-     * @return Travel
+     * @return array
      */
     public function getTravel(): array
     {
@@ -42,8 +42,7 @@ class TravelWasUpdated implements DomainEvent
     }
 
     /**
-    /**
-     * @param Travel $travel
+     * @param array $travel
      */
     public function setTravel(array $travel): void
     {

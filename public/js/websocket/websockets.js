@@ -1,11 +1,28 @@
-var WS_BASE = "ws://localhost:5555";
-var WS_URL = (typeof WS_TRAVEL_ID !== 'undefined' && WS_TRAVEL_ID)
-    ? WS_BASE + "/ws/" + WS_TRAVEL_ID
+var WS_BASE = (typeof WS_SERVER_URL !== 'undefined' && WS_SERVER_URL) ? WS_SERVER_URL : "ws://localhost:5555";
+var WS_TRAVEL_URL = (typeof WS_TRAVEL_ID !== 'undefined' && WS_TRAVEL_ID)
+    ? WS_BASE + "/ws/" + WS_TRAVEL_ID + "?userId=" + (WS_CURRENT_USER_ID || '') + "&username=" + encodeURIComponent(WS_CURRENT_USERNAME || '')
     : WS_BASE + "/ws";
 var socket = null;
 var reconnectAttempts = 0;
 var maxReconnectAttempts = 10;
 var reconnectTimer = null;
+var chatHandlers = [];
+
+function onChatMessage(handler) {
+    chatHandlers.push(handler);
+}
+
+function sendChatMessage(content) {
+    if (socket && socket.readyState === WebSocket.OPEN) {
+        var msg = JSON.stringify({
+            type: 'chat',
+            userId: WS_CURRENT_USER_ID || '',
+            username: WS_CURRENT_USERNAME || '',
+            content: content
+        });
+        socket.send(msg);
+    }
+}
 
 function updateConnectionBadge(state) {
     console.log("updateConnectionBadge called with state:", state);
@@ -55,10 +72,10 @@ function connectWebSocket() {
     }
 
     updateConnectionBadge('connecting');
-    console.log("Websocket connection attempt", reconnectAttempts + 1, "to", WS_URL);
+    console.log("Websocket connection attempt", reconnectAttempts + 1, "to", WS_TRAVEL_URL);
 
     try {
-        socket = new WebSocket(WS_URL);
+        socket = new WebSocket(WS_TRAVEL_URL);
         console.log("WebSocket object created");
     } catch (e) {
         console.log("WebSocket creation error:", e);
@@ -78,6 +95,27 @@ function connectWebSocket() {
         try {
             var msg = JSON.parse(event.data);
         } catch (e) {
+            return;
+        }
+
+        if (msg.type === 'chat') {
+            chatHandlers.forEach(function(handler) {
+                handler(msg);
+            });
+            return;
+        }
+
+        if (msg.type === 'user_joined') {
+            chatHandlers.forEach(function(handler) {
+                handler(msg);
+            });
+            return;
+        }
+
+        if (msg.type === 'user_left') {
+            chatHandlers.forEach(function(handler) {
+                handler(msg);
+            });
             return;
         }
 
