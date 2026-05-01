@@ -72,14 +72,61 @@ class UploadLocationImageAPIController extends AbstractController
             return new JsonResponse(['error' => 'Invalid file type'], 400);
         }
 
+        // Load image and optimize
+        $originalName = $file->getClientOriginalName();
         $uploadDir = $this->getParameter('kernel.project_dir') . '/public/uploads/gallery/';
         if (!is_dir($uploadDir)) {
             mkdir($uploadDir, 0755, true);
         }
 
-        $originalName = $file->getClientOriginalName();
-        $filename = uniqid() . '_' . preg_replace('/[^a-zA-Z0-9._-]/', '_', $originalName);
-        $file->move($uploadDir, $filename);
+        // Generate unique filename with WebP extension
+        $baseFilename = uniqid() . '_' . preg_replace('/[^a-zA-Z0-9._-]/', '_', pathinfo($originalName, PATHINFO_FILENAME));
+        $webpFilename = $baseFilename . '.webp';
+
+        // Create image resource from uploaded file
+        $sourcePath = $file->getPathname();
+        $mime = $file->getMimeType();
+        $image = null;
+
+        switch ($mime) {
+            case 'image/jpeg':
+                $image = imagecreatefromjpeg($sourcePath);
+                break;
+            case 'image/png':
+                $image = imagecreatefrompng($sourcePath);
+                break;
+            case 'image/gif':
+                $image = imagecreatefromgif($sourcePath);
+                break;
+            case 'image/webp':
+                $image = imagecreatefromwebp($sourcePath);
+                break;
+        }
+
+        if ($image) {
+            // Resize if too large (max 1920px width)
+            $maxWidth = 1920;
+            $width = imagesx($image);
+            $height = imagesy($image);
+
+            if ($width > $maxWidth) {
+                $newWidth = $maxWidth;
+                $newHeight = intval($height * ($maxWidth / $width));
+                $resized = imagecreatetruecolor($newWidth, $newHeight);
+                imagecopyresampled($resized, $image, 0, 0, 0, 0, $newWidth, $newHeight, $width, $height);
+                imagedestroy($image);
+                $image = $resized;
+            }
+
+            // Save as WebP with 85% quality
+            imagewebp($image, $uploadDir . $webpFilename, 85);
+            imagedestroy($image);
+            $filename = $webpFilename;
+        } else {
+            // Fallback: just move the file with sanitized name
+            $filename = uniqid() . '_' . preg_replace('/[^a-zA-Z0-9._-]/', '_', $originalName);
+            $file->move($uploadDir, $filename);
+        }
 
         $image = new Images();
         $image->setFilename($filename);

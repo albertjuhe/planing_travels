@@ -24,12 +24,17 @@ class DoctrineTravelRepository extends ServiceEntityRepository implements Travel
 
     public function ofSlugOrFail(string $travelSlug): Travel
     {
-        /** @var Travel $travel */
-        $travel = $this->findOneBy(['slug' => $travelSlug]);
+        $travel = $this->createQueryBuilder('t')
+            ->select('t', 's')
+            ->leftJoin('t.sharedusers', 's')
+            ->where('t.slug = :slug')
+            ->setParameter('slug', $travelSlug)
+            ->getQuery()
+            ->getOneOrNullResult();
+
         if (null === $travel) {
             throw new TravelDoesntExists();
         }
-
         return $travel;
     }
 
@@ -78,26 +83,35 @@ class DoctrineTravelRepository extends ServiceEntityRepository implements Travel
         $this->_em->persist($travel);
     }
 
-    public function getAllTravelsByUser(int $userId)
+    public function getAllTravelsByUser(int $userId, int $offset = 0, int $limit = 20): array
     {
         return $this->createQueryBuilder('t')
-            ->select('t')
+            ->select('t', 'l', 's', 'g')
+            ->leftJoin('t.location', 'l')
+            ->leftJoin('t.sharedusers', 's')
+            ->leftJoin('t.gpx', 'g')
             ->where('t.user = :userId')
             ->setParameter('userId', $userId)
             ->orderBy('t.createdAt', 'DESC')
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
             ->getQuery()
             ->getResult();
     }
 
-    public function getSharedTravelsByUser(int $userId): array
+    public function getSharedTravelsByUser(int $userId, int $offset = 0, int $limit = 20): array
     {
         return $this->createQueryBuilder('t')
-            ->select('t')
-            ->innerJoin('t.sharedusers', 'u')
-            ->where('u.id = :userId')
+            ->select('t', 'l', 's', 'g')
+            ->leftJoin('t.location', 'l')
+            ->innerJoin('t.sharedusers', 's')
+            ->leftJoin('t.gpx', 'g')
+            ->where('s.id = :userId')
             ->andWhere('t.user != :userId')
             ->setParameter('userId', $userId)
             ->orderBy('t.createdAt', 'DESC')
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
             ->getQuery()
             ->getResult();
     }

@@ -31,6 +31,7 @@ class GetLocationsByTravelService implements usesCasesService
     public function __invoke(GetLocationsByTravelQuery $query)
     {
         $travelId = $query->getTravel();
+
         /** @var Travel $travel */
         $travel = $this->travelRepository->ofIdOrFail($travelId);
 
@@ -38,12 +39,25 @@ class GetLocationsByTravelService implements usesCasesService
             throw new TravelDoesntExists();
         }
 
-        $locations = [];
+        // Get locations with all relations in a single query
+        $locationRepository = $this->travelRepository->_em->getRepository(\App\Domain\Location\Model\Location::class);
+        $locations = $locationRepository->createQueryBuilder('l')
+            ->select('l', 'm', 'tl', 'vd', 'i', 'n')
+            ->leftJoin('l.mark', 'm')
+            ->leftJoin('l.typeLocation', 'tl')
+            ->leftJoin('l.visitDates', 'vd')
+            ->leftJoin('l.images', 'i')
+            ->leftJoin('l.notas', 'n')
+            ->where('l.travel = :travelId')
+            ->setParameter('travelId', $travelId)
+            ->getQuery()
+            ->getResult();
 
-        foreach ($travel->getLocation()->getValues() as $location) {
-            $locations[] = $location->toArray();
+        $result = [];
+        foreach ($locations as $location) {
+            $result[] = $location->toArray();
         }
 
-        return $locations;
+        return $result;
     }
 }
