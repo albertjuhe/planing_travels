@@ -72,6 +72,26 @@ Populates elasticsearch with the current travels
 > chown -R www-data:www-data uploads/
 > chmod -R 775 uploads/
 
+## Websocket server
+> docker stop planing_travels-websocket-1                                                                                   LSP
+> docker start planing_travels-websocket-1
+> docker logs -f planing_travels-websocket-1
+> docker logs planing_travels-websocket-1 --tail=3
+> docker-compose up -d --force-recreate --build websocket
+
+### check websockets
+```
+    console.log('Socket:', socket.readyState, 'URL:', socket.url);
+                                                                                                                               LSP
+     // Envía el mensaje                                                                                                       LSPs will activate as files are read
+     socket.send(JSON.stringify({
+         type: 'chat',                                                                                                         ▼ Modified Files
+         userId: WS_CURRENT_USER_ID,                                                                                           PlanningTravelsSocketio/server.go  +5
+         username: 'dummy',                                                                                                    assets/js/components/websockets +5 -3
+         content: 'test'                                                                                                       public/js/websocket/websockets. +1 -1
+     }));
+```
+
 
 
 

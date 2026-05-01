@@ -146,13 +146,18 @@ func (rm *RoomManager) HandleChatMessage(travelId string, senderConn *websocket.
 	rm.mutex.RLock()
 	defer rm.mutex.RUnlock()
 
+	log.Printf("[room:%s] received message: %s", travelId, string(message))
+
 	var chatMsg ChatMessage
 	if err := json.Unmarshal(message, &chatMsg); err != nil {
 		log.Printf("[room:%s] invalid chat message: %v", travelId, err)
 		return
 	}
 
+	log.Printf("[room:%s] parsed chat: type=%s content=%s", travelId, chatMsg.Type, chatMsg.Content)
+
 	if chatMsg.Type != "chat" || chatMsg.Content == "" {
+		log.Printf("[room:%s] chat message ignored: type=%s content=%s", travelId, chatMsg.Type, chatMsg.Content)
 		return
 	}
 
