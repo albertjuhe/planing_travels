@@ -146,18 +146,13 @@ func (rm *RoomManager) HandleChatMessage(travelId string, senderConn *websocket.
 	rm.mutex.RLock()
 	defer rm.mutex.RUnlock()
 
-	log.Printf("[room:%s] received message: %s", travelId, string(message))
-
 	var chatMsg ChatMessage
 	if err := json.Unmarshal(message, &chatMsg); err != nil {
 		log.Printf("[room:%s] invalid chat message: %v", travelId, err)
 		return
 	}
 
-	log.Printf("[room:%s] parsed chat: type=%s content=%s", travelId, chatMsg.Type, chatMsg.Content)
-
 	if chatMsg.Type != "chat" || chatMsg.Content == "" {
-		log.Printf("[room:%s] chat message ignored: type=%s content=%s", travelId, chatMsg.Type, chatMsg.Content)
 		return
 	}
 
@@ -268,6 +263,12 @@ func wsEndpoint(w http.ResponseWriter, r *http.Request) {
 	userID := r.URL.Query().Get("userId")
 	username := r.URL.Query().Get("username")
 
+	// Basic validation: require userId and username
+	if userID == "" || username == "" {
+		http.Error(w, "missing userId or username", http.StatusUnauthorized)
+		return
+	}
+
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		log.Printf("upgrade error: %v", err)
@@ -306,6 +307,7 @@ func broadcastEndpoint(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// TODO: Add authentication check here (e.g., validate token from PHP)
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
 		http.Error(w, "cannot read body", http.StatusBadRequest)
@@ -357,8 +359,8 @@ func main() {
 
 	server := &http.Server{
 		Addr:         ":5555",
-		ReadTimeout:  10 * time.Second,
-		WriteTimeout: 10 * time.Second,
+		ReadTimeout:  60 * time.Second,
+		WriteTimeout: 60 * time.Second,
 	}
 
 	go func() {
