@@ -38,6 +38,11 @@ class ShareTravelService implements UsesCasesService
             throw new UserDoesntExists('User "'.$command->getTargetUsername().'" does not exist');
         }
 
+        // Prevent owner from being added as shared user
+        if ($targetUser->getId()->equalsTo($travel->getUser()->getId())) {
+            return;
+        }
+
         $alreadyShared = $travel->getSharedusers()->exists(
             function ($key, $sharedUser) use ($targetUser) {
                 return $sharedUser->getId()->equalsTo($targetUser->getId());

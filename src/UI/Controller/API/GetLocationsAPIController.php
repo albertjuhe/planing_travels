@@ -38,7 +38,7 @@ class GetLocationsAPIController extends QueryController
             'locations' => $locations,
         ]);
 
-        $response->headers->set("Cache-Control", "max-age=3600");
+        $response->headers->set("Cache-Control", "no-cache, no-store, must-revalidate");
 
         return $response;
     }

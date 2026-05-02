@@ -9,6 +9,7 @@ use App\Domain\User\Model\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use App\Domain\Travel\Repository\TravelRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 
 class DoctrineTravelRepository extends ServiceEntityRepository implements TravelRepository
 {
@@ -85,33 +86,69 @@ class DoctrineTravelRepository extends ServiceEntityRepository implements Travel
 
     public function getAllTravelsByUser(int $userId, int $offset = 0, int $limit = 20): array
     {
-        return $this->createQueryBuilder('t')
-            ->select('t', 'l', 's', 'g')
-            ->leftJoin('t.location', 'l')
-            ->leftJoin('t.sharedusers', 's')
-            ->leftJoin('t.gpx', 'g')
+        // Get IDs first to avoid JOIN pagination issues
+        $qb = $this->createQueryBuilder('t')
+            ->select('t.id')
             ->where('t.user = :userId')
             ->setParameter('userId', $userId)
+            ->orderBy('t.createdAt', 'DESC');
+
+        if ($limit > 0) {
+            $qb->setFirstResult($offset)
+               ->setMaxResults($limit);
+        }
+
+        $ids = $qb->getQuery()->getResult();
+
+        if (empty($ids)) {
+            return [];
+        }
+
+        $idList = array_column($ids, 'id');
+
+        return $this->createQueryBuilder('t')
+            ->select('t', 'l', 'g')
+            ->leftJoin('t.location', 'l')
+            ->leftJoin('t.gpx', 'g')
+            ->where('t.id IN (:ids)')
+            ->setParameter('ids', $idList)
             ->orderBy('t.createdAt', 'DESC')
-            ->setFirstResult($offset)
-            ->setMaxResults($limit)
             ->getQuery()
             ->getResult();
     }
 
     public function getSharedTravelsByUser(int $userId, int $offset = 0, int $limit = 20): array
     {
-        return $this->createQueryBuilder('t')
-            ->select('t', 'l', 's', 'g')
-            ->leftJoin('t.location', 'l')
+        // Get IDs first to avoid JOIN pagination issues
+        $qb = $this->createQueryBuilder('t')
+            ->select('t.id')
             ->innerJoin('t.sharedusers', 's')
-            ->leftJoin('t.gpx', 'g')
             ->where('s.id = :userId')
             ->andWhere('t.user != :userId')
             ->setParameter('userId', $userId)
+            ->orderBy('t.createdAt', 'DESC');
+
+        if ($limit > 0) {
+            $qb->setFirstResult($offset)
+               ->setMaxResults($limit);
+        }
+
+        $ids = $qb->getQuery()->getResult();
+
+        if (empty($ids)) {
+            return [];
+        }
+
+        $idList = array_column($ids, 'id');
+
+        return $this->createQueryBuilder('t')
+            ->select('t', 'l', 's', 'g')
+            ->leftJoin('t.location', 'l')
+            ->leftJoin('t.sharedusers', 's')
+            ->leftJoin('t.gpx', 'g')
+            ->where('t.id IN (:ids)')
+            ->setParameter('ids', $idList)
             ->orderBy('t.createdAt', 'DESC')
-            ->setFirstResult($offset)
-            ->setMaxResults($limit)
             ->getQuery()
             ->getResult();
     }
