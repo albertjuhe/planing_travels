@@ -1,11 +1,28 @@
 var WS_BASE = "ws://localhost:5555";
 var WS_URL = (typeof WS_TRAVEL_ID !== 'undefined' && WS_TRAVEL_ID)
-    ? WS_BASE + "/ws/" + WS_TRAVEL_ID
+    ? WS_BASE + "/ws/" + WS_TRAVEL_ID + "?userId=" + (WS_CURRENT_USER_ID || '') + "&username=" + encodeURIComponent(WS_CURRENT_USERNAME || '')
     : WS_BASE + "/ws";
 var socket = null;
 var reconnectAttempts = 0;
 var maxReconnectAttempts = 10;
 var reconnectTimer = null;
+var chatHandlers = [];
+
+function onChatMessage(handler) {
+    chatHandlers.push(handler);
+}
+
+function sendChatMessage(content) {
+    if (socket && socket.readyState === WebSocket.OPEN) {
+        var msg = JSON.stringify({
+            type: 'chat',
+            userId: WS_CURRENT_USER_ID || '',
+            username: WS_CURRENT_USERNAME || '',
+            content: content
+        });
+        socket.send(msg);
+    }
+}
 
 function updateConnectionBadge(state) {
     console.log("updateConnectionBadge called with state:", state);
@@ -112,6 +129,13 @@ function connectWebSocket() {
 
             $('#infoTravel').html('<p class="alert alert-info"><strong>' + (loc.addedByUsername || 'A collaborator') + '</strong> added a new location.</p>');
             $('#infoTravel').show().delay(5000).fadeOut();
+        }
+
+        if (msg.type === 'chat') {
+            chatHandlers.forEach(function(handler) {
+                handler(msg);
+            });
+            return;
         }
 
         if (msg.event === 'location_removed') {
