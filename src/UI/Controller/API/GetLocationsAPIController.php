@@ -24,28 +24,22 @@ class GetLocationsAPIController extends QueryController
      */
     public function getLocationsByTravel(Request $request, string $travel)
     {
-        /*
-                $user = $this->security->getUser();
-                if (empty($user)) {
-                    return new JsonResponse(
-                        $response['error'] = 'Operation not allowed'
-                    );
-                }
-        */
+        $user = $this->security->getUser();
+        if (empty($user)) {
+            return new JsonResponse(['error' => 'Operation not allowed']);
+        }
+
         $query = new GetLocationsByTravelQuery($travel);
         $locations = $this->ask($query);
 
-        $response = new JsonResponse(
-            $response['data'] = [
-                'type' => 'travel',
-                'id' => $travel,
-                'locations' => $locations,
-            ]
-        );
+        $response = new JsonResponse([
+            'type' => 'travel',
+            'id' => $travel,
+            'locations' => $locations,
+        ]);
 
-        $response->headers->set("Cache-Control", "max-age=3600");
+        $response->headers->set("Cache-Control", "no-cache, no-store, must-revalidate");
 
         return $response;
-
     }
 }

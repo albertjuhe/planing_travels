@@ -34,18 +34,16 @@ class DeleteLocationAPIController extends CommandController
         /** @var User $user */
         $user = $this->security->getUser();
         if (empty($user)) {
-            return new JsonResponse(
-                $response['error'] = 'Operation not allowed'
-            );
+            return new JsonResponse(['error' => 'Operation not allowed']);
         }
 
         $deleteLocationCommand = new DeleteLocationCommand($location, $travel, $user->userId());
         $this->commandBus->handle($deleteLocationCommand);
 
-        return new JsonResponse(
-            $response['data'] = [
+        return new JsonResponse([
+            'data' => [
                 'location' => $location,
             ]
-        );
+        ]);
     }
 }
