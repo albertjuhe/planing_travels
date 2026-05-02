@@ -8,7 +8,6 @@ services:
       - "8000:80"
     volumes:
       - ${PWD}:/var/www/html
-      - ./Docker/php/conf.d/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
       - ./Docker/php/conf.d/error_reporting.ini:/usr/local/etc/php/conf.d/error_reporting.ini
     environment:
       - MYSQL_HOST
@@ -19,9 +18,8 @@ services:
       - WAIT_START_CMD
       - WAIT_SLEEP
       - WAIT_LOOPS
-      - PHP_EXTENSION_XDEBUG:1
-      - ENABLE_XDEBUG=1
-      - XDEBUG_REMOTE_HOST=${DOCKER_HOST_IP:-localhost}
+      - PHP_EXTENSION_XDEBUG=0
+      - ENABLE_XDEBUG=0
       - WEBSOCKET_SERVER_URL=http://websocket:5555
     entrypoint: ["/bin/sh", "-c", "git config --global --add safe.directory /var/www/html && exec apache2-foreground"]
     depends_on:
