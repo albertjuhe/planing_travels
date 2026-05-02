@@ -110,6 +110,17 @@ class WebSocketNotifier
         ]);
     }
 
+    public function sendChatMessage(string $travelId, string $userId, string $username, string $content): void
+    {
+        $this->broadcast($travelId, [
+            'type'     => 'chat',
+            'userId'   => $userId,
+            'username' => $username,
+            'content'  => $content,
+            'time'     => date('c'),
+        ]);
+    }
+
     protected function broadcast(string $travelId, array $payload): void
     {
         $url = $this->wsServerUrl.'/travel/'.$travelId.'/broadcast';
