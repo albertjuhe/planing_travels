@@ -1,6 +1,7 @@
 # Travel Experience
 
 A personal sandbox for experimenting with backend architecture, infrastructure patterns, and full-stack development techniques. The domain is a collaborative travel planning app — create trips, add locations on a map, schedule them in a calendar, share with other users, and upload photos.
+Demo: http://35.193.209.157:8000/public/index.php/
 
 ## Tech Stack
 
