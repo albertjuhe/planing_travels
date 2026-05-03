@@ -19,6 +19,7 @@
         "league/tactician": "^1.0",
         "league/tactician-bundle": "^1.1",
         "league/tactician-doctrine": "^1.1",
+        "nelmio/security-bundle": "^3.0",
         "phpmd/phpmd": "2.*",
         "ramsey/uuid-doctrine": "^1.5",
         "sensio/framework-extra-bundle": "^5.1",
