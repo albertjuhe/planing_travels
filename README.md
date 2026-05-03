@@ -1,41 +1,68 @@
 # Travel Experience
 
-A personal sandbox for experimenting with backend architecture, infrastructure patterns, and full-stack development techniques. The domain is a collaborative travel planning app — create trips, add locations on a map, schedule them in a calendar, share with other users, and upload photos.
+A collaborative travel planning application — create trips, add locations on a map, schedule them in a calendar, share with other users, chat in real-time, and upload photos.
+
 Demo: http://35.193.209.157:8000/public/index.php/
+
+## Features
+
+- **Travel Management** — create, edit, and delete travel plans with dates, descriptions, and photos
+- **Interactive Map** — Leaflet.js with multiple tile layers (OSM, Google Maps, satellite, terrain), GPX track rendering, routing
+- **Location Management** — add, edit, and delete locations with marks, type classification, visit dates, and notes
+- **Calendar View** — visualize travel schedules in a calendar interface
+- **Travel Sharing** — share travels with other users who can add locations and collaborate
+- **Real-time Chat** — WebSocket-based chat for each travel using Go backend
+- **Image Uploads** — upload and optimize images (auto-convert to WebP, resize to 1920px max)
+- **Read-only Mode** — ability to view travels without editing
+- **Watch Counter** — track travel views
+- **Markdown Support** — travel descriptions with markdown rendering
 
 ## Tech Stack
 
 ### Backend — PHP / Symfony 4
-- **Symfony 4** — framework, routing, security, forms, console
+- **Symfony 4.4** — framework, routing, security (CSRF protection), forms, console
 - **Doctrine ORM** — MySQL persistence with UUID primary keys (`ramsey/uuid-doctrine`), embeddables, custom mapping types, and Gedmo extensions (sluggable, timestampable)
 - **CQRS + Command Bus** — commands and queries dispatched through `league/tactician` with Doctrine transactional middleware
 - **Hexagonal Architecture / DDD** — domain, application, and infrastructure layers; no framework leaking into the domain
 - **JMS Serializer** — flexible serialization for API responses
 - **Symfony Messenger** — async message handling
-- **Guzzle** — HTTP client for internal service communication (PHP → Go WebSocket server)
-- **Symfony Security** — form-based authentication, role system, travel ownership and sharing model
-- **Twig** — server-rendered templates with component includes
+- **Guzzle 6.5** — HTTP client for internal service communication (PHP → Go WebSocket server)
+- **Symfony Security** — form-based authentication, role system (ROLE_USER, ROLE_ADMIN), travel ownership and sharing model
+- **Twig 2.16** — server-rendered templates with component includes
 - **KnpMarkdownBundle** — markdown support for travel descriptions
-- **FOSElasticaBundle** — Elasticsearch integration for search (currently disabled in docker-compose)
+- **Webpack Encore** — asset bundling with React components
 
 ### WebSocket Server — Go
 A standalone Go service (`PlanningTravelsSocketio/`) that manages real-time collaboration:
 - **gorilla/websocket** — WebSocket upgrade and connection management
 - Room-based pub/sub: each travel has its own room; clients join via `GET /ws/{travelId}`
 - PHP broadcasts events to connected clients via `POST /travel/{travelId}/broadcast`
+- Real-time location updates, chat messages, and notifications
 - Ping/pong keepalive, graceful shutdown
 
 ### Frontend
 - **jQuery** + vanilla JS — map interactions, drag-and-drop, file uploads (`jquery.fileupload`), sortable lists
 - **Leaflet.js** — interactive map with multiple tile layers (OSM, Google Maps, satellite, terrain, traffic), routing machine, GPX track rendering, fullscreen, and print
-- **Webpack Encore** — asset bundling
-- **React** (via Encore) — used for select components
+- **React** (via Encore) — used for select components and dynamic UI elements
+- **Bootstrap** — responsive design
 
-### Infrastructure
-- **Docker Compose** — multi-container setup: PHP/Apache app, Go WebSocket server, MySQL 5.7, Adminer
+### Infrastructure & DevOps
+- **Docker Compose** — multi-container setup: PHP/Apache app, Go WebSocket server, MySQL 5.7 with persistent volumes, Adminer
+- **MySQL 5.7** — database with proper indexing for performance
 - **GitHub Actions** — CI pipeline (`.github/workflows/validation.yml`)
-- **Xdebug** — remote debugging configured in the PHP container
+- **Xdebug** — remote debugging (enabled via `docker-compose.override.yml` for local development)
 - **Adminer** — database UI at `localhost:8080`
+- **Elasticsearch 6.x** — search integration (currently disabled in docker-compose)
+
+### Security & Performance
+- **CSRF Protection** — enabled for all forms
+- **Password Hashing** — bcrypt encryption for user passwords
+- **Input Validation** — strict validation on all API endpoints
+- **Image Optimization** — auto WebP conversion, resizing, and secure file handling
+- **Database Indexing** — optimized queries with indexes on frequently accessed columns
+- **Query Optimization** — JOIN-free pagination to prevent duplicate results
+- **No-cache headers** — for dynamic API responses (locations, real-time data)
+- **Dependency Management** — automated security updates via Dependabot (20+ security patches applied)
 
 ### Code Quality
 - **PHPStan** — static analysis
@@ -45,18 +72,68 @@ A standalone Go service (`PlanningTravelsSocketio/`) that manages real-time coll
 
 ## Running Locally
 
+### Prerequisites
+- Docker & Docker Compose
+- (Optional) PHP 7.4+ and Composer for local development
+
+### Quick Start
+
 ```bash
-make up
+# Clone and start all services
+docker-compose up -d
+
+# The app will be available at:
+# App: http://localhost:8000
+# Adminer: http://localhost:8080 (server: mysql, user: root, password: root)
+# WebSocket: ws://localhost:5555
 ```
 
-App: `http://localhost:8000`  
-Adminer: `http://localhost:8080` (server: `mysql`, user: `root`, password: `root`)  
-WebSocket server: `ws://localhost:5555`
+### Development with Xdebug
+
+```bash
+# docker-compose.override.yml enables Xdebug automatically
+# No need to modify docker-compose.yml
+
+# Stop and restart
+docker-compose down
+docker-compose up -d
+
+# Access the app container
+docker-compose exec app bash
+
+# Clear cache
+php bin/console cache:clear --env=dev
+```
+
+### Production Deployment
+
+```bash
+# 1. Merge security branches
+git checkout master
+git merge update-composer
+
+# 2. Update dependencies
+docker-compose exec app composer install --no-dev --optimize-autoloader
+
+# 3. Run migrations
+docker-compose exec app php bin/console doctrine:migrations:migrate --env=prod --no-interaction
+
+# 4. Clear cache
+docker-compose exec app php bin/console cache:clear --env=prod
+
+# 5. Rebuild and restart (Xdebug disabled by default)
+docker-compose build app
+docker-compose up -d app
+```
+
+### Useful Commands
 
 ```bash
 make down       # stop containers
 make bash       # shell into the app container
 make exec CMD='php bin/console cache:clear'
+
+# Initialize Webpack Encore assets
 mkdir -p public/build
 echo "{}" > public/build/manifest.json
 echo '{"entrypoints": {}}' > public/build/entrypoints.json
@@ -69,8 +146,53 @@ The codebase follows a strict layered structure under `src/`:
 ```
 src/
 ├── Domain/        # entities, value objects, repository interfaces — no framework dependencies
-├── Application/   # commands, queries, handlers
+│   ├── Travel/    # Travel aggregate root, repository interfaces
+│   ├── Location/  # Location entity, mark, type
+│   ├── User/      # User entity, authentication
+│   └── Shared/    # Shared kernel, events, exceptions
+├── Application/   # commands, queries, handlers, use cases
+│   ├── UseCases/  # business logic (Travel/, Location/, User/)
+│   └── Command/    # command/query objects
+├── Infrastructure/ # implementations (Doctrine repositories, external services)
 └── UI/            # controllers, templates, forms
+    ├── Controller/ # HTTP and API controllers
+    └── templates/  # Twig templates
 ```
 
 Commands are dispatched through the tactician command bus, which wraps handlers in a Doctrine transaction. Queries return read models directly from the repository. The Go WebSocket server is intentionally decoupled — PHP calls it over HTTP after persisting a change, and the Go server fans the event out to all connected browser clients in that travel's room.
+
+## Database Migrations
+
+```bash
+# Create a new migration
+docker-compose exec app php bin/console make:migration
+
+# Run pending migrations
+docker-compose exec app php bin/console doctrine:migrations:migrate
+
+# Check migration status
+docker-compose exec app php bin/console doctrine:migrations:status
+```
+
+## Security Updates
+
+This project uses GitHub Dependabot to automatically scan for vulnerabilities and create pull requests. Recent security patches include:
+- Symfony HttpKernel, HttpFoundation, Security, SecurityBundle (multiple CVEs)
+- Twig (template injection)
+- Guzzle (HTTP request smuggling)
+- NPM packages: elliptic, eventsource, express, json5, and 15+ more
+
+To apply security updates:
+```bash
+git checkout update-composer
+git merge origin/dependabot/composer/package-name
+git push origin update-composer
+```
+
+## Contributing
+
+1. Create a feature branch from `master`
+2. Make your changes following the layered architecture
+3. Run code quality tools: `phpstan`, `phpcs`, `phpmd`
+4. Write tests for new functionality
+5. Create a pull request to `master`
