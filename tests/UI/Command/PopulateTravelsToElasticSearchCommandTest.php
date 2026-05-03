@@ -14,7 +14,7 @@ class PopulateTravelsToElasticSearchCommandTest extends TestCase
     /** @var CommandTester */
     private $commandTester;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->populateIndexer = $this->createMock(PopulateIndexer::class);
 
@@ -33,7 +33,7 @@ class PopulateTravelsToElasticSearchCommandTest extends TestCase
         $this->commandTester->execute([]);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->populateIndexer = null;
         $this->commandTester = null;

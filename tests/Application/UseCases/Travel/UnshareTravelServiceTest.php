@@ -13,7 +13,7 @@ use App\Tests\Domain\User\Model\UserMother;
 
 class UnshareTravelServiceTest extends TravelService
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
     }

@@ -1,18 +1,14 @@
 security:
-
     encoders:
         Symfony\Component\Security\Core\User\User: plaintext
         App\Domain\User\Model\User:
-             algorithm: bcrypt
+            algorithm: bcrypt
 
-
-    # https://symfony.com/doc/current/security.html#b-configuring-how-users-are-loaded
     providers:
         db_users:
             entity: { class: App\Domain\User\Model\User, property: username }
 
     firewalls:
-        # disables authentication for assets and the profiler, adapt it according to your needs
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|app)/
             security: false
@@ -20,19 +16,12 @@ security:
             anonymous: ~
             provider: db_users
             form_login:
-              login_path: private_login
-              check_path: private_login
-              default_target_path: main_private
+                login_path: private_login
+                check_path: private_login
+                default_target_path: main_private
             logout:
-               path: logout
-               target: homepage
-            # activate different ways to authenticate
-
-            # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
-            #http_basic: ~
-
-            # https://symfony.com/doc/current/security/form_login_setup.html
-            #form_login: ~
+                path: logout
+                target: homepage
 
     access_control:
         - { path: ^/(en|fr|ca|es)/private, roles: ROLE_USER }

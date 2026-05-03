@@ -37,12 +37,20 @@ class GetUserTravels extends QueryController
      */
     public function getTravelsByUser(Request $request, int $userId): JsonResponse
     {
+        $currentUser = $this->security->getUser();
+        if (empty($currentUser)) {
+            return new JsonResponse(['error' => 'Unauthorized'], 401);
+        }
+
         try {
             $user = $this->userRepository->ofIdOrFail(new UserId($userId));
         } catch (UserDoesntExists $e) {
-            return new JsonResponse(
-                $response['error'] = 'Operation not allowed'
-            );
+            return new JsonResponse(['error' => 'Operation not allowed'], 403);
+        }
+
+        // Users can only see their own travels
+        if ($currentUser->getId()->id() !== $userId) {
+            return new JsonResponse(['error' => 'Operation not allowed'], 403);
         }
 
         $getMyTravelQuery = new GetMyTravelsQuery($user);

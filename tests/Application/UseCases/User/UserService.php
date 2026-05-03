@@ -9,7 +9,7 @@ class UserService extends TestCase
 {
     protected $userRepository;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->userRepository = new InMemoryUserRepository();
     }

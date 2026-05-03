@@ -1,0 +1,32 @@
+nelmio_security:
+    # Protección contra Clickjacking
+    clickjacking:
+        paths:
+            '^/': DENY
+            '^/admin': DENY
+
+    # Evitar MIME type sniffing
+    content_type:
+        enabled: true
+
+    # Content Security Policy (CSP) - ajustar según necesidades
+    csp:
+        enabled: false  # Cambiar a true cuando se configuren las directivas
+        # Ejemplo de configuración básica:
+        # policy:
+        #     default-src: ['self']
+        #     script-src: ['self', 'unsafe-inline']
+        #     style-src: ['self', 'unsafe-inline']
+        #     img-src: ['self', 'data:', 'https:']
+        #     font-src: ['self', 'data:']
+
+    # Protección XSS
+    xss_protection:
+        enabled: true
+        mode: block
+
+    # HSTS (solo si usas HTTPS en producción)
+    # hsts:
+    #     enabled: true
+    #     max_age: 31536000
+    #     include_subdomains: true

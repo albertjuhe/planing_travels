@@ -26,51 +26,51 @@ doctrine:
             Travel:
                type: yml
                prefix: App\Domain\Travel\Model
-               dir: '%kernel.root_dir%/../src/Infrastructure/TravelBundle/Resources/config/persistence/Model'
+               dir: '%kernel.project_dir%/../src/Infrastructure/TravelBundle/Resources/config/persistence/Model'
                is_bundle: false
             Gpx:
                 type: yml
                 prefix: App\Domain\Gpx\Model
-                dir: '%kernel.root_dir%/../src/Infrastructure/GpxBundle/Resources/config/persistence'
+                dir: '%kernel.project_dir%/../src/Infrastructure/GpxBundle/Resources/config/persistence'
                 is_bundle: false
             Images:
                 type: yml
                 prefix: App\Domain\Images\Model
-                dir: '%kernel.root_dir%/../src/Infrastructure/ImagesBundle/Resources/config/persistence'
+                dir: '%kernel.project_dir%/../src/Infrastructure/ImagesBundle/Resources/config/persistence'
                 is_bundle: false
             Location:
                 type: yml
                 prefix: App\Domain\Location\Model
-                dir: '%kernel.root_dir%/../src/Infrastructure/LocationBundle/Resources/config/persistence'
+                dir: '%kernel.project_dir%/../src/Infrastructure/LocationBundle/Resources/config/persistence'
                 is_bundle: false
             Mark:
                 type: yml
                 prefix: App\Domain\Mark\Model
-                dir: '%kernel.root_dir%/../src/Infrastructure/MarkBundle/Resources/config/persistence'
+                dir: '%kernel.project_dir%/../src/Infrastructure/MarkBundle/Resources/config/persistence'
                 is_bundle: false
             Note:
                 type: yml
                 prefix: App\Domain\Note\Model
-                dir: '%kernel.root_dir%/../src/Infrastructure/NoteBundle/Resources/config/persistence'
+                dir: '%kernel.project_dir%/../src/Infrastructure/NoteBundle/Resources/config/persistence'
                 is_bundle: false
             TypeLocation:
                 type: yml
                 prefix: App\Domain\TypeLocation\Model
-                dir: '%kernel.root_dir%/../src/Infrastructure/TypeLocationBundle/Resources/config/persistence'
+                dir: '%kernel.project_dir%/../src/Infrastructure/TypeLocationBundle/Resources/config/persistence'
                 is_bundle: false
             GeoLocation:
                 type: yml
                 prefix: App\Domain\Travel\ValueObject
-                dir: '%kernel.root_dir%/../src/Infrastructure/TravelBundle/Resources/config/persistence/ValueObject'
+                dir: '%kernel.project_dir%/../src/Infrastructure/TravelBundle/Resources/config/persistence/ValueObject'
                 is_bundle: false
             User:
                 type: yml
                 prefix: App\Domain\User\Model
-                dir: '%kernel.root_dir%/../src/Infrastructure/UserBundle/Resources/config/persistence'
+                dir: '%kernel.project_dir%/../src/Infrastructure/UserBundle/Resources/config/persistence'
                 is_bundle: false
             StoredEvent:
                 type: yml
                 prefix: App\Domain\Event\Model
-                dir: '%kernel.root_dir%/../src/Infrastructure/EventBundle/Resources/config/persistence'
+                dir: '%kernel.project_dir%/../src/Infrastructure/EventBundle/Resources/config/persistence'
                 is_bundle: false
 

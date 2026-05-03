@@ -17,7 +17,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 class AddLocationServiceTest extends LocationService
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
     }

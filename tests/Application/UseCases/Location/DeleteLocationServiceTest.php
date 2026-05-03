@@ -10,7 +10,7 @@ use App\Domain\User\ValueObject\UserId;
 
 class DeleteLocationServiceTest extends LocationService
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
     }

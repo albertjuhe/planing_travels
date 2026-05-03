@@ -107,10 +107,14 @@ class Location extends AggregateRoot
 
     public static function fromArray(array $data): Location
     {
+        if (empty($data['placeAddress']) || trim($data['placeAddress']) === '') {
+            throw new \InvalidArgumentException('Location title is required');
+        }
+
         $location = new Location();
-        $location->setDescription($data['comment']);
-        $location->setUrl($data['link']);
-        $location->setTitle($data['placeAddress']);
+        $location->setDescription($data['comment'] ?? '');
+        $location->setUrl($data['link'] ?? '');
+        $location->setTitle(trim($data['placeAddress']));
 
         return $location;
     }

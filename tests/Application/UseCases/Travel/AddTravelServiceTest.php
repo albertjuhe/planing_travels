@@ -12,7 +12,7 @@ use App\Tests\Domain\User\Model\UserMother;
 
 class AddTravelServiceTest extends TravelService
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
     }

@@ -13,7 +13,7 @@ class TravelWasUpdatedTest extends TestCase
     /** @var Travel */
     private $travel;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->travel = Travel::fromGeoLocation(new GeoLocation(1, 1, 1, 1, 1, 1));
     }

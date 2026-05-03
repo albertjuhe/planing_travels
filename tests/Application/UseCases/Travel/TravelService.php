@@ -14,7 +14,7 @@ class TravelService extends TestCase
     protected $userRepository;
     protected $idSubscriber;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->travelRepository = new InMemoryTravelRepository();
         $this->userRepository = new InMemoryUserRepository();

@@ -24,6 +24,11 @@ class GetBestTravelsAPIController extends QueryController
      */
     public function listBestTravels(Request $request, int $maxtravels)
     {
+        $user = $this->security->getUser();
+        if (empty($user)) {
+            return new JsonResponse(['error' => 'Unauthorized'], 401);
+        }
+
         $query = new BestTravelsListQuery($maxtravels, 'createdAt');
         $travels = $this->ask($query);
         $url = $this->generateUrl('getBestTravels', ['maxtravels' => $maxtravels]);

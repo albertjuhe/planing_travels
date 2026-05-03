@@ -15,7 +15,7 @@ class LocationTest extends TestCase
     /** @var Location */
     private $locationId;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->locationId = uniqid();
         $this->location = Location::fromIdAndTitle($this->locationId, 'location1');

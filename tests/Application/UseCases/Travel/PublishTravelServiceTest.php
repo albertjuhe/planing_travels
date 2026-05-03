@@ -14,7 +14,7 @@ use App\Tests\Subscriber\DomainEventAllSubscriber;
 
 class PublishTravelServiceTest extends TravelService
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
     }

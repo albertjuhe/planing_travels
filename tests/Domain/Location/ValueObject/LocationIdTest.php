@@ -18,8 +18,8 @@ class LocationIdTest extends TestCase
     {
         $id = uniqid();
         $locationId = LocationId::create($id);
-        $this->assertInternalType('string', $locationId->id());
-        $this->assertInternalType('string', $locationId->__toString());
+        $this->assertIsString($locationId->id());
+        $this->assertIsString($locationId->__toString());
     }
 
     public function testTravelIdCheckEquality()
