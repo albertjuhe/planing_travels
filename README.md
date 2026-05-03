@@ -54,16 +54,6 @@ A standalone Go service (`PlanningTravelsSocketio/`) that manages real-time coll
 - **Adminer** — database UI at `localhost:8080`
 - **Elasticsearch 6.x** — search integration (currently disabled in docker-compose)
 
-### Security & Performance
-- **CSRF Protection** — enabled for all forms
-- **Password Hashing** — bcrypt encryption for user passwords
-- **Input Validation** — strict validation on all API endpoints
-- **Image Optimization** — auto WebP conversion, resizing, and secure file handling
-- **Database Indexing** — optimized queries with indexes on frequently accessed columns
-- **Query Optimization** — JOIN-free pagination to prevent duplicate results
-- **No-cache headers** — for dynamic API responses (locations, real-time data)
-- **Dependency Management** — automated security updates via Dependabot (20+ security patches applied)
-
 ### Code Quality
 - **PHPStan** — static analysis
 - **PHP CodeSniffer** + **PHP CS Fixer** — coding standards
@@ -108,9 +98,9 @@ php bin/console cache:clear --env=dev
 ### Production Deployment
 
 ```bash
-# 1. Merge security branches
+# 1. Merge xxxx branches
 git checkout master
-git merge update-composer
+git merge xxxxx
 
 # 2. Update dependencies
 docker-compose exec app composer install --no-dev --optimize-autoloader
@@ -172,21 +162,6 @@ docker-compose exec app php bin/console doctrine:migrations:migrate
 
 # Check migration status
 docker-compose exec app php bin/console doctrine:migrations:status
-```
-
-## Security Updates
-
-This project uses GitHub Dependabot to automatically scan for vulnerabilities and create pull requests. Recent security patches include:
-- Symfony HttpKernel, HttpFoundation, Security, SecurityBundle (multiple CVEs)
-- Twig (template injection)
-- Guzzle (HTTP request smuggling)
-- NPM packages: elliptic, eventsource, express, json5, and 15+ more
-
-To apply security updates:
-```bash
-git checkout update-composer
-git merge origin/dependabot/composer/package-name
-git push origin update-composer
 ```
 
 ## Contributing
