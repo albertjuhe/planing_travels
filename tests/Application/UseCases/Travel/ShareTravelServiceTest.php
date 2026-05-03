@@ -12,7 +12,7 @@ use App\Tests\Infrastructure\TravelBundle\Repository\InMemoryTravelRepository;
 
 class ShareTravelServiceTest extends TravelService
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
     }

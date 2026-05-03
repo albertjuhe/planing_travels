@@ -14,7 +14,7 @@ class GpxTest extends TestCase
     /** @var Travel */
     private $travel;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->gpx = new Gpx();
         $this->gpx->setId(1);

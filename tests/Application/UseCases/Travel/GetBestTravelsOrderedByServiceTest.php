@@ -9,7 +9,7 @@ class GetBestTravelsOrderedByServiceTest
     /** @var InMemoryTravelRepository */
     private $travelRepository;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->travelRepository = new InMemoryTravelRepository();
         $this->travelRepository->loadData();

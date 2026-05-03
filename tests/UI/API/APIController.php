@@ -11,7 +11,7 @@ class APIController extends TestCase
 
     protected $client;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->initializeClient();
     }

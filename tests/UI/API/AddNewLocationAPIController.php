@@ -6,7 +6,7 @@ class AddNewLocationAPIController extends APIController
 {
     private $api = 'api/user/1/location';
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
     }

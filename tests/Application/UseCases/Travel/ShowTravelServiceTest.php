@@ -11,7 +11,7 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class ShowTravelServiceTest extends TravelService
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
     }

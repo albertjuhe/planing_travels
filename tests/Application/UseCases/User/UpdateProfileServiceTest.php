@@ -6,7 +6,7 @@ use App\Domain\User\Model\User;
 
 class UpdateProfileServiceTest extends UserService
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
     }

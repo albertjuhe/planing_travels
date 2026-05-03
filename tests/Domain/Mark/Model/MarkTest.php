@@ -12,7 +12,7 @@ class MarkTest extends TestCase
     /** @var Mark */
     private $mark;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->mark = new Mark();
         $this->mark->setId(89);

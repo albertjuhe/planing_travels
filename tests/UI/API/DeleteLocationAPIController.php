@@ -6,7 +6,7 @@ class DeleteLocationAPIController extends APIController
 {
     private $api = '/api/travel/2/location/1';
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
     }

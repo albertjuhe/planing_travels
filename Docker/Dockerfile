@@ -1,4 +1,4 @@
-FROM php:7.4-apache
+FROM php:8.1-apache
 
 RUN apt-get update && apt-get install -y \
     git \
@@ -6,19 +6,25 @@ RUN apt-get update && apt-get install -y \
     libzip-dev \
     libpng-dev \
     libjpeg-dev \
-    libfreetype6-dev \
+    libfreetype-dev \
+    libicu-dev \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install pdo pdo_mysql zip gd
+    && docker-php-ext-install pdo pdo_mysql zip gd intl
 
-RUN pecl install redis xdebug-3.1.6 && docker-php-ext-enable redis xdebug
+RUN pecl install redis xdebug-3.2.0 && docker-php-ext-enable redis xdebug
 
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 ENV DISPLAY_ERRORS="off"
 ENV ERROR_REPORTING="E_ALL & ~E_DEPRECATED & ~E_STRICT"
 
+RUN a2enmod rewrite
+
+COPY apache-symfony.conf /etc/apache2/sites-available/symfony.conf
+RUN a2dissite 000-default.conf && a2ensite symfony.conf
+
 COPY wait_to_start.sh /var/www/html
 COPY php.ini /usr/local/etc/php/
 
-EXPOSE 9000
-WORKDIR /var/www/html
+EXPOSE 80
+WORKDIR /var/www/html/
