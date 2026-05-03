@@ -26,6 +26,10 @@ security:
             logout:
                path: logout
                target: homepage
+            # Cookie security settings
+            cookie_secure: auto  # true in prod when using HTTPS
+            cookie_httponly: true
+            cookie_samesite: lax
             # activate different ways to authenticate
 
             # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate

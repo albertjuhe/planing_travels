@@ -11,10 +11,12 @@ monolog:
             type: stream
             path: "%kernel.logs_dir%/%kernel.environment%.log"
             level: debug
+            # Exclude security channels that might log sensitive data
+            channels: ["!security", "!authentication"]
         console:
             type: console
             process_psr_3_messages: false
-            channels: ["!event", "!doctrine"]
+            channels: ["!event", "!doctrine", "!security"]
         deprecation:
             type: stream
             path: "%kernel.logs_dir%/%kernel.environment%.deprecations.log"
@@ -23,3 +25,6 @@ monolog:
             handler: deprecation
             max_level: info
             channels: ["php"]
+
+    # Security note: Ensure no passwords, tokens, or API keys are logged
+    # Avoid using $logger->info('User logged in: ' . $password) or similar

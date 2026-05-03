@@ -67,6 +67,11 @@ class UploadLocationImageAPIController extends AbstractController
             return new JsonResponse(['error' => 'No file provided'], 400);
         }
 
+        // Limit file size to 5MB
+        if ($file->getSize() > 5 * 1024 * 1024) {
+            return new JsonResponse(['error' => 'File too large (max 5MB)'], 400);
+        }
+
         $allowedMimeTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
         if (!in_array($file->getMimeType(), $allowedMimeTypes)) {
             return new JsonResponse(['error' => 'Invalid file type'], 400);
