@@ -1891,28 +1891,26 @@
                                         {% endif %}
                                     </div>
                                     <div class="cal-day__body">
-                                        {% for loc in travel.location %}
-                                            {% if loc.hasVisitDateOn(thisDateStr) %}
-                                                <div class="cal-card" id="cal-loc-{{ loc.id }}-{{ thisDateStr }}"
-                                                     data-location-id="{{ loc.id }}"
-                                                     data-date="{{ thisDateStr }}"
-                                                     data-title="{{ loc.title|e('html_attr') }}"
-                                                     data-type="{{ loc.typeLocation is not null ? loc.typeLocation.title|e('html_attr') : '' }}"
-                                                     data-icon="{{ loc.typeLocation is not null ? loc.typeLocation.icon|e('html_attr') : '' }}">
-                                                    <span class="cal-card__icon">
-                                                        {% if loc.typeLocation is not null %}<i class="{{ loc.typeLocation.icon }}"></i>{% else %}📍{% endif %}
-                                                    </span>
-                                                    <span class="cal-card__text">
-                                                        <div class="cal-card__title">{{ loc.title }}</div>
-                                                        {% if loc.typeLocation is not null %}<div class="cal-card__type">{{ loc.typeLocation.title }}</div>{% endif %}
-                                                    </span>
-                                                    {% if canEdit %}
-                                                    <button class="cal-remove-btn" type="button" data-location-id="{{ loc.id }}" data-date="{{ thisDateStr }}" title="Remove from this day">&times;</button>
-                                                    {% endif %}
-                                                </div>
-                                            {% endif %}
-                                        {% endfor %}
-                                    </div>
+                                         {% for loc in travel.getLocationsForDate(thisDateStr) %}
+                                             <div class="cal-card" id="cal-loc-{{ loc.id }}-{{ thisDateStr }}"
+                                                  data-location-id="{{ loc.id }}"
+                                                  data-date="{{ thisDateStr }}"
+                                                  data-title="{{ loc.title|e('html_attr') }}"
+                                                  data-type="{{ loc.typeLocation is not null ? loc.typeLocation.title|e('html_attr') : '' }}"
+                                                  data-icon="{{ loc.typeLocation is not null ? loc.typeLocation.icon|e('html_attr') : '' }}">
+                                                 <span class="cal-card__icon">
+                                                     {% if loc.typeLocation is not null %}<i class="{{ loc.typeLocation.icon }}"></i>{% else %}📍{% endif %}
+                                                 </span>
+                                                 <span class="cal-card__text">
+                                                     <div class="cal-card__title">{{ loc.title }}</div>
+                                                     {% if loc.typeLocation is not null %}<div class="cal-card__type">{{ loc.typeLocation.title }}</div>{% endif %}
+                                                 </span>
+                                                 {% if canEdit %}
+                                                 <button class="cal-remove-btn" type="button" data-location-id="{{ loc.id }}" data-date="{{ thisDateStr }}" title="Remove from this day">&times;</button>
+                                                 {% endif %}
+                                             </div>
+                                         {% endfor %}
+                                     </div>
                                 </div>
                             {% endfor %}
                         </div>
@@ -2499,6 +2497,53 @@
 
         function escHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
         function escAttr(s) { return String(s).replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+
+        /* ── Update positions after drag-and-drop ── */
+        function updatePositionsForDate(dateStr) {
+            var dayBody = document.querySelector('#cal-day-' + dateStr + ' .cal-day__body');
+            if (!dayBody) return;
+            
+            var updates = [];
+            dayBody.querySelectorAll('.cal-card').forEach(function (card, index) {
+                updates.push({
+                    locationId: card.dataset.locationId,
+                    date: dateStr,
+                    position: index
+                });
+            });
+
+            if (updates.length === 0) return;
+
+            fetch('{{ path('updateLocationPositions') }}', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+                body: JSON.stringify({ updates: updates })
+            })
+            .then(function (r) { return r.json(); })
+            .then(function (data) {
+                if (!data.success) {
+                    console.error('Failed to update positions', data);
+                }
+            })
+            .catch(function (e) { console.error('Network error updating positions', e); });
+        }
+
+        /* Initialize sortable on calendar day bodies */
+        if (typeof Sortable !== 'undefined') {
+            document.querySelectorAll('.cal-day__body').forEach(function (dayBody) {
+                new Sortable(dayBody, {
+                    group: 'cal-locations',
+                    animation: 150,
+                    ghostClass: 'sortable-ghost',
+                    chosenClass: 'sortable-chosen',
+                    dragClass: 'sortable-drag',
+                    onEnd: function () {
+                        var dateStr = this.el.closest('.cal-day').dataset.date;
+                        updatePositionsForDate(dateStr);
+                    }
+                });
+            });
+        }
         {% endif %}
 
         {% if app.user %}

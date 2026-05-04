@@ -207,23 +207,21 @@
                             </span>
                         </div>
                         <div class="cr-day__body">
-                            {% set hasLocs = false %}
-                            {% for loc in travel.location %}
-                                {% if loc.hasVisitDateOn(thisDateStr) %}
-                                    {% set hasLocs = true %}
-                                    <div class="cr-loc"
-                                         data-lat="{{ loc.mark.geolocation.lat }}"
-                                         data-lng="{{ loc.mark.geolocation.lng }}"
-                                         data-title="{{ loc.title|e('html_attr') }}">
-                                        {% if loc.typeLocation is not null %}<i class="{{ loc.typeLocation.icon }}"></i>{% endif %}
-                                        {{ loc.title }}
-                                    </div>
-                                {% endif %}
-                            {% endfor %}
-                            {% if not hasLocs %}
-                                <span class="cr-day__empty">No locations</span>
-                            {% endif %}
-                        </div>
+                             {% set hasLocs = false %}
+                             {% for loc in travel.getLocationsForDate(thisDateStr) %}
+                                 {% set hasLocs = true %}
+                                 <div class="cr-loc"
+                                      data-lat="{{ loc.mark.geolocation.lat }}"
+                                      data-lng="{{ loc.mark.geolocation.lng }}"
+                                      data-title="{{ loc.title|e('html_attr') }}">
+                                     {% if loc.typeLocation is not null %}<i class="{{ loc.typeLocation.icon }}"></i>{% endif %}
+                                     {{ loc.title }}
+                                 </div>
+                             {% endfor %}
+                             {% if not hasLocs %}
+                                 <span class="cr-day__empty">No locations</span>
+                             {% endif %}
+                         </div>
                     </div>
                 {% endfor %}
             </div>

@@ -13,6 +13,9 @@ class LocationVisitDate
     /** @var \DateTime */
     private $visitDate;
 
+    /** @var int|null */
+    private $position;
+
     public function __construct(Location $location, \DateTime $visitDate)
     {
         $this->location = $location;
@@ -37,5 +40,15 @@ class LocationVisitDate
     public function getVisitDateString(): string
     {
         return $this->visitDate->format('Y-m-d');
+    }
+
+    public function getPosition(): ?int
+    {
+        return $this->position;
+    }
+
+    public function setPosition(?int $position): void
+    {
+        $this->position = $position;
     }
 }

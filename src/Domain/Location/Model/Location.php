@@ -431,6 +431,25 @@ class Location extends AggregateRoot
             }
         }
         $visitDate = new LocationVisitDate($this, $date);
+        
+        // Set initial position based on existing visit dates for this date in the same travel
+        $dateStr = $date->format('Y-m-d');
+        $maxPosition = -1;
+        
+        // Get all visit dates for this date across all locations in the travel
+        if ($this->travel !== null && $this->travel->getLocation() !== null) {
+            foreach ($this->travel->getLocation() as $loc) {
+                if ($loc->getVisitDates() !== null) {
+                    foreach ($loc->getVisitDates() as $vd) {
+                        if ($vd->getVisitDateString() === $dateStr && $vd->getPosition() !== null) {
+                            $maxPosition = max($maxPosition, $vd->getPosition());
+                        }
+                    }
+                }
+            }
+        }
+        $visitDate->setPosition($maxPosition + 1);
+        
         $this->getVisitDates()->add($visitDate);
 
         return $visitDate;

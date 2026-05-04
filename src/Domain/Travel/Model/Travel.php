@@ -62,7 +62,7 @@ class Travel extends AggregateRoot
     /** @var array */
     private $sharedusers;
 
-    /** @var Location */
+    /** @var \Doctrine\Common\Collections\Collection */
     private $location;
 
     /** @var \DateTime */
@@ -83,6 +83,7 @@ class Travel extends AggregateRoot
         $this->setWatch(0);
         $this->geoLocation = new GeoLocation(0, 0, 0, 0, 0, 0);
         $this->sharedusers = new ArrayCollection();
+        $this->location = new ArrayCollection();
         $this->status = self::TRAVEL_DRAFT;
     }
 
@@ -490,5 +491,47 @@ class Travel extends AggregateRoot
     public function getLongitude(): float
     {
         return $this->getGeoLocation()->lng();
+    }
+
+    /**
+     * Get locations that have a visit date on a specific date, ordered by position.
+     *
+     * @return Location[]
+     */
+    public function getLocationsForDate(string $dateStr): array
+    {
+        if ($this->location === null) {
+            return [];
+        }
+        
+        $locations = [];
+        foreach ($this->location as $location) {
+            if ($location !== null && $location->hasVisitDateOn($dateStr)) {
+                $locations[] = $location;
+            }
+        }
+
+        usort($locations, function($a, $b) use ($dateStr) {
+            $posA = $this->getLocationPositionForDate($a, $dateStr);
+            $posB = $this->getLocationPositionForDate($b, $dateStr);
+            return $posA <=> $posB;
+        });
+
+        return $locations;
+    }
+
+    private function getLocationPositionForDate(Location $location, string $dateStr): int
+    {
+        if ($location->getVisitDates() === null) {
+            return 9999;
+        }
+        
+        foreach ($location->getVisitDates() as $vd) {
+            if ($vd !== null && $vd->getVisitDateString() === $dateStr) {
+                $position = $vd->getPosition();
+                return $position !== null ? (int) $position : 9999;
+            }
+        }
+        return 9999;
     }
 }

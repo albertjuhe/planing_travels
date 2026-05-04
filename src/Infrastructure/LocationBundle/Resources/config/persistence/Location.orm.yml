@@ -106,7 +106,7 @@ App\Domain\Location\Model\Location:
             mappedBy: location
             orphanRemoval: true
             orderBy:
-                visitDate: ASC
+                position: ASC
         notas:
             targetEntity: App\Domain\Note\Model\Note
             cascade:

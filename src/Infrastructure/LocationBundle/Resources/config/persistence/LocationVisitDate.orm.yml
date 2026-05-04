@@ -11,6 +11,10 @@ App\Domain\Location\Model\LocationVisitDate:
             type: date
             nullable: false
             column: visit_date
+        position:
+            type: integer
+            nullable: true
+            column: position
     manyToOne:
         location:
             targetEntity: App\Domain\Location\Model\Location
