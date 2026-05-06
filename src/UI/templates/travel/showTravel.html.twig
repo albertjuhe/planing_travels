@@ -2363,9 +2363,15 @@
             var rect = btn.getBoundingClientRect();
             picker.classList.add('is-open');
             var pw = picker.offsetWidth;
+            var ph = picker.offsetHeight;
             var left = rect.left;
             if (left + pw > window.innerWidth - 8) { left = window.innerWidth - pw - 8; }
-            picker.style.top  = (rect.bottom + window.scrollY + 4) + 'px';
+            var spaceBelow = window.innerHeight - rect.bottom;
+            if (spaceBelow < ph + 8) {
+                picker.style.top  = (rect.top + window.scrollY - ph - 4) + 'px';
+            } else {
+                picker.style.top  = (rect.bottom + window.scrollY + 4) + 'px';
+            }
             picker.style.left = Math.max(4, left) + 'px';
         }
 
