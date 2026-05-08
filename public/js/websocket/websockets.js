@@ -1,4 +1,4 @@
-var WS_BASE = "ws://localhost:5555";
+var WS_BASE = (window.location.protocol === 'https:' ? 'wss://' : 'ws://') + window.location.hostname + ':5555';
 var WS_URL = (typeof WS_TRAVEL_ID !== 'undefined' && WS_TRAVEL_ID)
     ? WS_BASE + "/ws/" + WS_TRAVEL_ID + "?userId=" + (WS_CURRENT_USER_ID || '') + "&username=" + encodeURIComponent(WS_CURRENT_USERNAME || '')
     : WS_BASE + "/ws";

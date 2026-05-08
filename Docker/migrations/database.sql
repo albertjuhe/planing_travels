@@ -138,6 +138,7 @@ create table if not exists location_visit_date
         primary key,
     location_id char(36)     not null comment '(DC2Type:LocationId)',
     visit_date  date         not null,
+    position    int          null,
     constraint FK_LVD_LOCATION
         foreign key (location_id) references location (id) on delete cascade,
     constraint UNIQ_LVD_LOC_DATE
