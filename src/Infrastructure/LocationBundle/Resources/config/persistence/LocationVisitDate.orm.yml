@@ -15,6 +15,14 @@ App\Domain\Location\Model\LocationVisitDate:
             type: integer
             nullable: true
             column: position
+        timeStart:
+            type: time
+            nullable: true
+            column: time_start
+        timeEnd:
+            type: time
+            nullable: true
+            column: time_end
     manyToOne:
         location:
             targetEntity: App\Domain\Location\Model\Location

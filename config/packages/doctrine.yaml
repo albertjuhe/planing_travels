@@ -73,4 +73,9 @@ doctrine:
                 prefix: App\Domain\Event\Model
                 dir: '%kernel.root_dir%/../src/Infrastructure/EventBundle/Resources/config/persistence'
                 is_bundle: false
+            Budget:
+                type: yml
+                prefix: App\Domain\Budget\Model
+                dir: '%kernel.root_dir%/../src/Infrastructure/BudgetBundle/Resources/config/persistence'
+                is_bundle: false
 

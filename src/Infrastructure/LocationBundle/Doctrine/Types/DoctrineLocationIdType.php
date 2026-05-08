@@ -15,11 +15,17 @@ class DoctrineLocationIdType extends GuidType
 
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
+        if ($value === null) {
+            return null;
+        }
         return $value->id();
     }
 
     public function convertToPHPValue($value, AbstractPlatform $platform)
     {
+        if ($value === null) {
+            return null;
+        }
         return new LocationId($value);
     }
 }

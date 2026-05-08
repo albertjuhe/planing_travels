@@ -880,312 +880,49 @@
 }
 
 /* ─────────────────────────────────────────
-   View tabs (Map / Calendar)
+   View tabs (navigation links)
 ───────────────────────────────────────── */
 .st-view-tabs {
     display: flex;
-    gap: 4px;
-    margin-bottom: 16px;
+    gap: 8px;
+    margin-bottom: 20px;
     margin-top: 20px;
+    flex-wrap: wrap;
 }
 .st-view-tab {
     display: inline-flex;
     align-items: center;
-    gap: 7px;
-    padding: 8px 20px;
-    font-size: 13px;
+    gap: 10px;
+    padding: 14px 28px;
+    font-size: 16px;
     font-weight: 600;
-    border-radius: 20px;
-    border: 1.5px solid #dde3ea;
+    border-radius: 28px;
+    border: 2px solid #dde3ea;
     background: #fff;
     color: #636e72;
     cursor: pointer;
-    transition: background 0.15s, color 0.15s, border-color 0.15s;
+    text-decoration: none;
+    transition: background 0.15s, color 0.15s, border-color 0.15s, box-shadow 0.15s;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    white-space: nowrap;
 }
-.st-view-tab:hover { background: #f4f6f8; color: #2c3e50; }
+.st-view-tab:hover {
+    background: #f4f6f8;
+    color: #2c3e50;
+    border-color: #bdc3c7;
+    text-decoration: none;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+}
 .st-view-tab.is-active {
-    background: #2980b9;
+    background: linear-gradient(135deg, #1a2e4a 0%, #2980b9 100%);
     color: #fff;
-    border-color: #2980b9;
+    border-color: transparent;
+    box-shadow: 0 4px 12px rgba(41,128,185,0.3);
 }
 .st-view-panel { display: none; }
 .st-view-panel.is-active { display: block; }
 
 /* ─────────────────────────────────────────
-   Calendar view
-───────────────────────────────────────── */
-.cal-wrap {
-    display: flex;
-    gap: 20px;
-    align-items: flex-start;
-}
-
-/* ── Unscheduled sidebar ── */
-.cal-unscheduled {
-    flex-shrink: 0;
-    width: 210px;
-    background: #fff;
-    border-radius: 14px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.07), 0 8px 24px rgba(0,0,0,0.06);
-    overflow: hidden;
-    position: sticky;
-    top: 16px;
-}
-.cal-unscheduled__head {
-    padding: 13px 16px 11px;
-    background: linear-gradient(135deg, #1a2e4a 0%, #2980b9 100%);
-    font-size: 11px;
-    font-weight: 700;
-    color: rgba(255,255,255,0.9);
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-    display: flex;
-    align-items: center;
-    gap: 7px;
-}
-.cal-unscheduled__head::before {
-    content: '';
-    display: inline-block;
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: #f39c12;
-}
-.cal-unscheduled__body {
-    padding: 10px;
-    min-height: 60px;
-    max-height: 480px;
-    overflow-y: auto;
-}
-.cal-unscheduled__body::-webkit-scrollbar { width: 4px; }
-.cal-unscheduled__body::-webkit-scrollbar-thumb { background: #dde3ea; border-radius: 2px; }
-.cal-unscheduled__empty {
-    font-size: 12px;
-    color: #b0bec5;
-    text-align: center;
-    padding: 20px 8px;
-    line-height: 1.5;
-}
-
-/* ── Calendar main area ── */
-.cal-main {
-    flex: 1;
-    min-width: 0;
-}
-
-/* Month label rows */
-.cal-month-label {
-    padding: 10px 14px 6px;
-    font-size: 12px;
-    font-weight: 700;
-    color: #2980b9;
-    text-transform: uppercase;
-    letter-spacing: 0.6px;
-    background: #f0f7ff;
-    border-top: 2px solid #d6eaf8;
-    border-bottom: 1px solid #d6eaf8;
-}
-
-.cal-grid {
-    background: #fff;
-    border-radius: 14px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.07), 0 8px 24px rgba(0,0,0,0.06);
-    overflow: hidden;
-    border: 1px solid #eaecef;
-}
-.cal-grid__body {
-    display: flex;
-    flex-direction: column;
-}
-
-/* ── Day rows ── */
-.cal-day {
-    display: flex;
-    align-items: center;
-    border-bottom: 1px solid #eaecef;
-    min-height: 44px;
-    transition: background 0.1s;
-}
-.cal-day:last-child { border-bottom: none; }
-.cal-day--weekend:not(.cal-day--out) {
-    background: #fdfaf5;
-}
-.cal-day--today:not(.cal-day--out) {
-    background: #f0f7ff;
-}
-.cal-day__head {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 8px 12px;
-    flex-shrink: 0;
-    width: 160px;
-}
-.cal-day__dow {
-    font-size: 11px;
-    font-weight: 600;
-    color: #7f8c8d;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    width: 32px;
-    flex-shrink: 0;
-}
-.cal-day--weekend:not(.cal-day--out) .cal-day__dow { color: #e67e22; }
-.cal-day__num {
-    font-size: 14px;
-    font-weight: 700;
-    color: #2c3e50;
-    line-height: 1;
-    width: 26px;
-    height: 26px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    flex-shrink: 0;
-}
-.cal-day--today:not(.cal-day--out) .cal-day__num {
-    background: #2980b9;
-    color: #fff;
-    font-size: 13px;
-}
-.cal-day--weekend:not(.cal-day--out) .cal-day__num { color: #e67e22; }
-.cal-day__body {
-    flex: 1;
-    padding: 5px 6px;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 4px;
-    min-width: 0;
-}
-
-/* ── Add button ── */
-.cal-add-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 22px;
-    height: 22px;
-    border-radius: 50%;
-    border: none;
-    background: #e8f4fd;
-    color: #2980b9;
-    cursor: pointer;
-    font-size: 16px;
-    line-height: 1;
-    transition: background 0.15s, color 0.15s, transform 0.1s;
-    flex-shrink: 0;
-    padding: 0;
-    font-weight: 300;
-}
-.cal-add-btn:hover {
-    background: #2980b9;
-    color: #fff;
-    transform: scale(1.15);
-}
-
-/* ── Location cards inside calendar ── */
-.cal-card {
-    display: flex;
-    align-items: flex-start;
-    gap: 5px;
-    padding: 4px 6px;
-    border-radius: 5px;
-    border-left: 3px solid #2980b9;
-    background: #eaf4fd;
-    font-size: 11px;
-    color: #1a2e4a;
-    user-select: none;
-    position: relative;
-    transition: background 0.12s, border-color 0.12s;
-}
-.cal-card:hover { background: #d6eaf8; }
-.cal-card__icon { flex-shrink: 0; font-size: 11px; line-height: 1.4; opacity: 0.75; }
-.cal-card__text { flex: 1; min-width: 0; }
-.cal-card__title { font-weight: 600; line-height: 1.3; word-break: break-word; }
-.cal-card__type { font-size: 9px; color: #5d8aa8; margin-top: 1px; text-transform: uppercase; letter-spacing: 0.3px; }
-.cal-remove-btn {
-    flex-shrink: 0;
-    background: none;
-    border: none;
-    color: #a8c8e0;
-    font-size: 12px;
-    line-height: 1;
-    cursor: pointer;
-    padding: 0;
-    border-radius: 3px;
-    transition: color 0.12s;
-    align-self: flex-start;
-    margin-top: 1px;
-}
-.cal-remove-btn:hover { color: #e74c3c; }
-
-/* Type-based card accent colours */
-.cal-card[data-icon*="bed"]        { border-color: #8e44ad; background: #f5eef8; }
-.cal-card[data-icon*="bed"]:hover  { background: #ebdef0; }
-.cal-card[data-icon*="plane"]      { border-color: #27ae60; background: #eafaf1; }
-.cal-card[data-icon*="plane"]:hover{ background: #d5f5e3; }
-.cal-card[data-icon*="camera"]     { border-color: #e67e22; background: #fef9e7; }
-.cal-card[data-icon*="camera"]:hover{ background: #fdebd0; }
-.cal-card[data-icon*="cutlery"]    { border-color: #e74c3c; background: #fdedec; }
-.cal-card[data-icon*="cutlery"]:hover{ background: #fadbd8; }
-.cal-card[data-icon*="train"]      { border-color: #16a085; background: #e8f8f5; }
-.cal-card[data-icon*="train"]:hover{ background: #d1f2eb; }
-.cal-card[data-icon*="bus"]        { border-color: #d35400; background: #fdf2e9; }
-.cal-card[data-icon*="coffee"]     { border-color: #795548; background: #efebe9; }
-
-/* Sidebar cards */
-.cal-unscheduled .cal-card {
-    font-size: 12px;
-    padding: 7px 9px;
-    margin-bottom: 5px;
-    border-radius: 8px;
-    border-left-width: 4px;
-    background: #f4f6f8;
-    border-color: #b0bec5;
-    color: #2c3e50;
-}
-.cal-unscheduled .cal-card:hover { background: #eaecef; }
-
-/* ── Picker dropdown ── */
-.cal-picker {
-    position: fixed;
-    z-index: 3000;
-    background: #fff;
-    border: 1px solid #dde3ea;
-    border-radius: 12px;
-    box-shadow: 0 12px 36px rgba(0,0,0,0.18);
-    min-width: 210px;
-    max-width: 270px;
-    max-height: 300px;
-    overflow-y: auto;
-    padding: 6px;
-    display: none;
-}
-.cal-picker.is-open { display: block; }
-.cal-picker__empty {
-    font-size: 12px;
-    color: #b0bec5;
-    text-align: center;
-    padding: 16px 8px;
-}
-.cal-picker__item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 10px;
-    border-radius: 7px;
-    font-size: 12px;
-    color: #2c3e50;
-    cursor: pointer;
-    transition: background 0.12s;
-}
-.cal-picker__item:hover { background: #eaf4fd; }
-.cal-picker__item__icon { flex-shrink: 0; font-size: 13px; }
-.cal-picker__item__title { font-weight: 600; line-height: 1.3; }
-.cal-picker__item__type { font-size: 10px; color: #95a5a6; }
-
 /* Connected user badge */
 .st-online-badge {
     position: fixed;
@@ -1694,6 +1431,7 @@
         font-size: 12px;
     }
 }
+
     </style>
 {% endblock %}
 
@@ -1752,6 +1490,10 @@
                             Edit travel
                         </a>
                     {% endif %}
+                    <a href="{{ path('print_travel', {'_locale': app.request.locale, 'slug': travel.slug}) }}" class="pa-btn-new pa-btn-share" target="_blank" title="Print / Save as PDF">
+                        <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><path d="M4 1h8v4H4V1zM2 6h12v7H2V6zm2 2v4h8V8H4zm0 1h8v1H4V9zm0 2h5v1H4v-1z"/></svg>
+                        Print
+                    </a>
                 </div>
             </div>
         </div>
@@ -1765,17 +1507,23 @@
         {# ── View tab switcher ── #}
         <div class="st-view-tabs">
             <button class="st-view-tab is-active" data-tab="map" type="button">
-                <svg viewBox="0 0 16 16" width="13" height="13" fill="currentColor"><path d="M8 1a5 5 0 0 1 5 5c0 4-5 9-5 9S3 10 3 6a5 5 0 0 1 5-5zm0 3a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/></svg>
+                <svg viewBox="0 0 16 16" width="16" height="16" fill="currentColor"><path d="M8 1a5 5 0 0 1 5 5c0 4-5 9-5 9S3 10 3 6a5 5 0 0 1 5-5zm0 3a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/></svg>
                 Map
             </button>
-            <button class="st-view-tab" data-tab="calendar" type="button">
-                <svg viewBox="0 0 16 16" width="13" height="13" fill="currentColor"><path d="M11 1v1H5V1H3v1H1v13h14V2h-2V1h-2zm2 12H3V6h10v7z"/></svg>
+            <a class="st-view-tab" href="{{ path('show_travel_calendar_simple', {_locale: app.request.locale, slug: travel.slug}) }}" style="text-decoration:none;">
+                <svg viewBox="0 0 16 16" width="16" height="16" fill="currentColor"><path d="M11 1v1H5V1H3v1H1v13h14V2h-2V1h-2zm2 12H3V6h10v7z"/></svg>
                 Calendar
-            </button>
+            </a>
             <a class="st-view-tab" href="{{ path('show_travel_calendar', {slug: travel.slug}) }}" style="text-decoration:none;">
-                <svg viewBox="0 0 16 16" width="13" height="13" fill="currentColor"><path d="M2 14L6 2l4 8 2-4 2 8" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <svg viewBox="0 0 16 16" width="16" height="16" fill="currentColor"><path d="M2 14L6 2l4 8 2-4 2 8" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 Calendar + Route
             </a>
+            {% if app.user %}
+            <a class="st-view-tab" href="{{ path('show_travel_budget', {slug: travel.slug}) }}" style="text-decoration:none;">
+                <svg viewBox="0 0 16 16" width="16" height="16" fill="currentColor"><path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zm.75 10.5v.75h-1.5v-.75H5.5v-1.5h1v-3h-1V6.25h1V5.5h1.5v.75H9.5v1.5h-1v3h1v1.5H8.75z"/></svg>
+                Budget
+            </a>
+            {% endif %}
         </div>
 
         {# ── MAP panel ── #}
@@ -1825,106 +1573,10 @@
 
         </div>{# /st-panel-map #}
 
-        {# ── CALENDAR panel ── #}
-        <div class="st-view-panel" id="st-panel-calendar">
-            <div class="cal-wrap">
-
-                {# Unscheduled sidebar #}
-                <div class="cal-unscheduled">
-                    <div class="cal-unscheduled__head">Locations</div>
-                    <div class="cal-unscheduled__body" id="cal-unscheduled">
-                        {% set hasUnscheduled = false %}
-                        {% for loc in travel.location %}
-                            {% if not loc.hasAnyVisitDate %}
-                                {% set hasUnscheduled = true %}
-                                <div class="cal-card" id="cal-loc-{{ loc.id }}"
-                                     data-location-id="{{ loc.id }}"
-                                     data-title="{{ loc.title|e('html_attr') }}"
-                                     data-type="{{ loc.typeLocation is not null ? loc.typeLocation.title|e('html_attr') : '' }}"
-                                     data-icon="{{ loc.typeLocation is not null ? loc.typeLocation.icon|e('html_attr') : '' }}">
-                                    <span class="cal-card__icon">
-                                        {% if loc.typeLocation is not null %}<i class="{{ loc.typeLocation.icon }}"></i>{% else %}📍{% endif %}
-                                    </span>
-                                    <span class="cal-card__text">
-                                        <div class="cal-card__title">{{ loc.title }}</div>
-                                        {% if loc.typeLocation is not null %}<div class="cal-card__type">{{ loc.typeLocation.title }}</div>{% endif %}
-                                    </span>
-                                </div>
-                            {% endif %}
-                        {% endfor %}
-                        {% if not hasUnscheduled %}
-                            <div class="cal-unscheduled__empty" id="cal-unscheduled-empty">All locations scheduled ✓</div>
-                        {% endif %}
-                    </div>
-                </div>
-
-                {# Day list calendar #}
-                <div class="cal-main">
-                    <div class="cal-grid">
-                        <div class="cal-grid__body" id="cal-grid-body">
-                            {% set startTs    = travel.startAt|date('U') %}
-                            {% set endTs      = travel.endAt|date('U') %}
-                            {% set todayStr   = 'now'|date('Y-m-d') %}
-                            {% set monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'] %}
-                            {% set dowNames   = { 1: 'Mon', 2: 'Tue', 3: 'Wed', 4: 'Thu', 5: 'Fri', 6: 'Sat', 7: 'Sun' } %}
-                            {% set tripDays   = (((endTs - startTs) / 86400)|round(0,'ceil') + 1) %}
-                            {% set lastMonth  = '' %}
-                            {% for i in 0..(tripDays - 1) %}
-                                {% set thisDate    = travel.startAt|date_modify('+' ~ i ~ ' days') %}
-                                {% set thisDateStr = thisDate|date('Y-m-d') %}
-                                {% set dow         = thisDate|date('N') %}
-                                {% set isWeekend   = dow >= 6 %}
-                                {% set isToday     = thisDateStr == todayStr %}
-                                {% set thisMonth   = thisDate|date('Y-n') %}
-                                {% if thisMonth != lastMonth %}
-                                    {% set lastMonth = thisMonth %}
-                                    <div class="cal-month-label">{{ monthNames[thisDate|date('n') - 1] }} {{ thisDate|date('Y') }}</div>
-                                {% endif %}
-                                <div class="cal-day{% if isWeekend %} cal-day--weekend{% endif %}{% if isToday %} cal-day--today{% endif %}"
-                                     id="cal-day-{{ thisDateStr }}"
-                                     data-date="{{ thisDateStr }}">
-                                    <div class="cal-day__head">
-                                        <span class="cal-day__dow">{{ dowNames[dow] }}</span>
-                                        <span class="cal-day__num">{{ thisDate|date('d') }}</span>
-                                        {% if canEdit %}
-                                        <button class="cal-add-btn" type="button" data-date="{{ thisDateStr }}" title="Add location">+</button>
-                                        {% endif %}
-                                    </div>
-                                    <div class="cal-day__body">
-                                         {% for loc in travel.getLocationsForDate(thisDateStr) %}
-                                             <div class="cal-card" id="cal-loc-{{ loc.id }}-{{ thisDateStr }}"
-                                                  data-location-id="{{ loc.id }}"
-                                                  data-date="{{ thisDateStr }}"
-                                                  data-title="{{ loc.title|e('html_attr') }}"
-                                                  data-type="{{ loc.typeLocation is not null ? loc.typeLocation.title|e('html_attr') : '' }}"
-                                                  data-icon="{{ loc.typeLocation is not null ? loc.typeLocation.icon|e('html_attr') : '' }}">
-                                                 <span class="cal-card__icon">
-                                                     {% if loc.typeLocation is not null %}<i class="{{ loc.typeLocation.icon }}"></i>{% else %}📍{% endif %}
-                                                 </span>
-                                                 <span class="cal-card__text">
-                                                     <div class="cal-card__title">{{ loc.title }}</div>
-                                                     {% if loc.typeLocation is not null %}<div class="cal-card__type">{{ loc.typeLocation.title }}</div>{% endif %}
-                                                 </span>
-                                                 {% if canEdit %}
-                                                 <button class="cal-remove-btn" type="button" data-location-id="{{ loc.id }}" data-date="{{ thisDateStr }}" title="Remove from this day">&times;</button>
-                                                 {% endif %}
-                                             </div>
-                                         {% endfor %}
-                                     </div>
-                                </div>
-                            {% endfor %}
-                        </div>
-                    </div>
-
-                </div>{# /cal-main #}
-
-            </div>
-        </div>{# /st-panel-calendar #}
 
     </div>{# /container #}
 
 </div>{# /st-page #}
-
 {% if app.user and app.user.userId == travel.user.userId %}
 <div class="sh-overlay" id="sh-overlay" role="dialog" aria-modal="true" aria-labelledby="sh-modal-title">
     <div class="sh-modal">
@@ -1961,7 +1613,6 @@
     <span id="online-user-label">Usuario desconectado</span>
 </a>
 
-{# ── Notes Modal ── #}
 <div class="nm-overlay" id="notesModal" role="dialog" aria-modal="true">
     <div class="nm-modal">
         <div class="nm-modal__header">
@@ -2020,6 +1671,11 @@
     </script>
     <script src="{{ asset('js/websocket/websockets.js') }}?v={{ "now"|date('U') }}"></script>
     <script src="{{ asset('js/chat-widget.js') }}?v={{ "now"|date('U') }}"></script>
+    {% if app.user %}
+    <script>
+        ChatWidget.init('{{ travel.id }}', '{{ app.user.id }}', '{{ app.user.username }}');
+    </script>
+    {% endif %}
     <script src="{{ asset('leaflet/leaflet-easyprint.js') }}"></script>
     <script>
         var mPoint = new mapPoint('{{ travel.id }}');
@@ -2302,268 +1958,8 @@
             });
         });
 
-        {% if canEdit %}
-        /* ── Calendar: picker + week navigation ── */
-        var VISIT_DATE_URL = '{{ path('updateLocationVisitDate', {'locationId': '__LOC__'}) }}';
 
-        /* Build a registry of all locations for the picker */
-        var ALL_LOCATIONS = [
-            {% for loc in travel.location %}
-            {
-                id: '{{ loc.id }}',
-                title: {{ loc.title|json_encode|raw }},
-                type: {{ (loc.typeLocation is not null ? loc.typeLocation.title : '')|json_encode|raw }},
-                icon: {{ (loc.typeLocation is not null ? loc.typeLocation.icon : '')|json_encode|raw }}
-            }{{ not loop.last ? ',' : '' }}
-            {% endfor %}
-        ];
-        {% endif %}
 
-        {% if canEdit %}
-        /* ── Picker ── */
-        var picker = document.createElement('div');
-        picker.className = 'cal-picker';
-        picker.id = 'cal-picker';
-        document.body.appendChild(picker);
-        var pickerDate = null;
-
-        function openPicker(btn) {
-            pickerDate = btn.dataset.date;
-            picker.innerHTML = '';
-            var dayBody = document.querySelector('#cal-day-' + pickerDate + ' .cal-day__body');
-            var alreadyOnDay = [];
-            if (dayBody) {
-                dayBody.querySelectorAll('.cal-card').forEach(function (c) {
-                    alreadyOnDay.push(c.dataset.locationId);
-                });
-            }
-            var available = ALL_LOCATIONS.filter(function (loc) {
-                return alreadyOnDay.indexOf(loc.id) === -1;
-            });
-            if (available.length === 0) {
-                picker.innerHTML = '<div class="cal-picker__empty">All locations already on this day</div>';
-            } else {
-                available.forEach(function (loc) {
-                    var item = document.createElement('div');
-                    item.className = 'cal-picker__item';
-                    var iconHtml = loc.icon
-                        ? '<i class="cal-picker__item__icon ' + escAttr(loc.icon) + '"></i>'
-                        : '<span class="cal-picker__item__icon">📍</span>';
-                    item.innerHTML = iconHtml +
-                        '<span><div class="cal-picker__item__title">' + escHtml(loc.title) + '</div>' +
-                        (loc.type ? '<div class="cal-picker__item__type">' + escHtml(loc.type) + '</div>' : '') +
-                        '</span>';
-                    item.addEventListener('click', function () {
-                        addLocationToDay(loc, pickerDate);
-                        closePicker();
-                    });
-                    picker.appendChild(item);
-                });
-            }
-            var rect = btn.getBoundingClientRect();
-            picker.classList.add('is-open');
-            var pw = picker.offsetWidth;
-            var ph = picker.offsetHeight;
-            var left = rect.left;
-            if (left + pw > window.innerWidth - 8) { left = window.innerWidth - pw - 8; }
-            var spaceBelow = window.innerHeight - rect.bottom;
-            if (spaceBelow < ph + 8) {
-                picker.style.top  = (rect.top + window.scrollY - ph - 4) + 'px';
-            } else {
-                picker.style.top  = (rect.bottom + window.scrollY + 4) + 'px';
-            }
-            picker.style.left = Math.max(4, left) + 'px';
-        }
-
-        function closePicker() { picker.classList.remove('is-open'); pickerDate = null; }
-
-        document.addEventListener('click', function (e) {
-            if (!picker.contains(e.target) && !e.target.closest('.cal-add-btn')) { closePicker(); }
-        });
-        document.addEventListener('click', function (e) {
-            var btn = e.target.closest('.cal-add-btn');
-            if (!btn) return;
-            e.stopPropagation();
-            if (picker.classList.contains('is-open') && pickerDate === btn.dataset.date) { closePicker(); }
-            else { openPicker(btn); }
-        });
-        document.addEventListener('click', function (e) {
-            var btn = e.target.closest('.cal-remove-btn');
-            if (!btn) return;
-            var locId = btn.dataset.locationId;
-            var date = btn.dataset.date;
-            if (date) {
-                removeLocationFromDay(locId, date);
-            } else {
-                var card = btn.closest('.cal-card');
-                if (card) { removeLocationFromDay(card.dataset.locationId, card.dataset.date); }
-            }
-        });
-
-        function addLocationToDay(loc, date) {
-            var dayBody = document.querySelector('#cal-day-' + date + ' .cal-day__body');
-            if (!dayBody) return;
-            var card = document.createElement('div');
-            card.className = 'cal-card';
-            card.id = 'cal-loc-' + loc.id + '-' + date;
-            card.dataset.locationId = loc.id;
-            card.dataset.date = date;
-            card.dataset.title = loc.title;
-            card.dataset.type = loc.type || '';
-            card.dataset.icon = loc.icon || '';
-            var iconHtml = loc.icon
-                ? '<i class="' + escAttr(loc.icon) + '"></i>'
-                : '📍';
-            card.innerHTML =
-                '<span class="cal-card__icon">' + iconHtml + '</span>' +
-                '<span class="cal-card__text">' +
-                    '<div class="cal-card__title">' + escHtml(loc.title) + '</div>' +
-                    (loc.type ? '<div class="cal-card__type">' + escHtml(loc.type) + '</div>' : '') +
-                '</span>' +
-                '<button class="cal-remove-btn" type="button" data-location-id="' + loc.id + '" data-date="' + date + '" title="Remove from this day">&times;</button>';
-            dayBody.appendChild(card);
-
-            var unschedCard = document.getElementById('cal-loc-' + loc.id);
-            if (unschedCard && unschedCard.closest('#cal-unscheduled')) {
-                unschedCard.remove();
-                updateUnscheduledEmpty();
-            }
-
-            patchVisitDate(loc.id, { action: 'add', date: date }, function () {
-                card.remove();
-            });
-        }
-
-        function removeLocationFromDay(locationId, date) {
-            var card = document.getElementById('cal-loc-' + locationId + '-' + date);
-            if (card) { card.remove(); }
-
-            var hasOtherDays = document.querySelector('.cal-day__body .cal-card[data-location-id="' + locationId + '"]');
-            if (!hasOtherDays) {
-                var loc = ALL_LOCATIONS.filter(function (l) { return l.id === locationId; })[0];
-                if (loc) {
-                    var unschedCard = document.createElement('div');
-                    unschedCard.className = 'cal-card';
-                    unschedCard.id = 'cal-loc-' + locationId;
-                    unschedCard.dataset.locationId = locationId;
-                    unschedCard.dataset.title = loc.title;
-                    unschedCard.dataset.type = loc.type || '';
-                    unschedCard.dataset.icon = loc.icon || '';
-                    var iconHtml = loc.icon
-                        ? '<i class="' + escAttr(loc.icon) + '"></i>'
-                        : '📍';
-                    unschedCard.innerHTML =
-                        '<span class="cal-card__icon">' + iconHtml + '</span>' +
-                        '<span class="cal-card__text">' +
-                            '<div class="cal-card__title">' + escHtml(loc.title) + '</div>' +
-                            (loc.type ? '<div class="cal-card__type">' + escHtml(loc.type) + '</div>' : '') +
-                        '</span>';
-                    document.getElementById('cal-unscheduled').appendChild(unschedCard);
-                    updateUnscheduledEmpty();
-                }
-            }
-
-            patchVisitDate(locationId, { action: 'remove', date: date }, function () {
-                location.reload();
-            });
-        }
-
-        function patchVisitDate(locationId, payload, onError) {
-            var url = VISIT_DATE_URL.replace('__LOC__', locationId);
-            fetch(url, {
-                method: 'PATCH',
-                headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
-                body: JSON.stringify(payload)
-            })
-            .then(function (r) {
-                if (!r.ok) { onError(); return; }
-                return r.text().then(function (text) {
-                    try {
-                        var d = JSON.parse(text);
-                        if (!d.success) { onError(); }
-                    } catch (e) {
-                        /* non-JSON but HTTP 2xx — treat as success */
-                    }
-                });
-            })
-            .catch(function () { /* network error — keep optimistic UI */ });
-        }
-
-        function updateUnscheduledEmpty() {
-            var body    = document.getElementById('cal-unscheduled');
-            var cards   = body.querySelectorAll('.cal-card');
-            var emptyEl = document.getElementById('cal-unscheduled-empty');
-            if (cards.length === 0 && !emptyEl) {
-                var div = document.createElement('div');
-                div.className = 'cal-unscheduled__empty'; div.id = 'cal-unscheduled-empty';
-                div.textContent = 'All locations scheduled ✓';
-                body.appendChild(div);
-            } else if (cards.length > 0 && emptyEl) { emptyEl.remove(); }
-        }
-
-        function escHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-        function escAttr(s) { return String(s).replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
-
-        /* ── Update positions after drag-and-drop ── */
-        function updatePositionsForDate(dateStr) {
-            var dayBody = document.querySelector('#cal-day-' + dateStr + ' .cal-day__body');
-            if (!dayBody) return;
-            
-            var updates = [];
-            dayBody.querySelectorAll('.cal-card').forEach(function (card, index) {
-                updates.push({
-                    locationId: card.dataset.locationId,
-                    date: dateStr,
-                    position: index
-                });
-            });
-
-            if (updates.length === 0) return;
-
-            fetch('{{ path('updateLocationPositions') }}', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
-                body: JSON.stringify({ updates: updates })
-            })
-            .then(function (r) { return r.json(); })
-            .then(function (data) {
-                if (!data.success) {
-                    console.error('Failed to update positions', data);
-                }
-            })
-            .catch(function (e) { console.error('Network error updating positions', e); });
-        }
-
-        /* Initialize sortable on calendar day bodies */
-        if (typeof Sortable !== 'undefined') {
-            document.querySelectorAll('.cal-day__body').forEach(function (dayBody) {
-                new Sortable(dayBody, {
-                    group: 'cal-locations',
-                    animation: 150,
-                    ghostClass: 'sortable-ghost',
-                    chosenClass: 'sortable-chosen',
-                    dragClass: 'sortable-drag',
-                    onEnd: function () {
-                        var dateStr = this.el.closest('.cal-day').dataset.date;
-                        updatePositionsForDate(dateStr);
-                    }
-                });
-            });
-        }
-        {% endif %}
-
-        {% if app.user %}
-        /* ── Chat Widget ── */
-        if (typeof ChatWidget !== 'undefined' && typeof WS_TRAVEL_ID !== 'undefined') {
-            ChatWidget.init(
-                WS_TRAVEL_ID,
-                '{{ app.user.id }}',
-                '{{ app.user.username|default('')|escape('js') }}'
-            );
-        }
-        {% endif %}
-    }());
-    </script>
 {% endblock %}
 
 {% block aside %}{% endblock %}

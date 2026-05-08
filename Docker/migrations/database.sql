@@ -239,6 +239,41 @@ create index IDX_8525D330A76ED395
 create index IDX_8525D330ECAB15B3
     on travels_shared (travel_id);
 
+create table if not exists travel_budget
+(
+    id         int auto_increment primary key,
+    travel_id  char(36)       not null comment '(DC2Type:TravelId)',
+    amount     decimal(10, 2) not null default 0,
+    currency   varchar(3)     not null default 'EUR',
+    created_at datetime       not null,
+    updated_at datetime       not null,
+    constraint FK_BUDGET_TRAVEL foreign key (travel_id) references travel (id) on delete cascade,
+    constraint UNIQ_BUDGET_TRAVEL unique (travel_id)
+) collate = utf8mb4_unicode_ci;
+
+create table if not exists travel_expense
+(
+    id           int auto_increment primary key,
+    travel_id    char(36)       not null comment '(DC2Type:TravelId)',
+    location_id  char(36)       null comment '(DC2Type:LocationId)',
+    description  varchar(255)   not null,
+    amount       decimal(10, 2) not null,
+    currency     varchar(3)     not null default 'EUR',
+    category     varchar(50)    not null default 'other',
+    expense_date date           null,
+    created_at   datetime       not null,
+    updated_at   datetime       not null,
+    constraint FK_EXPENSE_TRAVEL foreign key (travel_id) references travel (id) on delete cascade,
+    constraint FK_EXPENSE_LOCATION foreign key (location_id) references location (id) on delete set null
+) collate = utf8mb4_unicode_ci;
+
+create index IDX_EXPENSE_TRAVEL on travel_expense (travel_id);
+create index IDX_EXPENSE_LOCATION on travel_expense (location_id);
+
+alter table location_visit_date
+    add column if not exists time_start time default null,
+    add column if not exists time_end   time default null;
+
 
 INSERT INTO travelGuuid.typelocation (id, title, icon, created_at, updated_at, description) VALUES (1, 'House', 'fa fa-bed', '2015-08-07 17:57:18', '2015-08-07 17:57:18', null);
 INSERT INTO travelGuuid.typelocation (id, title, icon, created_at, updated_at, description) VALUES (2, 'Airport', 'fa fa-plane', '2015-08-07 17:57:48', '2015-08-07 17:57:48', null);
@@ -335,5 +370,9 @@ INSERT INTO travelGuuid.migration_versions (version, executed_at) VALUES
 ('20180120123701', '2018-01-20 12:37:01'),
 ('20180203182434', '2018-02-03 18:24:34'),
 ('20181021183748', '2018-10-21 18:37:48'),
-('20260402120000', '2026-04-02 12:00:00');
+('20260402120000', '2026-04-02 12:00:00'),
+('20260501081155', '2026-05-01 08:11:55'),
+('20260504120000', '2026-05-04 12:00:00'),
+('20260508100000', '2026-05-08 10:00:00'),
+('20260508110000', '2026-05-08 11:00:00');
 

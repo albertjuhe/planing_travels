@@ -16,6 +16,12 @@ class LocationVisitDate
     /** @var int|null */
     private $position;
 
+    /** @var \DateTime|null */
+    private $timeStart;
+
+    /** @var \DateTime|null */
+    private $timeEnd;
+
     public function __construct(Location $location, \DateTime $visitDate)
     {
         $this->location = $location;
@@ -50,5 +56,35 @@ class LocationVisitDate
     public function setPosition(?int $position): void
     {
         $this->position = $position;
+    }
+
+    public function getTimeStart(): ?\DateTime
+    {
+        return $this->timeStart;
+    }
+
+    public function setTimeStart(?\DateTime $timeStart): void
+    {
+        $this->timeStart = $timeStart;
+    }
+
+    public function getTimeEnd(): ?\DateTime
+    {
+        return $this->timeEnd;
+    }
+
+    public function setTimeEnd(?\DateTime $timeEnd): void
+    {
+        $this->timeEnd = $timeEnd;
+    }
+
+    public function getTimeStartString(): ?string
+    {
+        return $this->timeStart ? $this->timeStart->format('H:i') : null;
+    }
+
+    public function getTimeEndString(): ?string
+    {
+        return $this->timeEnd ? $this->timeEnd->format('H:i') : null;
     }
 }

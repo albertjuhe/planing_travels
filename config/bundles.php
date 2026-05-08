@@ -22,6 +22,7 @@ return [
     App\Infrastructure\TypeLocationBundle\TypeLocationBundle::class => ['all' => true],
     App\Infrastructure\UserBundle\UserBundle::class => ['all' => true],
     App\Infrastructure\EventBundle\EventBundle::class => ['all' => true],
+    App\Infrastructure\BudgetBundle\BudgetBundle::class => ['all' => true],
     Symfony\Bundle\MonologBundle\MonologBundle::class => ['all' => true],
     League\Tactician\Bundle\TacticianBundle::class => ['all' => true],
     Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle::class => ['dev' => true, 'test' => true],
