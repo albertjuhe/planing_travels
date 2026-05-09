@@ -381,7 +381,7 @@ body { padding-top: var(--nav-h); }
 /* ── Responsive ── */
 @media (max-width: 991px) {
     .ts-navbar__toggle { display: flex; }
-    .ts-navbar { height: var(--nav-h); }
+    .ts-navbar { height: auto; min-height: var(--nav-h); background: #fff; border-bottom-color: #e9ecef; }
     .ts-navbar__inner { flex-wrap: wrap; align-items: flex-start; height: auto; padding: 0; }
     .ts-navbar__brand { height: var(--nav-h); }
 
@@ -391,7 +391,8 @@ body { padding-top: var(--nav-h); }
         align-items: stretch;
         width: 100%;
         padding: 12px 0 16px;
-        border-top: 1px solid var(--nav-border);
+        border-top: 1px solid #e9ecef;
+        background: #fff;
         gap: 0;
     }
     .ts-navbar__collapse.is-open { display: flex; }
@@ -402,7 +403,12 @@ body { padding-top: var(--nav-h); }
         gap: 2px;
         width: 100%;
     }
-    .ts-navbar__link { padding: 10px 16px; border-radius: 6px; }
+    .ts-navbar__link { padding: 10px 16px; border-radius: 6px; color: #2c3e50; }
+    .ts-navbar__link:hover,
+    .ts-navbar__link:focus { background: #f8f9fa; color: #1a2e4a; }
+    .ts-navbar__link.is-active { color: var(--nav-accent); }
+    .ts-navbar__link--cta { border-color: rgba(243,156,18,0.4); color: var(--nav-accent); }
+    .ts-navbar__link--cta:hover { background: rgba(243,156,18,0.08); }
 
     .ts-navbar__actions {
         flex-direction: column;
@@ -414,6 +420,13 @@ body { padding-top: var(--nav-h); }
         gap: 8px;
     }
     .ts-navbar__btn { justify-content: center; border-radius: 8px; padding: 10px 18px; }
+    .ts-navbar__btn--ghost {
+        color: #2c3e50;
+        border-color: #dee2e6;
+        background: transparent;
+    }
+    .ts-navbar__btn--ghost:hover { background: #f8f9fa; border-color: #adb5bd; color: #1a2e4a; }
+    .ts-navbar__btn--primary { color: #fff; background: var(--nav-accent); border-color: var(--nav-accent); }
 
     .ts-navbar__user-menu { width: 100%; }
     .ts-navbar__user-btn { width: 100%; justify-content: flex-start; border-radius: 8px; }
@@ -425,6 +438,15 @@ body { padding-top: var(--nav-h); }
         margin-top: 6px;
         animation: none;
     }
+
+    /* Brand text stays dark on white nav */
+    .ts-navbar__brand-text { color: #1a2e4a; }
+    .ts-navbar__brand-text strong { color: var(--nav-accent); }
+
+    /* Hamburger for white nav */
+    .ts-navbar__toggle { background: #f0f2f4; border-color: #dee2e6; }
+    .ts-navbar__toggle span { background: #1a2e4a; }
+    .ts-navbar__toggle.is-open span { background: #1a2e4a; }
 }
 </style>
 
