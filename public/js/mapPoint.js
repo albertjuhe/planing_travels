@@ -478,6 +478,8 @@ mapPoint.prototype.saveNota = function (nota) {
 
 mapPoint.prototype.resetRoute = function () {
     $('#routePoints').empty();
+    $('#route-count').text('');
+    $('#route-empty').show();
 };
 
 //Start dragging, change opacity
@@ -498,10 +500,16 @@ mapPoint.prototype.handleDrop = function (e) {
         var layerRoute = '<div class="point-view" id="route-' + _dataTransfer.getData('text') + '" data-route="true" data-id="' + _dataTransfer.getData('text') + '">' + $('#' + _dataTransfer.getData('text')).html() + ' ' + buttonRemove + '</div>';
 
         $('#routePoints').append(layerRoute);
+        $('#route-empty').hide();
+        var count = $('#routePoints').children('.point-view').length;
+        $('#route-count').text(count);
         $('#routePoints').sortable();
         $('#remove-point-' + _dataTransfer.getData('text')).bind({
             'click': function () {
                 $('#route-' + $(this).data('place')).remove();
+                var remaining = $('#routePoints').children('.point-view').length;
+                $('#route-count').text(remaining || '');
+                if (!remaining) { $('#route-empty').show(); }
             }
         })
     }
