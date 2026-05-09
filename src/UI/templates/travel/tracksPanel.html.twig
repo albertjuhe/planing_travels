@@ -1,23 +1,31 @@
-{# src/AppBundle/Resources/views/Travel/tracksPanel.html.twig #}
-
 <div class="st-panel">
     <div class="st-panel__head">
         <span class="st-panel__head-left">
             <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor" opacity=".7"><path d="M1 12L4 6l3 4 2-3 3 5 2-3" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
             GPX Tracks
         </span>
-        <button class="st-btn st-btn--ghost" id="tracks-toggle">
-            <svg viewBox="0 0 16 16" width="11" height="11" fill="currentColor"><path d="M2 5h12M2 8h12M2 11h12"/></svg>
-            Toggle
+        <button class="st-btn st-btn--ghost" id="tracks-show-all">
+            <svg viewBox="0 0 16 16" width="11" height="11" fill="currentColor"><path d="M8 1v14M1 8h14" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+            Show all
         </button>
     </div>
     <div class="st-panel__body">
-        <div id="tracks"></div>
-    </div>
-    <div class="st-panel-footer">
-        <button type="button" class="st-btn st-btn--primary" id="calculate-route">
-            <svg viewBox="0 0 16 16" width="11" height="11" fill="currentColor"><path d="M8 1v14M1 8h14" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
-            Show tracks
-        </button>
+        <div id="tracks" class="st-track-list">
+            {% for gpx in gpxs %}
+            <div class="st-track-item" data-track-idx="{{ loop.index0 }}">
+                <span class="st-track-dot" style="background:{{ gpx.color }}"></span>
+                <span class="st-track-name">{{ gpx.filename }}</span>
+                <label class="st-track-toggle">
+                    <input type="checkbox" class="st-track-checkbox" checked data-track-idx="{{ loop.index0 }}"/>
+                    <span class="st-track-slider"></span>
+                </label>
+            </div>
+            {% else %}
+            <div class="st-track-empty">
+                <svg viewBox="0 0 16 16" width="24" height="24" fill="currentColor" opacity=".2"><path d="M1 12L4 6l3 4 2-3 3 5 2-3" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <p>No GPX tracks</p>
+            </div>
+            {% endfor %}
+        </div>
     </div>
 </div>
