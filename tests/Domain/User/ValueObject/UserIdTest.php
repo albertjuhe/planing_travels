@@ -18,8 +18,8 @@ class UserIdTest extends TestCase
     {
         $id = mt_rand();
         $userId = UserId::create($id);
-        $this->assertInternalType('int', $userId->id());
-        $this->assertInternalType('string', $userId->__toString());
+        $this->assertIsInt($userId->id());
+        $this->assertIsString($userId->__toString());
     }
 
     public function testTravelIdCheckEquality()

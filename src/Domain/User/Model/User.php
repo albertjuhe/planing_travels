@@ -4,10 +4,11 @@ namespace App\Domain\User\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use App\Domain\Travel\Model\Travel;
 use App\Domain\User\ValueObject\UserId;
 
-class User implements UserInterface
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     /**
      * @var UserId
@@ -149,49 +150,48 @@ class User implements UserInterface
         return $this->firstName !== $this->plainPassword && $this->username !== $this->plainPassword;
     }
 
-    public function getUsername()
+    public function getUserIdentifier(): string
+    {
+        return $this->username ?? '';
+    }
+
+    public function getUsername(): ?string
     {
         return $this->username;
     }
 
-    public function getSalt()
-    {
-        // you *may* need a real salt depending on your encoder
-        // see section on salt below
-        return null;
-    }
-
-    public function getPassword(): string
+public function getPassword(): ?string
     {
         return $this->password;
     }
 
-    public function getRoles()
+    public function getRoles(): array
     {
         return ['ROLE_USER'];
     }
 
-    public function eraseCredentials()
+    public function eraseCredentials(): void
     {
     }
 
-    /** @see \Serializable::serialize() */
-    public function serialize()
+    public function __serialize(): array
     {
-        return serialize([
+        return [
+            $this->id,
             $this->email,
             $this->username,
             $this->password,
-        ]);
+        ];
     }
 
-    /** @see \Serializable::unserialize() */
-    public function unserialize($serialized)
+    public function __unserialize(array $data): void
     {
-        list(
+        [
+            $this->id,
             $this->email,
             $this->username,
-            $this->password) = unserialize($serialized);
+            $this->password,
+        ] = $data;
     }
 
     /**

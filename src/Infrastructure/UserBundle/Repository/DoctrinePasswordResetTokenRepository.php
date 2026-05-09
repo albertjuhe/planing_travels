@@ -5,7 +5,7 @@ namespace App\Infrastructure\UserBundle\Repository;
 use App\Domain\User\Model\PasswordResetToken;
 use App\Domain\User\Model\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 
 class DoctrinePasswordResetTokenRepository extends ServiceEntityRepository
 {
@@ -17,7 +17,7 @@ class DoctrinePasswordResetTokenRepository extends ServiceEntityRepository
     public function save(PasswordResetToken $token): void
     {
         $this->_em->persist($token);
-        $this->_em->flush($token);
+        $this->_em->flush();
     }
 
     public function findValidTokenByPlainValue(string $plainToken): ?PasswordResetToken

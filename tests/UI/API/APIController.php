@@ -2,22 +2,12 @@
 
 namespace App\Tests\UI\API;
 
-use GuzzleHttp\Client;
-use PHPUnit\Framework\TestCase;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class APIController extends TestCase
+abstract class APIController extends WebTestCase
 {
-    public const LOCALHOST = 'http://localhost/planing_travels/public/index.php/';
-
-    protected $client;
-
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->initializeClient();
-    }
-
-    private function initializeClient(): void
-    {
-        $this->client = new Client();
+        parent::setUp();
     }
 }

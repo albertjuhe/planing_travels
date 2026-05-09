@@ -12,7 +12,7 @@ use App\Tests\Infrastructure\TravelBundle\Repository\InMemoryTravelRepository;
 
 class ShareTravelServiceTest extends TravelService
 {
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
     }
@@ -34,7 +34,7 @@ class ShareTravelServiceTest extends TravelService
         );
 
         $service = new ShareTravelService($this->travelRepository, $this->userRepository);
-        $service->handle($command);
+        $service->__invoke($command);
 
         $sharedUsers = $travel->getSharedusers();
         $this->assertCount(1, $sharedUsers);
@@ -61,7 +61,7 @@ class ShareTravelServiceTest extends TravelService
         );
 
         $service = new ShareTravelService($this->travelRepository, $this->userRepository);
-        $service->handle($command);
+        $service->__invoke($command);
     }
 
     public function testShareTravelThrowsWhenTargetUserNotFound(): void
@@ -80,7 +80,7 @@ class ShareTravelServiceTest extends TravelService
         );
 
         $service = new ShareTravelService($this->travelRepository, $this->userRepository);
-        $service->handle($command);
+        $service->__invoke($command);
     }
 
     public function testShareTravelIsIdempotent(): void
@@ -100,8 +100,8 @@ class ShareTravelServiceTest extends TravelService
         );
 
         $service = new ShareTravelService($this->travelRepository, $this->userRepository);
-        $service->handle($command);
-        $service->handle($command);
+        $service->__invoke($command);
+        $service->__invoke($command);
 
         $this->assertCount(1, $travel->getSharedusers());
     }

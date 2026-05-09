@@ -6,7 +6,7 @@ use App\Domain\Event\DomainEvent;
 use App\Domain\Event\Model\StoredEvent;
 use App\Domain\Event\Repository\EventStore;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 use JMS\Serializer\SerializerInterface;
 
 class DoctrineEventStore extends ServiceEntityRepository implements EventStore

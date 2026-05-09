@@ -41,7 +41,7 @@ class UpdateTravelService implements UsesCasesService
      *
      * @throws InvalidTravelUser
      */
-    public function handle(UpdateTravelCommand $command)
+    public function __invoke(UpdateTravelCommand $command)
     {
         /** @var Travel */
         $travel = $command->travel();

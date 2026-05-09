@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                  https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="App\Domain\Budget\Model\TravelBudget" table="travel_budget">
+        <id name="id" type="integer">
+            <generator strategy="IDENTITY"/>
+        </id>
+        <field name="amount"    type="decimal"  precision="10" scale="2" nullable="false"/>
+        <field name="currency"  type="string"   length="3"               nullable="false"/>
+        <field name="createdAt" type="datetime" column="created_at"      nullable="false"/>
+        <field name="updatedAt" type="datetime" column="updated_at"      nullable="false"/>
+        <many-to-one field="travel" target-entity="App\Domain\Travel\Model\Travel" fetch="LAZY">
+            <join-column name="travel_id" referenced-column-name="id"/>
+        </many-to-one>
+        <lifecycle-callbacks/>
+    </entity>
+
+</doctrine-mapping>

@@ -24,7 +24,7 @@ class ShareTravelService implements UsesCasesService
         $this->userRepository = $userRepository;
     }
 
-    public function handle(ShareTravelCommand $command): void
+    public function __invoke(ShareTravelCommand $command): void
     {
         $travel = $this->travelRepository->ofIdOrFail($command->getTravelId());
 

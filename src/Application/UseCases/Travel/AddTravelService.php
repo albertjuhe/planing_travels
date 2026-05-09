@@ -32,7 +32,7 @@ class AddTravelService implements UsesCasesService
      *
      * @throws \Exception
      */
-    public function handle(AddTravelCommand $command)
+    public function __invoke(AddTravelCommand $command)
     {
         /** @var Travel $travel */
         $travel = $command->getTravel();

@@ -5,7 +5,7 @@ namespace App\Infrastructure\TravelBundle\Repository;
 use App\Domain\Travel\Model\Travel;
 use App\Domain\Travel\Repository\TravelReadModelRepository;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 
 class DoctrineTravelReadModelRepository extends ServiceEntityRepository implements TravelReadModelRepository
 {

@@ -13,7 +13,7 @@ class InMemoryUserRepositoryTest extends TestCase
     /** @var InMemoryUserRepository */
     private $inMemoryUserRepository;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->inMemoryUserRepository = new InMemoryUserRepository();
     }

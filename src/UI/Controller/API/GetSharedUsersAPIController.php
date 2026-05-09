@@ -6,8 +6,8 @@ use App\Domain\Travel\Exceptions\InvalidTravelUser;
 use App\Infrastructure\TravelBundle\Repository\DoctrineTravelRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Bundle\SecurityBundle\Security;
 
 class GetSharedUsersAPIController extends AbstractController
 {
@@ -23,9 +23,7 @@ class GetSharedUsersAPIController extends AbstractController
         $this->security = $security;
     }
 
-    /**
-     * @Route("/api/travel/{travelId}/shared-users", name="getSharedUsersAPI", methods={"GET"})
-     */
+    #[Route('/api/travel/{travelId}/shared-users', name: 'getSharedUsersAPI', methods: ['GET'])]
     public function getSharedUsers(string $travelId): JsonResponse
     {
         $user = $this->security->getUser();

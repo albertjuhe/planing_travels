@@ -9,8 +9,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Bundle\SecurityBundle\Security;
 
 class UpdateLocationAPIController extends AbstractController
 {
@@ -34,9 +34,7 @@ class UpdateLocationAPIController extends AbstractController
         $this->webSocketNotifier = $webSocketNotifier;
     }
 
-    /**
-     * @Route("/api/location/{locationId}", name="updateLocation", methods={"PATCH"})
-     */
+    #[Route('/api/location/{locationId}', name: 'updateLocation', methods: ['PATCH'])]
     public function update(Request $request, string $locationId): JsonResponse
     {
         $user = $this->security->getUser();

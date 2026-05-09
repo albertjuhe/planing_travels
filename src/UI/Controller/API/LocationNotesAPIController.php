@@ -9,8 +9,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Bundle\SecurityBundle\Security;
 
 class LocationNotesAPIController extends AbstractController
 {
@@ -31,9 +31,7 @@ class LocationNotesAPIController extends AbstractController
         $this->webSocketNotifier = $webSocketNotifier;
     }
 
-    /**
-     * @Route("/api/location/{locationId}/notes", name="getLocationNotes", methods={"GET"})
-     */
+    #[Route('/api/location/{locationId}/notes', name: 'getLocationNotes', methods: ['GET'])]
     public function getNotes(string $locationId): JsonResponse
     {
         try {
@@ -53,9 +51,7 @@ class LocationNotesAPIController extends AbstractController
         return new JsonResponse(['notes' => $notes]);
     }
 
-    /**
-     * @Route("/api/location/{locationId}/notes", name="addLocationNote", methods={"POST"})
-     */
+    #[Route('/api/location/{locationId}/notes', name: 'addLocationNote', methods: ['POST'])]
     public function addNote(Request $request, string $locationId): JsonResponse
     {
         $user = $this->security->getUser();
@@ -104,9 +100,7 @@ class LocationNotesAPIController extends AbstractController
         ], 201);
     }
 
-    /**
-     * @Route("/api/location/{locationId}/notes/{noteId}", name="deleteLocationNote", methods={"DELETE"})
-     */
+    #[Route('/api/location/{locationId}/notes/{noteId}', name: 'deleteLocationNote', methods: ['DELETE'])]
     public function deleteNote(string $locationId, int $noteId): JsonResponse
     {
         $user = $this->security->getUser();

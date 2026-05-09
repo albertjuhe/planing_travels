@@ -7,8 +7,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Bundle\SecurityBundle\Security;
 
 class UpdateLocationPositionsAPIController extends AbstractController
 {
@@ -23,9 +23,7 @@ class UpdateLocationPositionsAPIController extends AbstractController
         $this->em = $em;
     }
 
-    /**
-     * @Route("/api/locations/positions", name="updateLocationPositions", methods={"POST"})
-     */
+    #[Route('/api/locations/positions', name: 'updateLocationPositions', methods: ['POST'])]
     public function update(Request $request): JsonResponse
     {
         $user = $this->security->getUser();

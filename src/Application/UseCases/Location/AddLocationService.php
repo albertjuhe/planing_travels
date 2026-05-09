@@ -61,7 +61,7 @@ class AddLocationService implements UsesCasesService
     /**
      * @throws InvalidTravelUser
      */
-    public function handle(AddLocationCommand $addLocationCommand): void
+    public function __invoke(AddLocationCommand $addLocationCommand): void
     {
         $travelId = $addLocationCommand->getTravelId();
         $location = $addLocationCommand->getLocation();

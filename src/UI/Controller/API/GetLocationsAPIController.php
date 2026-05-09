@@ -7,9 +7,8 @@ use App\Infrastructure\Application\QueryBus\QueryBus;
 use App\UI\Controller\http\QueryController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\Security;
-use Symfony\Component\Routing\Annotation\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Routing\Attribute\Route;
 
 class GetLocationsAPIController extends QueryController
 {
@@ -18,10 +17,7 @@ class GetLocationsAPIController extends QueryController
         parent::__construct($queryBus, $security);
     }
 
-    /**
-     * @Route("api/travel/{travel}/locations", name="locations_by_travel")
-     * @Method({"GET"})
-     */
+    #[Route('api/travel/{travel}/locations', name: 'locations_by_travel', methods: ['GET'])]
     public function getLocationsByTravel(Request $request, string $travel)
     {
         $user = $this->security->getUser();

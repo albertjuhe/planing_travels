@@ -6,27 +6,24 @@ use App\Application\Command\Travel\ShareTravelCommand;
 use App\Domain\Travel\Exceptions\InvalidTravelUser;
 use App\Domain\User\Exceptions\UserDoesntExists;
 use App\UI\Controller\http\CommandController;
-use League\Tactician\CommandBus;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Bundle\SecurityBundle\Security;
 
 class ShareTravelAPIController extends CommandController
 {
     /** @var Security */
     private $security;
 
-    public function __construct(CommandBus $commandBus, Security $security)
+    public function __construct(MessageBusInterface $commandBus, Security $security)
     {
         parent::__construct($commandBus);
         $this->security = $security;
     }
 
-    /**
-     * @Route("/api/travel/{travelId}/share", name="shareTravelAPI", methods={"POST"})
-     */
+    #[Route('/api/travel/{travelId}/share', name: 'shareTravelAPI', methods: ['POST'])]
     public function share(Request $request, string $travelId): JsonResponse
     {
         $user = $this->security->getUser();
@@ -43,7 +40,7 @@ class ShareTravelAPIController extends CommandController
 
         try {
             $command = new ShareTravelCommand($travelId, (int) $user->getId()->id(), $username);
-            $this->commandBus->handle($command);
+            $this->commandBus->dispatch($command);
         } catch (InvalidTravelUser $e) {
             return new JsonResponse(['error' => $e->getMessage()], JsonResponse::HTTP_FORBIDDEN);
         } catch (UserDoesntExists $e) {

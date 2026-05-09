@@ -39,7 +39,7 @@ class PublishTravelService implements UsesCasesService
      *
      * @throws \Exception
      */
-    public function handle(PublishTravelCommand $command)
+    public function __invoke(PublishTravelCommand $command)
     {
         $travelSlug = $command->getTravelSlug();
         $user = $command->getUser();

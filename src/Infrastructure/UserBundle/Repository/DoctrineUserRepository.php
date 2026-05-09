@@ -7,7 +7,7 @@ use App\Domain\User\Repository\UserRepository;
 use App\Domain\User\Model\User;
 use App\Domain\User\ValueObject\UserId;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 use App\Domain\User\Exceptions\UserSavingError;
 
 class DoctrineUserRepository extends ServiceEntityRepository implements UserRepository
@@ -74,7 +74,7 @@ class DoctrineUserRepository extends ServiceEntityRepository implements UserRepo
     {
         try {
             $this->_em->persist($user);
-            $this->_em->flush($user);
+            $this->_em->flush();
         } catch (\Exception $e) {
             throw new UserSavingError('Error saving user: '.$e->getMessage());
         }

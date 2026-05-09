@@ -116,7 +116,7 @@
                     {% endif %}
 
                     {% if travel.description %}
-                    <p class="pa-card__desc">{{ travel.description|truncate(90) }}</p>
+                    <p class="pa-card__desc">{{ travel.description|u.truncate(90) }}</p>
                     {% endif %}
 
                     <div class="pa-card__meta">
@@ -223,7 +223,7 @@
                     </p>
                     {% endif %}
                     {% if travel.description %}
-                    <p class="pa-card__desc">{{ travel.description|truncate(90) }}</p>
+                    <p class="pa-card__desc">{{ travel.description|u.truncate(90) }}</p>
                     {% endif %}
                     <p class="pa-card__owner">
                         By <strong>{{ travel.user.firstName }} {{ travel.user.lastName }}</strong>

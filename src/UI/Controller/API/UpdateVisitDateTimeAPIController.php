@@ -8,8 +8,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Bundle\SecurityBundle\Security;
 
 class UpdateVisitDateTimeAPIController extends AbstractController
 {
@@ -27,9 +27,7 @@ class UpdateVisitDateTimeAPIController extends AbstractController
         $this->security = $security;
     }
 
-    /**
-     * @Route("/api/location/{locationId}/visit-time", name="updateVisitTime", methods={"PATCH"})
-     */
+    #[Route('/api/location/{locationId}/visit-time', name: 'updateVisitTime', methods: ['PATCH'])]
     public function update(Request $request, string $locationId): JsonResponse
     {
         $user = $this->security->getUser();

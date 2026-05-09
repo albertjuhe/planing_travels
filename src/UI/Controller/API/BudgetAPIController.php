@@ -10,8 +10,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Bundle\SecurityBundle\Security;
 
 class BudgetAPIController extends AbstractController
 {
@@ -32,9 +32,7 @@ class BudgetAPIController extends AbstractController
         $this->security = $security;
     }
 
-    /**
-     * @Route("/api/travel/{travelId}/budget", name="getBudget", methods={"GET"})
-     */
+    #[Route('/api/travel/{travelId}/budget', name: 'getBudget', methods: ['GET'])]
     public function getBudget(string $travelId): JsonResponse
     {
         $user = $this->security->getUser();
@@ -87,9 +85,7 @@ class BudgetAPIController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/api/travel/{travelId}/budget", name="saveBudget", methods={"POST"})
-     */
+    #[Route('/api/travel/{travelId}/budget', name: 'saveBudget', methods: ['POST'])]
     public function saveBudget(Request $request, string $travelId): JsonResponse
     {
         $user = $this->security->getUser();
@@ -128,9 +124,7 @@ class BudgetAPIController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/api/travel/{travelId}/expense", name="addExpense", methods={"POST"})
-     */
+    #[Route('/api/travel/{travelId}/expense', name: 'addExpense', methods: ['POST'])]
     public function addExpense(Request $request, string $travelId): JsonResponse
     {
         $user = $this->security->getUser();
@@ -192,9 +186,7 @@ class BudgetAPIController extends AbstractController
         ], 201);
     }
 
-    /**
-     * @Route("/api/expense/{expenseId}", name="deleteExpense", methods={"DELETE"})
-     */
+    #[Route('/api/expense/{expenseId}', name: 'deleteExpense', methods: ['DELETE'])]
     public function deleteExpense(int $expenseId): JsonResponse
     {
         $user = $this->security->getUser();

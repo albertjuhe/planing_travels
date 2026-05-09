@@ -9,7 +9,7 @@ class LocationWasAddedTest extends TestCase
 {
     private $locationWasAdded;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->locationWasAdded = new LocationWasAdded(
             []

@@ -4,13 +4,11 @@ namespace App\UI\Controller\http;
 
 use App\Application\Query\Travel\ShowTravelBySlugQuery;
 use App\Domain\User\Model\User;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class ShowTravelCalendarController extends QueryController
 {
-    /**
-     * @Route("/{_locale}/travel/{slug}/calendar", name="show_travel_calendar")
-     */
+    #[Route('/{_locale}/travel/{slug}/calendar', name: 'show_travel_calendar')]
     public function showTravelCalendar(string $slug)
     {
         /** @var User|null $currentUser */

@@ -2,22 +2,14 @@
 
 namespace App\Infrastructure\Middleware;
 
-use App\Infrastructure\TravelBundle\Repository\ElasticSearchTravelRepository;
-use League\Tactician\Middleware;
+use Symfony\Component\Messenger\Envelope;
+use Symfony\Component\Messenger\Middleware\MiddlewareInterface;
+use Symfony\Component\Messenger\Middleware\StackInterface;
 
-class ElasticSearchMiddleware implements Middleware
+class ElasticSearchMiddleware implements MiddlewareInterface
 {
-    private $elasticSearchTravelRepository;
-
-    public function __construct(ElasticSearchTravelRepository $elasticSearchTravelRepository)
+    public function handle(Envelope $envelope, StackInterface $stack): Envelope
     {
-        $this->elasticSearchTravelRepository = $elasticSearchTravelRepository;
-    }
-
-    public function execute($command, callable $next)
-    {
-        $returnValue = $next($command);
-        //$this->elasticSearchTravelRepository->save($returnValue);
-        return $returnValue;
+        return $stack->next()->handle($envelope, $stack);
     }
 }

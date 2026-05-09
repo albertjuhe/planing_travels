@@ -8,12 +8,12 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use App\Infrastructure\TravelBundle\Repository\DoctrineTravelRepository;
 use App\Domain\User\Exceptions\UserDoesntExists;
 use App\Infrastructure\TravelBundle\Form\UpdateTravelType;
 use App\Application\Command\Travel\UpdateTravelCommand;
-use League\Tactician\CommandBus;
+use Symfony\Component\Messenger\MessageBusInterface;
 
 class UpdateTravelController extends CommandController
 {
@@ -22,24 +22,13 @@ class UpdateTravelController extends CommandController
 
     public function __construct(
         DoctrineTravelRepository $travelRepository,
-        CommandBus $commandBus
+        MessageBusInterface $commandBus
     ) {
         parent::__construct($commandBus);
         $this->travelRepository = $travelRepository;
     }
 
-    /**
-     * @Route("/{_locale}/private/travel/{slug}/update",name="updateTravel")
-     *
-     * @param Request $request
-     * @param string  $slug
-     * @param $_locale
-     *
-     * @return RedirectResponse|Response
-     *
-     * @throws UserDoesntExists
-     * @throws TravelDoesntExists
-     */
+    #[Route('/{_locale}/private/travel/{slug}/update', name: 'updateTravel')]
     public function updateTravel(Request $request, string $slug, $_locale)
     {
         if (!$this->getUser()) {
@@ -70,7 +59,7 @@ class UpdateTravelController extends CommandController
             }
 
             $commandUpdate = new UpdateTravelCommand($travel, $this->getUser());
-            $this->commandBus->handle($commandUpdate);
+            $this->commandBus->dispatch($commandUpdate);
 
             return $this->redirectToRoute('main_private');
         }

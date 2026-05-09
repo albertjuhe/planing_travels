@@ -14,7 +14,7 @@ use App\Tests\Subscriber\DomainEventAllSubscriber;
 
 class PublishTravelServiceTest extends TravelService
 {
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
     }
@@ -30,7 +30,7 @@ class PublishTravelServiceTest extends TravelService
         $publishTravelCommand = new PublishTravelCommand($travel->getSlug(), $user);
         /** @var UpdateTravelService */
         $publishTravelService = new PublishTravelService($this->travelRepository, $this->userRepository);
-        $publishTravelService->handle($publishTravelCommand);
+        $publishTravelService->__invoke($publishTravelCommand);
 
         $travelPublished = $this->travelRepository->getTravelById(1);
         $this->assertEquals($travelPublished->getStatus(), Travel::TRAVEL_PUBLISHED);
@@ -53,6 +53,6 @@ class PublishTravelServiceTest extends TravelService
         $publishTravelCommand = new PublishTravelCommand($travel->getSlug(), $user);
         /** @var UpdateTravelService */
         $publishTravelService = new PublishTravelService($this->travelRepository, $this->userRepository);
-        $publishTravelService->handle($publishTravelCommand);
+        $publishTravelService->__invoke($publishTravelCommand);
     }
 }

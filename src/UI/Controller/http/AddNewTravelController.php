@@ -9,28 +9,17 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use App\Domain\User\Exceptions\UserDoesntExists;
-use League\Tactician\CommandBus;
-
-
+use Symfony\Component\Messenger\MessageBusInterface;
 class AddNewTravelController extends CommandController
 {
-    public function __construct(CommandBus $commandBus)
+    public function __construct(MessageBusInterface $commandBus)
     {
         parent::__construct($commandBus);
     }
 
-    /**
-     * @Route("/{_locale}/private/new",name="newTravel")
-     *
-     * @param Request $request
-     * @param $_locale
-     *
-     * @return RedirectResponse|Response
-     *
-     * @throws UserDoesntExists
-     */
+    #[Route('/{_locale}/private/new', name: 'newTravel')]
     public function newTravel(Request $request, $_locale)
     {
         if (!$this->getUser()) {
@@ -59,7 +48,7 @@ class AddNewTravelController extends CommandController
             }
 
             $addTravelCommand = new AddTravelCommand($travel, $this->getUser());
-            $this->commandBus->handle($addTravelCommand);
+            $this->commandBus->dispatch($addTravelCommand);
 
             return $this->redirectToRoute('main_private');
         }

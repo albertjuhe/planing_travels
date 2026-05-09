@@ -19,7 +19,7 @@ class LocationService extends TestCase
     protected $typeLocationRepository;
     protected $webSocketNotifier;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->travelRepository = $this->createMock(TravelRepository::class);
         $this->userRepository = $this->createMock(UserRepository::class);

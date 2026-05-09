@@ -12,7 +12,7 @@ final class Version20260402120000 extends AbstractMigration
     public function up(Schema $schema): void
     {
         $this->abortIf(
-            'mysql' !== $this->connection->getDatabasePlatform()->getName(),
+            !($this->connection->getDatabasePlatform() instanceof \Doctrine\DBAL\Platforms\MySQLPlatform || $this->connection->getDatabasePlatform() instanceof \Doctrine\DBAL\Platforms\MariaDBPlatform),
             "Migration can only be executed safely on 'mysql'."
         );
 
@@ -40,7 +40,7 @@ final class Version20260402120000 extends AbstractMigration
     public function down(Schema $schema): void
     {
         $this->abortIf(
-            'mysql' !== $this->connection->getDatabasePlatform()->getName(),
+            !($this->connection->getDatabasePlatform() instanceof \Doctrine\DBAL\Platforms\MySQLPlatform || $this->connection->getDatabasePlatform() instanceof \Doctrine\DBAL\Platforms\MariaDBPlatform),
             "Migration can only be executed safely on 'mysql'."
         );
 

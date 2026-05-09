@@ -4,7 +4,7 @@ namespace App\UI\Controller\http;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use App\Infrastructure\TravelBundle\Repository\DoctrineTravelRepository;
 
 class DefaultController extends AbstractController
@@ -22,13 +22,7 @@ class DefaultController extends AbstractController
         $this->travelRepository = $travelRepository;
     }
 
-    /**
-     * Matches /.
-     *
-     * @Route("/{_locale}",defaults={"_locale"="en"},name="homepage")
-     *
-     * @return Response
-     */
+    #[Route('/{_locale}', defaults: ['_locale' => 'en'], name: 'homepage')]
     public function index($_locale)
     {
         return $this->render('default/index.html.twig', ['locale' => $_locale]);

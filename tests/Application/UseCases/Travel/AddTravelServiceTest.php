@@ -12,7 +12,7 @@ use App\Tests\Domain\User\Model\UserMother;
 
 class AddTravelServiceTest extends TravelService
 {
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
     }
@@ -30,7 +30,7 @@ class AddTravelServiceTest extends TravelService
 
         $addTravelService = new AddTravelService($this->travelRepository, $this->userRepository);
         $command = new AddTravelCommand($travel, $user);
-        $addTravelService->handle($command);
+        $addTravelService->__invoke($command);
 
         $newTravel = $this->travelRepository->getTravelById($travelId);
         $this->assertEquals($newTravel->getId(), $travel->getId());
@@ -49,6 +49,6 @@ class AddTravelServiceTest extends TravelService
 
         $addTravelService = new AddTravelService($this->travelRepository, $this->userRepository);
         $command = new AddTravelCommand($travel, $user);
-        $addTravelService->handle($command);
+        $addTravelService->__invoke($command);
     }
 }

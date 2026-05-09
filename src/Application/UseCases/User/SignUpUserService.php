@@ -3,7 +3,7 @@
 namespace App\Application\UseCases\User;
 
 use App\Domain\User\Model\User;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use App\Domain\User\Repository\UserRepository;
 
 class SignUpUserService
@@ -13,22 +13,16 @@ class SignUpUserService
      */
     private $userRepository;
     /**
-     * @var UserPasswordEncoderInterface
+     * @var UserPasswordHasherInterface
      */
-    private $userPasswordEncoderInterface;
+    private $passwordHasher;
 
-    /**
-     * SignUpUserService constructor.
-     *
-     * @param $userRepository
-     * @param $userPasswordEncoderInterface
-     */
     public function __construct(
         UserRepository $userRepository,
-        UserPasswordEncoderInterface $userPasswordEncoderInterface
+        UserPasswordHasherInterface $passwordHasher
     ) {
         $this->userRepository = $userRepository;
-        $this->userPasswordEncoderInterface = $userPasswordEncoderInterface;
+        $this->passwordHasher = $passwordHasher;
     }
 
     /**
@@ -37,7 +31,7 @@ class SignUpUserService
      */
     public function execute(User $user)
     {
-        $password = $this->userPasswordEncoderInterface->encodePassword($user, $user->getPlainPassword());
+        $password = $this->passwordHasher->hashPassword($user, $user->getPlainPassword());
         $user->setPassword($password);
         $this->userRepository->save($user);
     }

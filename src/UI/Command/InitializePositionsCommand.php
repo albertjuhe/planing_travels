@@ -22,12 +22,14 @@ class InitializePositionsCommand extends Command
         $this->em = $em;
     }
 
-    protected function configure()
+    protected function configure(): void
     {
-        $this->setDescription('Initialize position field for existing location_visit_date records');
+        $this
+            ->setName('app:initialize-positions')
+            ->setDescription('Initialize position field for existing location_visit_date records');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
         

@@ -13,7 +13,7 @@ use App\Tests\Domain\User\Model\UserMother;
 
 class UnshareTravelServiceTest extends TravelService
 {
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
     }
@@ -26,7 +26,7 @@ class UnshareTravelServiceTest extends TravelService
             (int) $owner->getId()->id(),
             $target->getUsername()
         );
-        (new ShareTravelService($this->travelRepository, $this->userRepository))->handle($command);
+        (new ShareTravelService($this->travelRepository, $this->userRepository))->__invoke($command);
     }
 
     public function testUnshareTravelRemovesUser(): void
@@ -46,7 +46,7 @@ class UnshareTravelServiceTest extends TravelService
             (int) $owner->getId()->id(),
             $target->getUsername()
         );
-        (new UnshareTravelService($this->travelRepository, $this->userRepository))->handle($command);
+        (new UnshareTravelService($this->travelRepository, $this->userRepository))->__invoke($command);
 
         $this->assertCount(0, $travel->getSharedusers());
     }
@@ -69,7 +69,7 @@ class UnshareTravelServiceTest extends TravelService
             (int) $notOwner->getId()->id(),
             $target->getUsername()
         );
-        (new UnshareTravelService($this->travelRepository, $this->userRepository))->handle($command);
+        (new UnshareTravelService($this->travelRepository, $this->userRepository))->__invoke($command);
     }
 
     public function testUnshareThrowsWhenTargetUserNotFound(): void
@@ -86,7 +86,7 @@ class UnshareTravelServiceTest extends TravelService
             (int) $owner->getId()->id(),
             'nonexistent_user'
         );
-        (new UnshareTravelService($this->travelRepository, $this->userRepository))->handle($command);
+        (new UnshareTravelService($this->travelRepository, $this->userRepository))->__invoke($command);
     }
 
     public function testUnshareOnlyRemovesTargetUser(): void
@@ -108,7 +108,7 @@ class UnshareTravelServiceTest extends TravelService
             (int) $owner->getId()->id(),
             $target1->getUsername()
         );
-        (new UnshareTravelService($this->travelRepository, $this->userRepository))->handle($command);
+        (new UnshareTravelService($this->travelRepository, $this->userRepository))->__invoke($command);
 
         $this->assertCount(1, $travel->getSharedusers());
         $this->assertTrue(

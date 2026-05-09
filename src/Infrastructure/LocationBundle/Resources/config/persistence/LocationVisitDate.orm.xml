@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                  https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="App\Domain\Location\Model\LocationVisitDate" table="location_visit_date">
+        <id name="id" type="integer">
+            <generator strategy="IDENTITY"/>
+        </id>
+        <field name="visitDate"  type="date" column="visit_date" nullable="false"/>
+        <field name="position"   type="integer" column="position" nullable="true"/>
+        <field name="timeStart"  type="time" column="time_start" nullable="true"/>
+        <field name="timeEnd"    type="time" column="time_end"   nullable="true"/>
+        <many-to-one field="location" target-entity="App\Domain\Location\Model\Location" inversed-by="visitDates" fetch="LAZY">
+            <join-column name="location_id" referenced-column-name="id" on-delete="CASCADE"/>
+        </many-to-one>
+    </entity>
+
+</doctrine-mapping>

@@ -40,7 +40,7 @@ class DeleteLocationService implements UsesCasesService
         $this->webSocketNotifier = $webSocketNotifier;
     }
 
-    public function handle(DeleteLocationCommand $deleteLocationCommand)
+    public function __invoke(DeleteLocationCommand $deleteLocationCommand)
     {
         $locationId = $deleteLocationCommand->getLocationId();
         /** @var UserId $userId */

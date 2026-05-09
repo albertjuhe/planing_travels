@@ -7,7 +7,7 @@ use App\Domain\Location\Model\Location;
 use App\Domain\Location\Repository\LocationRepository;
 use App\Domain\Location\ValueObject\LocationId;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 
 class DoctrineLocationRepository extends ServiceEntityRepository implements LocationRepository
 {

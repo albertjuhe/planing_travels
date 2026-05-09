@@ -6,21 +6,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use App\Application\UseCases\User\SignInUserService;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 /**
  * Class SignInController.
  */
 class SignInController extends AbstractController
 {
-    /**
-     * @Route("/{_locale}/login", name="private_login")
-     *
-     * @param Request             $request
-     * @param AuthenticationUtils $authUtils
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
+    #[Route('/{_locale}/login', name: 'private_login')]
     public function login(Request $request, AuthenticationUtils $authUtils)
     {
         $signInService = new SignInUserService($authUtils);

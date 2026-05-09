@@ -3,35 +3,13 @@
 namespace App\UI\Controller\http;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use League\Tactician\CommandBus;
+use Symfony\Component\Messenger\MessageBusInterface;
 
 class CommandController extends AbstractController
 {
-    /** @var CommandBus */
-    protected $commandBus;
+    protected MessageBusInterface $commandBus;
 
-    /**
-     * BaseController constructor.
-     *
-     * @param CommandBus $commandBus
-     */
-    public function __construct(CommandBus $commandBus)
-    {
-        $this->commandBus = $commandBus;
-    }
-
-    /**
-     * @return CommandBus
-     */
-    public function getCommandBus(): CommandBus
-    {
-        return $this->commandBus;
-    }
-
-    /**
-     * @param CommandBus $commandBus
-     */
-    public function setCommandBus(CommandBus $commandBus): void
+    public function __construct(MessageBusInterface $commandBus)
     {
         $this->commandBus = $commandBus;
     }

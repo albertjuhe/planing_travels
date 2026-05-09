@@ -10,7 +10,7 @@ use App\Tests\Domain\User\Model\UserMother;
 
 class GetAllMyTravelsServiceTest extends TravelService
 {
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
     }
