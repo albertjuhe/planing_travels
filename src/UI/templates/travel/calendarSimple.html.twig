@@ -175,7 +175,8 @@
     position: fixed; z-index: 3000;
     background: #fff; border: 1px solid #dde3ea;
     border-radius: 12px; box-shadow: 0 12px 36px rgba(0,0,0,0.18);
-    min-width: 210px; max-width: 270px; max-height: 300px;
+    min-width: 210px; max-width: 270px;
+    max-height: min(300px, calc(100vh - 16px));
     overflow-y: auto; padding: 6px; display: none;
 }
 .cs-picker.is-open { display: block; }
@@ -470,10 +471,24 @@
                     e.stopPropagation();
                     activeDateBtn = btn;
                     buildPickerItems();
-                    var rect = btn.getBoundingClientRect();
-                    picker.style.top = (rect.bottom + window.scrollY + 4) + 'px';
-                    picker.style.left = (rect.left + window.scrollX) + 'px';
+                    picker.style.top = '';
+                    picker.style.bottom = '';
+                    picker.style.left = '';
                     picker.classList.add('is-open');
+                    var rect = btn.getBoundingClientRect();
+                    var pickerH = picker.offsetHeight;
+                    var spaceBelow = window.innerHeight - rect.bottom;
+                    var spaceAbove = rect.top;
+                    if (spaceBelow >= pickerH + 8 || spaceBelow >= spaceAbove) {
+                        picker.style.top = (rect.bottom + 4) + 'px';
+                    } else {
+                        picker.style.top = Math.max(4, rect.top - pickerH - 4) + 'px';
+                    }
+                    var left = rect.left;
+                    if (left + 270 > window.innerWidth) {
+                        left = Math.max(4, window.innerWidth - 274);
+                    }
+                    picker.style.left = left + 'px';
                 });
             });
 
