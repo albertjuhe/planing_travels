@@ -1,8 +1,9 @@
 "use strict";
 
 //Constructor
-var mapPoint = function (travelId) {
+var mapPoint = function (travelId, canEdit) {
     this.travel = travelId;
+    this.canEdit = canEdit !== undefined ? !!canEdit : true;
     this.control = null;
     this.currentPoints = [];
     this.dragSrcEl = null;
@@ -137,19 +138,19 @@ mapPoint.prototype.addPoint = function (locationPoint) {
                             '<svg viewBox="0 0 16 16" width="16" height="16" fill="currentColor"><path d="M0 3h16v10H0V3zm1 1v8h14V4H1zm4 2a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm-1 5l2-3 2 2 2-3 3 4H3z"/></svg>' +
                             'View gallery' +
                         '</button>' +
-                        '<button type="button" class="pt-menu__item" data-place="' + pid + '" data-function="nota">' +
+                        (this.canEdit ? '<button type="button" class="pt-menu__item" data-place="' + pid + '" data-function="nota">' +
                             '<svg viewBox="0 0 16 16" width="16" height="16" fill="currentColor"><path d="M2 2h12v12H2V2zm1 1v10h10V3H3zm2 2h6v1H5V5zm0 3h6v1H5V8zm0 3h4v1H5v-1z"/></svg>' +
                             'Add notes' +
-                        '</button>' +
-                        '<button type="button" class="pt-menu__item" data-place="' + pid + '" data-function="edit">' +
+                        '</button>' : '') +
+                        (this.canEdit ? '<button type="button" class="pt-menu__item" data-place="' + pid + '" data-function="edit">' +
                             '<svg viewBox="0 0 16 16" width="16" height="16" fill="currentColor"><path d="M11.7 1.3a1 1 0 0 1 1.4 0l1.6 1.6a1 1 0 0 1 0 1.4L5.5 13.5 1 15l1.5-4.5 9.2-9.2z"/></svg>' +
                             'Edit location' +
-                        '</button>' +
-                        '<div class="pt-menu__divider"></div>' +
-                        '<button type="button" class="pt-menu__item pt-menu__item--danger" data-place="' + pid + '" data-function="remove">' +
+                        '</button>' : '') +
+                        (this.canEdit ? '<div class="pt-menu__divider"></div>' : '') +
+                        (this.canEdit ? '<button type="button" class="pt-menu__item pt-menu__item--danger" data-place="' + pid + '" data-function="remove">' +
                             '<svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M3 4h10l-1 10H4L3 4zm4 0V2h2v2M1 4h14"/></svg>' +
                             'Delete location' +
-                        '</button>' +
+                        '</button>' : '') +
                     '</div>' +
                 '</div>' +
             '</div>' +
@@ -296,7 +297,8 @@ mapPoint.prototype.nota = function (e) {
     modal.setAttribute('data-location-id', l.id);
     document.getElementById('notes-modal-title').textContent = l.address;
     document.getElementById('notes-list').innerHTML = '<div class="notes-loading">Loading notes…</div>';
-    document.getElementById('note-content-input').value = '';
+    var noteInput = document.getElementById('note-content-input');
+    if (noteInput) { noteInput.value = ''; }
     var feedback = document.getElementById('notes-feedback');
     if (feedback) { feedback.style.display = 'none'; feedback.textContent = ''; }
     modal.classList.add('is-open');
@@ -306,26 +308,28 @@ mapPoint.prototype.nota = function (e) {
     if (!modal._notesWired) {
         modal._notesWired = true;
 
-        var saveBtn = document.getElementById('notes-save-btn');
-        var textarea = document.getElementById('note-content-input');
         var closeBtn = document.getElementById('nm-close');
         var overlay  = modal;
+        var saveBtn = document.getElementById('notes-save-btn');
 
-        saveBtn.addEventListener('click', function () {
-            var content = textarea.value.trim();
-            if (!content) {
-                if (feedback) { feedback.textContent = 'Please write something first.'; feedback.style.display = 'block'; }
-                return;
-            }
-            var locId = overlay.getAttribute('data-location-id');
-            mapPoint._saveNote(locId, content);
-        });
-
-        textarea.addEventListener('keydown', function (ev) {
-            if (ev.key === 'Enter' && (ev.ctrlKey || ev.metaKey)) {
-                saveBtn.click();
-            }
-        });
+        if (saveBtn) {
+            (function (btn, ta) {
+                btn.addEventListener('click', function () {
+                    var content = ta.value.trim();
+                    if (!content) {
+                        if (feedback) { feedback.textContent = 'Please write something first.'; feedback.style.display = 'block'; }
+                        return;
+                    }
+                    var locId = overlay.getAttribute('data-location-id');
+                    mapPoint._saveNote(locId, content);
+                });
+                ta.addEventListener('keydown', function (ev) {
+                    if (ev.key === 'Enter' && (ev.ctrlKey || ev.metaKey)) {
+                        btn.click();
+                    }
+                });
+            })(saveBtn, document.getElementById('note-content-input'));
+        }
 
         closeBtn.addEventListener('click', function () {
             overlay.classList.remove('is-open');
@@ -346,6 +350,8 @@ mapPoint.prototype.nota = function (e) {
 /* ── Notes modal static helpers ── */
 mapPoint._loadNotes = function (locationId) {
     var list = document.getElementById('notes-list');
+    var modal = document.getElementById('notesModal');
+    var canEdit = modal ? modal.getAttribute('data-can-edit') === 'true' : false;
     fetch('../../api/location/' + locationId + '/notes', {
         headers: { 'X-Requested-With': 'XMLHttpRequest' }
     })
@@ -353,14 +359,19 @@ mapPoint._loadNotes = function (locationId) {
     .then(function (data) {
         var notes = data.notes || [];
         if (!notes.length) {
-            list.innerHTML = '<div class="notes-empty">No notes yet. Add the first one below.</div>';
+            list.innerHTML = canEdit
+                ? '<div class="notes-empty">No notes yet. Add the first one below.</div>'
+                : '<div class="notes-empty">No notes yet.</div>';
             return;
         }
         list.innerHTML = notes.map(function (n) {
-            return '<div class="note-item" id="note-item-' + n.id + '">' +
-                '<div class="note-item__body">' + mapPoint._renderNoteContent(n.content) + '</div>' +
-                '<button class="note-item__delete" data-note-id="' + n.id + '" data-location-id="' + locationId + '" title="Delete">&#x2715;</button>' +
-            '</div>';
+            var html = '<div class="note-item" id="note-item-' + n.id + '">' +
+                '<div class="note-item__body">' + mapPoint._renderNoteContent(n.content) + '</div>';
+            if (canEdit) {
+                html += '<button class="note-item__delete" data-note-id="' + n.id + '" data-location-id="' + locationId + '" title="Delete">&#x2715;</button>';
+            }
+            html += '</div>';
+            return html;
         }).join('');
         list.querySelectorAll('.note-item__delete').forEach(function (btn) {
             btn.addEventListener('click', function () {

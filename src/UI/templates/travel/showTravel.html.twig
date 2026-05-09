@@ -1824,7 +1824,7 @@
     <span id="online-user-label">Usuario desconectado</span>
 </a>
 
-<div class="nm-overlay" id="notesModal" role="dialog" aria-modal="true">
+<div class="nm-overlay" id="notesModal" role="dialog" aria-modal="true" data-can-edit="{{ canEdit ? 'true' : 'false' }}">
     <div class="nm-modal">
         <div class="nm-modal__header">
             <h3 class="nm-modal__title">
@@ -1842,6 +1842,7 @@
                 <div class="notes-empty">No notes yet. Add the first one below.</div>
             </div>
         </div>
+        {% if canEdit %}
         <div class="nm-modal__footer">
             <div class="notes-feedback" id="notes-feedback"></div>
             <div class="nm-form">
@@ -1851,6 +1852,7 @@
                 </button>
             </div>
         </div>
+        {% endif %}
     </div>
 </div>
 {% endblock %}
@@ -1889,7 +1891,7 @@
     {% endif %}
     <script src="{{ asset('leaflet/leaflet-easyprint.js') }}"></script>
     <script>
-        var mPoint = new mapPoint('{{ travel.id }}');
+        var mPoint = new mapPoint('{{ travel.id }}', {{ canEdit ? 'true' : 'false' }});
         mPoint.addPlugin('locationGallery',new locationGallery('{{ asset('uploads/gallery/') }}', {{ canEdit ? 'true' : 'false' }}));
 
         var map = L.map('map',{
