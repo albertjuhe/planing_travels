@@ -1,0 +1,58 @@
+App\Domain\Budget\Model\TravelExpense:
+    type: entity
+    table: travel_expense
+    id:
+        id:
+            type: integer
+            nullable: false
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        description:
+            type: string
+            length: 255
+            nullable: false
+        amount:
+            type: decimal
+            precision: 10
+            scale: 2
+            nullable: false
+        currency:
+            type: string
+            length: 3
+            nullable: false
+        category:
+            type: string
+            length: 50
+            nullable: false
+        expenseDate:
+            type: date
+            nullable: true
+            column: expense_date
+        createdAt:
+            type: datetime
+            nullable: false
+            column: created_at
+        updatedAt:
+            type: datetime
+            nullable: false
+            column: updated_at
+    manyToOne:
+        travel:
+            targetEntity: App\Domain\Travel\Model\Travel
+            cascade: {}
+            fetch: LAZY
+            joinColumns:
+                travel_id:
+                    referencedColumnName: id
+        location:
+            targetEntity: App\Domain\Location\Model\Location
+            cascade: {}
+            fetch: LAZY
+            nullable: true
+            joinColumns:
+                location_id:
+                    referencedColumnName: id
+                    nullable: true
+    lifecycleCallbacks: {}

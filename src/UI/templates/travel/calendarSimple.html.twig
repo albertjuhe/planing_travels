@@ -1,0 +1,486 @@
+{% extends 'old_base.html.twig' %}
+
+{% block title %}Calendar – {{ travel.title }}{% endblock %}
+
+{% block navbar %}
+    {% include 'default/navbarPublic.html.twig' %}
+{% endblock %}
+
+{% block css %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('font-awesome-4.3.0/css/font-awesome.min.css') }}"/>
+    <style>
+*, *::before, *::after { box-sizing: border-box; }
+
+.cs-page {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 24px 20px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Header */
+.cs-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+.cs-header__left { display: flex; flex-direction: column; gap: 4px; }
+.cs-header__title { font-size: 22px; font-weight: 800; color: #1a2e4a; margin: 0; }
+.cs-header__sub { font-size: 13px; color: #7f8c8d; margin: 0; }
+.cs-back {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 16px; font-size: 13px; font-weight: 600;
+    border-radius: 8px; border: 1px solid #dde3ea;
+    background: #fff; color: #2c3e50; text-decoration: none;
+    transition: all 0.15s;
+}
+.cs-back:hover { background: #f4f6f8; text-decoration: none; color: #2c3e50; }
+
+/* Unscheduled */
+.cs-unscheduled {
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07), 0 8px 24px rgba(0,0,0,0.06);
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+.cs-unscheduled__head {
+    padding: 13px 18px;
+    background: linear-gradient(135deg, #1a2e4a 0%, #2980b9 100%);
+    font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.9);
+    text-transform: uppercase; letter-spacing: 0.8px;
+    display: flex; align-items: center; gap: 8px;
+}
+.cs-unscheduled__body {
+    padding: 12px 16px;
+    display: flex; flex-wrap: wrap; gap: 8px;
+    min-height: 48px;
+}
+.cs-unscheduled__empty { font-size: 12px; color: #b0bec5; font-style: italic; }
+
+/* Calendar grid */
+.cs-grid {
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07), 0 8px 24px rgba(0,0,0,0.06);
+    overflow: hidden;
+}
+.cs-grid__head {
+    padding: 14px 18px;
+    background: linear-gradient(135deg, #1a2e4a 0%, #2574a9 100%);
+    color: #fff; font-size: 14px; font-weight: 700;
+    display: flex; align-items: center; gap: 8px;
+}
+.cs-month-label {
+    padding: 8px 14px 6px;
+    font-size: 12px; font-weight: 700; color: #2980b9;
+    text-transform: uppercase; letter-spacing: 0.6px;
+    background: #f0f7ff;
+    border-top: 2px solid #d6eaf8;
+    border-bottom: 1px solid #d6eaf8;
+}
+
+/* Day rows */
+.cs-day {
+    display: flex; align-items: center;
+    border-bottom: 1px solid #eaecef;
+    min-height: 48px;
+    transition: background 0.1s;
+}
+.cs-day:last-child { border-bottom: none; }
+.cs-day--weekend { background: #fdfaf5; }
+.cs-day--today { background: #f0f7ff; }
+.cs-day__head {
+    display: flex; align-items: center; gap: 6px;
+    padding: 8px 14px; flex-shrink: 0; width: 160px;
+}
+.cs-day__dow {
+    font-size: 11px; font-weight: 600; color: #7f8c8d;
+    text-transform: uppercase; letter-spacing: 0.5px; width: 32px;
+}
+.cs-day--weekend .cs-day__dow { color: #e67e22; }
+.cs-day__num {
+    font-size: 14px; font-weight: 700; color: #2c3e50;
+    width: 28px; height: 28px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 50%;
+}
+.cs-day--today .cs-day__num { background: #2980b9; color: #fff; font-size: 13px; }
+.cs-day--weekend .cs-day__num { color: #e67e22; }
+.cs-day__body {
+    flex: 1; padding: 6px 8px;
+    display: flex; flex-wrap: wrap; align-items: center; gap: 5px; min-width: 0;
+}
+
+/* Add button */
+.cs-add-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 22px; height: 22px; border-radius: 50%; border: none;
+    background: #e8f4fd; color: #2980b9;
+    cursor: pointer; font-size: 16px; line-height: 1;
+    transition: background 0.15s, color 0.15s, transform 0.1s;
+    flex-shrink: 0; padding: 0;
+}
+.cs-add-btn:hover { background: #2980b9; color: #fff; transform: scale(1.15); }
+
+/* Location cards */
+.cs-card {
+    display: flex; align-items: flex-start; gap: 5px;
+    padding: 4px 8px; border-radius: 6px;
+    border-left: 3px solid #2980b9; background: #eaf4fd;
+    font-size: 12px; color: #1a2e4a; position: relative;
+    transition: background 0.12s;
+}
+.cs-card:hover { background: #d6eaf8; }
+.cs-card__icon { flex-shrink: 0; font-size: 11px; line-height: 1.4; opacity: 0.75; }
+.cs-card__text { flex: 1; min-width: 0; }
+.cs-card__title { font-weight: 600; line-height: 1.3; word-break: break-word; }
+.cs-card__type { font-size: 9px; color: #5d8aa8; margin-top: 1px; text-transform: uppercase; letter-spacing: 0.3px; }
+.cs-card__times { display: flex; align-items: center; gap: 4px; margin-top: 3px; }
+.cs-remove-btn {
+    flex-shrink: 0; background: none; border: none;
+    color: #a8c8e0; font-size: 13px; line-height: 1;
+    cursor: pointer; padding: 0; border-radius: 3px;
+    transition: color 0.12s; align-self: flex-start; margin-top: 1px;
+}
+.cs-remove-btn:hover { color: #e74c3c; }
+
+/* Time inputs */
+.cs-time-input {
+    font-size: 11px; border: 1px solid #dde3ea; border-radius: 5px;
+    padding: 2px 4px; color: #2c3e50; background: #fff;
+    cursor: pointer; width: 80px; transition: border-color 0.15s;
+}
+.cs-time-input:focus { border-color: #2980b9; outline: none; }
+.cs-time-sep { font-size: 11px; color: #9ca3af; }
+.cs-time-badge {
+    font-size: 11px; background: #eaf4fd; color: #1a2e4a;
+    border-radius: 4px; padding: 2px 6px; font-weight: 600;
+}
+
+/* Unscheduled card */
+.cs-unscheduled .cs-card {
+    font-size: 12px; padding: 7px 9px; border-radius: 8px;
+    border-left-width: 4px; background: #f4f6f8;
+    border-color: #b0bec5; color: #2c3e50;
+}
+.cs-unscheduled .cs-card:hover { background: #eaecef; }
+
+/* Picker dropdown */
+.cs-picker {
+    position: fixed; z-index: 3000;
+    background: #fff; border: 1px solid #dde3ea;
+    border-radius: 12px; box-shadow: 0 12px 36px rgba(0,0,0,0.18);
+    min-width: 210px; max-width: 270px; max-height: 300px;
+    overflow-y: auto; padding: 6px; display: none;
+}
+.cs-picker.is-open { display: block; }
+.cs-picker__empty { font-size: 12px; color: #b0bec5; text-align: center; padding: 16px 8px; }
+.cs-picker__item {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 10px; border-radius: 7px;
+    font-size: 12px; color: #2c3e50; cursor: pointer; transition: background 0.12s;
+}
+.cs-picker__item:hover { background: #eaf4fd; }
+.cs-picker__item__icon { flex-shrink: 0; font-size: 13px; }
+.cs-picker__item__title { font-weight: 600; line-height: 1.3; }
+.cs-picker__item__type { font-size: 10px; color: #95a5a6; }
+
+/* Type accent colours */
+.cs-card[data-icon*="bed"]       { border-color: #8e44ad; background: #f5eef8; }
+.cs-card[data-icon*="plane"]     { border-color: #27ae60; background: #eafaf1; }
+.cs-card[data-icon*="camera"]    { border-color: #e67e22; background: #fef9e7; }
+.cs-card[data-icon*="cutlery"]   { border-color: #e74c3c; background: #fdedec; }
+.cs-card[data-icon*="train"]     { border-color: #16a085; background: #e8f8f5; }
+.cs-card[data-icon*="bus"]       { border-color: #d35400; background: #fdf2e9; }
+.cs-card[data-icon*="coffee"]    { border-color: #795548; background: #efebe9; }
+    </style>
+{% endblock %}
+
+{% block content %}
+{% set isOwner = app.user is not null and app.user.userId == travel.user.userId %}
+{% set canEdit = isOwner or (app.user is not null and travel.sharedusers|filter(u => u.userId == app.user.userId)|length > 0) %}
+
+<div class="cs-page">
+
+    {# Header #}
+    <div class="cs-header">
+        <div class="cs-header__left">
+            <h1 class="cs-header__title">{{ travel.title }} – Calendar</h1>
+            <p class="cs-header__sub">{{ travel.startAt|date("d M Y") }} – {{ travel.endAt|date("d M Y") }}</p>
+        </div>
+        <a class="cs-back" href="{{ path('show_travel', {slug: travel.slug}) }}">
+            <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 2L4 8l6 6"/></svg>
+            Back to travel
+        </a>
+    </div>
+
+    {# Unscheduled locations #}
+    <div class="cs-unscheduled">
+        <div class="cs-unscheduled__head">
+            <svg viewBox="0 0 16 16" width="13" height="13" fill="currentColor"><path d="M8 1a5 5 0 0 1 5 5c0 4-5 9-5 9S3 10 3 6a5 5 0 0 1 5-5zm0 3a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/></svg>
+            Unscheduled locations
+        </div>
+        <div class="cs-unscheduled__body" id="cs-unscheduled">
+            {% set hasUnscheduled = false %}
+            {% for loc in travel.location %}
+                {% if not loc.hasAnyVisitDate %}
+                    {% set hasUnscheduled = true %}
+                    <div class="cs-card" id="cs-loc-{{ loc.id }}"
+                         data-location-id="{{ loc.id }}"
+                         data-title="{{ loc.title|e('html_attr') }}"
+                         data-type="{{ loc.typeLocation is not null ? loc.typeLocation.title|e('html_attr') : '' }}"
+                         data-icon="{{ loc.typeLocation is not null ? loc.typeLocation.icon|e('html_attr') : '' }}">
+                        <span class="cs-card__icon">
+                            {% if loc.typeLocation is not null %}<i class="{{ loc.typeLocation.icon }}"></i>{% else %}📍{% endif %}
+                        </span>
+                        <span class="cs-card__text">
+                            <div class="cs-card__title">{{ loc.title }}</div>
+                            {% if loc.typeLocation is not null %}<div class="cs-card__type">{{ loc.typeLocation.title }}</div>{% endif %}
+                        </span>
+                    </div>
+                {% endif %}
+            {% endfor %}
+            {% if not hasUnscheduled %}
+                <span class="cs-unscheduled__empty">All locations scheduled ✓</span>
+            {% endif %}
+        </div>
+    </div>
+
+    {# Calendar grid #}
+    <div class="cs-grid">
+        <div class="cs-grid__head">
+            <svg viewBox="0 0 16 16" width="16" height="16" fill="currentColor"><path d="M11 1v1H5V1H3v1H1v13h14V2h-2V1h-2zm2 12H3V6h10v7z"/></svg>
+            {{ travel.startAt|date("d M Y") }} – {{ travel.endAt|date("d M Y") }}
+        </div>
+
+        {% set startTs   = travel.startAt|date('U') %}
+        {% set endTs     = travel.endAt|date('U') %}
+        {% set tripDays  = (((endTs - startTs) / 86400)|round(0,'ceil') + 1) %}
+        {% set dowNames  = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'] %}
+        {% set monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'] %}
+        {% set todayStr  = 'now'|date('Y-m-d') %}
+        {% set lastMonth = '' %}
+
+        {% for i in 0..tripDays-1 %}
+            {% set thisDate    = travel.startAt|date_modify('+' ~ i ~ ' days') %}
+            {% set thisDateStr = thisDate|date('Y-m-d') %}
+            {% set dow         = thisDate|date('N') %}
+            {% set isWeekend   = dow >= 6 %}
+            {% set isToday     = thisDateStr == todayStr %}
+            {% set thisMonth   = thisDate|date('Y-n') %}
+
+            {% if thisMonth != lastMonth %}
+                {% set lastMonth = thisMonth %}
+                <div class="cs-month-label">{{ monthNames[thisDate|date('n') - 1] }} {{ thisDate|date('Y') }}</div>
+            {% endif %}
+
+            <div class="cs-day{% if isWeekend %} cs-day--weekend{% endif %}{% if isToday %} cs-day--today{% endif %}"
+                 id="cs-day-{{ thisDateStr }}"
+                 data-date="{{ thisDateStr }}">
+                <div class="cs-day__head">
+                    <span class="cs-day__dow">{{ dowNames[dow - 1] }}</span>
+                    <span class="cs-day__num">{{ thisDate|date('d') }}</span>
+                    {% if canEdit %}
+                    <button class="cs-add-btn" type="button" data-date="{{ thisDateStr }}" title="Add location">+</button>
+                    {% endif %}
+                </div>
+                <div class="cs-day__body">
+                    {% for loc in travel.getLocationsForDate(thisDateStr) %}
+                        {% set vd = null %}
+                        {% for v in loc.visitDates %}
+                            {% if v.visitDateString == thisDateStr %}{% set vd = v %}{% endif %}
+                        {% endfor %}
+                        <div class="cs-card" id="cs-loc-{{ loc.id }}-{{ thisDateStr }}"
+                             data-location-id="{{ loc.id }}"
+                             data-date="{{ thisDateStr }}"
+                             data-title="{{ loc.title|e('html_attr') }}"
+                             data-type="{{ loc.typeLocation is not null ? loc.typeLocation.title|e('html_attr') : '' }}"
+                             data-icon="{{ loc.typeLocation is not null ? loc.typeLocation.icon|e('html_attr') : '' }}">
+                            <span class="cs-card__icon">
+                                {% if loc.typeLocation is not null %}<i class="{{ loc.typeLocation.icon }}"></i>{% else %}📍{% endif %}
+                            </span>
+                            <span class="cs-card__text">
+                                <div class="cs-card__title">{{ loc.title }}</div>
+                                {% if loc.typeLocation is not null %}<div class="cs-card__type">{{ loc.typeLocation.title }}</div>{% endif %}
+                                <div class="cs-card__times">
+                                    {% if canEdit %}
+                                    <input type="time" class="cs-time-input cs-time-start"
+                                           value="{{ vd and vd.timeStartString ? vd.timeStartString : '' }}"
+                                           data-location-id="{{ loc.id }}"
+                                           data-date="{{ thisDateStr }}"
+                                           title="Start time">
+                                    <span class="cs-time-sep">→</span>
+                                    <input type="time" class="cs-time-input cs-time-end"
+                                           value="{{ vd and vd.timeEndString ? vd.timeEndString : '' }}"
+                                           data-location-id="{{ loc.id }}"
+                                           data-date="{{ thisDateStr }}"
+                                           title="End time">
+                                    {% elseif vd and vd.timeStartString %}
+                                    <span class="cs-time-badge">{{ vd.timeStartString }}{% if vd.timeEndString %} – {{ vd.timeEndString }}{% endif %}</span>
+                                    {% endif %}
+                                </div>
+                            </span>
+                            {% if canEdit %}
+                            <button class="cs-remove-btn" type="button"
+                                    data-location-id="{{ loc.id }}"
+                                    data-date="{{ thisDateStr }}"
+                                    title="Remove from this day">×</button>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+</div>
+
+{# Picker dropdown #}
+{% if canEdit %}
+<div class="cs-picker" id="cs-picker">
+    <div class="cs-picker__empty" id="cs-picker-empty">No unscheduled locations</div>
+</div>
+{% endif %}
+
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    {% set isOwner = app.user is not null and app.user.userId == travel.user.userId %}
+    {% set canEdit = isOwner or (app.user is not null and travel.sharedusers|filter(u => u.userId == app.user.userId)|length > 0) %}
+    <script>
+    (function () {
+        var VISIT_DATE_URL = '{{ path('updateLocationVisitDate', {'locationId': '__LOC__'}) }}';
+        var VISIT_TIME_URL = '{{ path('updateVisitTime', {'locationId': '__LOC__'}) }}';
+        var CAN_EDIT = {{ canEdit ? 'true' : 'false' }};
+
+        var ALL_LOCATIONS = [
+            {% for loc in travel.location %}
+            {
+                id: '{{ loc.id }}',
+                title: {{ loc.title|json_encode|raw }},
+                type: {{ (loc.typeLocation is not null ? loc.typeLocation.title : '')|json_encode|raw }},
+                icon: {{ (loc.typeLocation is not null ? loc.typeLocation.icon : '')|json_encode|raw }}
+            }{% if not loop.last %},{% endif %}
+            {% endfor %}
+        ];
+
+        /* ── Time inputs ── */
+        if (CAN_EDIT) {
+            var saveTimer = {};
+            document.querySelectorAll('.cs-time-input').forEach(function (input) {
+                input.addEventListener('change', function () {
+                    var locationId = input.dataset.locationId;
+                    var date = input.dataset.date;
+                    var key = locationId + '|' + date;
+                    clearTimeout(saveTimer[key]);
+                    saveTimer[key] = setTimeout(function () {
+                        var card = input.closest('.cs-card');
+                        var startInput = card.querySelector('.cs-time-start');
+                        var endInput = card.querySelector('.cs-time-end');
+                        fetch(VISIT_TIME_URL.replace('__LOC__', locationId), {
+                            method: 'PATCH',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                date: date,
+                                timeStart: startInput ? startInput.value : null,
+                                timeEnd: endInput ? endInput.value : null
+                            })
+                        }).catch(function () {});
+                    }, 600);
+                });
+            });
+
+            /* ── Remove from day ── */
+            document.querySelectorAll('.cs-remove-btn').forEach(function (btn) {
+                btn.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    var locationId = btn.dataset.locationId;
+                    var date = btn.dataset.date;
+                    fetch(VISIT_DATE_URL.replace('__LOC__', locationId), {
+                        method: 'PATCH',
+                        headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+                        body: JSON.stringify({ action: 'remove', date: date })
+                    }).then(function (r) {
+                        if (r.ok) {
+                            var card = document.getElementById('cs-loc-' + locationId + '-' + date);
+                            if (card) card.remove();
+                            /* move to unscheduled if no more dates */
+                            fetch(VISIT_DATE_URL.replace('__LOC__', locationId).replace('PATCH', 'GET'));
+                            location.reload();
+                        }
+                    }).catch(function () {});
+                });
+            });
+
+            /* ── Add location picker ── */
+            var picker = document.getElementById('cs-picker');
+            var activeDateBtn = null;
+
+            function buildPickerItems() {
+                var date = activeDateBtn ? activeDateBtn.dataset.date : null;
+                /* collect location IDs already on this day */
+                var alreadyOnDay = {};
+                if (date) {
+                    var dayEl = document.getElementById('cs-day-' + date);
+                    if (dayEl) {
+                        dayEl.querySelectorAll('.cs-card[data-location-id]').forEach(function (c) {
+                            alreadyOnDay[c.dataset.locationId] = true;
+                        });
+                    }
+                }
+                picker.innerHTML = '';
+                var available = ALL_LOCATIONS.filter(function (loc) {
+                    return !alreadyOnDay[loc.id];
+                });
+                if (!available.length) {
+                    picker.innerHTML = '<div class="cs-picker__empty">No locations to add</div>';
+                    return;
+                }
+                available.forEach(function (loc) {
+                    var item = document.createElement('div');
+                    item.className = 'cs-picker__item';
+                    item.dataset.locationId = loc.id;
+                    var icon = loc.icon ? '<i class="' + loc.icon + ' cs-picker__item__icon"></i>' : '<span class="cs-picker__item__icon">📍</span>';
+                    item.innerHTML = icon +
+                        '<span><div class="cs-picker__item__title">' + loc.title + '</div>' +
+                        (loc.type ? '<div class="cs-picker__item__type">' + loc.type + '</div>' : '') + '</span>';
+                    item.addEventListener('click', function () {
+                        var d = activeDateBtn ? activeDateBtn.dataset.date : null;
+                        if (!d) return;
+                        fetch(VISIT_DATE_URL.replace('__LOC__', loc.id), {
+                            method: 'PATCH',
+                            headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+                            body: JSON.stringify({ action: 'add', date: d })
+                        }).then(function (r) {
+                            if (r.ok) { picker.classList.remove('is-open'); location.reload(); }
+                        }).catch(function () {});
+                    });
+                    picker.appendChild(item);
+                });
+            }
+
+            document.querySelectorAll('.cs-add-btn').forEach(function (btn) {
+                btn.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    activeDateBtn = btn;
+                    buildPickerItems();
+                    var rect = btn.getBoundingClientRect();
+                    picker.style.top = (rect.bottom + window.scrollY + 4) + 'px';
+                    picker.style.left = (rect.left + window.scrollX) + 'px';
+                    picker.classList.add('is-open');
+                });
+            });
+
+            document.addEventListener('click', function () {
+                picker.classList.remove('is-open');
+            });
+        }
+    }());
+    </script>
+{% endblock %}

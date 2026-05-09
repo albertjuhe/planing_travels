@@ -115,7 +115,7 @@ App\Domain\Travel\Model\Travel:
             cascade: {  }
             fetch: LAZY
             mappedBy: null
-            inversedBy: travel
+            inversedBy: null
             max_depth: 1
             joinColumns:
                 user_id:

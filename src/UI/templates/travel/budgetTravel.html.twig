@@ -1,0 +1,496 @@
+{% extends 'old_base.html.twig' %}
+
+{% block title %}Budget – {{ travel.title }}{% endblock %}
+
+{% block navbar %}
+    {% include 'default/navbarPublic.html.twig' %}
+{% endblock %}
+
+{% block css %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('font-awesome-4.3.0/css/font-awesome.min.css') }}"/>
+    <style>
+*, *::before, *::after { box-sizing: border-box; }
+
+.bv-page {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 24px 20px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Header */
+.bv-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+.bv-header__left { display: flex; flex-direction: column; gap: 4px; }
+.bv-header__title { font-size: 22px; font-weight: 800; color: #1a2e4a; margin: 0; }
+.bv-header__sub { font-size: 13px; color: #7f8c8d; margin: 0; }
+.bv-back {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 16px; font-size: 13px; font-weight: 600;
+    border-radius: 8px; border: 1px solid #dde3ea;
+    background: #fff; color: #2c3e50; text-decoration: none;
+    transition: all 0.15s;
+}
+.bv-back:hover { background: #f4f6f8; text-decoration: none; color: #2c3e50; }
+
+/* Summary bar */
+.bv-summary {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    background: linear-gradient(135deg, #1a2e4a 0%, #2574a9 100%);
+    border-radius: 14px;
+    padding: 20px 28px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+.bv-summary__item { display: flex; flex-direction: column; gap: 3px; }
+.bv-summary__label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: rgba(255,255,255,0.6); }
+.bv-summary__value { font-size: 24px; font-weight: 800; color: #fff; }
+.bv-summary__value--spent { color: #f39c12; }
+.bv-summary__value--over { color: #e74c3c; }
+.bv-summary__value--ok { color: #2ecc71; }
+.bv-summary__divider { width: 1px; height: 40px; background: rgba(255,255,255,0.2); flex-shrink: 0; }
+.bv-summary__progress-wrap {
+    flex: 1; min-width: 160px;
+    display: flex; flex-direction: column; gap: 6px;
+}
+.bv-summary__progress-label { font-size: 11px; color: rgba(255,255,255,0.6); font-weight: 600; }
+.bv-progress-track {
+    height: 8px; background: rgba(255,255,255,0.15); border-radius: 4px; overflow: hidden;
+}
+.bv-progress-bar {
+    height: 100%; border-radius: 4px; transition: width 0.5s ease;
+    background: linear-gradient(90deg, #2ecc71, #f39c12, #e74c3c);
+}
+.bv-summary__actions { margin-left: auto; }
+.bv-btn {
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 9px 18px; font-size: 13px; font-weight: 600;
+    border-radius: 8px; border: 1.5px solid rgba(255,255,255,0.4);
+    background: rgba(255,255,255,0.12); color: #fff;
+    cursor: pointer; transition: all 0.15s; white-space: nowrap;
+}
+.bv-btn:hover { background: rgba(255,255,255,0.22); }
+.bv-btn--primary { background: #f39c12; border-color: #f39c12; }
+.bv-btn--primary:hover { background: #e67e22; border-color: #e67e22; }
+
+/* Layout */
+.bv-layout {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 20px;
+    align-items: start;
+}
+@media (max-width: 700px) { .bv-layout { grid-template-columns: 1fr; } }
+
+/* Panel */
+.bv-panel {
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07), 0 8px 24px rgba(0,0,0,0.06);
+    overflow: hidden;
+}
+.bv-panel__head {
+    padding: 14px 18px;
+    background: linear-gradient(135deg, #1a2e4a 0%, #2574a9 100%);
+    color: #fff;
+    font-size: 13px; font-weight: 700;
+    display: flex; align-items: center; justify-content: space-between; gap: 8px;
+}
+.bv-panel__head-left { display: flex; align-items: center; gap: 8px; }
+.bv-panel__body { padding: 16px; }
+
+/* Category list */
+.bv-cat-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 9px 0; border-bottom: 1px solid #f3f4f6;
+    font-size: 13px;
+}
+.bv-cat-row:last-child { border-bottom: none; }
+.bv-cat-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.bv-cat-name { flex: 1; color: #374151; font-weight: 500; }
+.bv-cat-amount { font-weight: 700; color: #1a2e4a; }
+.bv-empty { font-size: 13px; color: #9ca3af; text-align: center; padding: 28px 0; }
+
+/* Expense table */
+.bv-expense-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 12px; border-radius: 8px; margin-bottom: 6px;
+    background: #f9fafb; border: 1px solid #f3f4f6;
+    font-size: 13px; transition: background 0.1s;
+}
+.bv-expense-row:hover { background: #f3f4f6; }
+.bv-expense-cat {
+    flex-shrink: 0; padding: 2px 9px; border-radius: 10px;
+    font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px;
+}
+.bv-expense-desc { flex: 1; color: #374151; font-weight: 500; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.bv-expense-date { font-size: 11px; color: #9ca3af; white-space: nowrap; flex-shrink: 0; }
+.bv-expense-amount { font-weight: 700; color: #1a2e4a; white-space: nowrap; flex-shrink: 0; }
+.bv-expense-del {
+    flex-shrink: 0; background: none; border: none;
+    color: #d1d5db; font-size: 18px; cursor: pointer;
+    padding: 2px 4px; border-radius: 4px; transition: color 0.12s; line-height: 1;
+}
+.bv-expense-del:hover { color: #dc2626; }
+
+/* Modal overlay */
+.bv-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.5); z-index: 3000;
+    align-items: center; justify-content: center;
+}
+.bv-overlay.is-open { display: flex; }
+.bv-modal {
+    background: #fff; border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+    width: 100%; max-width: 420px;
+    animation: bvSlideIn 0.18s ease;
+}
+@keyframes bvSlideIn {
+    from { opacity: 0; transform: translateY(-16px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+.bv-modal__header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 22px 14px; border-bottom: 1px solid #f3f4f6;
+}
+.bv-modal__title { font-size: 17px; font-weight: 700; color: #1a2e4a; margin: 0; }
+.bv-modal__close {
+    background: #f3f4f6; border: none; font-size: 18px; color: #6b7280;
+    cursor: pointer; width: 34px; height: 34px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center; transition: all 0.15s;
+}
+.bv-modal__close:hover { background: #e5e7eb; }
+.bv-modal__body { padding: 18px 22px; display: flex; flex-direction: column; gap: 13px; }
+.bv-modal__footer { padding: 14px 22px 18px; border-top: 1px solid #f3f4f6; display: flex; gap: 8px; justify-content: flex-end; }
+.bv-field { display: flex; flex-direction: column; gap: 5px; }
+.bv-field label { font-size: 12px; font-weight: 700; color: #2c3e50; text-transform: uppercase; letter-spacing: 0.4px; }
+.bv-input {
+    padding: 9px 12px; font-size: 14px;
+    border: 1.5px solid #dde3ea; border-radius: 8px;
+    outline: none; background: #f8f9fa; transition: all 0.15s;
+}
+.bv-input:focus { border-color: #2980b9; background: #fff; box-shadow: 0 0 0 3px rgba(41,128,185,0.1); }
+.bv-row2 { display: flex; gap: 10px; }
+.bv-row2 > * { flex: 1; }
+.bv-row2 > *:last-child { flex: 0 0 100px; }
+.bv-modal__btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 9px 18px; font-size: 13px; font-weight: 600;
+    border-radius: 8px; border: none; cursor: pointer; transition: background 0.15s;
+}
+.bv-modal__btn--cancel { background: #f4f6f8; color: #636e72; border: 1.5px solid #dde3ea; }
+.bv-modal__btn--cancel:hover { background: #eaecef; }
+.bv-modal__btn--submit { background: #2980b9; color: #fff; }
+.bv-modal__btn--submit:hover { background: #1e6fa8; }
+.bv-feedback { font-size: 12px; color: #dc2626; display: none; }
+    </style>
+{% endblock %}
+
+{% block content %}
+{% set isOwner = app.user is not null and app.user.userId == travel.user.userId %}
+{% set canEdit = isOwner or (app.user is not null and travel.sharedusers|filter(u => u.userId == app.user.userId)|length > 0) %}
+
+<div class="bv-page">
+
+    {# Header #}
+    <div class="bv-header">
+        <div class="bv-header__left">
+            <h1 class="bv-header__title">{{ travel.title }} – Budget</h1>
+            <p class="bv-header__sub">{{ travel.startAt|date("d M Y") }} – {{ travel.endAt|date("d M Y") }}</p>
+        </div>
+        <a class="bv-back" href="{{ path('show_travel', {slug: travel.slug}) }}">
+            <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 2L4 8l6 6"/></svg>
+            Back to travel
+        </a>
+    </div>
+
+    {# Summary bar #}
+    <div class="bv-summary">
+        <div class="bv-summary__item">
+            <span class="bv-summary__label">Budget</span>
+            <span class="bv-summary__value" id="bv-total-budget">
+                {% if budget %}{{ budget.amount|number_format(2) }} {{ budget.currency }}{% else %}Not set{% endif %}
+            </span>
+        </div>
+        <div class="bv-summary__divider"></div>
+        <div class="bv-summary__item">
+            <span class="bv-summary__label">Spent</span>
+            <span class="bv-summary__value bv-summary__value--spent">
+                {{ totalSpent|number_format(2) }} {{ budget ? budget.currency : 'EUR' }}
+            </span>
+        </div>
+        <div class="bv-summary__divider"></div>
+        <div class="bv-summary__item">
+            <span class="bv-summary__label">Remaining</span>
+            {% if budget %}
+                {% set remaining = budget.amount - totalSpent %}
+                <span class="bv-summary__value {{ remaining < 0 ? 'bv-summary__value--over' : 'bv-summary__value--ok' }}">
+                    {{ remaining|abs|number_format(2) }} {{ budget.currency }}
+                    {% if remaining < 0 %} over{% endif %}
+                </span>
+            {% else %}
+                <span class="bv-summary__value">—</span>
+            {% endif %}
+        </div>
+        {% if budget %}
+        <div class="bv-summary__progress-wrap">
+            <span class="bv-summary__progress-label">
+                {% if budget.amount > 0 %}{{ ((totalSpent / budget.amount) * 100)|round }}% used{% else %}0% used{% endif %}
+            </span>
+            <div class="bv-progress-track">
+                <div class="bv-progress-bar" style="width:{% if budget.amount > 0 %}{% set pct = (totalSpent / budget.amount) * 100 %}{% if pct > 100 %}100{% else %}{{ pct|round }}{% endif %}{% else %}0{% endif %}%"></div>
+            </div>
+        </div>
+        {% endif %}
+        {% if canEdit %}
+        <div class="bv-summary__actions">
+            <button class="bv-btn" id="bv-set-budget-btn" type="button">
+                <svg viewBox="0 0 16 16" width="13" height="13" fill="currentColor"><path d="M11.7 1.3a1 1 0 0 1 1.4 0l1.6 1.6a1 1 0 0 1 0 1.4L5.5 13.5 1 15l1.5-4.5 9.2-9.2z"/></svg>
+                Set budget
+            </button>
+        </div>
+        {% endif %}
+    </div>
+
+    {# Main layout #}
+    <div class="bv-layout">
+
+        {# Category breakdown #}
+        <div class="bv-panel">
+            <div class="bv-panel__head">
+                <span class="bv-panel__head-left">
+                    <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><path d="M2 2h5v5H2V2zm7 0h5v5H9V2zM2 9h5v5H2V9zm7 0h5v5H9V9z"/></svg>
+                    By category
+                </span>
+            </div>
+            <div class="bv-panel__body">
+                {% set catColors = {accommodation: '#8e44ad', transport: '#2980b9', food: '#e74c3c', activities: '#27ae60', shopping: '#f39c12', other: '#7f8c8d'} %}
+                {% if totalByCategory|length > 0 %}
+                    {% for cat, amount in totalByCategory %}
+                    <div class="bv-cat-row">
+                        <span class="bv-cat-dot" style="background:{{ catColors[cat] ?? '#636e72' }}"></span>
+                        <span class="bv-cat-name">{{ categories[cat] ?? cat }}</span>
+                        <span class="bv-cat-amount">{{ amount|number_format(2) }} {{ budget ? budget.currency : 'EUR' }}</span>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="bv-empty">No expenses yet</div>
+                {% endif %}
+            </div>
+        </div>
+
+        {# Expenses list #}
+        <div class="bv-panel">
+            <div class="bv-panel__head">
+                <span class="bv-panel__head-left">
+                    <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><path d="M1 3h14v2H1V3zm0 4h14v2H1V7zm0 4h9v2H1v-2z"/></svg>
+                    Expenses
+                </span>
+                {% if canEdit %}
+                <button class="bv-btn bv-btn--primary" id="bv-add-expense-btn" type="button">
+                    <svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M8 2v12M2 8h12"/></svg>
+                    Add expense
+                </button>
+                {% endif %}
+            </div>
+            <div class="bv-panel__body">
+                {% if expenses|length > 0 %}
+                    {% set catColors = {accommodation: '#8e44ad', transport: '#2980b9', food: '#e74c3c', activities: '#27ae60', shopping: '#f39c12', other: '#7f8c8d'} %}
+                    <div id="bv-expense-list">
+                    {% for expense in expenses %}
+                        {% set color = catColors[expense.category] ?? '#636e72' %}
+                        <div class="bv-expense-row" id="bv-exp-{{ expense.id }}">
+                            <span class="bv-expense-cat" style="background:{{ color }}22;color:{{ color }}">
+                                {{ categories[expense.category] ?? expense.category }}
+                            </span>
+                            <span class="bv-expense-desc">{{ expense.description }}</span>
+                            <span class="bv-expense-date">{{ expense.expenseDate ? expense.expenseDate|date('d M') : '' }}</span>
+                            <span class="bv-expense-amount">{{ expense.amount|number_format(2) }} {{ expense.currency }}</span>
+                            {% if canEdit %}
+                            <button class="bv-expense-del" data-id="{{ expense.id }}" title="Delete">&times;</button>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="bv-empty" id="bv-expense-list">No expenses added yet.</div>
+                {% endif %}
+            </div>
+        </div>
+
+    </div>{# /bv-layout #}
+</div>{# /bv-page #}
+
+{# ── Set budget modal ── #}
+{% if canEdit %}
+<div class="bv-overlay" id="bv-budget-modal">
+    <div class="bv-modal">
+        <div class="bv-modal__header">
+            <h3 class="bv-modal__title">Set travel budget</h3>
+            <button class="bv-modal__close" id="bv-budget-modal-close">&times;</button>
+        </div>
+        <div class="bv-modal__body">
+            <div class="bv-row2">
+                <div class="bv-field">
+                    <label for="bv-budget-amount">Amount</label>
+                    <input type="number" id="bv-budget-amount" class="bv-input" placeholder="e.g. 2000" min="0" step="0.01"
+                           value="{{ budget ? budget.amount : '' }}">
+                </div>
+                <div class="bv-field">
+                    <label for="bv-budget-currency">Currency</label>
+                    <select id="bv-budget-currency" class="bv-input">
+                        <option value="EUR" {{ (budget and budget.currency == 'EUR') ? 'selected' : '' }}>€ EUR</option>
+                        <option value="USD" {{ (budget and budget.currency == 'USD') ? 'selected' : '' }}>$ USD</option>
+                        <option value="GBP" {{ (budget and budget.currency == 'GBP') ? 'selected' : '' }}>£ GBP</option>
+                        <option value="CHF" {{ (budget and budget.currency == 'CHF') ? 'selected' : '' }}>CHF</option>
+                        <option value="JPY" {{ (budget and budget.currency == 'JPY') ? 'selected' : '' }}>¥ JPY</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="bv-modal__footer">
+            <button class="bv-modal__btn bv-modal__btn--cancel" id="bv-budget-cancel">Cancel</button>
+            <button class="bv-modal__btn bv-modal__btn--submit" id="bv-budget-save">Save</button>
+        </div>
+    </div>
+</div>
+
+{# ── Add expense modal ── #}
+<div class="bv-overlay" id="bv-expense-modal">
+    <div class="bv-modal">
+        <div class="bv-modal__header">
+            <h3 class="bv-modal__title">Add expense</h3>
+            <button class="bv-modal__close" id="bv-expense-modal-close">&times;</button>
+        </div>
+        <div class="bv-modal__body">
+            <div class="bv-field">
+                <label for="bv-exp-desc">Description *</label>
+                <input type="text" id="bv-exp-desc" class="bv-input" placeholder="e.g. Hotel Barcelona">
+            </div>
+            <div class="bv-row2">
+                <div class="bv-field">
+                    <label for="bv-exp-amount">Amount *</label>
+                    <input type="number" id="bv-exp-amount" class="bv-input" placeholder="0.00" min="0" step="0.01">
+                </div>
+                <div class="bv-field">
+                    <label for="bv-exp-currency">Currency</label>
+                    <select id="bv-exp-currency" class="bv-input">
+                        <option value="EUR">€ EUR</option>
+                        <option value="USD">$ USD</option>
+                        <option value="GBP">£ GBP</option>
+                        <option value="CHF">CHF</option>
+                        <option value="JPY">¥ JPY</option>
+                    </select>
+                </div>
+            </div>
+            <div class="bv-field">
+                <label for="bv-exp-category">Category</label>
+                <select id="bv-exp-category" class="bv-input">
+                    <option value="accommodation">Accommodation</option>
+                    <option value="transport">Transport</option>
+                    <option value="food">Food &amp; Drink</option>
+                    <option value="activities">Activities</option>
+                    <option value="shopping">Shopping</option>
+                    <option value="other" selected>Other</option>
+                </select>
+            </div>
+            <div class="bv-field">
+                <label for="bv-exp-date">Date</label>
+                <input type="date" id="bv-exp-date" class="bv-input">
+            </div>
+            <span class="bv-feedback" id="bv-exp-feedback"></span>
+        </div>
+        <div class="bv-modal__footer">
+            <button class="bv-modal__btn bv-modal__btn--cancel" id="bv-expense-cancel">Cancel</button>
+            <button class="bv-modal__btn bv-modal__btn--submit" id="bv-expense-save">Add</button>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}
+
+{% block javascript %}
+    {{ parent() }}
+    {% set isOwner = app.user is not null and app.user.userId == travel.user.userId %}
+    {% set canEdit = isOwner or (app.user is not null and travel.sharedusers|filter(u => u.userId == app.user.userId)|length > 0) %}
+    {% if canEdit %}
+    <script>
+    (function () {
+        var TRAVEL_ID    = '{{ travel.id }}';
+        var BUDGET_URL   = '{{ path('getBudget',    {'travelId': '__ID__'}) }}'.replace('__ID__', TRAVEL_ID);
+        var SAVE_URL     = '{{ path('saveBudget',   {'travelId': '__ID__'}) }}'.replace('__ID__', TRAVEL_ID);
+        var EXPENSE_URL  = '{{ path('addExpense',   {'travelId': '__ID__'}) }}'.replace('__ID__', TRAVEL_ID);
+        var DEL_BASE     = '{{ path('deleteExpense', {'expenseId': 9999999}) }}'.replace('9999999', '');
+        var CAT_COLORS   = { accommodation:'#8e44ad', transport:'#2980b9', food:'#e74c3c', activities:'#27ae60', shopping:'#f39c12', other:'#7f8c8d' };
+        var CAT_LABELS   = { accommodation:'Accommodation', transport:'Transport', food:'Food & Drink', activities:'Activities', shopping:'Shopping', other:'Other' };
+
+        function openModal(id) { document.getElementById(id).classList.add('is-open'); }
+        function closeModal(id) { document.getElementById(id).classList.remove('is-open'); }
+
+        /* ── Set budget ── */
+        document.getElementById('bv-set-budget-btn').addEventListener('click', function () { openModal('bv-budget-modal'); });
+        document.getElementById('bv-budget-modal-close').addEventListener('click', function () { closeModal('bv-budget-modal'); });
+        document.getElementById('bv-budget-cancel').addEventListener('click', function () { closeModal('bv-budget-modal'); });
+        document.getElementById('bv-budget-save').addEventListener('click', function () {
+            var amount = parseFloat(document.getElementById('bv-budget-amount').value);
+            var currency = document.getElementById('bv-budget-currency').value;
+            if (isNaN(amount) || amount < 0) return;
+            fetch(SAVE_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ amount: amount, currency: currency })
+            }).then(function (r) {
+                if (r.ok) { location.reload(); }
+            });
+        });
+
+        /* ── Add expense ── */
+        document.getElementById('bv-add-expense-btn').addEventListener('click', function () { openModal('bv-expense-modal'); });
+        document.getElementById('bv-expense-modal-close').addEventListener('click', function () { closeModal('bv-expense-modal'); });
+        document.getElementById('bv-expense-cancel').addEventListener('click', function () { closeModal('bv-expense-modal'); });
+        document.getElementById('bv-expense-save').addEventListener('click', function () {
+            var desc = document.getElementById('bv-exp-desc').value.trim();
+            var amount = parseFloat(document.getElementById('bv-exp-amount').value);
+            var currency = document.getElementById('bv-exp-currency').value;
+            var category = document.getElementById('bv-exp-category').value;
+            var date = document.getElementById('bv-exp-date').value;
+            var fb = document.getElementById('bv-exp-feedback');
+            if (!desc || isNaN(amount) || amount <= 0) {
+                fb.textContent = 'Description and a valid amount are required.';
+                fb.style.display = 'block';
+                return;
+            }
+            fb.style.display = 'none';
+            fetch(EXPENSE_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ description: desc, amount: amount, currency: currency, category: category, expenseDate: date || null })
+            }).then(function (r) {
+                if (r.ok) { location.reload(); }
+            });
+        });
+
+        /* ── Delete expense ── */
+        document.querySelectorAll('.bv-expense-del').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                if (!confirm('Delete this expense?')) return;
+                fetch(DEL_BASE + btn.dataset.id, { method: 'DELETE' })
+                    .then(function (r) { if (r.ok) { document.getElementById('bv-exp-' + btn.dataset.id).remove(); } });
+            });
+        });
+    }());
+    </script>
+    {% endif %}
+{% endblock %}

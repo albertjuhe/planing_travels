@@ -163,6 +163,36 @@
 {% block content %}
 {% set isOwner = app.user is not null and app.user.userId == travel.user.userId %}
 {% set canEdit = isOwner or (app.user is not null and travel.sharedusers|filter(u => u.userId == app.user.userId)|length > 0) %}
+    {% if canEdit %}
+    <script>
+    (function () {
+        var saveTimer = {};
+        document.querySelectorAll('.cr-time-input').forEach(function (input) {
+            input.addEventListener('change', function () {
+                var locationId = input.dataset.locationId;
+                var date = input.dataset.date;
+                var field = input.dataset.field;
+                var key = locationId + '|' + date;
+                clearTimeout(saveTimer[key]);
+                saveTimer[key] = setTimeout(function () {
+                    var row = input.closest('.cr-loc');
+                    var startInput = row.querySelector('.cr-time-start');
+                    var endInput = row.querySelector('.cr-time-end');
+                    fetch('/api/location/' + locationId + '/visit-time', {
+                        method: 'PATCH',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            date: date,
+                            timeStart: startInput ? startInput.value : null,
+                            timeEnd: endInput ? endInput.value : null
+                        })
+                    }).catch(function () {});
+                }, 600);
+            });
+        });
+    }());
+    </script>
+    {% endif %}
 
 <div class="cr-page">
     <div class="cr-header">
@@ -210,12 +240,39 @@
                              {% set hasLocs = false %}
                              {% for loc in travel.getLocationsForDate(thisDateStr) %}
                                  {% set hasLocs = true %}
+                                 {% set vd = null %}
+                                 {% for v in loc.visitDates %}
+                                     {% if v.visitDateString == thisDateStr %}{% set vd = v %}{% endif %}
+                                 {% endfor %}
                                  <div class="cr-loc"
+                                      data-location-id="{{ loc.id }}"
                                       data-lat="{{ loc.mark.geolocation.lat }}"
                                       data-lng="{{ loc.mark.geolocation.lng }}"
-                                      data-title="{{ loc.title|e('html_attr') }}">
+                                      data-title="{{ loc.title|e('html_attr') }}"
+                                      data-date="{{ thisDateStr }}">
                                      {% if loc.typeLocation is not null %}<i class="{{ loc.typeLocation.icon }}"></i>{% endif %}
-                                     {{ loc.title }}
+                                     <span class="cr-loc__title">{{ loc.title }}</span>
+                                     <span class="cr-loc__times">
+                                         {% if canEdit %}
+                                         <input type="time" class="cr-time-input cr-time-start"
+                                                value="{{ vd and vd.timeStartString ? vd.timeStartString : '' }}"
+                                                data-location-id="{{ loc.id }}"
+                                                data-date="{{ thisDateStr }}"
+                                                data-field="timeStart"
+                                                title="Start time">
+                                         <span class="cr-time-sep">→</span>
+                                         <input type="time" class="cr-time-input cr-time-end"
+                                                value="{{ vd and vd.timeEndString ? vd.timeEndString : '' }}"
+                                                data-location-id="{{ loc.id }}"
+                                                data-date="{{ thisDateStr }}"
+                                                data-field="timeEnd"
+                                                title="End time">
+                                         {% else %}
+                                             {% if vd and vd.timeStartString %}
+                                             <span class="cr-time-badge">{{ vd.timeStartString }}{% if vd.timeEndString %} – {{ vd.timeEndString }}{% endif %}</span>
+                                             {% endif %}
+                                         {% endif %}
+                                     </span>
                                  </div>
                              {% endfor %}
                              {% if not hasLocs %}
@@ -463,10 +520,29 @@
     }());
     </script>
     <style>
-    .cr-marker-label {
-        background: none !important; border: none !important; box-shadow: none !important;
-        font-size: 11px !important; font-weight: 700 !important; color: #fff !important;
-    }
-    .cr-marker-label::before { display: none !important; }
+    .cr-loc { flex-direction: column; align-items: flex-start; gap: 4px; }
+.cr-loc__title { font-weight: 600; }
+.cr-loc__times { display: flex; align-items: center; gap: 4px; }
+.cr-time-input {
+    font-size: 11px;
+    border: 1px solid #dde3ea;
+    border-radius: 5px;
+    padding: 2px 4px;
+    color: #2c3e50;
+    background: #fff;
+    cursor: pointer;
+    width: 80px;
+    transition: border-color 0.15s;
+}
+.cr-time-input:focus { border-color: #2980b9; outline: none; }
+.cr-time-sep { font-size: 11px; color: #9ca3af; }
+.cr-time-badge {
+    font-size: 11px;
+    background: #eaf4fd;
+    color: #1a2e4a;
+    border-radius: 4px;
+    padding: 2px 6px;
+    font-weight: 600;
+}
     </style>
 {% endblock %}

@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="{{ app.request.locale }}">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ travel.title }} – Itinerary</title>
+    <link rel="stylesheet" href="{{ asset('font-awesome-4.3.0/css/font-awesome.min.css') }}"/>
+    <style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 13px;
+    color: #1a2e4a;
+    background: #fff;
+    padding: 32px 40px;
+    max-width: 860px;
+    margin: 0 auto;
+}
+
+/* ── Print button (screen only) ── */
+.print-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background: #1a2e4a;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-bottom: 28px;
+    transition: background 0.15s;
+}
+.print-btn:hover { background: #2980b9; }
+@media print { .print-btn { display: none; } }
+
+/* ── Header ── */
+.pt-header {
+    border-bottom: 3px solid #1a2e4a;
+    padding-bottom: 16px;
+    margin-bottom: 24px;
+}
+.pt-title { font-size: 28px; font-weight: 800; color: #1a2e4a; }
+.pt-meta { font-size: 13px; color: #636e72; margin-top: 6px; display: flex; gap: 20px; flex-wrap: wrap; }
+.pt-meta span { display: flex; align-items: center; gap: 5px; }
+
+/* ── Section titles ── */
+.pt-section { margin-bottom: 28px; }
+.pt-section__title {
+    font-size: 14px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: #2980b9;
+    border-bottom: 1px solid #d6eaf8;
+    padding-bottom: 6px;
+    margin-bottom: 14px;
+}
+
+/* ── Day block ── */
+.pt-day {
+    margin-bottom: 18px;
+    page-break-inside: avoid;
+}
+.pt-day__header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #f0f7ff;
+    border-left: 4px solid #2980b9;
+    padding: 8px 12px;
+    border-radius: 0 6px 6px 0;
+    margin-bottom: 8px;
+}
+.pt-day__num {
+    font-size: 18px;
+    font-weight: 800;
+    color: #1a2e4a;
+    min-width: 28px;
+}
+.pt-day__dow { font-size: 12px; font-weight: 700; color: #636e72; text-transform: uppercase; }
+.pt-day__date { font-size: 12px; color: #7f8c8d; }
+.pt-day__empty { font-size: 12px; color: #b0bec5; font-style: italic; padding: 4px 0 4px 14px; }
+
+/* ── Location rows ── */
+.pt-loc {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    margin-bottom: 5px;
+    background: #fafafa;
+    border: 1px solid #eaecef;
+}
+.pt-loc__time {
+    font-size: 11px;
+    font-weight: 700;
+    color: #2980b9;
+    min-width: 90px;
+    flex-shrink: 0;
+    padding-top: 1px;
+}
+.pt-loc__icon { flex-shrink: 0; width: 18px; text-align: center; color: #6366f1; }
+.pt-loc__body { flex: 1; min-width: 0; }
+.pt-loc__title { font-weight: 600; color: #1a2e4a; }
+.pt-loc__type { font-size: 10px; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.3px; }
+.pt-loc__desc { font-size: 12px; color: #636e72; margin-top: 3px; line-height: 1.5; }
+
+/* ── Budget section ── */
+.pt-budget-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 7px 0;
+    border-bottom: 1px solid #f3f4f6;
+    font-size: 13px;
+}
+.pt-budget-row:last-child { border-bottom: none; }
+.pt-budget-total {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0 0;
+    font-weight: 800;
+    font-size: 15px;
+    color: #1a2e4a;
+    border-top: 2px solid #1a2e4a;
+    margin-top: 8px;
+}
+.pt-budget-remaining {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0 0;
+    font-size: 13px;
+    color: #27ae60;
+    font-weight: 700;
+}
+.pt-budget-remaining.over { color: #e74c3c; }
+
+/* ── Expense table ── */
+.pt-expense-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.pt-expense-table th {
+    text-align: left;
+    padding: 6px 8px;
+    background: #f4f6f8;
+    font-weight: 700;
+    color: #636e72;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    font-size: 10px;
+}
+.pt-expense-table td { padding: 7px 8px; border-bottom: 1px solid #f3f4f6; }
+.pt-expense-table tr:last-child td { border-bottom: none; }
+.pt-expense-cat {
+    display: inline-block;
+    padding: 1px 6px;
+    border-radius: 8px;
+    font-size: 10px;
+    font-weight: 700;
+    background: #f0f4ff;
+    color: #2980b9;
+}
+
+@media print {
+    body { padding: 16px 20px; }
+    .pt-day { page-break-inside: avoid; }
+    .pt-section { page-break-inside: avoid; }
+}
+    </style>
+</head>
+<body>
+
+<button class="print-btn" onclick="window.print()">
+    🖨 Print / Save as PDF
+</button>
+
+{# ── Header ── #}
+<div class="pt-header">
+    <div class="pt-title">{{ travel.title }}</div>
+    <div class="pt-meta">
+        <span>📅 {{ travel.startAt|date("d M Y") }} – {{ travel.endAt|date("d M Y") }}</span>
+        <span>👤 {{ travel.user.firstName }} {{ travel.user.lastName }}</span>
+        {% set totalLocs = travel.location|length %}
+        <span>📍 {{ totalLocs }} location{{ totalLocs != 1 ? 's' : '' }}</span>
+        {% if travel.description %}
+        <span>{{ travel.description }}</span>
+        {% endif %}
+    </div>
+</div>
+
+{# ── Itinerary ── #}
+<div class="pt-section">
+    <div class="pt-section__title">📅 Daily Itinerary</div>
+
+    {% set startTs  = travel.startAt|date('U') %}
+    {% set endTs    = travel.endAt|date('U') %}
+    {% set tripDays = (((endTs - startTs) / 86400)|round(0,'ceil') + 1) %}
+    {% set dowNames = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'] %}
+    {% set monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'] %}
+
+    {% for i in 0..tripDays-1 %}
+        {% set thisDate    = travel.startAt|date_modify('+' ~ i ~ ' days') %}
+        {% set thisDateStr = thisDate|date('Y-m-d') %}
+        {% set dow         = thisDate|date('N') - 1 %}
+        {% set monthIdx    = thisDate|date('n') - 1 %}
+        {% set dayLocs     = travel.getLocationsForDate(thisDateStr) %}
+
+        <div class="pt-day">
+            <div class="pt-day__header">
+                <span class="pt-day__num">{{ thisDate|date('d') }}</span>
+                <span class="pt-day__dow">{{ dowNames[dow] }}</span>
+                <span class="pt-day__date">{{ monthNames[monthIdx] }} {{ thisDate|date('Y') }}</span>
+            </div>
+
+            {% if dayLocs|length == 0 %}
+                <div class="pt-day__empty">No locations scheduled</div>
+            {% else %}
+                {% for loc in dayLocs %}
+                    {% set vd = null %}
+                    {% for v in loc.visitDates %}
+                        {% if v.visitDateString == thisDateStr %}{% set vd = v %}{% endif %}
+                    {% endfor %}
+                    <div class="pt-loc">
+                        <div class="pt-loc__time">
+                            {% if vd and vd.timeStartString %}
+                                {{ vd.timeStartString }}{% if vd.timeEndString %} → {{ vd.timeEndString }}{% endif %}
+                            {% else %}
+                                &nbsp;
+                            {% endif %}
+                        </div>
+                        <div class="pt-loc__icon">
+                            {% if loc.typeLocation is not null %}<i class="{{ loc.typeLocation.icon }}"></i>{% else %}📍{% endif %}
+                        </div>
+                        <div class="pt-loc__body">
+                            <div class="pt-loc__title">{{ loc.title }}</div>
+                            {% if loc.typeLocation is not null %}
+                            <div class="pt-loc__type">{{ loc.typeLocation.title }}</div>
+                            {% endif %}
+                            {% if loc.description %}
+                            <div class="pt-loc__desc">{{ loc.description }}</div>
+                            {% endif %}
+                            {% if loc.url %}
+                            <div class="pt-loc__desc"><a href="{{ loc.url }}">{{ loc.url }}</a></div>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+    {% endfor %}
+</div>
+
+{# ── Unscheduled locations ── #}
+{% set unscheduled = travel.location|filter(l => not l.hasAnyVisitDate) %}
+{% if unscheduled|length > 0 %}
+<div class="pt-section">
+    <div class="pt-section__title">📍 Unscheduled Locations</div>
+    {% for loc in unscheduled %}
+    <div class="pt-loc">
+        <div class="pt-loc__time"></div>
+        <div class="pt-loc__icon">
+            {% if loc.typeLocation is not null %}<i class="{{ loc.typeLocation.icon }}"></i>{% else %}📍{% endif %}
+        </div>
+        <div class="pt-loc__body">
+            <div class="pt-loc__title">{{ loc.title }}</div>
+            {% if loc.typeLocation is not null %}<div class="pt-loc__type">{{ loc.typeLocation.title }}</div>{% endif %}
+            {% if loc.description %}<div class="pt-loc__desc">{{ loc.description }}</div>{% endif %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+{# ── Budget ── #}
+{% if budget or expenses|length > 0 %}
+<div class="pt-section">
+    <div class="pt-section__title">💰 Budget</div>
+
+    {% if budget %}
+    <div style="margin-bottom:16px;">
+        <div class="pt-budget-row">
+            <span>Total budget</span>
+            <strong>{{ budget.amount|number_format(2) }} {{ budget.currency }}</strong>
+        </div>
+        <div class="pt-budget-total">
+            <span>Total spent</span>
+            <span>{{ totalSpent|number_format(2) }} {{ budget.currency }}</span>
+        </div>
+        {% set remaining = budget.amount - totalSpent %}
+        <div class="pt-budget-remaining{% if remaining < 0 %} over{% endif %}">
+            <span>{{ remaining >= 0 ? 'Remaining' : 'Over budget' }}</span>
+            <span>{{ remaining|abs|number_format(2) }} {{ budget.currency }}</span>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if expenses|length > 0 %}
+    <table class="pt-expense-table">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Description</th>
+                <th>Category</th>
+                <th style="text-align:right">Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for expense in expenses %}
+            <tr>
+                <td>{{ expense.expenseDate ? expense.expenseDate|date('d M') : '—' }}</td>
+                <td>{{ expense.description }}</td>
+                <td><span class="pt-expense-cat">{{ categories[expense.category] ?? expense.category }}</span></td>
+                <td style="text-align:right;font-weight:700;">{{ expense.amount|number_format(2) }} {{ expense.currency }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+</div>
+{% endif %}
+
+</body>
+</html>
