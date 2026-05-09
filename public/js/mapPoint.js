@@ -738,8 +738,16 @@ mapPoint.prototype.saveEdit = function () {
                     data: formData,
                     processData: false,
                     contentType: false,
-                    complete: function () {
+                    success: function () {
+                        $('#infoTravel').html('<p class="alert alert-success">Location and image updated</p>');
+                        $('#infoTravel').show().delay(5000).fadeOut();
                         $('#editlocation').modal('hide');
+                    },
+                    error: function (jqXHR) {
+                        var msg = 'Image upload failed';
+                        try { var r = JSON.parse(jqXHR.responseText); if (r.error) msg = r.error; } catch (e) {}
+                        $('#infoTravel').html('<p class="alert alert-danger">Error: ' + msg + '</p>');
+                        $('#infoTravel').show().delay(8000).fadeOut();
                     }
                 });
             } else {
