@@ -73,8 +73,8 @@ class DoctrineUserRepository extends ServiceEntityRepository implements UserRepo
     public function save(User $user): void
     {
         try {
-            $this->_em->persist($user);
-            $this->_em->flush();
+            $this->getEntityManager()->persist($user);
+            $this->getEntityManager()->flush();
         } catch (\Exception $e) {
             throw new UserSavingError('Error saving user: '.$e->getMessage());
         }

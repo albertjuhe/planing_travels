@@ -33,6 +33,6 @@ class DoctrineMarkRepository extends ServiceEntityRepository implements MarkRepo
 
     public function save(Mark $mark): void
     {
-        $this->_em->persist($mark);
+        $this->getEntityManager()->persist($mark);
     }
 }

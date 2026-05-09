@@ -40,36 +40,30 @@ services:
             $logger: '@logger'
 
     # Repository Travel
-    App\Infrastructure\TravelBundle\Repository\DoctrineTravelRepository:
-        arguments: ['@doctrine']
+    App\Infrastructure\TravelBundle\Repository\DoctrineTravelRepository: ~
 
     doctrine.travel.repository: '@App\Infrastructure\TravelBundle\Repository\DoctrineTravelRepository'
     doctrine.travel.read_model.repository: '@App\Infrastructure\TravelBundle\Repository\DoctrineTravelReadModelRepository'
 
     # Repository User
-    App\Infrastructure\UserBundle\Repository\DoctrineUserRepository:
-        arguments: ['@doctrine']
+    App\Infrastructure\UserBundle\Repository\DoctrineUserRepository: ~
 
     doctrine.user.repository: '@App\Infrastructure\UserBundle\Repository\DoctrineUserRepository'
 
     # Repository Location
-    App\Infrastructure\LocationBundle\Repository\DoctrineLocationRepository:
-        arguments: ['@doctrine']
+    App\Infrastructure\LocationBundle\Repository\DoctrineLocationRepository: ~
 
     doctrine.location.repository: '@App\Infrastructure\LocationBundle\Repository\DoctrineLocationRepository'
 
     # Repository Mark
-    App\Infrastructure\MarkBundle\Repository\DoctrineMarkRepository:
-        arguments: ['@doctrine']
+    App\Infrastructure\MarkBundle\Repository\DoctrineMarkRepository: ~
 
     doctrine.mark.repository: '@App\Infrastructure\MarkBundle\Repository\DoctrineMarkRepository'
 
     # Event store repository
-    App\Infrastructure\EventBundle\Repository\DoctrineEventStore:
-        arguments: ['@doctrine', '@jms_serializer']
+    App\Infrastructure\EventBundle\Repository\DoctrineEventStore: ~
 
-    App\Infrastructure\EventBundle\Repository\DummyEventStore:
-        arguments: ['@doctrine']
+    App\Infrastructure\EventBundle\Repository\DummyEventStore: ~
 
     App\Domain\Event\Repository\EventStore:
         alias: App\Infrastructure\EventBundle\Repository\DummyEventStore

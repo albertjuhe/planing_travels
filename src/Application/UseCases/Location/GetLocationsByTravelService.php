@@ -4,30 +4,20 @@ namespace App\Application\UseCases\Location;
 
 use App\Application\Query\Location\GetLocationsByTravelQuery;
 use App\Application\UseCases\UsesCasesService;
+use App\Domain\Location\Model\Location;
 use App\Domain\Travel\Exceptions\TravelDoesntExists;
 use App\Domain\Travel\Model\Travel;
 use App\Domain\Travel\Repository\TravelRepository;
+use Doctrine\ORM\EntityManagerInterface;
 
 class GetLocationsByTravelService implements usesCasesService
 {
-    /**
-     * @var TravelRepository;
-     */
-    private $travelRepository;
-
-    /**
-     * GetAllMyTravels constructor.
-     *
-     * @param TravelRepository $travelRepository
-     */
-    public function __construct(TravelRepository $travelRepository)
-    {
-        $this->travelRepository = $travelRepository;
+    public function __construct(
+        private TravelRepository $travelRepository,
+        private EntityManagerInterface $em
+    ) {
     }
 
-    /**
-     * @return mixed
-     */
     public function __invoke(GetLocationsByTravelQuery $query)
     {
         $travelId = $query->getTravel();
@@ -39,9 +29,8 @@ class GetLocationsByTravelService implements usesCasesService
             throw new TravelDoesntExists();
         }
 
-        // Get locations with all relations in a single query
-        $locationRepository = $this->travelRepository->_em->getRepository(\App\Domain\Location\Model\Location::class);
-        $locations = $locationRepository->createQueryBuilder('l')
+        $locations = $this->em->getRepository(Location::class)
+            ->createQueryBuilder('l')
             ->select('l', 'm', 'tl', 'vd', 'i', 'n')
             ->leftJoin('l.mark', 'm')
             ->leftJoin('l.typeLocation', 'tl')

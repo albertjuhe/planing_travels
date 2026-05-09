@@ -81,7 +81,7 @@ class DoctrineTravelRepository extends ServiceEntityRepository implements Travel
      */
     public function save(Travel $travel): void
     {
-        $this->_em->persist($travel);
+        $this->getEntityManager()->persist($travel);
     }
 
     public function getAllTravelsByUser(int $userId, int $offset = 0, int $limit = 20): array

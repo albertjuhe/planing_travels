@@ -16,8 +16,8 @@ class DoctrinePasswordResetTokenRepository extends ServiceEntityRepository
 
     public function save(PasswordResetToken $token): void
     {
-        $this->_em->persist($token);
-        $this->_em->flush();
+        $this->getEntityManager()->persist($token);
+        $this->getEntityManager()->flush();
     }
 
     public function findValidTokenByPlainValue(string $plainToken): ?PasswordResetToken

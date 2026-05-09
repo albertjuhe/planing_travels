@@ -12,6 +12,7 @@ use App\Domain\TypeLocation\Repository\TypeLocationRepository;
 use App\Domain\User\Repository\UserRepository;
 use App\Domain\User\ValueObject\UserId;
 use App\Infrastructure\WebSocket\WebSocketNotifier;
+use Symfony\Component\String\Slugger\AsciiSlugger;
 
 class AddLocationService implements UsesCasesService
 {
@@ -95,6 +96,12 @@ class AddLocationService implements UsesCasesService
         $location->setTravel($travel);
         $location->setMark($mark);
         $location->setTypeLocation($locationType);
+
+        if (!$location->getSlug()) {
+            $slugger = new AsciiSlugger();
+            $slug = strtolower((string) $slugger->slug($location->getTitle()));
+            $location->setSlug($slug ?: 'location-' . uniqid());
+        }
 
         $this->locationRepository->save($location);
 

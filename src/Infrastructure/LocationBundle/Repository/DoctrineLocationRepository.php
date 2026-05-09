@@ -23,12 +23,12 @@ class DoctrineLocationRepository extends ServiceEntityRepository implements Loca
 
     public function save(Location $location): void
     {
-        $this->_em->persist($location);
+        $this->getEntityManager()->persist($location);
     }
 
     public function remove(Location $location): void
     {
-        $this->_em->remove($location);
+        $this->getEntityManager()->remove($location);
     }
 
     public function findById(string $locationId): Location
