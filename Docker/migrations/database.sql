@@ -271,8 +271,8 @@ create index IDX_EXPENSE_TRAVEL on travel_expense (travel_id);
 create index IDX_EXPENSE_LOCATION on travel_expense (location_id);
 
 alter table location_visit_date
-    add column if not exists time_start time default null,
-    add column if not exists time_end   time default null;
+    add column time_start time default null,
+    add column time_end   time default null;
 
 
 INSERT INTO travelGuuid.typelocation (id, title, icon, created_at, updated_at, description) VALUES (1, 'House', 'fa fa-bed', '2015-08-07 17:57:18', '2015-08-07 17:57:18', null);
