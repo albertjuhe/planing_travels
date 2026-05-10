@@ -125,6 +125,11 @@ services:
         tags:
             - { name: messenger.message_handler, bus: command.bus }
 
+    App\Application\UseCases\Location\DeleteLocationService:
+        arguments: ['@doctrine.user.repository', '@doctrine.location.repository', '@App\Infrastructure\WebSocket\WebSocketNotifier']
+        tags:
+            - { name: messenger.message_handler, bus: command.bus }
+
     # Twig string-extra extension (filtro u.truncate, etc.)
     Twig\Extra\String\StringExtension:
         tags:
