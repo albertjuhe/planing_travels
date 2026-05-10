@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                  https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <embeddable name="App\Domain\Travel\ValueObject\GeoLocation">
+        <field name="lat"  type="decimal" precision="14" scale="8" nullable="false" column="lat"/>
+        <field name="lng"  type="decimal" precision="14" scale="8" nullable="false" column="lng"/>
+        <field name="lat0" type="decimal" precision="14" scale="8" nullable="true"  column="lat0"/>
+        <field name="lng0" type="decimal" precision="14" scale="8" nullable="true"  column="lng0"/>
+        <field name="lat1" type="decimal" precision="14" scale="8" nullable="true"  column="lat1"/>
+        <field name="lng1" type="decimal" precision="14" scale="8" nullable="true"  column="lng1"/>
+    </embeddable>
+
+</doctrine-mapping>

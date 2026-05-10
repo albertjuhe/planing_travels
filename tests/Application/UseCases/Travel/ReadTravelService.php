@@ -9,7 +9,7 @@ class ReadTravelService extends TestCase
 {
     protected $travelRepository;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->travelRepository = $this->createMock(ElasticSearchReadModelRepository::class);
     }

@@ -4,6 +4,7 @@ namespace App\Tests\Domain\User\Model;
 
 use PHPUnit\Framework\TestCase;
 use App\Domain\User\Model\User;
+use App\Domain\User\ValueObject\UserId;
 use App\Domain\Travel\Model\Travel;
 use App\Domain\Travel\ValueObject\GeoLocation;
 
@@ -76,30 +77,28 @@ class UserTest extends TestCase
 
         $user->setUsername('username');
         $this->assertEquals('username', $user->getUsername());
-
-        $this->assertEquals(null, $user->getSalt());
     }
 
-    public function testSerialize()
+    public function testSerialize(): void
     {
         $user = User::fromId(1);
         $user->setUsername('usernameTest');
         $user->setPassword('passwordTest');
-        $serialized = 'a:3:{i:0;N;i:1;s:12:"usernameTest";i:2;s:12:"passwordTest";}';
 
-        $this->assertSame($serialized, $user->serialize());
+        $data = $user->__serialize();
+        $this->assertInstanceOf(UserId::class, $data[0]);
+        $this->assertSame('usernameTest', $data[2]);
+        $this->assertSame('passwordTest', $data[3]);
     }
 
-    public function testUnserialize()
+    public function testUnserialize(): void
     {
-        $serialized = 'a:3:{i:0;N;i:1;s:12:"usernameTest";i:2;s:12:"passwordTest";}';
-
+        $userId = new UserId(1);
         $user = User::fromId(1);
-        $user->unserialize($serialized);
+        $user->__unserialize([$userId, null, 'usernameTest', 'passwordTest']);
 
         $this->assertEquals('usernameTest', $user->getUsername());
         $this->assertEquals('passwordTest', $user->getPassword());
-
         $this->assertEquals(1, $user->getId()->id());
     }
 

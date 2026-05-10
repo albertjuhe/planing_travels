@@ -5,7 +5,7 @@ namespace App\Infrastructure\TypeLocationBundle\Repository;
 use App\Domain\TypeLocation\Exceptions\TypeLocationDoesntExists;
 use App\Domain\TypeLocation\Repository\TypeLocationRepository;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 use App\Domain\TypeLocation\Model\TypeLocation;
 
 class DoctrineTypeLocation extends ServiceEntityRepository implements TypeLocationRepository

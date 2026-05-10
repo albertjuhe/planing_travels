@@ -8,8 +8,8 @@ use App\Domain\Budget\Model\TravelExpense;
 use App\Domain\User\Model\User;
 use App\Infrastructure\Application\QueryBus\QueryBus;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Bundle\SecurityBundle\Security;
 
 class PrintTravelController extends QueryController
 {
@@ -21,9 +21,7 @@ class PrintTravelController extends QueryController
         $this->em = $em;
     }
 
-    /**
-     * @Route("/{_locale}/travel/{slug}/print", name="print_travel")
-     */
+    #[Route('/{_locale}/travel/{slug}/print', name: 'print_travel')]
     public function print(string $slug)
     {
         /** @var User|null $currentUser */

@@ -9,11 +9,10 @@ use App\Domain\Location\Model\Location;
 use App\UI\Controller\http\CommandController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use League\Tactician\CommandBus;
+use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 
 class AddNewLocationAPIController extends CommandController
 {
@@ -22,16 +21,13 @@ class AddNewLocationAPIController extends CommandController
      */
     private $security;
 
-    public function __construct(CommandBus $commandBus, Security $security)
+    public function __construct(MessageBusInterface $commandBus, Security $security)
     {
         parent::__construct($commandBus);
         $this->security = $security;
     }
 
-    /**
-     * @Route("/api/user/{userId}/location",name="newAPILocation")
-     * @Method({"POST"})
-     */
+    #[Route('/api/user/{userId}/location', name: 'newAPILocation', methods: ['POST'])]
     public function newLocation(Request $request, $userId)
     {
         $user = $this->security->getUser();
@@ -50,7 +46,7 @@ class AddNewLocationAPIController extends CommandController
         $location->setMark($mark);
 
         $addLocationCommand = new AddLocationCommand($data['travel'], $location, $userId, $mark, $data['IdType']);
-        $this->commandBus->handle($addLocationCommand);
+        $this->commandBus->dispatch($addLocationCommand);
 
         return new JsonResponse(['id' => $location->getId()->id()], Response::HTTP_CREATED);
     }

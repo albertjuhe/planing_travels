@@ -10,28 +10,26 @@ use App\Infrastructure\UserBundle\Repository\DoctrineUserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class ProfileController extends AbstractController
 {
     /** @var DoctrineUserRepository */
     private $userRepository;
 
-    /** @var UserPasswordEncoderInterface */
-    private $passwordEncoder;
+    /** @var UserPasswordHasherInterface */
+    private $passwordHasher;
 
     public function __construct(
         DoctrineUserRepository $userRepository,
-        UserPasswordEncoderInterface $passwordEncoder
+        UserPasswordHasherInterface $passwordHasher
     ) {
         $this->userRepository = $userRepository;
-        $this->passwordEncoder = $passwordEncoder;
+        $this->passwordHasher = $passwordHasher;
     }
 
-    /**
-     * @Route("/{_locale}/private/profile", name="profile_edit")
-     */
+    #[Route('/{_locale}/private/profile', name: 'profile_edit')]
     public function edit(Request $request, $_locale): Response
     {
         /** @var User $user */
@@ -56,11 +54,11 @@ class ProfileController extends AbstractController
         if ($passwordForm->isSubmitted() && $passwordForm->isValid()) {
             $currentPassword = $passwordForm->get('currentPassword')->getData();
 
-            if (!$this->passwordEncoder->isPasswordValid($user, $currentPassword)) {
+            if (!$this->passwordHasher->isPasswordValid($user, $currentPassword)) {
                 $this->addFlash('error', 'Current password is incorrect.');
             } else {
                 $newPassword = $passwordForm->get('newPassword')->getData();
-                $encoded = $this->passwordEncoder->encodePassword($user, $newPassword);
+                $encoded = $this->passwordHasher->hashPassword($user, $newPassword);
                 $user->setPassword($encoded);
                 $this->userRepository->save($user);
                 $this->addFlash('notice', 'Password changed successfully.');

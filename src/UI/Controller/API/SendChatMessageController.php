@@ -4,29 +4,25 @@ namespace App\UI\Controller\API;
 
 use App\Infrastructure\WebSocket\WebSocketNotifier;
 use App\UI\Controller\http\CommandController;
-use League\Tactician\CommandBus;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Bundle\SecurityBundle\Security;
 
 class SendChatMessageController extends CommandController
 {
     private $security;
     private $wsNotifier;
 
-    public function __construct(CommandBus $commandBus, Security $security, WebSocketNotifier $wsNotifier)
+    public function __construct(MessageBusInterface $commandBus, Security $security, WebSocketNotifier $wsNotifier)
     {
         parent::__construct($commandBus);
         $this->security = $security;
         $this->wsNotifier = $wsNotifier;
     }
 
-    /**
-     * @Route("/api/travel/{travelId}/chat", name="send_chat_message")
-     * @Method({"POST"})
-     */
+    #[Route('/api/travel/{travelId}/chat', name: 'send_chat_message', methods: ['POST'])]
     public function sendMessage(Request $request, string $travelId): JsonResponse
     {
         $user = $this->security->getUser();

@@ -7,7 +7,7 @@ use App\Domain\Location\Model\Location;
 use App\Domain\Location\Repository\LocationRepository;
 use App\Domain\Location\ValueObject\LocationId;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 
 class DoctrineLocationRepository extends ServiceEntityRepository implements LocationRepository
 {
@@ -23,12 +23,12 @@ class DoctrineLocationRepository extends ServiceEntityRepository implements Loca
 
     public function save(Location $location): void
     {
-        $this->_em->persist($location);
+        $this->getEntityManager()->persist($location);
     }
 
     public function remove(Location $location): void
     {
-        $this->_em->remove($location);
+        $this->getEntityManager()->remove($location);
     }
 
     public function findById(string $locationId): Location

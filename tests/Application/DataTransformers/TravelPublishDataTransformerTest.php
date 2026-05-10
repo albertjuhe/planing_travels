@@ -12,7 +12,7 @@ class TravelPublishDataTransformerTest extends TestCase
 {
     private $travel;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->travel = Travel::fromTitleAndGeolocationAndUser(
             'Dummy1',

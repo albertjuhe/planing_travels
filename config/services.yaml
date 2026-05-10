@@ -1,191 +1,138 @@
-# Put parameters here that don't need to change on each machine where the app is deployed
-# https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: 'en'
     travel_photos_directory: '%kernel.project_dir%/public/uploads/travel_photos'
 
 services:
-    # default configuration for services in *this* file
     _defaults:
-      autowire: true      # Automatically injects dependencies in your services.
-      autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
-      public: false       # Allows optimizing the container by removing unused services; this also means
-      # fetching services directly from the container via $container->get() won't work.
-      # The best practice is to be explicit about your dependencies anyway.
+        autowire: true
+        autoconfigure: true
+        public: false
 
-    # makes classes in src/ available to be used as services
-    # this creates a service per class whose id is the fully-qualified class name
     App\:
-      resource: '../src/*'
-      exclude:
-        - '../src/{Entity,Migrations,Tests}'
-        - '../src/Infrastructure/Application/ElasticSearch'
-        - '../src/Infrastructure/TravelBundle/Repository/ElasticSearch*.php'
-        - '../src/Infrastructure/TravelBundle/DataTransformer/ElasticSearch*.php'
-        - '../src/Infrastructure/Middleware/ElasticSearchMiddleware.php'
-        - '../src/UI/Controller/Command/ElasticSearch*.php'
-        - '../src/UI/Controller/Command/PopulateTravelsToElasticSearchCommand.php'
-        - '../src/Application/UseCases/Travel/PopulateIndexer.php'
+        resource: '../src/*'
+        exclude:
+            - '../src/{Entity,Migrations,Tests}'
+            - '../src/Infrastructure/Application/ElasticSearch'
+            - '../src/Infrastructure/TravelBundle/Repository/ElasticSearch*.php'
+            - '../src/Infrastructure/TravelBundle/DataTransformer/ElasticSearch*.php'
+            - '../src/Infrastructure/Middleware/ElasticSearchMiddleware.php'
+            - '../src/UI/Controller/Command/ElasticSearch*.php'
+            - '../src/UI/Controller/Command/PopulateTravelsToElasticSearchCommand.php'
+            - '../src/Application/UseCases/Travel/PopulateIndexer.php'
 
-    # controllers are imported separately to make sure services can be injected
-    # as action arguments even if you don't extend any base controller class
     App\UI\Controller\:
-      resource: '../src/UI/Controller'
-      exclude: '../src/UI/Controller/Command'
-      tags: ['controller.service_arguments']
+        resource: '../src/UI/Controller'
+        exclude: '../src/UI/Controller/Command'
+        tags: ['controller.service_arguments']
 
-    twig.extension.text:
-      class: Twig_Extensions_Extension_Text
-      tags:
-        - { name: twig.extension }
-
+    # Query Bus — receives the query.bus
     queryBus:
-      class: App\Infrastructure\Application\QueryBus\QueryBus
+        class: App\Infrastructure\Application\QueryBus\QueryBus
+        arguments: ['@query.bus']
 
-    # Command bus handler
-    travel.share_handler:
-      class: App\Application\UseCases\Travel\ShareTravelService
-      arguments: ['@doctrine.travel.repository','@doctrine.user.repository']
-      tags:
-        - { name: tactician.handler, command: App\Application\Command\Travel\ShareTravelCommand}
+    App\Infrastructure\Application\QueryBus\QueryBus:
+        arguments: ['@query.bus']
 
-    travel.unshare_handler:
-      class: App\Application\UseCases\Travel\UnshareTravelService
-      arguments: ['@doctrine.travel.repository','@doctrine.user.repository']
-      tags:
-        - { name: tactician.handler, command: App\Application\Command\Travel\UnshareTravelCommand}
-
-    travel.unpublish_handler:
-      class: App\Application\UseCases\Travel\UnpublishTravelService
-      arguments: ['@doctrine.travel.repository','@doctrine.user.repository']
-      tags:
-        - { name: tactician.handler, command: App\Application\Command\Travel\UnpublishTravelCommand}
-
-    travel.publish_handler:
-      class: App\Application\UseCases\Travel\PublishTravelService
-      arguments: ['@doctrine.travel.repository','@doctrine.user.repository']
-      tags:
-        - { name: tactician.handler, command: App\Application\Command\Travel\PublishTravelCommand}
-
-    travel.update_handler:
-      class: App\Application\UseCases\Travel\UpdateTravelService
-      arguments: ['@doctrine.travel.repository']
-      tags:
-        - { name: tactician.handler, command: App\Application\Command\Travel\UpdateTravelCommand}
-
-    travel.add_handler:
-      class: App\Application\UseCases\Travel\AddTravelService
-      arguments: ['@doctrine.travel.repository','@doctrine.user.repository']
-      tags:
-        - { name: tactician.handler, command: App\Application\Command\Travel\AddTravelCommand}
-
-    location.add_handler:
-      class: App\Application\UseCases\Location\AddLocationService
-      arguments:  ['@doctrine.travel.repository','@doctrine.user.repository', '@doctrine.mark.repository', '@doctrine.location.repository', '@App\Infrastructure\TypeLocationBundle\Repository\DoctrineTypeLocation', '@App\Infrastructure\WebSocket\WebSocketNotifier']
-      tags:
-        - { name: tactician.handler, command: App\Application\Command\Location\AddLocationCommand}
-
-    location.delete_handler:
-      class: App\Application\UseCases\Location\DeleteLocationService
-      arguments:  ['@doctrine.user.repository', '@doctrine.location.repository', '@App\Infrastructure\WebSocket\WebSocketNotifier']
-      tags:
-        - { name: tactician.handler, command: App\Application\Command\Location\DeleteLocationCommand}
-
-    # Query Bus
-    travel.get_best_travels:
-      class: App\Application\UseCases\Travel\GetBestTravelsOrderedByService
-      arguments: ['@doctrine.travel.read_model.repository']
-      tags: [messenger.message_handler]
-
-    App\Application\UseCases\Travel\ShowTravelService:
-      arguments: ['@doctrine.travel.repository', '@doctrine.orm.entity_manager']
-      tags: [messenger.message_handler]
-
-    travel.gey_my_travels:
-      class: App\Application\UseCases\Travel\GetAllMyTravelsService
-      arguments: [ '@doctrine.travel.repository' ]
-      tags: [ messenger.message_handler ]
-
-    location.get_by_travel_handler:
-      class: App\Application\UseCases\Location\GetLocationsByTravelService
-      arguments:  ['@doctrine.travel.repository' ]
-      tags: [messenger.message_handler]
-
-
-    # Tactician middleware Store domain events
-    App\Application\Middleware\DomainEventsMiddleware:
-      arguments: ['@doctrine.travel_event.repository', '@event_dispatcher', '@doctrine.travel.repository']
-
-
-    App\Domain\Event\Repository\EventStore:
-      alias: App\Infrastructure\EventBundle\Repository\DummyEventStore
-
-    tactician.middleware.domainEventStore: '@App\Infrastructure\Middleware\DomainEventsMiddleware'
-
+    # WebSocket
     App\Infrastructure\WebSocket\WebSocketNotifier:
-      arguments:
-        $wsServerUrl: '%env(string:WEBSOCKET_SERVER_URL)%'
-        $logger: '@logger'
+        arguments:
+            $wsServerUrl: '%env(string:WEBSOCKET_SERVER_URL)%'
+            $logger: '@logger'
 
-    # Repository travel
-    App\Infrastructure\TravelBundle\Repository\DoctrineTravelRepository:
-      arguments: ['@doctrine']
+    # Repository Travel
+    App\Infrastructure\TravelBundle\Repository\DoctrineTravelRepository: ~
 
     doctrine.travel.repository: '@App\Infrastructure\TravelBundle\Repository\DoctrineTravelRepository'
-
-    #elasticsearch.travel.read_model.repository: '@App\Infrastructure\TravelBundle\Repository\ElasticSearchReadModelRepository'
     doctrine.travel.read_model.repository: '@App\Infrastructure\TravelBundle\Repository\DoctrineTravelReadModelRepository'
 
     # Repository User
-    App\Infrastructure\UserBundle\Repository\DoctrineUserRepository:
-      arguments: ['@doctrine']
+    App\Infrastructure\UserBundle\Repository\DoctrineUserRepository: ~
 
     doctrine.user.repository: '@App\Infrastructure\UserBundle\Repository\DoctrineUserRepository'
 
     # Repository Location
-    App\Infrastructure\LocationBundle\Repository\DoctrineLocationRepository:
-      arguments: ['@doctrine']
+    App\Infrastructure\LocationBundle\Repository\DoctrineLocationRepository: ~
 
     doctrine.location.repository: '@App\Infrastructure\LocationBundle\Repository\DoctrineLocationRepository'
 
     # Repository Mark
-    App\Infrastructure\MarkBundle\Repository\DoctrineMarkRepository:
-      arguments: ['@doctrine']
+    App\Infrastructure\MarkBundle\Repository\DoctrineMarkRepository: ~
 
     doctrine.mark.repository: '@App\Infrastructure\MarkBundle\Repository\DoctrineMarkRepository'
 
-
     # Event store repository
-    App\Infrastructure\EventBundle\Repository\DoctrineEventStore:
-      arguments: ['@doctrine','@jms_serializer']
+    App\Infrastructure\EventBundle\Repository\DoctrineEventStore: ~
 
-    App\Infrastructure\EventBundle\Repository\DummyEventStore:
-      arguments: ['@doctrine']
+    App\Infrastructure\EventBundle\Repository\DummyEventStore: ~
+
+    App\Domain\Event\Repository\EventStore:
+        alias: App\Infrastructure\EventBundle\Repository\DummyEventStore
 
     doctrine.travel_event.repository: '@App\Infrastructure\EventBundle\Repository\DummyEventStore'
 
-    # Tactician middleware Store elasticsearch (disabled)
-    #App\Application\Middleware\ElasticSearchMiddleware:
-    #  arguments: ['@elasticsearch.travel.repository']
+    # Query handlers — registrados explícitamente en query.bus
+    App\Application\UseCases\Travel\GetAllMyTravelsService:
+        tags:
+            - { name: messenger.message_handler, bus: query.bus }
 
-    #tactician.middleware.elasticSearchTravel: '@App\Infrastructure\Middleware\ElasticSearchMiddleware'
+    App\Application\UseCases\Travel\ShowTravelService:
+        arguments: ['@doctrine.travel.repository', '@doctrine.orm.entity_manager']
+        tags:
+            - { name: messenger.message_handler, bus: query.bus }
 
-    # Elasticsearch Repository (disabled)
-    #elasticsearch.travel.repository: '@App\Infrastructure\TravelBundle\Repository\ElasticSearchTravelRepository'
+    App\Application\UseCases\Travel\GetBestTravelsOrderedByService:
+        arguments: ['@doctrine.travel.read_model.repository']
+        tags:
+            - { name: messenger.message_handler, bus: query.bus }
 
-    # Listener postpersist (disabled)
-    #elasticsearch.listener:
-    #  class: App\Infrastructure\Application\ElasticSearch\Notification\ElasticSearchListener
-    #  tags:
-    #    - { name: doctrine.event_listener, event: postPersist }
-    #    - { name: doctrine.event_listener, event: postUpdate }
+    App\Application\UseCases\Location\GetLocationsByTravelService:
+        tags:
+            - { name: messenger.message_handler, bus: query.bus }
 
-    #App\Application\UseCases\Travel\PopulateIndexer:
-    #  arguments:  ['@doctrine.travel.repository', '@elasticsearch.travel.repository' ]
+    # Command handlers — registrados explícitamente en command.bus
+    App\Application\UseCases\Travel\AddTravelService:
+        arguments: ['@doctrine.travel.repository', '@doctrine.user.repository']
+        tags:
+            - { name: messenger.message_handler, bus: command.bus }
 
-    #Elastica\Client:
-    #  class: Elastica\Client
-    #  arguments:
-    #    $config:
-    #      host: '%env(string:ELASTICSEARCH_HOST)%'
-    #      port: '%env(string:ELASTICSEARCH_PORT)%'
+    App\Application\UseCases\Travel\ShareTravelService:
+        arguments: ['@doctrine.travel.repository', '@doctrine.user.repository']
+        tags:
+            - { name: messenger.message_handler, bus: command.bus }
+
+    App\Application\UseCases\Travel\UnshareTravelService:
+        arguments: ['@doctrine.travel.repository', '@doctrine.user.repository']
+        tags:
+            - { name: messenger.message_handler, bus: command.bus }
+
+    App\Application\UseCases\Travel\PublishTravelService:
+        arguments: ['@doctrine.travel.repository', '@doctrine.user.repository']
+        tags:
+            - { name: messenger.message_handler, bus: command.bus }
+
+    App\Application\UseCases\Travel\UnpublishTravelService:
+        arguments: ['@doctrine.travel.repository', '@doctrine.user.repository']
+        tags:
+            - { name: messenger.message_handler, bus: command.bus }
+
+    App\Application\UseCases\Travel\UpdateTravelService:
+        arguments: ['@doctrine.travel.repository']
+        tags:
+            - { name: messenger.message_handler, bus: command.bus }
+
+    App\Application\UseCases\Location\AddLocationService:
+        arguments: ['@doctrine.travel.repository', '@doctrine.user.repository', '@doctrine.mark.repository', '@doctrine.location.repository', '@App\Infrastructure\TypeLocationBundle\Repository\DoctrineTypeLocation', '@App\Infrastructure\WebSocket\WebSocketNotifier']
+        tags:
+            - { name: messenger.message_handler, bus: command.bus }
+
+    # Twig string-extra extension (filtro u.truncate, etc.)
+    Twig\Extra\String\StringExtension:
+        tags:
+            - { name: twig.extension }
+
+    # Domain Events Middleware
+    App\Infrastructure\Middleware\DomainEventsMiddleware:
+        arguments:
+            - '@App\Domain\Event\Repository\EventStore'
+            - '@event_dispatcher'
+            - '@doctrine.travel.repository'

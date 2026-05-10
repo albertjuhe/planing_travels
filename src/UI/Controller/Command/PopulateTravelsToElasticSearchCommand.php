@@ -22,7 +22,7 @@ class PopulateTravelsToElasticSearchCommand extends Command
         $this->populateIndexer = $populateIndexer;
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this->setName('populateTravels');
     }

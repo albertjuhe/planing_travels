@@ -11,9 +11,8 @@ use App\Infrastructure\UserBundle\Repository\DoctrineUserRepository;
 use App\UI\Controller\http\QueryController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\Security;
-use Symfony\Component\Routing\Annotation\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Routing\Attribute\Route;
 
 class GetUserTravels extends QueryController
 {
@@ -31,10 +30,7 @@ class GetUserTravels extends QueryController
         $this->userRepository = $userRepository;
     }
 
-    /**
-     * @Route("api/user/{userId}/travels", name="list travels by user")
-     * @Method({"GET"})
-     */
+    #[Route('api/user/{userId}/travels', name: 'list travels by user', methods: ['GET'])]
     public function getTravelsByUser(Request $request, int $userId): JsonResponse
     {
         try {

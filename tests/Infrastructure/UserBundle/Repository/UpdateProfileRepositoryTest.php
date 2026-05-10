@@ -11,7 +11,7 @@ class UpdateProfileRepositoryTest extends TestCase
     /** @var InMemoryUserRepository */
     private $userRepository;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->userRepository = new InMemoryUserRepository();
     }

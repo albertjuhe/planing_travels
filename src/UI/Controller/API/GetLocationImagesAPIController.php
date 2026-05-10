@@ -5,7 +5,7 @@ namespace App\UI\Controller\API;
 use App\Infrastructure\LocationBundle\Repository\DoctrineLocationRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class GetLocationImagesAPIController extends AbstractController
 {
@@ -17,9 +17,7 @@ class GetLocationImagesAPIController extends AbstractController
         $this->locationRepository = $locationRepository;
     }
 
-    /**
-     * @Route("/api/location/{locationId}/images", name="getLocationImages", methods={"GET"})
-     */
+    #[Route('/api/location/{locationId}/images', name: 'getLocationImages', methods: ['GET'])]
     public function getImages(string $locationId): JsonResponse
     {
         try {

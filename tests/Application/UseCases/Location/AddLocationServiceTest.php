@@ -17,7 +17,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 class AddLocationServiceTest extends LocationService
 {
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
     }
@@ -85,7 +85,7 @@ class AddLocationServiceTest extends LocationService
 
         $this->locationRepository->expects($this->once())->method('save');
 
-        $addLocationService->handle($addLocationCommand);
+        $addLocationService->__invoke($addLocationCommand);
     }
 
     public function testAddLocationAndBelongUSerIsDifferent(): void
@@ -130,6 +130,6 @@ class AddLocationServiceTest extends LocationService
 
         $this->locationRepository->expects($this->never())->method('save');
 
-        $addLocationService->handle($addLocationCommand);
+        $addLocationService->__invoke($addLocationCommand);
     }
 }

@@ -5,12 +5,11 @@ namespace App\UI\Controller\API;
 use App\Application\Command\Location\DeleteLocationCommand;
 use App\Domain\User\Model\User;
 use App\UI\Controller\http\CommandController;
-use League\Tactician\CommandBus;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Bundle\SecurityBundle\Security;
 
 class DeleteLocationAPIController extends CommandController
 {
@@ -19,16 +18,13 @@ class DeleteLocationAPIController extends CommandController
      */
     private $security;
 
-    public function __construct(CommandBus $commandBus, Security $security)
+    public function __construct(MessageBusInterface $commandBus, Security $security)
     {
         parent::__construct($commandBus);
         $this->security = $security;
     }
 
-    /**
-     * @Route("/api/travel/{travel}/location/{location}",name="deleteAPILocation")
-     * @Method({"DELETE"})
-     */
+    #[Route('/api/travel/{travel}/location/{location}', name: 'deleteAPILocation', methods: ['DELETE'])]
     public function deleteLocation(Request $request, string $travel, string $location)
     {
         /** @var User $user */
@@ -38,7 +34,7 @@ class DeleteLocationAPIController extends CommandController
         }
 
         $deleteLocationCommand = new DeleteLocationCommand($location, $travel, $user->userId());
-        $this->commandBus->handle($deleteLocationCommand);
+        $this->commandBus->dispatch($deleteLocationCommand);
 
         return new JsonResponse([
             'data' => [

@@ -19,7 +19,7 @@ class UnpublishTravelService implements UsesCasesService
         $this->userRepository = $userRepository;
     }
 
-    public function handle(UnpublishTravelCommand $command): void
+    public function __invoke(UnpublishTravelCommand $command): void
     {
         $user = $this->userRepository->ofIdOrFail($command->getUser()->getId());
         $travel = $this->travelRepository->ofSlugOrFail($command->getTravelSlug());

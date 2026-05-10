@@ -7,9 +7,8 @@ use App\Infrastructure\Application\QueryBus\QueryBus;
 use App\UI\Controller\http\QueryController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\Security;
-use Symfony\Component\Routing\Annotation\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Routing\Attribute\Route;
 
 class GetBestTravelsAPIController extends QueryController
 {
@@ -18,10 +17,7 @@ class GetBestTravelsAPIController extends QueryController
         parent::__construct($queryBus, $security);
     }
 
-    /**
-     * @Route("/api/travels/best/{maxtravels}",name="getBestTravels")
-     * @Method({"GET"})
-     */
+    #[Route('/api/travels/best/{maxtravels}', name: 'getBestTravels', methods: ['GET'])]
     public function listBestTravels(Request $request, int $maxtravels)
     {
         $query = new BestTravelsListQuery($maxtravels, 'createdAt');

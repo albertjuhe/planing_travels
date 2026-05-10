@@ -9,6 +9,7 @@ use App\Domain\Travel\Events\TravelWasAdded;
 use App\Domain\Travel\Repository\TravelRepository;
 use App\Domain\Travel\Model\Travel;
 use App\Domain\User\Repository\UserRepository;
+use Symfony\Component\String\Slugger\AsciiSlugger;
 
 class AddTravelService implements UsesCasesService
 {
@@ -32,7 +33,7 @@ class AddTravelService implements UsesCasesService
      *
      * @throws \Exception
      */
-    public function handle(AddTravelCommand $command)
+    public function __invoke(AddTravelCommand $command)
     {
         /** @var Travel $travel */
         $travel = $command->getTravel();
@@ -42,6 +43,13 @@ class AddTravelService implements UsesCasesService
         $this->userRepository->ofIdOrFail($user->getId());
 
         $travel->setUser($user);
+
+        if (!$travel->getSlug()) {
+            $slugger = new AsciiSlugger();
+            $slug = strtolower((string) $slugger->slug($travel->getTitle() ?? 'travel'));
+            $travel->setSlug($slug ?: 'travel-' . uniqid());
+        }
+
         DomainEventPublisher::instance()->publish(new TravelWasAdded($travel->toArray()));
         $this->travelRepository->save($travel);
 

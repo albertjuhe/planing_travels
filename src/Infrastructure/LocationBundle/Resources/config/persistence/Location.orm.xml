@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xmlns:gedmo="http://gediminasm.org/schemas/orm/doctrine-extensions-mapping"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                  https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="App\Domain\Location\Model\Location" table="location">
+        <id name="id" type="LocationId"/>
+        <field name="createdAt"   type="datetime" column="created_at" nullable="false"/>
+        <field name="updatedAt"   type="datetime" column="updated_at" nullable="false"/>
+        <field name="title"       type="string"   length="255"        nullable="false"/>
+        <field name="url"         type="string"   length="255"        nullable="true"/>
+        <field name="slug"        type="string"   length="500"/>
+        <field name="description" type="text"                         nullable="true"/>
+        <field name="stars"       type="integer"                      nullable="true"/>
+        <field name="visitAt"     type="date"     column="visit_at"   nullable="true"/>
+        <many-to-one field="mark" target-entity="App\Domain\Mark\Model\Mark" fetch="EAGER">
+            <join-column name="mark_id" referenced-column-name="id"/>
+        </many-to-one>
+        <many-to-one field="travel" target-entity="App\Domain\Travel\Model\Travel" inversed-by="location" fetch="LAZY">
+            <join-column name="travel_id" referenced-column-name="id"/>
+        </many-to-one>
+        <many-to-one field="typeLocation" target-entity="App\Domain\TypeLocation\Model\TypeLocation" fetch="EAGER">
+            <join-column name="typeLocation_id" referenced-column-name="id"/>
+        </many-to-one>
+        <one-to-many field="visitDates" target-entity="App\Domain\Location\Model\LocationVisitDate" mapped-by="location" fetch="EAGER" orphan-removal="true">
+            <cascade><cascade-all/></cascade>
+            <order-by><order-by-field name="position" direction="ASC"/></order-by>
+        </one-to-many>
+        <one-to-many field="notas" target-entity="App\Domain\Note\Model\Note" mapped-by="location" fetch="LAZY">
+            <cascade><cascade-all/></cascade>
+        </one-to-many>
+        <one-to-many field="images" target-entity="App\Domain\Images\Model\Images" mapped-by="location" fetch="LAZY">
+            <cascade><cascade-persist/></cascade>
+        </one-to-many>
+    </entity>
+
+</doctrine-mapping>

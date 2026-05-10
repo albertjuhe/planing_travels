@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                  https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="App\Domain\Mark\Model\Mark" table="mark">
+        <id name="id" type="string" length="150"/>
+        <embedded name="geoLocation" class="App\Domain\Travel\ValueObject\GeoLocation" use-column-prefix="false"/>
+        <field name="title"     type="string"   length="255" nullable="false"/>
+        <field name="createdAt" type="datetime"              nullable="false"/>
+        <field name="updatedAt" type="datetime"              nullable="false"/>
+        <field name="json"      type="text"      column="description" nullable="true"/>
+        <lifecycle-callbacks/>
+    </entity>
+
+</doctrine-mapping>

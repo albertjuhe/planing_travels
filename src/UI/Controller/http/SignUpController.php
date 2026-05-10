@@ -7,10 +7,10 @@ use App\Infrastructure\UserBundle\Form\UserType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use App\Infrastructure\UserBundle\Repository\DoctrineUserRepository;
 use App\Domain\User\Repository\UserRepository;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use App\Application\UseCases\User\SignUpUserService;
 
 class SignUpController extends AbstractController
@@ -28,21 +28,14 @@ class SignUpController extends AbstractController
         $this->userRepository = $userRepository;
     }
 
-    /**
-     * @Route("/{_locale}/register",name="private_register")
-     *
-     * @param Request                      $request
-     * @param UserPasswordEncoderInterface $passwordEncoder
-     *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
-     */
-    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder)
+    #[Route('/{_locale}/register', name: 'private_register')]
+    public function register(Request $request, UserPasswordHasherInterface $passwordHasher)
     {
         $user = new User();
         $form = $this->createForm(UserType::class, $user, ['attr' => ['class' => 'form-signin']]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $signUpUserService = new SignUpUserService($this->userRepository, $passwordEncoder);
+            $signUpUserService = new SignUpUserService($this->userRepository, $passwordHasher);
             $signUpUserService->execute($user);
 
             return $this->redirectToRoute('main_private');

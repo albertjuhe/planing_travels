@@ -8,8 +8,8 @@ use App\Domain\Budget\Model\TravelExpense;
 use App\Domain\User\Model\User;
 use App\Infrastructure\Application\QueryBus\QueryBus;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Bundle\SecurityBundle\Security;
 
 class ShowTravelBudgetController extends QueryController
 {
@@ -21,9 +21,7 @@ class ShowTravelBudgetController extends QueryController
         $this->em = $em;
     }
 
-    /**
-     * @Route("/{_locale}/travel/{slug}/budget", name="show_travel_budget")
-     */
+    #[Route('/{_locale}/travel/{slug}/budget', name: 'show_travel_budget')]
     public function showTravelBudget(string $slug)
     {
         /** @var User|null $currentUser */

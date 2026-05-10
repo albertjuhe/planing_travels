@@ -8,10 +8,12 @@ use App\Domain\Event\Repository\EventStore;
 use App\Domain\Travel\Repository\TravelRepository;
 use App\EventSubscriber\SymfonyEventSubscriber;
 use App\Infrastructure\TravelBundle\Notification\TravelEventSubscriber;
-use League\Tactician\Middleware;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Messenger\Envelope;
+use Symfony\Component\Messenger\Middleware\MiddlewareInterface;
+use Symfony\Component\Messenger\Middleware\StackInterface;
 
-class DomainEventsMiddleware implements Middleware
+class DomainEventsMiddleware implements MiddlewareInterface
 {
     protected $eventStore;
 
@@ -32,10 +34,8 @@ class DomainEventsMiddleware implements Middleware
         DomainEventPublisher::instance()->subscribe($travelEventSubscriber);
     }
 
-    public function execute($command, callable $next)
+    public function handle(Envelope $envelope, StackInterface $stack): Envelope
     {
-        $returnValue = $next($command);
-
-        return $returnValue;
+        return $stack->next()->handle($envelope, $stack);
     }
 }

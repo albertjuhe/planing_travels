@@ -6,9 +6,9 @@ use App\Application\Command\Travel\PublishTravelCommand;
 use App\Application\Command\Travel\UnpublishTravelCommand;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use App\Domain\User\Exceptions\UserDoesntExists;
-use League\Tactician\CommandBus;
+use Symfony\Component\Messenger\MessageBusInterface;
 
 class PublishTravelController extends CommandController
 {
@@ -18,42 +18,31 @@ class PublishTravelController extends CommandController
      * @param $travelRepository
      * @param $commandBus
      */
-    public function __construct(CommandBus $commandBus)
+    public function __construct(MessageBusInterface $commandBus)
     {
         parent::__construct($commandBus);
     }
 
-    /**
-     * @Route("/travel/publish/{slug}",name="publishTravel")
-     *
-     * @param Request $request
-     * @param $slug
-     *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
-     *
-     * @throws UserDoesntExists
-     */
+    #[Route('/travel/publish/{slug}', name: 'publishTravel')]
     public function publishTravel(Request $request, string $slug)
     {
         if (!$this->getUser()) {
             throw new UserDoesntExists();
         }
         $publishTravelCommand = new PublishTravelCommand($slug, $this->getUser());
-        $this->commandBus->handle($publishTravelCommand);
+        $this->commandBus->dispatch($publishTravelCommand);
 
         return $this->redirectToRoute('updateTravel', ['slug' => $slug]);
     }
 
-    /**
-     * @Route("/travel/unpublish/{slug}", name="unpublishTravel")
-     */
+    #[Route('/travel/unpublish/{slug}', name: 'unpublishTravel')]
     public function unpublishTravel(Request $request, string $slug)
     {
         if (!$this->getUser()) {
             throw new UserDoesntExists();
         }
         $command = new UnpublishTravelCommand($slug, $this->getUser());
-        $this->commandBus->handle($command);
+        $this->commandBus->dispatch($command);
 
         return $this->redirectToRoute('updateTravel', ['slug' => $slug]);
     }

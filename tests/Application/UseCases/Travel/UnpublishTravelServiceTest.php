@@ -13,7 +13,7 @@ use App\Tests\Infrastructure\TravelBundle\Repository\InMemoryTravelRepository;
 
 class UnpublishTravelServiceTest extends TravelService
 {
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
     }
@@ -25,13 +25,13 @@ class UnpublishTravelServiceTest extends TravelService
 
         $publishCommand = new PublishTravelCommand($travel->getSlug(), $user);
         $publishService = new PublishTravelService($this->travelRepository, $this->userRepository);
-        $publishService->handle($publishCommand);
+        $publishService->__invoke($publishCommand);
 
         $this->assertEquals(Travel::TRAVEL_PUBLISHED, $this->travelRepository->findTravelBySlug(InMemoryTravelRepository::TRAVEL_1)->getStatus());
 
         $unpublishCommand = new UnpublishTravelCommand($travel->getSlug(), $user);
         $unpublishService = new UnpublishTravelService($this->travelRepository, $this->userRepository);
-        $unpublishService->handle($unpublishCommand);
+        $unpublishService->__invoke($unpublishCommand);
 
         $result = $this->travelRepository->findTravelBySlug(InMemoryTravelRepository::TRAVEL_1);
         $this->assertEquals(Travel::TRAVEL_DRAFT, $result->getStatus());
@@ -47,12 +47,12 @@ class UnpublishTravelServiceTest extends TravelService
 
         $publishCommand = new PublishTravelCommand($travel->getSlug(), $user);
         $publishService = new PublishTravelService($this->travelRepository, $this->userRepository);
-        $publishService->handle($publishCommand);
+        $publishService->__invoke($publishCommand);
 
         $otherUser = UserMother::random();
         $unpublishCommand = new UnpublishTravelCommand($travel->getSlug(), $otherUser);
         $unpublishService = new UnpublishTravelService($this->travelRepository, $this->userRepository);
-        $unpublishService->handle($unpublishCommand);
+        $unpublishService->__invoke($unpublishCommand);
     }
 
     public function testUnpublishAlreadyDraftTravel(): void
@@ -64,7 +64,7 @@ class UnpublishTravelServiceTest extends TravelService
 
         $unpublishCommand = new UnpublishTravelCommand($travel->getSlug(), $user);
         $unpublishService = new UnpublishTravelService($this->travelRepository, $this->userRepository);
-        $unpublishService->handle($unpublishCommand);
+        $unpublishService->__invoke($unpublishCommand);
 
         $result = $this->travelRepository->findTravelBySlug(InMemoryTravelRepository::TRAVEL_1);
         $this->assertEquals(Travel::TRAVEL_DRAFT, $result->getStatus());

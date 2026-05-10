@@ -5,7 +5,7 @@ namespace App\Infrastructure\MarkBundle\Repository;
 use App\Domain\Mark\Model\Mark;
 use App\Domain\Mark\Repository\MarkRepository;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 
 class DoctrineMarkRepository extends ServiceEntityRepository implements MarkRepository
 {
@@ -33,6 +33,6 @@ class DoctrineMarkRepository extends ServiceEntityRepository implements MarkRepo
 
     public function save(Mark $mark): void
     {
-        $this->_em->persist($mark);
+        $this->getEntityManager()->persist($mark);
     }
 }

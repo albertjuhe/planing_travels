@@ -7,7 +7,7 @@ use App\Domain\Travel\Model\Travel;
 use App\Domain\Travel\ValueObject\TravelId;
 use App\Domain\User\Model\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 use App\Domain\Travel\Repository\TravelRepository;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 
@@ -81,7 +81,7 @@ class DoctrineTravelRepository extends ServiceEntityRepository implements Travel
      */
     public function save(Travel $travel): void
     {
-        $this->_em->persist($travel);
+        $this->getEntityManager()->persist($travel);
     }
 
     public function getAllTravelsByUser(int $userId, int $offset = 0, int $limit = 20): array

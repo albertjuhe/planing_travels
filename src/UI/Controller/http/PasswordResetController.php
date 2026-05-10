@@ -11,15 +11,13 @@ use App\Infrastructure\UserBundle\Repository\DoctrineUserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class PasswordResetController extends AbstractController
 {
-    /**
-     * @Route("/{_locale}/forgot-password", name="forgot_password")
-     */
+    #[Route('/{_locale}/forgot-password', name: 'forgot_password')]
     public function forgotPassword(
         Request $request,
         DoctrineUserRepository $userRepository,
@@ -71,15 +69,13 @@ class PasswordResetController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/{_locale}/reset-password/{token}", name="reset_password")
-     */
+    #[Route('/{_locale}/reset-password/{token}', name: 'reset_password')]
     public function resetPassword(
         Request $request,
         string $token,
         DoctrinePasswordResetTokenRepository $tokenRepository,
         DoctrineUserRepository $userRepository,
-        UserPasswordEncoderInterface $passwordEncoder,
+        UserPasswordHasherInterface $passwordHasher,
         $_locale
     ): Response {
         $resetToken = $tokenRepository->findValidTokenByPlainValue($token);
@@ -96,7 +92,7 @@ class PasswordResetController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $newPassword = (string) $form->get('newPassword')->getData();
             $user = $resetToken->getUser();
-            $encoded = $passwordEncoder->encodePassword($user, $newPassword);
+            $encoded = $passwordHasher->hashPassword($user, $newPassword);
 
             $user->setPassword($encoded);
             $resetToken->markAsUsed();

@@ -9,8 +9,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Bundle\SecurityBundle\Security;
 
 class UploadLocationImageAPIController extends AbstractController
 {
@@ -31,9 +31,7 @@ class UploadLocationImageAPIController extends AbstractController
         $this->webSocketNotifier = $webSocketNotifier;
     }
 
-    /**
-     * @Route("/api/location/{locationId}/image", name="uploadLocationImage", methods={"POST"})
-     */
+    #[Route('/api/location/{locationId}/image', name: 'uploadLocationImage', methods: ['POST'])]
     public function upload(Request $request, string $locationId): JsonResponse
     {
         $user = $this->security->getUser();

@@ -3,35 +3,28 @@
 namespace App\EventSubscriber;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use Symfony\Component\Security\Http\SecurityEvents;
 
-/**
- * Stores the locale of the user in the session after the
- * login. This can be used by the LocaleSubscriber afterwards.
- */
 class UserLocaleSubscriber implements EventSubscriberInterface
 {
-    private $session;
-
-    public function __construct(SessionInterface $session)
+    public function __construct(private RequestStack $requestStack)
     {
-        $this->session = $session;
     }
 
-    public function onInteractiveLogin(InteractiveLoginEvent $event)
+    public function onInteractiveLogin(InteractiveLoginEvent $event): void
     {
         $user = $event->getAuthenticationToken()->getUser();
         $request = $event->getRequest();
 
         if (null !== $user->getLocale()) {
-            $this->session->set('_locale', $user->getLocale());
+            $this->requestStack->getSession()->set('_locale', $user->getLocale());
             $request->attributes->set('_locale', $user->getLocale());
         }
     }
 
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             SecurityEvents::INTERACTIVE_LOGIN => [['onInteractiveLogin', 15]],

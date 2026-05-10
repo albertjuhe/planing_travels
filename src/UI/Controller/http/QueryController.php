@@ -6,7 +6,7 @@ use App\Domain\User\Exceptions\UserDoesntExists;
 use App\Domain\User\Model\User;
 use App\Infrastructure\Application\QueryBus\QueryBus;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class QueryController extends AbstractController

@@ -4,16 +4,11 @@ namespace App\UI\Controller\http;
 
 use App\Application\Query\Travel\ShowTravelBySlugQuery;
 use App\Domain\User\Model\User;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class ShowTravelController extends QueryController
 {
-    /**
-     * @param string $slug
-     * @Route("/{_locale}/travel/{slug}",name="show_travel")
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
+    #[Route('/{_locale}/travel/{slug}', name: 'show_travel')]
     public function showTravel(string $slug)
     {
         /** @var User|null $currentUser */

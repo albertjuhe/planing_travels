@@ -10,7 +10,7 @@ use App\Domain\User\ValueObject\UserId;
 
 class DeleteLocationServiceTest extends LocationService
 {
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
     }
@@ -53,7 +53,7 @@ class DeleteLocationServiceTest extends LocationService
             $this->webSocketNotifier
         );
 
-        $deleteLocationService->handle($deleteLocationCommand);
+        $deleteLocationService->__invoke($deleteLocationCommand);
     }
 
     public function testDeleteLocationNotifiesWithCorrectTravelId(): void
@@ -81,7 +81,7 @@ class DeleteLocationServiceTest extends LocationService
             $this->webSocketNotifier
         );
 
-        $deleteLocationService->handle($deleteLocationCommand);
+        $deleteLocationService->__invoke($deleteLocationCommand);
     }
 
     public function testDeleteNonExistentLocationThrows(): void
@@ -119,6 +119,6 @@ class DeleteLocationServiceTest extends LocationService
             $this->webSocketNotifier
         );
 
-        $deleteLocationService->handle($deleteLocationCommand);
+        $deleteLocationService->__invoke($deleteLocationCommand);
     }
 }

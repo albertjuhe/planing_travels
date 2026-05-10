@@ -1,18 +1,11 @@
 parameters:
-    # Adds a fallback DATABASE_URL if the env var is not set.
-    # This allows you to run cache:warmup even if your
-    # environment variables are not available yet.
-    # You should not need to change this value.
     env(DATABASE_URL): ''
 
 doctrine:
     dbal:
-        # configure these for your database server
         driver: 'pdo_mysql'
-        server_version: '5.7'
+        server_version: '8.0'
         charset: utf8mb4
-
-        # With Symfony 3.3, remove the `resolve:` prefix
         url: '%env(resolve:DATABASE_URL)%'
         types:
             TravelId: App\Infrastructure\TravelBundle\Doctrine\Types\DoctrineTraveIdType
@@ -20,62 +13,61 @@ doctrine:
             UserId: App\Infrastructure\UserBundle\Doctrine\Types\DoctrineUserIdType
     orm:
         auto_generate_proxy_classes: '%kernel.debug%'
-        naming_strategy: doctrine.orm.naming_strategy.underscore
-        auto_mapping: true
+        naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
+        auto_mapping: false
         mappings:
             Travel:
-               type: yml
-               prefix: App\Domain\Travel\Model
-               dir: '%kernel.root_dir%/../src/Infrastructure/TravelBundle/Resources/config/persistence/Model'
-               is_bundle: false
+                type: xml
+                prefix: App\Domain\Travel\Model
+                dir: '%kernel.project_dir%/src/Infrastructure/TravelBundle/Resources/config/persistence/Model'
+                is_bundle: false
             Gpx:
-                type: yml
+                type: xml
                 prefix: App\Domain\Gpx\Model
-                dir: '%kernel.root_dir%/../src/Infrastructure/GpxBundle/Resources/config/persistence'
+                dir: '%kernel.project_dir%/src/Infrastructure/GpxBundle/Resources/config/persistence'
                 is_bundle: false
             Images:
-                type: yml
+                type: xml
                 prefix: App\Domain\Images\Model
-                dir: '%kernel.root_dir%/../src/Infrastructure/ImagesBundle/Resources/config/persistence'
+                dir: '%kernel.project_dir%/src/Infrastructure/ImagesBundle/Resources/config/persistence'
                 is_bundle: false
             Location:
-                type: yml
+                type: xml
                 prefix: App\Domain\Location\Model
-                dir: '%kernel.root_dir%/../src/Infrastructure/LocationBundle/Resources/config/persistence'
+                dir: '%kernel.project_dir%/src/Infrastructure/LocationBundle/Resources/config/persistence'
                 is_bundle: false
             Mark:
-                type: yml
+                type: xml
                 prefix: App\Domain\Mark\Model
-                dir: '%kernel.root_dir%/../src/Infrastructure/MarkBundle/Resources/config/persistence'
+                dir: '%kernel.project_dir%/src/Infrastructure/MarkBundle/Resources/config/persistence'
                 is_bundle: false
             Note:
-                type: yml
+                type: xml
                 prefix: App\Domain\Note\Model
-                dir: '%kernel.root_dir%/../src/Infrastructure/NoteBundle/Resources/config/persistence'
+                dir: '%kernel.project_dir%/src/Infrastructure/NoteBundle/Resources/config/persistence'
                 is_bundle: false
             TypeLocation:
-                type: yml
+                type: xml
                 prefix: App\Domain\TypeLocation\Model
-                dir: '%kernel.root_dir%/../src/Infrastructure/TypeLocationBundle/Resources/config/persistence'
+                dir: '%kernel.project_dir%/src/Infrastructure/TypeLocationBundle/Resources/config/persistence'
                 is_bundle: false
             GeoLocation:
-                type: yml
+                type: xml
                 prefix: App\Domain\Travel\ValueObject
-                dir: '%kernel.root_dir%/../src/Infrastructure/TravelBundle/Resources/config/persistence/ValueObject'
+                dir: '%kernel.project_dir%/src/Infrastructure/TravelBundle/Resources/config/persistence/ValueObject'
                 is_bundle: false
             User:
-                type: yml
+                type: xml
                 prefix: App\Domain\User\Model
-                dir: '%kernel.root_dir%/../src/Infrastructure/UserBundle/Resources/config/persistence'
+                dir: '%kernel.project_dir%/src/Infrastructure/UserBundle/Resources/config/persistence'
                 is_bundle: false
             StoredEvent:
-                type: yml
+                type: xml
                 prefix: App\Domain\Event\Model
-                dir: '%kernel.root_dir%/../src/Infrastructure/EventBundle/Resources/config/persistence'
+                dir: '%kernel.project_dir%/src/Infrastructure/EventBundle/Resources/config/persistence'
                 is_bundle: false
             Budget:
-                type: yml
+                type: xml
                 prefix: App\Domain\Budget\Model
-                dir: '%kernel.root_dir%/../src/Infrastructure/BudgetBundle/Resources/config/persistence'
+                dir: '%kernel.project_dir%/src/Infrastructure/BudgetBundle/Resources/config/persistence'
                 is_bundle: false
-

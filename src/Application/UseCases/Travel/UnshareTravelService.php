@@ -23,7 +23,7 @@ class UnshareTravelService implements UsesCasesService
         $this->userRepository = $userRepository;
     }
 
-    public function handle(UnshareTravelCommand $command): void
+    public function __invoke(UnshareTravelCommand $command): void
     {
         $travel = $this->travelRepository->ofIdOrFail($command->getTravelId());
 
