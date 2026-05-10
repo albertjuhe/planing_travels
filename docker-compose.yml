@@ -42,6 +42,8 @@ services:
       - MYSQL_ROOT_PASSWORD=root
     volumes:
       - ${PWD}/Docker/migrations:/docker-entrypoint-initdb.d
+      # ESTA ES LA LÍNEA CLAVE PARA LA PERSISTENCIA:
+      - ./Docker/db_data:/var/lib/mysql
 
   adminer:
     image: adminer
