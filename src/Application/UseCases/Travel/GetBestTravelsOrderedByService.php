@@ -3,10 +3,10 @@
 namespace App\Application\UseCases\Travel;
 
 use App\Application\Query\Travel\BestTravelsListQuery;
-use App\Application\UseCases\usesCasesService;
+use App\Application\UseCases\UsesCasesService;
 use App\Domain\Travel\Repository\TravelReadModelRepository;
 
-class GetBestTravelsOrderedByService implements usesCasesService
+class GetBestTravelsOrderedByService implements UsesCasesService
 {
     private $travelReadModelRepository;
 

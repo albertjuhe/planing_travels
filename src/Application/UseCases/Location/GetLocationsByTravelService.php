@@ -10,7 +10,7 @@ use App\Domain\Travel\Model\Travel;
 use App\Domain\Travel\Repository\TravelRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
-class GetLocationsByTravelService implements usesCasesService
+class GetLocationsByTravelService implements UsesCasesService
 {
     public function __construct(
         private TravelRepository $travelRepository,
