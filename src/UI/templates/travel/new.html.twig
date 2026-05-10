@@ -563,31 +563,26 @@
     });
 
     /* ── Flatpickr date pickers ── */
-    function writeSelectsDate(fieldId, date) {
-        if (!date) return;
-        var y = document.getElementById(fieldId + '_year');
-        var m = document.getElementById(fieldId + '_month');
-        var d = document.getElementById(fieldId + '_day');
-        if (!y || !m || !d) return;
-        y.value = date.getFullYear();
-        m.value = date.getMonth() + 1;
-        d.value = date.getDate();
-    }
-
-    var startFieldId = '{{ travelForm.startAt.vars.id }}';
-    var endFieldId   = '{{ travelForm.endAt.vars.id }}';
+    var startInput = document.getElementById('{{ travelForm.startAt.vars.id }}');
+    var endInput   = document.getElementById('{{ travelForm.endAt.vars.id }}');
 
     flatpickr('#nt-start-picker', {
         dateFormat: 'd M Y',
         onChange: function(dates) {
-            writeSelectsDate(startFieldId, dates[0]);
+            if (!dates[0] || !startInput) return;
+            var d = dates[0];
+            var pad = function(n) { return String(n).padStart(2, '0'); };
+            startInput.value = d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
         }
     });
 
     flatpickr('#nt-end-picker', {
         dateFormat: 'd M Y',
         onChange: function(dates) {
-            writeSelectsDate(endFieldId, dates[0]);
+            if (!dates[0] || !endInput) return;
+            var d = dates[0];
+            var pad = function(n) { return String(n).padStart(2, '0'); };
+            endInput.value = d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
         }
     });
 

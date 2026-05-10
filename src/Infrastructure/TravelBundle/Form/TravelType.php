@@ -20,8 +20,8 @@ class TravelType extends AbstractType
         $builder
             ->add('title', TextType::class)
             ->add('geoLocation', GeoLocationType::class)
-            ->add('startAt', DateType::class, ['years' => range(1950, (int) date('Y') + 10)])
-            ->add('endAt', DateType::class, ['years' => range(1950, (int) date('Y') + 10)])
+            ->add('startAt', DateType::class, ['widget' => 'single_text', 'required' => false, 'attr' => ['class' => 'nt-date-widget']])
+            ->add('endAt', DateType::class, ['widget' => 'single_text', 'required' => false, 'attr' => ['class' => 'nt-date-widget']])
             ->add('description', TextareaType::class)
             ->add('photo', FileType::class, [
                 'label' => 'Cover image',

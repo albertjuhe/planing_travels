@@ -3,6 +3,7 @@
 namespace App\Infrastructure\TravelBundle\Doctrine\Types;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -11,8 +12,8 @@ class GeoLocationType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('lat')
-            ->add('lng')
+            ->add('lat', NumberType::class, ['scale' => 6])
+            ->add('lng', NumberType::class, ['scale' => 6])
         ;
     }
 
