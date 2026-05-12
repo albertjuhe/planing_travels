@@ -58,6 +58,9 @@ class Location extends AggregateRoot
     /** @var Collection|LocationVisitDate[] */
     private $visitDates;
 
+    /** @var string|null */
+    private $timezone;
+
     public function __construct()
     {
         $this->id = new LocationId();
@@ -495,6 +498,18 @@ class Location extends AggregateRoot
     public function hasAnyVisitDate(): bool
     {
         return !$this->getVisitDates()->isEmpty();
+    }
+
+    public function getTimezone(): ?string
+    {
+        return $this->timezone;
+    }
+
+    public function setTimezone(?string $timezone): self
+    {
+        $this->timezone = $timezone;
+
+        return $this;
     }
 
     public function toArray()

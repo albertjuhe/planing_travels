@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                  https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="App\Domain\Money\Model\ExchangeRate" table="exchange_rates">
+        <unique-constraints>
+            <unique-constraint name="uq_exchange_rate" columns="from_currency,to_currency,valid_for_date"/>
+        </unique-constraints>
+        <id name="id" type="integer">
+            <generator strategy="IDENTITY"/>
+        </id>
+        <field name="fromCurrency" type="string" length="3" column="from_currency" nullable="false"/>
+        <field name="toCurrency" type="string" length="3" column="to_currency" nullable="false"/>
+        <field name="rate" type="float" nullable="false"/>
+        <field name="fetchedAt" type="datetime" column="fetched_at" nullable="false"/>
+        <field name="validForDate" type="date" column="valid_for_date" nullable="false"/>
+    </entity>
+
+</doctrine-mapping>

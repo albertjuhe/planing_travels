@@ -15,6 +15,7 @@
         <field name="description" type="text"                         nullable="true"/>
         <field name="stars"       type="integer"                      nullable="true"/>
         <field name="visitAt"     type="date"     column="visit_at"   nullable="true"/>
+        <field name="timezone"    type="string"   length="64"         nullable="true"/>
         <many-to-one field="mark" target-entity="App\Domain\Mark\Model\Mark" fetch="EAGER">
             <join-column name="mark_id" referenced-column-name="id"/>
         </many-to-one>

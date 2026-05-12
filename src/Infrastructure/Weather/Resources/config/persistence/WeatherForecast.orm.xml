@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                  https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="App\Domain\Weather\Model\WeatherForecast" table="weather_forecast">
+        <unique-constraints>
+            <unique-constraint name="uq_weather_forecast" columns="lat,lng,forecast_date"/>
+        </unique-constraints>
+        <indexes>
+            <index name="weather_date_idx" columns="forecast_date"/>
+        </indexes>
+        <id name="id" type="integer">
+            <generator strategy="IDENTITY"/>
+        </id>
+        <field name="lat" type="float" nullable="false"/>
+        <field name="lng" type="float" nullable="false"/>
+        <field name="forecastDate" type="date" column="forecast_date" nullable="false"/>
+        <field name="tempMin" type="float" column="temp_min" nullable="true"/>
+        <field name="tempMax" type="float" column="temp_max" nullable="true"/>
+        <field name="weatherCode" type="integer" column="weather_code" nullable="true"/>
+        <field name="icon" type="string" length="10" nullable="true"/>
+        <field name="description" type="string" length="100" nullable="true"/>
+        <field name="fetchedAt" type="datetime" column="fetched_at" nullable="false"/>
+        <field name="isHistorical" type="boolean" column="is_historical" nullable="false"/>
+    </entity>
+
+</doctrine-mapping>
