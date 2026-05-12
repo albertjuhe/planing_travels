@@ -1,0 +1,402 @@
+{# UI/templates/travel/journalTravel.html.twig
+   Rendered as a tab panel inside showTravel.html.twig
+   Variables expected: travel, canEdit, app.user
+#}
+
+<div class="journal-panel">
+
+    {# ── Header ── #}
+    <div class="journal-header">
+        <div>
+            <h2 class="journal-title">📖 Travel Journal</h2>
+            <p class="journal-subtitle">Day-by-day memories from this trip</p>
+        </div>
+        {% if canEdit %}
+            <button id="journal-new-btn" class="journal-btn-primary">
+                <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><path d="M8 1v14M1 8h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                New entry
+            </button>
+        {% endif %}
+    </div>
+
+    {# ── New / Edit form (hidden by default) ── #}
+    {% if canEdit %}
+    <div id="journal-form-panel" class="journal-form-panel" style="display:none;">
+        <div class="journal-form-inner">
+            <div class="journal-form-row">
+                <div class="journal-form-group" style="flex:0 0 160px;">
+                    <label class="journal-label">Date</label>
+                    <input id="journal-date" type="date" class="journal-input"
+                           value="{{ 'now'|date('Y-m-d') }}"
+                           min="{{ travel.startAt|date('Y-m-d') }}"
+                           max="{{ travel.endAt|date('Y-m-d') }}">
+                </div>
+                <div class="journal-form-group" style="flex:1;">
+                    <label class="journal-label">Title <span style="color:#9ca3af;font-weight:400;">(optional)</span></label>
+                    <input id="journal-entry-title" type="text" class="journal-input" placeholder="Day title…">
+                </div>
+                <div class="journal-form-group" style="flex:0 0 auto;">
+                    <label class="journal-label">Mood</label>
+                    <div class="journal-mood-row" id="journal-mood-picker">
+                        <button type="button" class="journal-mood-btn" data-mood="happy" title="Happy">😊</button>
+                        <button type="button" class="journal-mood-btn" data-mood="excited" title="Excited">🤩</button>
+                        <button type="button" class="journal-mood-btn" data-mood="relaxed" title="Relaxed">😌</button>
+                        <button type="button" class="journal-mood-btn" data-mood="tired" title="Tired">😴</button>
+                        <button type="button" class="journal-mood-btn" data-mood="adventurous" title="Adventurous">🧗</button>
+                    </div>
+                </div>
+            </div>
+
+            {# Locations visited on selected date (dynamic suggestion) #}
+            <div id="journal-locations-suggestion" class="journal-locations-suggestion" style="display:none;">
+                <span style="font-size:12px;color:#6b7280;">📍 Locations on this day:</span>
+                <span id="journal-locations-pills"></span>
+            </div>
+
+            <div class="journal-form-group">
+                <label class="journal-label">Your story</label>
+                <textarea id="journal-content" class="journal-textarea" rows="8" placeholder="Write about your day…"></textarea>
+            </div>
+
+            <div class="journal-form-actions">
+                <button id="journal-cancel-btn" type="button" class="journal-btn-secondary">Cancel</button>
+                <button id="journal-save-btn" type="button" class="journal-btn-primary">Save entry</button>
+            </div>
+
+            <div id="journal-form-feedback" style="display:none;margin-top:10px;padding:10px 14px;border-radius:8px;font-size:14px;"></div>
+        </div>
+    </div>
+    {% endif %}
+
+    {# ── Timeline ── #}
+    <div id="journal-timeline" class="journal-timeline">
+        <div class="journal-loading">Loading journal…</div>
+    </div>
+
+</div>
+
+{# ── Styles ── #}
+<style>
+.journal-panel { padding: 24px 0; }
+.journal-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 12px; }
+.journal-title { font-size: 22px; font-weight: 700; color: #1a2e4a; margin: 0 0 4px; }
+.journal-subtitle { font-size: 14px; color: #6b7280; margin: 0; }
+.journal-btn-primary { display: inline-flex; align-items: center; gap: 8px; background: #f39c12; color: #fff; border: none; padding: 10px 20px; border-radius: 24px; font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+.journal-btn-primary:hover { background: #e67e22; }
+.journal-btn-secondary { display: inline-flex; align-items: center; gap: 8px; background: #f3f4f6; color: #374151; border: none; padding: 10px 20px; border-radius: 24px; font-size: 14px; font-weight: 600; cursor: pointer; }
+.journal-btn-secondary:hover { background: #e5e7eb; }
+.journal-form-panel { background: #fff; border: 1px solid #e5e7eb; border-radius: 16px; margin-bottom: 28px; overflow: hidden; }
+.journal-form-inner { padding: 24px; }
+.journal-form-row { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 14px; }
+.journal-form-group { display: flex; flex-direction: column; gap: 6px; flex: 1; }
+.journal-label { font-size: 13px; font-weight: 600; color: #374151; }
+.journal-input { padding: 9px 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 14px; outline: none; transition: border-color 0.15s; }
+.journal-input:focus { border-color: #f39c12; box-shadow: 0 0 0 3px rgba(243,156,18,0.1); }
+.journal-textarea { width: 100%; padding: 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 14px; font-family: inherit; resize: vertical; outline: none; box-sizing: border-box; transition: border-color 0.15s; }
+.journal-textarea:focus { border-color: #f39c12; box-shadow: 0 0 0 3px rgba(243,156,18,0.1); }
+.journal-mood-row { display: flex; gap: 6px; }
+.journal-mood-btn { background: #f3f4f6; border: 2px solid transparent; border-radius: 8px; font-size: 20px; width: 40px; height: 40px; cursor: pointer; transition: all 0.15s; }
+.journal-mood-btn:hover { background: #fef3c7; border-color: #f59e0b; }
+.journal-mood-btn.is-selected { background: #fef3c7; border-color: #f59e0b; transform: scale(1.15); }
+.journal-form-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 16px; }
+.journal-locations-suggestion { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 8px 12px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.journal-location-pill { display: inline-flex; align-items: center; background: #dcfce7; color: #166534; border-radius: 12px; padding: 2px 10px; font-size: 12px; cursor: pointer; margin: 2px; transition: background 0.15s; }
+.journal-location-pill:hover { background: #bbf7d0; }
+
+/* Timeline */
+.journal-timeline { display: flex; flex-direction: column; gap: 24px; }
+.journal-day-group {}
+.journal-day-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+.journal-day-date { font-size: 13px; font-weight: 700; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap; }
+.journal-day-line { flex: 1; height: 1px; background: #e5e7eb; }
+.journal-entry-card { background: #fff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px; position: relative; }
+.journal-entry-card:hover { box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+.journal-entry-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 10px; gap: 12px; }
+.journal-entry-meta { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.journal-entry-title { font-size: 16px; font-weight: 700; color: #1a2e4a; }
+.journal-entry-author { font-size: 12px; color: #9ca3af; }
+.journal-entry-mood { font-size: 20px; }
+.journal-entry-weather { font-size: 12px; color: #6b7280; background: #f3f4f6; border-radius: 6px; padding: 2px 8px; }
+.journal-entry-public-badge { font-size: 11px; background: #dcfce7; color: #166534; border-radius: 10px; padding: 2px 8px; font-weight: 600; }
+.journal-entry-content { font-size: 15px; color: #374151; line-height: 1.7; white-space: pre-wrap; word-break: break-word; }
+.journal-entry-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+.journal-action-btn { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; padding: 5px 12px; border-radius: 8px; border: 1px solid #e5e7eb; background: #fff; color: #6b7280; cursor: pointer; transition: all 0.15s; }
+.journal-action-btn:hover { background: #f3f4f6; color: #374151; }
+.journal-action-btn--danger:hover { background: #fef2f2; color: #dc2626; border-color: #fca5a5; }
+.journal-loading { text-align: center; color: #9ca3af; padding: 40px; font-size: 15px; }
+.journal-empty { text-align: center; padding: 60px 20px; color: #9ca3af; }
+.journal-empty-icon { font-size: 48px; display: block; margin-bottom: 12px; }
+</style>
+
+{# ── JS ── #}
+<script>
+(function () {
+    var travelId = '{{ travel.id }}';
+    var canEdit = {{ canEdit ? 'true' : 'false' }};
+    var isPublished = {{ travel.isPublished ? 'true' : 'false' }};
+    var selectedMood = null;
+    var editingEntryId = null;
+
+    var timeline = document.getElementById('journal-timeline');
+    var newBtn = document.getElementById('journal-new-btn');
+    var formPanel = document.getElementById('journal-form-panel');
+    var cancelBtn = document.getElementById('journal-cancel-btn');
+    var saveBtn = document.getElementById('journal-save-btn');
+    var dateInput = document.getElementById('journal-date');
+    var titleInput = document.getElementById('journal-entry-title');
+    var contentInput = document.getElementById('journal-content');
+    var feedback = document.getElementById('journal-form-feedback');
+    var moodPicker = document.getElementById('journal-mood-picker');
+    var locationsSuggestion = document.getElementById('journal-locations-suggestion');
+    var locationsPills = document.getElementById('journal-locations-pills');
+
+    // Locations data from travel (injected via Twig)
+    var travelLocations = [];
+    {% for loc in travel.location %}
+    travelLocations.push({
+        id: '{{ loc.id }}',
+        title: {{ loc.title|json_encode|raw }},
+        visitDates: {{ loc.visitDateStrings|json_encode|raw }}
+    });
+    {% endfor %}
+
+    function loadJournal() {
+        fetch('/public/index.php/api/travel/' + travelId + '/journal', {
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(function (r) { return r.json(); })
+        .then(function (data) { renderTimeline(data.journal || {}); })
+        .catch(function () {
+            timeline.innerHTML = '<div class="journal-loading">Could not load journal.</div>';
+        });
+    }
+
+    function renderTimeline(grouped) {
+        var dates = Object.keys(grouped).sort();
+        if (dates.length === 0) {
+            timeline.innerHTML = '<div class="journal-empty"><span class="journal-empty-icon">📖</span>No journal entries yet.' + (canEdit ? ' Add your first entry!' : '') + '</div>';
+            return;
+        }
+        var html = '';
+        dates.forEach(function (date) {
+            var entries = grouped[date];
+            html += '<div class="journal-day-group">';
+            html += '<div class="journal-day-header"><span class="journal-day-date">' + formatDate(date) + '</span><span class="journal-day-line"></span></div>';
+            entries.forEach(function (e) {
+                html += renderEntry(e);
+            });
+            html += '</div>';
+        });
+        timeline.innerHTML = html;
+        bindEntryActions();
+    }
+
+    function renderEntry(e) {
+        var weather = e.weatherSnapshot ? (e.weatherSnapshot.icon + ' ' + e.weatherSnapshot.tempMin + '°/' + e.weatherSnapshot.tempMax + '°') : '';
+        var publicBadge = e.isPublic ? '<span class="journal-entry-public-badge">🌍 Public</span>' : '';
+        var moodEmoji = e.moodEmoji ? '<span class="journal-entry-mood">' + e.moodEmoji + '</span>' : '';
+        var weatherBadge = weather ? '<span class="journal-entry-weather">' + weather + '</span>' : '';
+        var title = e.title ? '<span class="journal-entry-title">' + escHtml(e.title) + '</span>' : '';
+        var authorInfo = '<span class="journal-entry-author">by ' + escHtml(e.authorUsername) + ' · ' + e.createdAt + '</span>';
+
+        var actions = '';
+        if (canEdit) {
+            var visLabel = e.isPublic ? 'Make private' : 'Make public';
+            var visIcon = e.isPublic ? '🔒' : '🌍';
+            actions += '<button class="journal-action-btn" data-action="edit" data-id="' + e.id + '">✏️ Edit</button>';
+            if (isPublished) {
+                actions += '<button class="journal-action-btn" data-action="visibility" data-id="' + e.id + '" data-public="' + (e.isPublic ? '0' : '1') + '">' + visIcon + ' ' + visLabel + '</button>';
+            }
+            actions += '<button class="journal-action-btn journal-action-btn--danger" data-action="delete" data-id="' + e.id + '">🗑️ Delete</button>';
+        }
+
+        return '<div class="journal-entry-card" data-entry-id="' + e.id + '">' +
+            '<div class="journal-entry-header">' +
+                '<div class="journal-entry-meta">' + moodEmoji + title + weatherBadge + publicBadge + '</div>' +
+                '<div>' + authorInfo + '</div>' +
+            '</div>' +
+            '<div class="journal-entry-content">' + escHtml(e.content) + '</div>' +
+            (actions ? '<div class="journal-entry-actions">' + actions + '</div>' : '') +
+        '</div>';
+    }
+
+    function bindEntryActions() {
+        timeline.querySelectorAll('[data-action]').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                var action = btn.dataset.action;
+                var id = btn.dataset.id;
+                if (action === 'delete') { doDelete(id); }
+                if (action === 'visibility') { doVisibility(id, btn.dataset.public === '1'); }
+                if (action === 'edit') { doEdit(id); }
+            });
+        });
+    }
+
+    function doDelete(id) {
+        if (!confirm('Delete this journal entry?')) { return; }
+        fetch('/public/index.php/api/journal/entry/' + id, {
+            method: 'DELETE',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        }).then(function () { loadJournal(); });
+    }
+
+    function doVisibility(id, makePublic) {
+        fetch('/public/index.php/api/journal/entry/' + id + '/visibility', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+            body: JSON.stringify({ isPublic: makePublic })
+        }).then(function () { loadJournal(); });
+    }
+
+    function doEdit(id) {
+        var card = timeline.querySelector('[data-entry-id="' + id + '"]');
+        if (!card) { return; }
+        var content = card.querySelector('.journal-entry-content').textContent;
+        editingEntryId = id;
+        contentInput.value = content;
+        titleInput.value = card.querySelector('.journal-entry-title') ? card.querySelector('.journal-entry-title').textContent : '';
+        openForm();
+        saveBtn.textContent = 'Update entry';
+    }
+
+    // Mood picker
+    if (moodPicker) {
+        moodPicker.querySelectorAll('.journal-mood-btn').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                moodPicker.querySelectorAll('.journal-mood-btn').forEach(function (b) { b.classList.remove('is-selected'); });
+                if (selectedMood === btn.dataset.mood) {
+                    selectedMood = null;
+                } else {
+                    selectedMood = btn.dataset.mood;
+                    btn.classList.add('is-selected');
+                }
+            });
+        });
+    }
+
+    // Date change → suggest locations
+    if (dateInput) {
+        dateInput.addEventListener('change', function () { suggestLocations(dateInput.value); });
+        suggestLocations(dateInput.value);
+    }
+
+    function suggestLocations(dateStr) {
+        if (!locationsSuggestion || !locationsPills) { return; }
+        var matching = travelLocations.filter(function (l) { return l.visitDates.indexOf(dateStr) >= 0; });
+        if (matching.length === 0) {
+            locationsSuggestion.style.display = 'none';
+            return;
+        }
+        locationsSuggestion.style.display = 'flex';
+        locationsPills.innerHTML = matching.map(function (l) {
+            return '<span class="journal-location-pill" data-title="' + escAttr(l.title) + '">' + escHtml(l.title) + '</span>';
+        }).join('');
+        locationsPills.querySelectorAll('.journal-location-pill').forEach(function (pill) {
+            pill.addEventListener('click', function () {
+                contentInput.value += (contentInput.value ? '\n' : '') + '📍 ' + pill.dataset.title;
+                contentInput.focus();
+            });
+        });
+    }
+
+    // Form open/close
+    if (newBtn) {
+        newBtn.addEventListener('click', function () {
+            editingEntryId = null;
+            contentInput.value = '';
+            titleInput.value = '';
+            selectedMood = null;
+            if (moodPicker) { moodPicker.querySelectorAll('.journal-mood-btn').forEach(function (b) { b.classList.remove('is-selected'); }); }
+            saveBtn.textContent = 'Save entry';
+            openForm();
+        });
+    }
+
+    function openForm() {
+        formPanel.style.display = 'block';
+        formPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        feedback.style.display = 'none';
+    }
+
+    if (cancelBtn) {
+        cancelBtn.addEventListener('click', function () {
+            formPanel.style.display = 'none';
+            editingEntryId = null;
+        });
+    }
+
+    if (saveBtn) {
+        saveBtn.addEventListener('click', function () {
+            var content = contentInput.value.trim();
+            if (!content) {
+                showFeedback('error', 'Content is required.');
+                return;
+            }
+
+            saveBtn.disabled = true;
+            saveBtn.textContent = 'Saving…';
+
+            var payload = {
+                entryDate: dateInput ? dateInput.value : null,
+                content: content,
+                title: titleInput.value.trim() || null,
+                mood: selectedMood
+            };
+
+            var url, method;
+            if (editingEntryId) {
+                url = '/public/index.php/api/journal/entry/' + editingEntryId;
+                method = 'PUT';
+            } else {
+                url = '/public/index.php/api/travel/' + travelId + '/journal';
+                method = 'POST';
+            }
+
+            fetch(url, {
+                method: method,
+                headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+                body: JSON.stringify(payload)
+            })
+            .then(function (r) { return r.json(); })
+            .then(function (data) {
+                if (data.error) {
+                    showFeedback('error', data.error);
+                    saveBtn.disabled = false;
+                    saveBtn.textContent = editingEntryId ? 'Update entry' : 'Save entry';
+                } else {
+                    formPanel.style.display = 'none';
+                    editingEntryId = null;
+                    loadJournal();
+                }
+            })
+            .catch(function () {
+                showFeedback('error', 'Network error. Please try again.');
+                saveBtn.disabled = false;
+                saveBtn.textContent = editingEntryId ? 'Update entry' : 'Save entry';
+            });
+        });
+    }
+
+    function showFeedback(type, msg) {
+        feedback.textContent = msg;
+        feedback.style.display = 'block';
+        feedback.style.background = type === 'error' ? '#fef2f2' : '#f0fdf4';
+        feedback.style.color = type === 'error' ? '#dc2626' : '#166534';
+    }
+
+    function formatDate(dateStr) {
+        var d = new Date(dateStr + 'T12:00:00');
+        return d.toLocaleDateString(undefined, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+    }
+
+    function escHtml(s) {
+        return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    function escAttr(s) {
+        return String(s).replace(/"/g,'&quot;');
+    }
+
+    loadJournal();
+}());
+</script>

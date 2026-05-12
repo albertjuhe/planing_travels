@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                  https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="App\Domain\Journal\Model\JournalEntry" table="journal_entry">
+        <indexes>
+            <index name="journal_travel_idx" columns="travel_id"/>
+            <index name="journal_date_idx" columns="entry_date"/>
+            <index name="journal_author_idx" columns="author_id"/>
+        </indexes>
+        <id name="id" type="string" length="36">
+            <generator strategy="NONE"/>
+        </id>
+        <field name="entryDate" type="date" column="entry_date" nullable="false"/>
+        <field name="title" type="string" length="255" nullable="true"/>
+        <field name="content" type="text" nullable="false"/>
+        <field name="mood" type="string" length="20" nullable="true"/>
+        <field name="weatherSnapshot" type="text" column="weather_snapshot" nullable="true"/>
+        <field name="isPublic" type="boolean" column="is_public" nullable="false"/>
+        <field name="createdAt" type="datetime" column="created_at" nullable="false"/>
+        <field name="updatedAt" type="datetime" column="updated_at" nullable="false"/>
+        <many-to-one field="travel" target-entity="App\Domain\Travel\Model\Travel" fetch="LAZY">
+            <join-column name="travel_id" referenced-column-name="id" nullable="false"/>
+        </many-to-one>
+        <many-to-one field="author" target-entity="App\Domain\User\Model\User" fetch="LAZY">
+            <join-column name="author_id" referenced-column-name="id" nullable="false"/>
+        </many-to-one>
+        <one-to-many field="photos" target-entity="App\Domain\Journal\Model\JournalPhoto" mapped-by="entry" fetch="LAZY" orphan-removal="true">
+            <cascade><cascade-all/></cascade>
+            <order-by><order-by-field name="createdAt" direction="ASC"/></order-by>
+        </one-to-many>
+    </entity>
+
+</doctrine-mapping>

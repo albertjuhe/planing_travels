@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                  https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="App\Domain\Journal\Model\JournalPhoto" table="journal_photo">
+        <indexes>
+            <index name="journal_photo_entry_idx" columns="entry_id"/>
+        </indexes>
+        <id name="id" type="string" length="36">
+            <generator strategy="NONE"/>
+        </id>
+        <field name="filename" type="string" length="255" nullable="false"/>
+        <field name="caption" type="string" length="500" nullable="true"/>
+        <field name="takenAt" type="datetime" column="taken_at" nullable="true"/>
+        <field name="geoLat" type="float" column="geo_lat" nullable="true"/>
+        <field name="geoLng" type="float" column="geo_lng" nullable="true"/>
+        <field name="linkedLocationId" type="string" length="36" column="linked_location_id" nullable="true"/>
+        <field name="createdAt" type="datetime" column="created_at" nullable="false"/>
+        <many-to-one field="entry" target-entity="App\Domain\Journal\Model\JournalEntry" inversed-by="photos" fetch="LAZY">
+            <join-column name="entry_id" referenced-column-name="id" nullable="false" on-delete="CASCADE"/>
+        </many-to-one>
+    </entity>
+
+</doctrine-mapping>
