@@ -15,26 +15,24 @@ Demo: http://35.193.209.157:8000/public/index.php/
 - **Image Uploads** — upload and optimize images (auto-convert to WebP, resize to 1920px max)
 - **Read-only Mode** — ability to view travels without editing
 - **Watch Counter** — track travel views
-- **Markdown Support** — travel descriptions with markdown rendering
 
 ## Tech Stack
 
-### Backend — PHP / Symfony 4
-- **Symfony 4.4** — framework, routing, security (CSRF protection), forms, console
+### Backend — PHP 8.2 / Symfony 7
+- **Symfony 7.0** — framework, routing, security (CSRF protection), forms, console
 - **Doctrine ORM** — MySQL persistence with UUID primary keys (`ramsey/uuid-doctrine`), embeddables, custom mapping types, and Gedmo extensions (sluggable, timestampable)
-- **CQRS + Command Bus** — commands and queries dispatched through `league/tactician` with Doctrine transactional middleware
+- **CQRS + Command/Query Buses** — commands and queries dispatched through Symfony Messenger with two separate buses (`command.bus` and `query.bus`); `doctrine_transaction` middleware wraps command handlers in a Doctrine transaction; a custom `DomainEventsMiddleware` collects and dispatches domain events after each command
 - **Hexagonal Architecture / DDD** — domain, application, and infrastructure layers; no framework leaking into the domain
 - **JMS Serializer** — flexible serialization for API responses
 - **Symfony Messenger** — async message handling
-- **Guzzle 6.5** — HTTP client for internal service communication (PHP → Go WebSocket server)
+- **Guzzle 7** — HTTP client for internal service communication (PHP → Go WebSocket server)
 - **Symfony Security** — form-based authentication, role system (ROLE_USER, ROLE_ADMIN), travel ownership and sharing model
-- **Twig 2.16** — server-rendered templates with component includes
-- **KnpMarkdownBundle** — markdown support for travel descriptions
+- **Twig 3** — server-rendered templates with component includes
 - **Webpack Encore** — asset bundling with React components
 
 ### WebSocket Server — Go
 A standalone Go service (`PlanningTravelsSocketio/`) that manages real-time collaboration:
-- **gorilla/websocket** — WebSocket upgrade and connection management
+- **gorilla/websocket** — WebSocket upgrade and connection management (Go 1.20)
 - Room-based pub/sub: each travel has its own room; clients join via `GET /ws/{travelId}`
 - PHP broadcasts events to connected clients via `POST /travel/{travelId}/broadcast`
 - Real-time location updates, chat messages, and notifications
@@ -64,7 +62,7 @@ A standalone Go service (`PlanningTravelsSocketio/`) that manages real-time coll
 
 ### Prerequisites
 - Docker & Docker Compose
-- (Optional) PHP 7.4+ and Composer for local development
+- (Optional) PHP 8.2+ and Composer for local development
 
 ### Quick Start
 
@@ -149,7 +147,7 @@ src/
     └── templates/  # Twig templates
 ```
 
-Commands are dispatched through the tactician command bus, which wraps handlers in a Doctrine transaction. Queries return read models directly from the repository. The Go WebSocket server is intentionally decoupled — PHP calls it over HTTP after persisting a change, and the Go server fans the event out to all connected browser clients in that travel's room.
+Commands are dispatched through Symfony Messenger's `command.bus`, which wraps handlers in a Doctrine transaction via the `doctrine_transaction` middleware. A custom `DomainEventsMiddleware` collects and dispatches domain events after each command. Queries are dispatched through a separate `query.bus` and return read models directly from the repository. The Go WebSocket server is intentionally decoupled — PHP calls it over HTTP after persisting a change, and the Go server fans the event out to all connected browser clients in that travel's room.
 
 ## Database Migrations
 
