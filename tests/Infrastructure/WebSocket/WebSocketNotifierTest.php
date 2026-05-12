@@ -21,7 +21,7 @@ class WebSocketNotifierTest extends TestCase
         return new class('http://localhost:5555', $this->logger) extends WebSocketNotifier {
             public array $broadcasts = [];
 
-            protected function broadcast(string $travelId, array $payload): void
+            public function broadcast(string $travelId, array $payload): void
             {
                 $this->broadcasts[] = ['travelId' => $travelId, 'payload' => $payload];
             }

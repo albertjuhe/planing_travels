@@ -121,7 +121,7 @@ class WebSocketNotifier
         ]);
     }
 
-    protected function broadcast(string $travelId, array $payload): void
+    public function broadcast(string $travelId, array $payload): void
     {
         $url = $this->wsServerUrl.'/travel/'.$travelId.'/broadcast';
         $body = json_encode($payload);

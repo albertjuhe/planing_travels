@@ -141,3 +141,87 @@ services:
             - '@App\Domain\Event\Repository\EventStore'
             - '@event_dispatcher'
             - '@doctrine.travel.repository'
+
+    # Shared authorization service
+    App\Application\Service\TravelAuthorizationService: ~
+
+    # F4: Clone Travel
+    App\Application\UseCases\Travel\CloneTravelService:
+        arguments:
+            - '@doctrine.travel.repository'
+            - '@doctrine.user.repository'
+            - '@doctrine.orm.entity_manager'
+        tags:
+            - { name: messenger.message_handler, bus: command.bus }
+
+    App\Application\UseCases\Travel\GetTravelLineageService:
+        arguments: ['@doctrine.travel.repository']
+        tags:
+            - { name: messenger.message_handler, bus: query.bus }
+
+    # F3: Real-time — Currency
+    App\Infrastructure\Money\Frankfurter\FrankfurterExchangeRateProvider:
+        arguments:
+            $client: '@GuzzleHttp\Client'
+            $logger: '@logger'
+            $baseUrl: '%env(string:FRANKFURTER_BASE_URL)%'
+
+    App\Domain\Money\Service\ExchangeRateProvider:
+        alias: App\Infrastructure\Money\Frankfurter\FrankfurterExchangeRateProvider
+
+    App\Infrastructure\Money\Repository\DoctrineExchangeRateRepository: ~
+
+    App\UI\Twig\CurrencyExtension:
+        tags:
+            - { name: twig.extension }
+
+    # F3: Real-time — Weather
+    App\Infrastructure\Weather\OpenMeteo\OpenMeteoWeatherProvider:
+        arguments:
+            $client: '@GuzzleHttp\Client'
+            $logger: '@logger'
+            $baseUrl: '%env(string:OPENMETEO_BASE_URL)%'
+
+    App\Domain\Weather\Service\WeatherProvider:
+        alias: App\Infrastructure\Weather\OpenMeteo\OpenMeteoWeatherProvider
+
+    App\Infrastructure\Weather\Repository\DoctrineWeatherForecastRepository: ~
+
+    # F3: Real-time — Timezones
+    App\Infrastructure\TimeZone\GeoTimeZoneResolver: ~
+
+    # Guzzle HTTP client (shared)
+    GuzzleHttp\Client: ~
+
+    # F2: Journal
+    App\Infrastructure\JournalBundle\Repository\DoctrineJournalEntryRepository: ~
+
+    App\Domain\Journal\Repository\JournalEntryRepository:
+        alias: App\Infrastructure\JournalBundle\Repository\DoctrineJournalEntryRepository
+
+    App\Application\UseCases\Journal\AddJournalEntryService:
+        arguments:
+            - '@doctrine.travel.repository'
+            - '@doctrine.user.repository'
+            - '@App\Domain\Journal\Repository\JournalEntryRepository'
+            - '@App\Domain\Weather\Service\WeatherProvider'
+            - '@App\Infrastructure\Weather\Repository\DoctrineWeatherForecastRepository'
+        tags:
+            - { name: messenger.message_handler, bus: command.bus }
+
+    App\Application\UseCases\Journal\UpdateJournalEntryService:
+        arguments: ['@App\Domain\Journal\Repository\JournalEntryRepository']
+        tags:
+            - { name: messenger.message_handler, bus: command.bus }
+
+    App\Application\UseCases\Journal\DeleteJournalEntryService:
+        arguments: ['@App\Domain\Journal\Repository\JournalEntryRepository']
+        tags:
+            - { name: messenger.message_handler, bus: command.bus }
+
+    App\Application\UseCases\Journal\SetEntryPublicVisibilityService:
+        arguments:
+            - '@App\Domain\Journal\Repository\JournalEntryRepository'
+            - '@App\Infrastructure\WebSocket\WebSocketNotifier'
+        tags:
+            - { name: messenger.message_handler, bus: command.bus }

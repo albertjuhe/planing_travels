@@ -71,3 +71,18 @@ doctrine:
                 prefix: App\Domain\Budget\Model
                 dir: '%kernel.project_dir%/src/Infrastructure/BudgetBundle/Resources/config/persistence'
                 is_bundle: false
+            Journal:
+                type: xml
+                prefix: App\Domain\Journal\Model
+                dir: '%kernel.project_dir%/src/Infrastructure/JournalBundle/Resources/config/persistence'
+                is_bundle: false
+            ExchangeRate:
+                type: xml
+                prefix: App\Domain\Money\Model
+                dir: '%kernel.project_dir%/src/Infrastructure/Money/Resources/config/persistence'
+                is_bundle: false
+            WeatherForecast:
+                type: xml
+                prefix: App\Domain\Weather\Model
+                dir: '%kernel.project_dir%/src/Infrastructure/Weather/Resources/config/persistence'
+                is_bundle: false
