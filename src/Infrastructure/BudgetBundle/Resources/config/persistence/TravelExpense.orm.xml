@@ -5,22 +5,35 @@
                   https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
     <entity name="App\Domain\Budget\Model\TravelExpense" table="travel_expense">
+        <indexes>
+            <index name="expense_travel_idx" columns="travel_id"/>
+            <index name="expense_payer_idx" columns="payer_user_id"/>
+        </indexes>
         <id name="id" type="integer">
             <generator strategy="IDENTITY"/>
         </id>
-        <field name="description" type="string"   length="255"                    nullable="false"/>
-        <field name="amount"      type="decimal"  precision="10" scale="2"        nullable="false"/>
-        <field name="currency"    type="string"   length="3"                      nullable="false"/>
-        <field name="category"    type="string"   length="50"                     nullable="false"/>
-        <field name="expenseDate" type="date"     column="expense_date"           nullable="true"/>
-        <field name="createdAt"   type="datetime" column="created_at"             nullable="false"/>
-        <field name="updatedAt"   type="datetime" column="updated_at"             nullable="false"/>
+        <field name="description"            type="string"   length="255"                    nullable="false"/>
+        <field name="amount"                 type="decimal"  precision="10" scale="2"        nullable="false"/>
+        <field name="currency"               type="string"   length="3"                      nullable="false"/>
+        <field name="category"               type="string"   length="50"                     nullable="false"/>
+        <field name="splitMode"              type="string"   length="10"  column="split_mode" nullable="false"/>
+        <field name="amountInTravelCurrency" type="decimal"  precision="10" scale="2" column="amount_in_travel_currency" nullable="false"/>
+        <field name="exchangeRateAtCreation" type="float"    column="exchange_rate_at_creation" nullable="false"/>
+        <field name="expenseDate"            type="date"     column="expense_date"           nullable="true"/>
+        <field name="createdAt"              type="datetime" column="created_at"             nullable="false"/>
+        <field name="updatedAt"              type="datetime" column="updated_at"             nullable="false"/>
         <many-to-one field="travel" target-entity="App\Domain\Travel\Model\Travel" fetch="LAZY">
             <join-column name="travel_id" referenced-column-name="id"/>
+        </many-to-one>
+        <many-to-one field="payer" target-entity="App\Domain\User\Model\User" fetch="LAZY">
+            <join-column name="payer_user_id" referenced-column-name="id" nullable="true"/>
         </many-to-one>
         <many-to-one field="location" target-entity="App\Domain\Location\Model\Location" fetch="LAZY">
             <join-column name="location_id" referenced-column-name="id" nullable="true"/>
         </many-to-one>
+        <one-to-many field="shares" target-entity="App\Domain\Budget\Model\ExpenseShare" mapped-by="expense" fetch="LAZY" orphan-removal="true">
+            <cascade><cascade-all/></cascade>
+        </one-to-many>
         <lifecycle-callbacks/>
     </entity>
 

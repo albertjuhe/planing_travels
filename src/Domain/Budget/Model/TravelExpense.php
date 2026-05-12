@@ -4,6 +4,9 @@ namespace App\Domain\Budget\Model;
 
 use App\Domain\Location\Model\Location;
 use App\Domain\Travel\Model\Travel;
+use App\Domain\User\Model\User;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 class TravelExpense
 {
@@ -23,11 +26,17 @@ class TravelExpense
         self::CATEGORY_OTHER         => 'Other',
     ];
 
+    public const SPLIT_EQUAL = 'equal';
+    public const SPLIT_EXACT = 'exact';
+
     /** @var int */
     private $id;
 
     /** @var Travel */
     private $travel;
+
+    /** @var User|null */
+    private $payer;
 
     /** @var Location|null */
     private $location;
@@ -44,6 +53,15 @@ class TravelExpense
     /** @var string */
     private $category;
 
+    /** @var string */
+    private $splitMode;
+
+    /** @var float */
+    private $amountInTravelCurrency;
+
+    /** @var float */
+    private $exchangeRateAtCreation;
+
     /** @var \DateTime|null */
     private $expenseDate;
 
@@ -53,6 +71,9 @@ class TravelExpense
     /** @var \DateTime */
     private $updatedAt;
 
+    /** @var Collection|ExpenseShare[] */
+    private $shares;
+
     public function __construct(
         Travel $travel,
         string $description,
@@ -60,7 +81,11 @@ class TravelExpense
         string $category = self::CATEGORY_OTHER,
         string $currency = 'EUR',
         ?Location $location = null,
-        ?\DateTime $expenseDate = null
+        ?\DateTime $expenseDate = null,
+        ?User $payer = null,
+        string $splitMode = self::SPLIT_EQUAL,
+        float $amountInTravelCurrency = 0.0,
+        float $exchangeRateAtCreation = 1.0
     ) {
         $this->travel = $travel;
         $this->description = $description;
@@ -69,8 +94,13 @@ class TravelExpense
         $this->currency = strtoupper($currency);
         $this->location = $location;
         $this->expenseDate = $expenseDate;
+        $this->payer = $payer;
+        $this->splitMode = $splitMode;
+        $this->amountInTravelCurrency = $amountInTravelCurrency > 0 ? $amountInTravelCurrency : $amount;
+        $this->exchangeRateAtCreation = $exchangeRateAtCreation;
         $this->createdAt = new \DateTime();
         $this->updatedAt = new \DateTime();
+        $this->shares = new ArrayCollection();
     }
 
     public function getId(): int
@@ -156,5 +186,98 @@ class TravelExpense
     public function getUpdatedAt(): \DateTime
     {
         return $this->updatedAt;
+    }
+
+    public function getPayer(): ?User
+    {
+        return $this->payer;
+    }
+
+    public function setPayer(?User $payer): void
+    {
+        $this->payer = $payer;
+        $this->updatedAt = new \DateTime();
+    }
+
+    public function getSplitMode(): string
+    {
+        return $this->splitMode ?? self::SPLIT_EQUAL;
+    }
+
+    public function setSplitMode(string $splitMode): void
+    {
+        $this->splitMode = $splitMode;
+        $this->updatedAt = new \DateTime();
+    }
+
+    public function getAmountInTravelCurrency(): float
+    {
+        return $this->amountInTravelCurrency ?? $this->amount;
+    }
+
+    public function setAmountInTravelCurrency(float $amountInTravelCurrency): void
+    {
+        $this->amountInTravelCurrency = $amountInTravelCurrency;
+    }
+
+    public function getExchangeRateAtCreation(): float
+    {
+        return $this->exchangeRateAtCreation ?? 1.0;
+    }
+
+    public function setExchangeRateAtCreation(float $rate): void
+    {
+        $this->exchangeRateAtCreation = $rate;
+    }
+
+    public function getShares(): Collection
+    {
+        return $this->shares ?? new ArrayCollection();
+    }
+
+    public function addShare(ExpenseShare $share): void
+    {
+        if (!$this->shares->contains($share)) {
+            $this->shares->add($share);
+        }
+    }
+
+    public function clearShares(): void
+    {
+        $this->shares->clear();
+    }
+
+    public function splitEqually(array $participants, float $amountInTravelCurrency): void
+    {
+        if (empty($participants)) {
+            return;
+        }
+        $this->clearShares();
+        $this->splitMode = self::SPLIT_EQUAL;
+        $count = count($participants);
+        $shareAmount = round($this->amount / $count, 2);
+        $shareTravelAmount = round($amountInTravelCurrency / $count, 2);
+        foreach ($participants as $participant) {
+            $share = new ExpenseShare($this, $participant, $shareAmount, $shareTravelAmount);
+            $this->addShare($share);
+        }
+    }
+
+    public function splitExact(array $userIdToAmount, array $usersById, float $exchangeRate = 1.0): void
+    {
+        $this->clearShares();
+        $this->splitMode = self::SPLIT_EXACT;
+        foreach ($userIdToAmount as $userId => $amount) {
+            if (!isset($usersById[$userId])) {
+                continue;
+            }
+            $share = new ExpenseShare(
+                $this,
+                $usersById[$userId],
+                (float) $amount,
+                round((float) $amount * $exchangeRate, 2)
+            );
+            $this->addShare($share);
+        }
     }
 }
