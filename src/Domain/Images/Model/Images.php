@@ -16,6 +16,12 @@ class Images
 
     private $location;
 
+    /** @var bool */
+    private $isClonedReference = false;
+
+    /** @var int|null */
+    private $originalImageId;
+
     public function __construct()
     {
         $this->updatedAt = new \DateTime();
@@ -171,4 +177,39 @@ class Images
     {
         return $this->filename;
     }
-}
+
+    public function isClonedReference(): bool
+    {
+        return $this->isClonedReference;
+    }
+
+    public function setIsClonedReference(bool $isClonedReference): self
+    {
+        $this->isClonedReference = $isClonedReference;
+
+        return $this;
+    }
+
+    public function getOriginalImageId(): ?int
+    {
+        return $this->originalImageId;
+    }
+
+    public function setOriginalImageId(?int $originalImageId): self
+    {
+        $this->originalImageId = $originalImageId;
+
+        return $this;
+    }
+
+    public static function cloneReference(Images $source, $newLocation): self
+    {
+        $clone = new self();
+        $clone->setFilename($source->getFilename());
+        $clone->setOriginal($source->getOriginal());
+        $clone->setLocation($newLocation);
+        $clone->setIsClonedReference(true);
+        $clone->setOriginalImageId($source->getId());
+
+        return $clone;
+    }

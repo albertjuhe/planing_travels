@@ -152,4 +152,51 @@ class DoctrineTravelRepository extends ServiceEntityRepository implements Travel
             ->getQuery()
             ->getResult();
     }
+
+    /**
+     * Returns all travels that were cloned from the given source travel ID.
+     *
+     * @return Travel[]
+     */
+    public function findClonesOf(string $sourceTravelId): array
+    {
+        return $this->createQueryBuilder('t')
+            ->where('t.clonedFromTravelId = :sourceId')
+            ->setParameter('sourceId', $sourceTravelId)
+            ->orderBy('t.clonedAt', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Returns travels cloned by a specific user.
+     *
+     * @return Travel[]
+     */
+    public function findClonedByUser(int $userId): array
+    {
+        return $this->createQueryBuilder('t')
+            ->where('t.user = :userId')
+            ->andWhere('t.clonedFromTravelId IS NOT NULL')
+            ->setParameter('userId', $userId)
+            ->orderBy('t.clonedAt', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Returns travels owned by user that have been cloned by others.
+     *
+     * @return Travel[]
+     */
+    public function findTravelsClonedFromUser(int $userId): array
+    {
+        return $this->createQueryBuilder('t')
+            ->where('t.user = :userId')
+            ->andWhere('t.cloneCount > 0')
+            ->setParameter('userId', $userId)
+            ->orderBy('t.cloneCount', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
 }

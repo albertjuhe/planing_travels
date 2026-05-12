@@ -8,6 +8,7 @@ use App\Domain\Location\Model\Location;
 use App\Domain\Travel\ValueObject\TravelId;
 use App\Domain\User\Model\User;
 use App\Domain\Travel\ValueObject\GeoLocation;
+use App\Domain\Travel\Events\TravelWasCloned;
 use App\Domain\Travel\Events\TravelWasPublished;
 use App\Application\DataTransformers\Travel\TravelPublishDataTransformer;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -71,6 +72,21 @@ class Travel extends AggregateRoot
     /** @var int */
     private $status;
 
+    /** @var string|null */
+    private $clonedFromTravelId;
+
+    /** @var int|null */
+    private $clonedFromUserId;
+
+    /** @var string|null */
+    private $clonedFromTitle;
+
+    /** @var \DateTime|null */
+    private $clonedAt;
+
+    /** @var int */
+    private $cloneCount = 0;
+
     /**
      * Travel constructor.
      */
@@ -85,6 +101,31 @@ class Travel extends AggregateRoot
         $this->sharedusers = new ArrayCollection();
         $this->location = new ArrayCollection();
         $this->status = self::TRAVEL_DRAFT;
+        $this->cloneCount = 0;
+    }
+
+    public static function cloneFrom(Travel $source, User $by, ?string $newTitle, bool $copyGpx): Travel
+    {
+        $clone = new self();
+        $clone->setUser($by);
+        $clone->setTitle($newTitle ?? $source->getTitle() . ' (copy)');
+        $clone->setDescription($source->getDescription());
+        $clone->setGeoLocation($source->getGeoLocation());
+        if ($source->getPhoto()) {
+            $clone->setPhoto($source->getPhoto());
+        }
+        if ($source->getStartAt()) {
+            $clone->setStartAt(clone $source->getStartAt());
+        }
+        if ($source->getEndAt()) {
+            $clone->setEndAt(clone $source->getEndAt());
+        }
+        $clone->clonedFromTravelId = $source->getId()->id();
+        $clone->clonedFromUserId = $source->getUser()->getId()->id();
+        $clone->clonedFromTitle = $source->getTitle();
+        $clone->clonedAt = new \DateTime();
+
+        return $clone;
     }
 
     public function equals(Travel $travel)
@@ -438,6 +479,54 @@ class Travel extends AggregateRoot
     public function setStatus($status): void
     {
         $this->status = $status;
+    }
+
+    public function getClonedFromTravelId(): ?string
+    {
+        return $this->clonedFromTravelId;
+    }
+
+    public function getClonedFromUserId(): ?int
+    {
+        return $this->clonedFromUserId;
+    }
+
+    public function getClonedFromTitle(): ?string
+    {
+        return $this->clonedFromTitle;
+    }
+
+    public function getClonedAt(): ?\DateTime
+    {
+        return $this->clonedAt;
+    }
+
+    public function getCloneCount(): int
+    {
+        return $this->cloneCount ?? 0;
+    }
+
+    public function incrementCloneCount(): void
+    {
+        $this->cloneCount = ($this->cloneCount ?? 0) + 1;
+    }
+
+    public function isClone(): bool
+    {
+        return $this->clonedFromTravelId !== null;
+    }
+
+    public function recordCloned(string $targetTravelId, int $clonedByUserId): void
+    {
+        $this->record(
+            new TravelWasCloned(
+                $targetTravelId,
+                $this->getId()->id(),
+                $clonedByUserId,
+                $this->getUser()->getId()->id(),
+                $this->getTitle()
+            )
+        );
     }
 
     /**

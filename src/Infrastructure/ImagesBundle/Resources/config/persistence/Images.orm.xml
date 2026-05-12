@@ -12,6 +12,8 @@
         <field name="filename"  type="string"   length="255" nullable="false"/>
         <field name="createdAt" type="datetime"              nullable="false"/>
         <field name="updatedAt" type="datetime"              nullable="false"/>
+        <field name="isClonedReference" type="boolean" column="is_cloned_reference" nullable="false"/>
+        <field name="originalImageId" type="integer" column="original_image_id" nullable="true"/>
         <many-to-one field="location" target-entity="App\Domain\Location\Model\Location" inversed-by="images" fetch="LAZY">
             <join-column name="location_id" referenced-column-name="id"/>
         </many-to-one>

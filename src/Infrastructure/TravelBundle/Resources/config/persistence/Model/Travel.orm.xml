@@ -9,6 +9,7 @@
         <indexes>
             <index name="travel_user_id_idx" columns="user_id"/>
             <index name="travel_status_idx" columns="status"/>
+            <index name="travel_cloned_from_idx" columns="cloned_from_travel_id"/>
         </indexes>
         <id name="id" type="TravelId"/>
         <embedded name="geoLocation" class="App\Domain\Travel\ValueObject\GeoLocation" use-column-prefix="false"/>
@@ -23,6 +24,11 @@
         <field name="stars" type="integer" nullable="true"/>
         <field name="watch" type="integer" nullable="true"/>
         <field name="status" type="integer" nullable="true"/>
+        <field name="clonedFromTravelId" type="string" length="36" column="cloned_from_travel_id" nullable="true"/>
+        <field name="clonedFromUserId" type="integer" column="cloned_from_user_id" nullable="true"/>
+        <field name="clonedFromTitle" type="string" length="255" column="cloned_from_title" nullable="true"/>
+        <field name="clonedAt" type="datetime" column="cloned_at" nullable="true"/>
+        <field name="cloneCount" type="integer" column="clone_count" nullable="false"/>
         <many-to-one field="user" target-entity="App\Domain\User\Model\User" fetch="LAZY">
             <join-column name="user_id" referenced-column-name="id"/>
         </many-to-one>

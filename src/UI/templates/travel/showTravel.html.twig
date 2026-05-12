@@ -1664,6 +1664,23 @@
                             Home
                         </a>
                         <h1 class="pa-header__title">{{ travel.title }}</h1>
+                        {% if travel.clonedFromTitle %}
+                            <span style="font-size:12px;color:rgba(255,255,255,0.65);margin-top:2px;">
+                                📍 Inspired by
+                                {% if travel.clonedFromTravelId %}
+                                    <a href="{{ path('showTravel', {'_locale': app.request.locale, 'travelSlug': travel.clonedFromTravelId}) }}"
+                                       style="color:rgba(255,255,255,0.85);text-decoration:underline;"
+                                       title="View original travel">
+                                        {{ travel.clonedFromTitle }}
+                                    </a>
+                                {% else %}
+                                    <em>{{ travel.clonedFromTitle }}</em>
+                                {% endif %}
+                            </span>
+                        {% endif %}
+                        {% if travel.cloneCount > 0 %}
+                            <span style="font-size:12px;color:rgba(255,255,255,0.55);margin-top:1px;">🔁 Cloned {{ travel.cloneCount }} time{{ travel.cloneCount > 1 ? 's' : '' }}</span>
+                        {% endif %}
                         <p class="pa-header__sub">
                             {% if travel.description %}
                                 <span>{{ travel.description }}</span>
@@ -1701,6 +1718,14 @@
                             Edit travel
                         </a>
                     {% endif %}
+                    {% if travel.isPublished and (not app.user or app.user.userId != travel.user.userId) %}
+                        <button type="button" class="pa-btn-new pa-btn-share" id="st-clone-btn"
+                                data-travel-id="{{ travel.id }}"
+                                data-travel-title="{{ travel.title|e('html_attr') }}">
+                            <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><path d="M4 2h7l3 3v9H4V2zm1 1v10h8V6l-2-2H5zm2 4h4v1H7V7zm0 2h4v1H7V9zm0 2h3v1H7v-1z"/></svg>
+                            Clone
+                        </button>
+                    {% endif %}
                     <a href="{{ path('print_travel', {'_locale': app.request.locale, 'slug': travel.slug}) }}" class="pa-btn-new pa-btn-share" target="_blank" title="Print / Save as PDF">
                         <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><path d="M4 1h8v4H4V1zM2 6h12v7H2V6zm2 2v4h8V8H4zm0 1h8v1H4V9zm0 2h5v1H4v-1z"/></svg>
                         Print
@@ -1735,6 +1760,10 @@
                 Budget
             </a>
             {% endif %}
+            <button class="st-view-tab" data-tab="journal" type="button">
+                <svg viewBox="0 0 16 16" width="16" height="16" fill="currentColor"><path d="M3 1h10a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zm1 3v1h8V4H4zm0 3v1h8V7H4zm0 3v1h5v-1H4z"/></svg>
+                Journal
+            </button>
         </div>
 
         {# ── MAP panel ── #}
@@ -1783,6 +1812,11 @@
         {% endif %}
 
         </div>{# /st-panel-map #}
+
+        {# ── JOURNAL panel ── #}
+        <div class="st-view-panel" id="st-panel-journal">
+            {% include 'travel/journalTravel.html.twig' with {'travel': travel, 'canEdit': canEdit} %}
+        </div>{# /st-panel-journal #}
 
 
     </div>{# /container #}
@@ -2232,6 +2266,86 @@
 {% endblock %}
 
 {% block aside %}{% endblock %}
+
+{# ── Clone Travel Modal ── #}
+<div id="clone-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:3000;align-items:center;justify-content:center;">
+    <div style="background:#fff;border-radius:16px;width:440px;max-width:95vw;padding:28px 28px 24px;box-shadow:0 20px 60px rgba(0,0,0,0.2);">
+        <h3 style="margin:0 0 6px;font-size:18px;font-weight:700;color:#1a2e4a;">Clone this travel</h3>
+        <p style="margin:0 0 20px;font-size:14px;color:#6b7280;">A copy will be created in your account as a draft. You can edit it freely.</p>
+        <div style="margin-bottom:14px;">
+            <label style="display:block;font-size:13px;font-weight:600;color:#374151;margin-bottom:6px;">New title</label>
+            <input id="clone-title" type="text" style="width:100%;padding:10px 12px;border:1px solid #d1d5db;border-radius:8px;font-size:14px;box-sizing:border-box;" placeholder="Leave empty to use default">
+        </div>
+        <div style="margin-bottom:20px;">
+            <label style="display:flex;align-items:center;gap:8px;font-size:14px;color:#374151;cursor:pointer;">
+                <input id="clone-gpx" type="checkbox" checked style="width:16px;height:16px;"> Include GPX tracks
+            </label>
+        </div>
+        <div id="clone-feedback" style="display:none;padding:10px 14px;border-radius:8px;font-size:14px;margin-bottom:14px;"></div>
+        <div style="display:flex;gap:10px;justify-content:flex-end;">
+            <button id="clone-cancel" style="padding:10px 20px;border:1px solid #d1d5db;border-radius:8px;background:#fff;font-size:14px;cursor:pointer;color:#374151;">Cancel</button>
+            <button id="clone-submit" style="padding:10px 24px;border:none;border-radius:8px;background:#f39c12;color:#fff;font-size:14px;font-weight:600;cursor:pointer;">Clone travel</button>
+        </div>
+    </div>
+</div>
+<script>
+(function () {
+    var cloneBtn = document.getElementById('st-clone-btn');
+    var overlay  = document.getElementById('clone-overlay');
+    if (!cloneBtn || !overlay) { return; }
+
+    var travelId   = cloneBtn.dataset.travelId;
+    var titleInput = document.getElementById('clone-title');
+    var gpxCheck   = document.getElementById('clone-gpx');
+    var submitBtn  = document.getElementById('clone-submit');
+    var cancelBtn  = document.getElementById('clone-cancel');
+    var feedback   = document.getElementById('clone-feedback');
+
+    overlay.style.display = 'flex';
+    overlay.style.display = 'none';
+
+    cloneBtn.addEventListener('click', function () {
+        titleInput.value = cloneBtn.dataset.travelTitle + ' (copy)';
+        feedback.style.display = 'none';
+        overlay.style.display = 'flex';
+    });
+
+    cancelBtn.addEventListener('click', function () { overlay.style.display = 'none'; });
+    overlay.addEventListener('click', function (e) { if (e.target === overlay) { overlay.style.display = 'none'; } });
+
+    submitBtn.addEventListener('click', function () {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Cloning…';
+        feedback.style.display = 'none';
+
+        fetch('/public/index.php/api/travel/' + travelId + '/clone', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+            body: JSON.stringify({
+                title: titleInput.value.trim() || null,
+                copyGpx: gpxCheck.checked
+            })
+        })
+        .then(function (res) { return res.json(); })
+        .then(function (data) {
+            if (data.redirectUrl) {
+                window.location.href = data.redirectUrl;
+            } else {
+                feedback.textContent = data.error || 'Something went wrong.';
+                feedback.style.cssText = 'display:block;background:#fef2f2;color:#dc2626;padding:10px 14px;border-radius:8px;font-size:14px;margin-bottom:14px;';
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Clone travel';
+            }
+        })
+        .catch(function () {
+            feedback.textContent = 'Network error. Please try again.';
+            feedback.style.cssText = 'display:block;background:#fef2f2;color:#dc2626;padding:10px 14px;border-radius:8px;font-size:14px;margin-bottom:14px;';
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Clone travel';
+        });
+    });
+}());
+</script>
 
 {% block header_js %}
     <script type="text/javascript" src="{{ google_maps}}"></script>

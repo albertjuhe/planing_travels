@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                  https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="App\Domain\Travel\Model\TravelClone" table="travel_clone">
+        <indexes>
+            <index name="travel_clone_source_idx" columns="source_travel_id"/>
+            <index name="travel_clone_by_user_idx" columns="cloned_by_user_id"/>
+        </indexes>
+        <id name="id" type="string" length="36">
+            <generator strategy="NONE"/>
+        </id>
+        <field name="sourceTravelId" type="string" length="36" column="source_travel_id" nullable="false"/>
+        <field name="sourceUserId" type="integer" column="source_user_id" nullable="false"/>
+        <field name="sourceTitleSnapshot" type="string" length="255" column="source_title_snapshot" nullable="false"/>
+        <field name="clonedAt" type="datetime" column="cloned_at" nullable="false"/>
+        <field name="depth" type="integer" nullable="false"/>
+        <one-to-one field="targetTravel" target-entity="App\Domain\Travel\Model\Travel" fetch="LAZY">
+            <join-column name="target_travel_id" referenced-column-name="id" unique="true" nullable="false"/>
+        </one-to-one>
+        <many-to-one field="clonedByUser" target-entity="App\Domain\User\Model\User" fetch="LAZY">
+            <join-column name="cloned_by_user_id" referenced-column-name="id" nullable="false"/>
+        </many-to-one>
+    </entity>
+
+</doctrine-mapping>
