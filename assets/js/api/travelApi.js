@@ -31,3 +31,5 @@ export const shareTravel = async (travelId, username) => {
         throw error;
     }
 };
+
+

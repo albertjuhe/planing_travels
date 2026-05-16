@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                  https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="App\Domain\TravelClone\Model\TravelClone" table="travel_clone">
+        <id name="id" type="integer">
+            <generator strategy="IDENTITY"/>
+        </id>
+        <field name="originalTravelId"   type="string"   length="36"  column="original_travel_id"   nullable="false"/>
+        <field name="clonedTravelId"     type="string"   length="36"  column="cloned_travel_id"     nullable="false"/>
+        <field name="clonedById"         type="integer"               column="cloned_by_id"         nullable="false"/>
+        <field name="originalUserId"     type="integer"               column="original_user_id"     nullable="false"/>
+        <field name="originalTravelTitle" type="string"  length="255" column="original_travel_title" nullable="false"/>
+        <field name="clonedAt"           type="datetime"              column="cloned_at"            nullable="false"/>
+        <field name="createdAt"          type="datetime"              column="created_at"           nullable="false"/>
+        <field name="updatedAt"          type="datetime"              column="updated_at"           nullable="false"/>
+    </entity>
+
+</doctrine-mapping>
