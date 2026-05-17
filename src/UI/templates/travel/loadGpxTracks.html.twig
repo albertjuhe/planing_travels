@@ -1,8 +1,12 @@
 // GPX Tracks
-var gpxLayers = {};
+var gpxLayers = window.gpxLayers || {};
+window.gpxLayers = gpxLayers;
+var gpxLayerById = window.gpxLayerById || {};
+window.gpxLayerById = gpxLayerById;
 {% for gpx in gpxs %}
 (function () {
     var idx = {{ loop.index0 }};
+    var id  = {{ gpx.id }};
     var url = '{{ asset('uploads/gpx/') }}{{ gpx.filename }}';
     var track = new L.GPX(url, {
         async: true,
@@ -16,6 +20,7 @@ var gpxLayers = {};
         var target = e.target;
         map.fitBounds(target.getBounds());
         gpxLayers[idx] = target;
+        gpxLayerById[id] = target;
     }).addTo(map);
 })();
 {% endfor %}

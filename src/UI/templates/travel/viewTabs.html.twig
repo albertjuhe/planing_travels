@@ -1,0 +1,113 @@
+{# Reusable navigation tabs for travel views.
+   Required: travel
+   Optional: active = 'map' | 'calendar' | 'calendar_route' | 'budget' (string)
+#}
+{% set _active = active|default('') %}
+{% set _isOwner = app.user is not null and app.user.userId == travel.user.userId %}
+{% set _canEdit = _isOwner or (app.user is not null and travel.sharedusers|filter(u => u.userId == app.user.userId)|length > 0) %}
+
+<style>
+.vt-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0 0 20px;
+    align-items: center;
+}
+.vt-tabs { display: flex; gap: 8px; flex-wrap: wrap; flex: 1; min-width: 0; }
+.vt-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.vt-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: 22px;
+    border: 2px solid #dde3ea;
+    background: #fff;
+    color: #636e72;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.15s, color 0.15s, border-color 0.15s, box-shadow 0.15s;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    white-space: nowrap;
+}
+.vt-tab:hover {
+    background: #f4f6f8;
+    color: #2c3e50;
+    border-color: #bdc3c7;
+    text-decoration: none;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+}
+.vt-tab.is-active {
+    background: linear-gradient(135deg, #1a2e4a 0%, #2980b9 100%);
+    color: #fff;
+    border-color: transparent;
+    box-shadow: 0 4px 12px rgba(41,128,185,0.3);
+}
+.vt-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: 22px;
+    border: 2px solid #dde3ea;
+    background: #fff;
+    color: #2c3e50;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+    white-space: nowrap;
+}
+.vt-action:hover { background: #f4f6f8; border-color: #bdc3c7; text-decoration: none; color: #1a2e4a; }
+.vt-action--primary {
+    background: #f39c12;
+    border-color: #f39c12;
+    color: #fff;
+}
+.vt-action--primary:hover { background: #e67e22; border-color: #e67e22; color: #fff; }
+</style>
+
+<div class="vt-bar">
+    <div class="vt-tabs">
+        <a class="vt-tab {{ _active == 'map' ? 'is-active' : '' }}" href="{{ path('show_travel', {_locale: app.request.locale, slug: travel.slug}) }}">
+            <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><path d="M8 1a5 5 0 0 1 5 5c0 4-5 9-5 9S3 10 3 6a5 5 0 0 1 5-5zm0 3a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/></svg>
+            Map
+        </a>
+        <a class="vt-tab {{ _active == 'calendar' ? 'is-active' : '' }}" href="{{ path('show_travel_calendar_simple', {_locale: app.request.locale, slug: travel.slug}) }}">
+            <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><path d="M11 1v1H5V1H3v1H1v13h14V2h-2V1h-2zm2 12H3V6h10v7z"/></svg>
+            Calendar
+        </a>
+        <a class="vt-tab {{ _active == 'calendar_route' ? 'is-active' : '' }}" href="{{ path('show_travel_calendar', {slug: travel.slug}) }}">
+            <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><path d="M2 14L6 2l4 8 2-4 2 8" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Calendar + Route
+        </a>
+        {% if app.user %}
+        <a class="vt-tab {{ _active == 'budget' ? 'is-active' : '' }}" href="{{ path('show_travel_budget', {slug: travel.slug}) }}">
+            <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zm.75 10.5v.75h-1.5v-.75H5.5v-1.5h1v-3h-1V6.25h1V5.5h1.5v.75H9.5v1.5h-1v3h1v1.5H8.75z"/></svg>
+            Budget
+        </a>
+        {% endif %}
+    </div>
+    <div class="vt-actions">
+        {% if _canEdit %}
+        <a href="{{ path('updateTravel', {'slug': travel.slug}) }}" class="vt-action vt-action--primary">
+            <svg viewBox="0 0 16 16" width="13" height="13" fill="currentColor"><path d="M11.7 1.3a1 1 0 0 1 1.4 0l1.6 1.6a1 1 0 0 1 0 1.4L5.5 13.5 1 15l1.5-4.5 9.2-9.2z"/></svg>
+            Edit
+        </a>
+        {% endif %}
+        <a href="{{ path('print_travel', {'_locale': app.request.locale, 'slug': travel.slug}) }}" class="vt-action" target="_blank" title="Print / Save as PDF">
+            <svg viewBox="0 0 16 16" width="13" height="13" fill="currentColor"><path d="M4 1h8v4H4V1zM2 6h12v7H2V6zm2 2v4h8V8H4zm0 1h8v1H4V9zm0 2h5v1H4v-1z"/></svg>
+            Print
+        </a>
+        {% if app.user and app.user.userId != travel.user.userId and travel.isPublished() %}
+        <a href="{{ path('cloneTravel', {'slug': travel.slug}) }}" class="vt-action" onclick="return confirm('Clone this travel to your account?')">
+            <svg viewBox="0 0 14 14" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="1" y="1" width="5" height="5" rx="1"/><rect x="8" y="1" width="5" height="5" rx="1"/><rect x="1" y="8" width="5" height="5" rx="1"/><rect x="8" y="8" width="5" height="5" rx="1"/></svg>
+            Clone
+        </a>
+        {% endif %}
+    </div>
+</div>

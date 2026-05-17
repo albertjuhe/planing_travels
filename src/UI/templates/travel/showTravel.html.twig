@@ -1785,7 +1785,7 @@
             <div class="st-details-row">
                 <div class="st-sidebar">
                     {% include 'travel/routePanel.html.twig' %}
-                    {% include 'travel/tracksPanel.html.twig' with {'gpxs': travel.gpx} %}
+                    {% include 'travel/tracksPanel.html.twig' with {'gpxs': travel.gpx, 'canEdit': canEdit} %}
                 </div>
 
                 <div class="st-main">
@@ -2044,6 +2044,119 @@
                 });
             }
         }());
+
+        /* ── GPX track view (zoom) ── */
+        (function () {
+            document.querySelectorAll('.st-track-view').forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    var idx = parseInt(btn.getAttribute('data-track-idx'), 10);
+                    var layer = gpxLayers[idx];
+                    if (!layer) { return; }
+                    var cb = document.querySelector('.st-track-checkbox[data-track-idx="' + idx + '"]');
+                    if (cb && !cb.checked) {
+                        cb.checked = true;
+                        map.addLayer(layer);
+                    }
+                    try { map.fitBounds(layer.getBounds().pad(0.05)); } catch (e) {}
+                });
+            });
+        }());
+
+        /* ── GPX upload ── */
+        {% if canEdit %}
+        (function () {
+            var btn = document.getElementById('tracks-upload-btn');
+            var input = document.getElementById('tracks-upload-input');
+            if (!btn || !input) { return; }
+            var uploadUrl = '{{ path('uploadGpxAPI', {'travelId': travel.id}) }}';
+            var label = document.getElementById('tracks-upload-label');
+
+            function uploadFile(file) {
+                if (!file) { return; }
+                if (!/\.gpx$/i.test(file.name)) {
+                    alert('Please select a .gpx file');
+                    return;
+                }
+                var fd = new FormData();
+                fd.append('file', file);
+                fd.append('title', file.name.replace(/\.gpx$/i, ''));
+
+                if (label) { label.textContent = 'Uploading…'; }
+                btn.style.pointerEvents = 'none';
+                btn.style.opacity = '0.7';
+
+                fetch(uploadUrl, { method: 'POST', body: fd, headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+                    .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, data: d }; }); })
+                    .then(function (res) {
+                        if (res.ok) {
+                            location.reload();
+                        } else {
+                            alert((res.data && res.data.error) || 'Upload failed');
+                            if (label) { label.textContent = 'Upload GPX track'; }
+                            btn.style.pointerEvents = '';
+                            btn.style.opacity = '';
+                            input.value = '';
+                        }
+                    })
+                    .catch(function (err) {
+                        alert('Upload error: ' + (err && err.message ? err.message : err));
+                        if (label) { label.textContent = 'Upload GPX track'; }
+                        btn.style.pointerEvents = '';
+                        btn.style.opacity = '';
+                        input.value = '';
+                    });
+            }
+
+            input.addEventListener('change', function () {
+                if (input.files && input.files.length) { uploadFile(input.files[0]); }
+            });
+
+            /* Drag & drop on the upload zone */
+            ['dragenter', 'dragover'].forEach(function (ev) {
+                btn.addEventListener(ev, function (e) {
+                    e.preventDefault(); e.stopPropagation();
+                    btn.classList.add('is-dragover');
+                });
+            });
+            ['dragleave', 'drop'].forEach(function (ev) {
+                btn.addEventListener(ev, function (e) {
+                    e.preventDefault(); e.stopPropagation();
+                    btn.classList.remove('is-dragover');
+                });
+            });
+            btn.addEventListener('drop', function (e) {
+                if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length) {
+                    uploadFile(e.dataTransfer.files[0]);
+                }
+            });
+        }());
+
+        /* ── GPX delete ── */
+        (function () {
+            var deleteBaseUrl = '{{ path('deleteGpxAPI', {'gpxId': 999999999}) }}';
+            document.querySelectorAll('.st-track-delete').forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    var id = btn.getAttribute('data-track-id');
+                    if (!confirm('Delete this GPX track?')) { return; }
+                    fetch(deleteBaseUrl.replace('999999999', id), {
+                        method: 'DELETE',
+                        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                    })
+                    .then(function (r) {
+                        if (r.ok) {
+                            var layer = gpxLayerById[id];
+                            if (layer) { map.removeLayer(layer); }
+                            var item = document.getElementById('st-track-' + id);
+                            if (item) { item.remove(); }
+                        } else {
+                            alert('Could not delete the track');
+                        }
+                    })
+                    .catch(function () { alert('Network error'); });
+                });
+            });
+        }());
+        {% endif %}
 
         var printer = L.easyPrint({
             tileLayer: googleRoadMap,

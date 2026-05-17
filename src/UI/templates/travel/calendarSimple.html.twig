@@ -220,6 +220,8 @@
         </a>
     </div>
 
+    {% include 'travel/viewTabs.html.twig' with {'travel': travel, 'active': 'calendar'} %}
+
     {# Unscheduled locations #}
     <div class="cs-unscheduled">
         <div class="cs-unscheduled__head">

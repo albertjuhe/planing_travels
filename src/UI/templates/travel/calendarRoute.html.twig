@@ -208,6 +208,8 @@
         </a>
     </div>
 
+    {% include 'travel/viewTabs.html.twig' with {'travel': travel, 'active': 'calendar_route'} %}
+
     <div class="cr-layout">
         {# Calendar #}
         <div class="cr-cal">

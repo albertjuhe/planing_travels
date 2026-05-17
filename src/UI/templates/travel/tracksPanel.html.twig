@@ -1,27 +1,78 @@
+<style>
+.st-track-upload {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin: 8px;
+    padding: 14px 16px;
+    border: 2px dashed #2980b9;
+    border-radius: 10px;
+    background: #f0f7fd;
+    color: #2980b9;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+    text-align: center;
+}
+.st-track-upload:hover {
+    background: #e1efff;
+    border-color: #1e6fa8;
+}
+.st-track-upload.is-dragover {
+    background: #d4e9fa;
+    border-color: #1e6fa8;
+}
+.st-track-upload__hint {
+    font-size: 11px;
+    color: #7f8c8d;
+    font-weight: 500;
+    margin-top: 2px;
+}
+</style>
 <div class="st-panel">
     <div class="st-panel__head">
         <span class="st-panel__head-left">
             <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor" opacity=".7"><path d="M1 12L4 6l3 4 2-3 3 5 2-3" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
             GPX Tracks
         </span>
-        <button class="st-btn st-btn--ghost" id="tracks-show-all">
+        <button class="st-btn st-btn--ghost" id="tracks-show-all" type="button">
             <svg viewBox="0 0 16 16" width="11" height="11" fill="currentColor"><path d="M8 1v14M1 8h14" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
             Show all
         </button>
     </div>
     <div class="st-panel__body">
+        {% if canEdit is defined and canEdit %}
+        <label class="st-track-upload" id="tracks-upload-btn" for="tracks-upload-input">
+            <svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 10v4H2v-4M8 2v9M4 6l4-4 4 4"/></svg>
+            <span>
+                <span id="tracks-upload-label">Upload GPX track</span>
+                <div class="st-track-upload__hint">Click or drop a .gpx file here</div>
+            </span>
+        </label>
+        <input type="file" id="tracks-upload-input" accept=".gpx,application/gpx+xml" style="display:none;">
+        {% endif %}
         <div id="tracks" class="st-track-list">
             {% for gpx in gpxs %}
-            <div class="st-track-item" data-track-idx="{{ loop.index0 }}">
+            <div class="st-track-item" data-track-idx="{{ loop.index0 }}" data-track-id="{{ gpx.id }}" id="st-track-{{ gpx.id }}">
                 <span class="st-track-dot" style="background:{{ gpx.color }}"></span>
-                <span class="st-track-name">{{ gpx.filename }}</span>
+                <span class="st-track-name" title="{{ gpx.title|default(gpx.filename) }}">{{ gpx.title|default(gpx.filename) }}</span>
+                <button type="button" class="st-track-view" data-track-idx="{{ loop.index0 }}" title="Zoom to track" style="background:none;border:none;cursor:pointer;color:#2980b9;padding:0 4px;display:inline-flex;align-items:center;">
+                    <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="7" r="4"/><path d="M10 10l4 4"/></svg>
+                </button>
                 <label class="st-track-toggle">
                     <input type="checkbox" class="st-track-checkbox" checked data-track-idx="{{ loop.index0 }}"/>
                     <span class="st-track-slider"></span>
                 </label>
+                {% if canEdit is defined and canEdit %}
+                <button type="button" class="st-track-delete" data-track-id="{{ gpx.id }}" title="Delete track" style="background:none;border:none;cursor:pointer;color:#b0bec5;padding:0 4px;display:inline-flex;align-items:center;">
+                    <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3 4h10M6 4V2h4v2M5 4l1 10h4l1-10"/></svg>
+                </button>
+                {% endif %}
             </div>
             {% else %}
-            <div class="st-track-empty">
+            <div class="st-track-empty" id="st-track-empty">
                 <svg viewBox="0 0 16 16" width="24" height="24" fill="currentColor" opacity=".2"><path d="M1 12L4 6l3 4 2-3 3 5 2-3" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 <p>No GPX tracks</p>
             </div>
