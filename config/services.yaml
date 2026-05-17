@@ -151,3 +151,27 @@ services:
             - '@App\Domain\Event\Repository\EventStore'
             - '@event_dispatcher'
             - '@doctrine.travel.repository'
+
+    # Weather (OpenWeatherMap)
+    App\Infrastructure\WeatherBundle\Provider\OpenWeatherMapProvider:
+        arguments:
+            $httpClient: '@http_client'
+            $apiKey: '%env(string:default::OPENWEATHER_API_KEY)%'
+            $logger: '@logger'
+
+    App\Infrastructure\WeatherBundle\Provider\CachedWeatherProvider:
+        arguments:
+            $inner: '@App\Infrastructure\WeatherBundle\Provider\OpenWeatherMapProvider'
+            $cache: '@cache.app'
+            $ttlSeconds: 3600
+
+    App\Domain\Weather\Repository\WeatherForecastProvider:
+        alias: App\Infrastructure\WeatherBundle\Provider\CachedWeatherProvider
+
+    App\Application\UseCases\Weather\GetTravelForecastService:
+        arguments:
+            $travelRepository: '@doctrine.travel.repository'
+            $weatherProvider: '@App\Domain\Weather\Repository\WeatherForecastProvider'
+            $logger: '@logger'
+        tags:
+            - { name: messenger.message_handler, bus: query.bus }

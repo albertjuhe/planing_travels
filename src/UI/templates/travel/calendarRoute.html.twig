@@ -305,6 +305,9 @@
         </div>
     </div>
 </div>
+
+{% include 'travel/weatherWidget.html.twig' with { 'travel': travel, 'canViewWeather': canEdit, 'daySelector': '.cr-day[data-date]', 'locationSelector': '.cr-loc[data-date]' } %}
+
 {% endblock %}
 
 {% block javascript %}
