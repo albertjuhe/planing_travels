@@ -8,6 +8,9 @@
                 <th><span class="glyphicon glyphicon-star"></span> Rating</th>
                 <th><span class="glyphicon glyphicon-eye-open"></span> Views</th>
                 <th>Traveler</th>
+                {% if app.user %}
+                    <th></th>
+                {% endif %}
             </tr>
         </thead>
         <tbody>
@@ -23,6 +26,11 @@
                 <td>{{ travel.stars }}</td>
                 <td>{{ travel.watch }}</td>
                 <td><span class="glyphicon glyphicon-user"></span> {{ travel.username }}</td>
+                {% if app.user and app.user.getId().id() != travel.userId %}
+                    <td><a href="{{ path('cloneTravel', {'slug': travel.slug}) }}" class="btn btn-xs btn-primary" onclick="return confirm('Clone this travel?')">Clone</a></td>
+                {% elseif app.user %}
+                    <td></td>
+                {% endif %}
             </tr>
             {% endfor %}
         </tbody>

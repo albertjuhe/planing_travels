@@ -135,6 +135,16 @@ services:
         tags:
             - { name: twig.extension }
 
+    # TravelClone
+    App\Infrastructure\TravelCloneBundle\Repository\DoctrineTravelCloneRepository: ~
+
+    doctrine.travel_clone.repository: '@App\Infrastructure\TravelCloneBundle\Repository\DoctrineTravelCloneRepository'
+
+    App\Application\UseCases\Travel\CloneTravelService:
+        arguments: ['@doctrine.travel.repository', '@doctrine.user.repository', '@doctrine.travel_clone.repository']
+        tags:
+            - { name: messenger.message_handler, bus: command.bus }
+
     # Domain Events Middleware
     App\Infrastructure\Middleware\DomainEventsMiddleware:
         arguments:

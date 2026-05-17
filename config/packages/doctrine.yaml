@@ -71,3 +71,8 @@ doctrine:
                 prefix: App\Domain\Budget\Model
                 dir: '%kernel.project_dir%/src/Infrastructure/BudgetBundle/Resources/config/persistence'
                 is_bundle: false
+            TravelClone:
+                type: xml
+                prefix: App\Domain\TravelClone\Model
+                dir: '%kernel.project_dir%/src/Infrastructure/TravelCloneBundle/Resources/config/persistence'
+                is_bundle: false

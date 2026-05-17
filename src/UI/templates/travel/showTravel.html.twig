@@ -1675,6 +1675,17 @@
                             <span class="pa-header__meta-item">
                                 By <strong>{{ travel.user.firstName }} {{ travel.user.lastName }}</strong>
                             </span>
+                            {% if cloneOrigin and originalTravel %}
+                            <span class="pa-header__meta-item">
+                                <svg viewBox="0 0 14 14" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="1" y="1" width="5" height="5" rx="1"/><rect x="8" y="1" width="5" height="5" rx="1"/><rect x="1" y="8" width="5" height="5" rx="1"/><rect x="8" y="8" width="5" height="5" rx="1"/></svg>
+                                Cloned from <a href="{{ path('show_travel', {slug: originalTravel.slug}) }}" style="color:#fff;text-decoration:underline;">{{ cloneOrigin.originalTravelTitle }}</a>
+                            </span>
+                            {% elseif cloneOrigin %}
+                            <span class="pa-header__meta-item">
+                                <svg viewBox="0 0 14 14" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="1" y="1" width="5" height="5" rx="1"/><rect x="8" y="1" width="5" height="5" rx="1"/><rect x="1" y="8" width="5" height="5" rx="1"/><rect x="8" y="8" width="5" height="5" rx="1"/></svg>
+                                Cloned from {{ cloneOrigin.originalTravelTitle }}
+                            </span>
+                            {% endif %}
                             <span id="panel-information"></span>
                         </p>
                     </div>
@@ -1705,6 +1716,12 @@
                         <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><path d="M4 1h8v4H4V1zM2 6h12v7H2V6zm2 2v4h8V8H4zm0 1h8v1H4V9zm0 2h5v1H4v-1z"/></svg>
                         Print
                     </a>
+                    {% if app.user and app.user.userId != travel.user.userId and travel.isPublished() %}
+                        <a href="{{ path('cloneTravel', {'slug': travel.slug}) }}" class="pa-btn-new" onclick="return confirm('Clone this travel to your account?')">
+                            <svg viewBox="0 0 14 14" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="1" y="1" width="5" height="5" rx="1"/><rect x="8" y="1" width="5" height="5" rx="1"/><rect x="1" y="8" width="5" height="5" rx="1"/><rect x="8" y="8" width="5" height="5" rx="1"/></svg>
+                            Clone
+                        </a>
+                    {% endif %}
                 </div>
             </div>
         </div>
