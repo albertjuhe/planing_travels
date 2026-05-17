@@ -21,6 +21,7 @@ services:
       - PHP_EXTENSION_XDEBUG=0
       - ENABLE_XDEBUG=0
       - WEBSOCKET_SERVER_URL=http://websocket:5555
+      - OPENWEATHER_API_KEY=${OPENWEATHER_API_KEY:-}
     entrypoint: ["/bin/sh", "-c", "git config --global --add safe.directory /var/www/html && exec apache2-foreground"]
     depends_on:
       - mysql

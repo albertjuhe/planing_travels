@@ -24,4 +24,5 @@ return [
     Symfony\Bundle\MonologBundle\MonologBundle::class => ['all' => true],
     Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle::class => ['dev' => true, 'test' => true],
     App\Infrastructure\TravelCloneBundle\TravelCloneBundle::class => ['all' => true],
+    App\Infrastructure\WeatherBundle\WeatherBundle::class => ['all' => true],
 ];

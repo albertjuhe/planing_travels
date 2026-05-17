@@ -8,3 +8,5 @@ framework:
         cookie_samesite: lax
 
     cache: ~
+
+    http_client: ~

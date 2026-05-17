@@ -1,0 +1,170 @@
+{#
+  Weather widget loader.
+  Required vars:
+    - travel: Travel entity (uses slug)
+    - canViewWeather: bool — only owner / shared users
+    - daySelector: CSS selector matching each day row
+        e.g. '.cs-day[data-date]' or '.cr-day[data-date]'
+    - locationSelector: CSS selector matching each location card inside a day
+        e.g. '.cs-card[data-date]' or '.cr-loc[data-date]'
+
+  Each matched day row receives a `.weather-col` column (appended last) with
+  the forecast icon + min/max temperature + tooltip.
+  Each matched location card receives a `.weather-mini` badge with the icon and
+  the current temperature, sharing the day's forecast.
+#}
+{% if canViewWeather %}
+<style>
+.weather-col {
+    flex-shrink: 0;
+    width: 110px;
+    padding: 4px 12px 4px 8px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    border-left: 1px solid #eef1f4;
+    margin-left: auto;
+}
+.weather-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px 2px 4px;
+    border-radius: 999px;
+    background: #f0f7ff;
+    border: 1px solid #d6eaf8;
+    font-size: 11px;
+    font-weight: 600;
+    color: #1a2e4a;
+    white-space: nowrap;
+}
+.weather-badge img {
+    width: 28px;
+    height: 28px;
+    display: block;
+}
+.weather-badge__temps { display: inline-flex; gap: 3px; align-items: baseline; }
+.weather-badge__max { color: #c0392b; }
+.weather-badge__min { color: #2980b9; }
+.weather-badge__sep { color: #bdc3c7; }
+
+.weather-mini {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    margin-left: 6px;
+    padding: 1px 6px 1px 2px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.85);
+    border: 1px solid #d6eaf8;
+    font-size: 10px;
+    font-weight: 700;
+    color: #1a2e4a;
+    white-space: nowrap;
+    vertical-align: middle;
+}
+.weather-mini img {
+    width: 18px;
+    height: 18px;
+    display: block;
+}
+</style>
+
+<script>
+(function () {
+    var WEATHER_URL = {{ path('travel_weather', { slug: travel.slug })|json_encode|raw }};
+    var DAY_SELECTOR = {{ daySelector|json_encode|raw }};
+    var LOCATION_SELECTOR = {{ (locationSelector ?? '')|json_encode|raw }};
+
+    function tooltip(forecast) {
+        return forecast.description +
+            ' · ' + forecast.temperatureMin + '°C / ' + forecast.temperatureMax + '°C' +
+            (forecast.precipitationProbability !== null ? ' · Rain ' + forecast.precipitationProbability + '%' : '') +
+            (forecast.humidity !== null ? ' · Humidity ' + forecast.humidity + '%' : '') +
+            (forecast.windSpeed !== null ? ' · Wind ' + forecast.windSpeed + ' m/s' : '');
+    }
+
+    function buildBadge(forecast) {
+        var badge = document.createElement('span');
+        badge.className = 'weather-badge';
+        badge.title = tooltip(forecast);
+
+        var img = document.createElement('img');
+        img.src = forecast.iconUrl;
+        img.alt = forecast.description;
+        img.loading = 'lazy';
+        badge.appendChild(img);
+
+        var temps = document.createElement('span');
+        temps.className = 'weather-badge__temps';
+        temps.innerHTML =
+            '<span class="weather-badge__max">' + Math.round(forecast.temperatureMax) + '°</span>' +
+            '<span class="weather-badge__sep">/</span>' +
+            '<span class="weather-badge__min">' + Math.round(forecast.temperatureMin) + '°</span>';
+        badge.appendChild(temps);
+
+        return badge;
+    }
+
+    function buildMini(forecast) {
+        var badge = document.createElement('span');
+        badge.className = 'weather-mini';
+        badge.title = tooltip(forecast);
+
+        var img = document.createElement('img');
+        img.src = forecast.iconUrl;
+        img.alt = forecast.description;
+        img.loading = 'lazy';
+        badge.appendChild(img);
+
+        var t = document.createElement('span');
+        t.textContent = Math.round(forecast.temperatureMax) + '°';
+        badge.appendChild(t);
+
+        return badge;
+    }
+
+    function applyForecast(forecastByDate) {
+        /* Day column */
+        document.querySelectorAll(DAY_SELECTOR).forEach(function (row) {
+            if (row.querySelector(':scope > .weather-col')) return;
+            var date = row.getAttribute('data-date');
+            if (!date) return;
+            var fc = forecastByDate[date];
+
+            var col = document.createElement('div');
+            col.className = 'weather-col';
+            if (fc) col.appendChild(buildBadge(fc));
+            row.appendChild(col);
+        });
+
+        /* Per-location mini-badge */
+        if (!LOCATION_SELECTOR) return;
+        document.querySelectorAll(LOCATION_SELECTOR).forEach(function (card) {
+            if (card.querySelector(':scope > .weather-mini')) return;
+            var date = card.getAttribute('data-date');
+            if (!date) return;
+            var fc = forecastByDate[date];
+            if (!fc) return;
+            card.appendChild(buildMini(fc));
+        });
+    }
+
+    function load() {
+        fetch(WEATHER_URL, { credentials: 'same-origin', headers: { 'Accept': 'application/json' } })
+            .then(function (r) { return r.json().catch(function () { return { available: false }; }); })
+            .then(function (data) {
+                if (!data || data.available !== true || !data.forecast) return;
+                applyForecast(data.forecast);
+            })
+            .catch(function () { /* silent */ });
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', load);
+    } else {
+        load();
+    }
+})();
+</script>
+{% endif %}

@@ -348,6 +348,8 @@
 </div>
 {% endif %}
 
+{% include 'travel/weatherWidget.html.twig' with { 'travel': travel, 'canViewWeather': canEdit, 'daySelector': '.cs-day[data-date]', 'locationSelector': '.cs-card[data-date]' } %}
+
 {% endblock %}
 
 {% block javascript %}
