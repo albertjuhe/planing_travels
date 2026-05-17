@@ -3,8 +3,10 @@
 namespace App\UI\Controller\API;
 
 use App\Domain\Gpx\Model\Gpx;
+use App\Infrastructure\GpxBundle\Service\GpxSimplifier;
 use App\Infrastructure\TravelBundle\Repository\DoctrineTravelRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -16,7 +18,9 @@ class GpxAPIController extends AbstractController
     public function __construct(
         private DoctrineTravelRepository $travelRepository,
         private EntityManagerInterface $em,
-        private Security $security
+        private Security $security,
+        private GpxSimplifier $gpxSimplifier,
+        private LoggerInterface $logger
     ) {
     }
 
@@ -68,6 +72,14 @@ class GpxAPIController extends AbstractController
             return new JsonResponse(['error' => 'Could not save file: '.$e->getMessage()], 500);
         }
 
+        // Simplify the GPX in place to reduce file size (Douglas-Peucker).
+        $stats = null;
+        try {
+            $stats = $this->gpxSimplifier->simplifyFile($uploadDir.$filename, 0.0001);
+        } catch (\Throwable $e) {
+            $this->logger->warning('GPX simplification failed: '.$e->getMessage(), ['file' => $filename]);
+        }
+
         $title = trim((string) $request->request->get('title', ''));
         if ($title === '') {
             $title = pathinfo($originalName, PATHINFO_FILENAME);
@@ -95,6 +107,7 @@ class GpxAPIController extends AbstractController
             'title'    => $gpx->getTitle(),
             'filename' => $gpx->getFilename(),
             'color'    => $gpx->getColor(),
+            'simplification' => $stats,
         ], 201);
     }
 
