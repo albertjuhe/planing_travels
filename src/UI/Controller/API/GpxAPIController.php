@@ -43,6 +43,11 @@ class GpxAPIController extends AbstractController
             return new JsonResponse(['error' => 'No file provided'], 400);
         }
 
+        $maxSize = 3 * 1024 * 1024; // 3 MB
+        if ($file->getSize() > $maxSize) {
+            return new JsonResponse(['error' => 'File too large (max 3 MB)'], 413);
+        }
+
         $originalName = $file->getClientOriginalName();
         $extension = strtolower(pathinfo($originalName, PATHINFO_EXTENSION));
         if ($extension !== 'gpx') {

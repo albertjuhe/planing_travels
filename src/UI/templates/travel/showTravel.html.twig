@@ -2077,6 +2077,10 @@
                     alert('Please select a .gpx file');
                     return;
                 }
+                if (file.size > 3 * 1024 * 1024) {
+                    alert('File too large (max 3 MB)');
+                    return;
+                }
                 var fd = new FormData();
                 fd.append('file', file);
                 fd.append('title', file.name.replace(/\.gpx$/i, ''));
