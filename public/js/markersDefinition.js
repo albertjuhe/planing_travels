@@ -79,6 +79,66 @@ var CoffeeMarker = L.AwesomeMarkers.icon({
     prefix: 'fa'
 });
 
+var ParkMarker = L.AwesomeMarkers.icon({
+    icon: 'tree',
+    markerColor: 'green',
+    prefix: 'fa'
+});
+
+var HotelMarker = L.AwesomeMarkers.icon({
+    icon: 'building-o',
+    markerColor: 'blue',
+    prefix: 'fa'
+});
+
+var BeachMarker = L.AwesomeMarkers.icon({
+    icon: 'umbrella',
+    markerColor: 'cadetblue',
+    prefix: 'fa'
+});
+
+var MuseumMarker = L.AwesomeMarkers.icon({
+    icon: 'university',
+    markerColor: 'darkpurple',
+    prefix: 'fa'
+});
+
+var ShopMarker = L.AwesomeMarkers.icon({
+    icon: 'shopping-cart',
+    markerColor: 'darkred',
+    prefix: 'fa'
+});
+
+var CampingMarker = L.AwesomeMarkers.icon({
+    icon: 'fire',
+    markerColor: 'orange',
+    prefix: 'fa'
+});
+
+var ViewpointMarker = L.AwesomeMarkers.icon({
+    icon: 'binoculars',
+    markerColor: 'darkgreen',
+    prefix: 'fa'
+});
+
+var HospitalMarker = L.AwesomeMarkers.icon({
+    icon: 'hospital-o',
+    markerColor: 'red',
+    prefix: 'fa'
+});
+
+var CinemaMarker = L.AwesomeMarkers.icon({
+    icon: 'film',
+    markerColor: 'purple',
+    prefix: 'fa'
+});
+
+var BarMarker = L.AwesomeMarkers.icon({
+    icon: 'glass',
+    markerColor: 'green',
+    prefix: 'fa'
+});
+
 var SelectedIcon = L.AwesomeMarkers.icon({
     prefix: 'fa', //font awesome rather than bootstrap
     markerColor: 'red', // see colors above

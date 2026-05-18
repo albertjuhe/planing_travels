@@ -699,8 +699,48 @@ mapPoint.prototype.getMark = function (pointtype, latitude, longitude, placeAdre
             typeIcon = "fa fa-ship";
             break;
         case "Coffee":
-            currentMark = L.marker([latitude, longitude], {icon: BreakfastMarker, title: placeAdress}).bindPopup(popup);
+            currentMark = L.marker([latitude, longitude], {icon: CoffeeMarker, title: placeAdress}).bindPopup(popup);
             typeIcon = "fa fa-coffee";
+            break;
+        case "Park":
+            currentMark = L.marker([latitude, longitude], {icon: ParkMarker, title: placeAdress}).bindPopup(popup);
+            typeIcon = "fa fa-tree";
+            break;
+        case "Hotel":
+            currentMark = L.marker([latitude, longitude], {icon: HotelMarker, title: placeAdress}).bindPopup(popup);
+            typeIcon = "fa fa-building-o";
+            break;
+        case "Beach":
+            currentMark = L.marker([latitude, longitude], {icon: BeachMarker, title: placeAdress}).bindPopup(popup);
+            typeIcon = "fa fa-umbrella";
+            break;
+        case "Museum":
+            currentMark = L.marker([latitude, longitude], {icon: MuseumMarker, title: placeAdress}).bindPopup(popup);
+            typeIcon = "fa fa-university";
+            break;
+        case "Shop":
+            currentMark = L.marker([latitude, longitude], {icon: ShopMarker, title: placeAdress}).bindPopup(popup);
+            typeIcon = "fa fa-shopping-cart";
+            break;
+        case "Camping":
+            currentMark = L.marker([latitude, longitude], {icon: CampingMarker, title: placeAdress}).bindPopup(popup);
+            typeIcon = "fa fa-fire";
+            break;
+        case "Viewpoint":
+            currentMark = L.marker([latitude, longitude], {icon: ViewpointMarker, title: placeAdress}).bindPopup(popup);
+            typeIcon = "fa fa-binoculars";
+            break;
+        case "Hospital":
+            currentMark = L.marker([latitude, longitude], {icon: HospitalMarker, title: placeAdress}).bindPopup(popup);
+            typeIcon = "fa fa-hospital-o";
+            break;
+        case "Cinema":
+            currentMark = L.marker([latitude, longitude], {icon: CinemaMarker, title: placeAdress}).bindPopup(popup);
+            typeIcon = "fa fa-film";
+            break;
+        case "Bar":
+            currentMark = L.marker([latitude, longitude], {icon: BarMarker, title: placeAdress}).bindPopup(popup);
+            typeIcon = "fa fa-glass";
             break;
         default:
             currentMark = L.marker([latitude, longitude], {title: placeAdress}).bindPopup(popup);
