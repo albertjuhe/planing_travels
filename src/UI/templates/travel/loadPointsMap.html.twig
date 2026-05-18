@@ -13,6 +13,9 @@ var objLocation;
         popup += "<br/><img style='width:80%' src='{{ asset('uploads/gallery/') }}{{ location.images  | first}}'/>";
     {% endif %}
     var currentMark = L.marker([{{ location.mark.geolocation.lat }},{{ location.mark.geolocation.lng }} ],{icon: {{  location.typeLocation.title }}Marker,title: "{{ location.title}}" }).bindPopup(popup).addTo(map);
+    currentMark.on('click', function() {
+        map.setView([{{ location.mark.geolocation.lat }},{{ location.mark.geolocation.lng }}], 12);
+    });
     objLocation = mPoint.createLocation('{{ location.id }}',{{ location.mark.geolocation.lat }},
     {{ location.mark.geolocation.lng }},
     '{{ location.mark.title }}',

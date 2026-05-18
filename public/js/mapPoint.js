@@ -172,6 +172,9 @@ mapPoint.prototype.addPoint = function (locationPoint) {
     $('*[data-place="' + pid + '"][data-function="info"]').bind({'click': this.info});
     $('*[data-place="' + pid + '"][data-function="nota"]').bind({'click': this.nota});
     $('*[data-place="' + pid + '"][data-function="edit"]').bind({'click': this.editMark});
+    $('#layer_' + pid + ' .point-view__drag').bind('click', function (e) {
+        map.setView([locationPoint.latitude, locationPoint.longitude], 11);
+    });
 
     /* Toggle dropdown */
     $('button[data-function="menu"][data-place="' + pid + '"]').bind('click', function (e) {
@@ -268,7 +271,7 @@ mapPoint.prototype.goMark = function (e) {
     var el = document.getElementById(placeToGo);
     var l = el ? $.data(el, 'location') : null;
     if (!l) { return; }
-    map.setView([l.latitude, l.longitude], 30);
+    map.setView([l.latitude, l.longitude], 12);
 };
 
 
