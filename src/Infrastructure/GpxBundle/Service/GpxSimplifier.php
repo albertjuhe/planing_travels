@@ -130,7 +130,60 @@ class GpxSimplifier
             'simplifiedPoints' => $simplifiedPoints,
             'originalSize'     => $originalSize,
             'simplifiedSize'   => (int) filesize($filePath),
+            'distanceMeters'   => $this->computeDistance($filePath),
         ];
+    }
+
+    /**
+     * Compute the total distance (meters) of all <trkpt> sequences in the GPX file
+     * using the haversine formula on the great-circle distance between consecutive points.
+     */
+    public function computeDistance(string $filePath): int
+    {
+        if (!is_file($filePath)) {
+            return 0;
+        }
+        $xml = @simplexml_load_string((string) file_get_contents($filePath));
+        if ($xml === false) {
+            return 0;
+        }
+
+        $total = 0.0;
+        foreach ($xml->trk as $trk) {
+            foreach ($trk->trkseg as $trkseg) {
+                $prev = null;
+                foreach ($trkseg->trkpt as $pt) {
+                    $lat = (float) $pt['lat'];
+                    $lon = (float) $pt['lon'];
+                    if ($prev !== null) {
+                        $total += $this->haversine($prev[0], $prev[1], $lat, $lon);
+                    }
+                    $prev = [$lat, $lon];
+                }
+            }
+        }
+        foreach ($xml->rte as $rte) {
+            $prev = null;
+            foreach ($rte->rtept as $pt) {
+                $lat = (float) $pt['lat'];
+                $lon = (float) $pt['lon'];
+                if ($prev !== null) {
+                    $total += $this->haversine($prev[0], $prev[1], $lat, $lon);
+                }
+                $prev = [$lat, $lon];
+            }
+        }
+        return (int) round($total);
+    }
+
+    private function haversine(float $lat1, float $lon1, float $lat2, float $lon2): float
+    {
+        $r = 6371000.0;
+        $dLat = deg2rad($lat2 - $lat1);
+        $dLon = deg2rad($lon2 - $lon1);
+        $a = sin($dLat / 2) ** 2
+            + cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * sin($dLon / 2) ** 2;
+        return 2 * $r * asin(min(1.0, sqrt($a)));
     }
 
     /**

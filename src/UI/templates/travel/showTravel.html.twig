@@ -1785,7 +1785,7 @@
             <div class="st-details-row">
                 <div class="st-sidebar">
                     {% include 'travel/routePanel.html.twig' %}
-                    {% include 'travel/tracksPanel.html.twig' with {'gpxs': travel.gpx, 'canEdit': canEdit} %}
+                    {% include 'travel/tracksPanel.html.twig' with {'gpxs': travel.gpx, 'canEdit': canEdit, 'travel': travel} %}
                 </div>
 
                 <div class="st-main">
@@ -2061,6 +2061,73 @@
                 });
             });
         }());
+
+        /* ── GPX color/date update ── */
+        {% if canEdit %}
+        (function () {
+            var updateBaseUrl = '{{ path('updateGpxAPI', {'gpxId': 999999999}) }}';
+
+            function applyColorToLayer(idx, color) {
+                var layer = gpxLayers[idx];
+                if (!layer) { return; }
+                try {
+                    layer.eachLayer(function (l) {
+                        if (l instanceof L.Polyline && l._gpxMainLine) {
+                            l.setStyle({ color: color });
+                        }
+                    });
+                } catch (e) {}
+            }
+
+            function patchGpx(id, payload) {
+                return fetch(updateBaseUrl.replace('999999999', id), {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+                    body: JSON.stringify(payload)
+                });
+            }
+
+            document.querySelectorAll('.st-track-color-input').forEach(function (input) {
+                var saveTimer = null;
+                input.addEventListener('input', function () {
+                    var color = input.value;
+                    var idx = parseInt(input.getAttribute('data-track-idx'), 10);
+                    applyColorToLayer(idx, color);
+                    clearTimeout(saveTimer);
+                    saveTimer = setTimeout(function () {
+                        patchGpx(input.getAttribute('data-track-id'), { color: color }).catch(function () {});
+                    }, 300);
+                });
+            });
+
+            document.querySelectorAll('.st-track-date').forEach(function (sel) {
+                sel.addEventListener('change', function () {
+                    var id = sel.getAttribute('data-track-id');
+                    patchGpx(id, { visitDate: sel.value || null }).catch(function () {});
+                });
+            });
+
+            document.querySelectorAll('.st-track-name-input').forEach(function (input) {
+                var saveTimer = null;
+                var lastSaved = input.value;
+                function save() {
+                    var v = input.value.trim();
+                    if (!v || v === lastSaved) { return; }
+                    patchGpx(input.getAttribute('data-track-id'), { title: v })
+                        .then(function (r) { if (r && r.ok) { lastSaved = v; } })
+                        .catch(function () {});
+                }
+                input.addEventListener('input', function () {
+                    clearTimeout(saveTimer);
+                    saveTimer = setTimeout(save, 700);
+                });
+                input.addEventListener('blur', function () { clearTimeout(saveTimer); save(); });
+                input.addEventListener('keydown', function (e) {
+                    if (e.key === 'Enter') { e.preventDefault(); input.blur(); }
+                });
+            });
+        }());
+        {% endif %}
 
         /* ── GPX upload ── */
         {% if canEdit %}

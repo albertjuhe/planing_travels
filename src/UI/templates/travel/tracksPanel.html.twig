@@ -16,26 +16,99 @@
     transition: background 0.15s, border-color 0.15s;
     text-align: center;
 }
-.st-track-upload:hover {
-    background: #e1efff;
-    border-color: #1e6fa8;
+.st-track-upload:hover { background: #e1efff; border-color: #1e6fa8; }
+.st-track-upload.is-dragover { background: #d4e9fa; border-color: #1e6fa8; }
+.st-track-upload__hint { font-size: 11px; color: #7f8c8d; font-weight: 500; margin-top: 2px; }
+
+.st-track-item { flex-wrap: wrap; }
+.st-track-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
 }
-.st-track-upload.is-dragover {
-    background: #d4e9fa;
-    border-color: #1e6fa8;
+.st-track-name-wrap {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
 }
-.st-track-upload__hint {
+.st-track-name {
+    flex: 1;
+    font-size: 12px;
+    color: #2c3e50;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.st-track-name-input {
+    width: 100%;
+    font-size: 12px;
+    font-weight: 600;
+    color: #2c3e50;
+    padding: 2px 4px;
+    border: 1px solid transparent;
+    background: transparent;
+    border-radius: 4px;
+    outline: none;
+    transition: background 0.12s, border-color 0.12s;
+    box-sizing: border-box;
+}
+.st-track-name-input:hover { background: #f4f6f8; border-color: #eaecef; }
+.st-track-name-input:focus { background: #fff; border-color: #2980b9; box-shadow: 0 0 0 2px rgba(41,128,185,0.15); }
+.st-track-distance {
+    font-size: 10px;
+    font-weight: 600;
+    color: #7f8c8d;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    padding-left: 4px;
+}
+.st-track-meta {
+    flex-basis: 100%;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 14px 4px 24px;
     font-size: 11px;
     color: #7f8c8d;
-    font-weight: 500;
-    margin-top: 2px;
 }
+.st-track-meta select.st-track-date {
+    font-size: 11px;
+    border: 1px solid #dde3ea;
+    border-radius: 5px;
+    padding: 2px 4px;
+    background: #fff;
+    color: #2c3e50;
+    max-width: 130px;
+}
+.st-track-meta select.st-track-date:focus { outline: none; border-color: #2980b9; }
+
+.st-track-color {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    box-shadow: 0 0 0 1px #d5dbe2, 0 1px 3px rgba(0,0,0,0.15);
+    cursor: pointer;
+    transition: transform 0.12s;
+    flex-shrink: 0;
+    padding: 0;
+    appearance: none;
+    -webkit-appearance: none;
+}
+.st-track-color::-webkit-color-swatch-wrapper { padding: 0; border-radius: 50%; }
+.st-track-color::-webkit-color-swatch { border: none; border-radius: 50%; }
+.st-track-color::-moz-color-swatch { border: none; border-radius: 50%; }
+.st-track-color:hover { transform: scale(1.15); }
 </style>
 <div class="st-panel">
     <div class="st-panel__head">
         <span class="st-panel__head-left">
             <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor" opacity=".7"><path d="M1 12L4 6l3 4 2-3 3 5 2-3" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
             GPX Tracks
+            {% set totalKm = 0 %}
+            <span id="tracks-total-km" class="st-route-count" style="display:none;"></span>
         </span>
         <button class="st-btn st-btn--ghost" id="tracks-show-all" type="button">
             <svg viewBox="0 0 16 16" width="11" height="11" fill="currentColor"><path d="M8 1v14M1 8h14" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
@@ -54,21 +127,55 @@
         <input type="file" id="tracks-upload-input" accept=".gpx,application/gpx+xml" style="display:none;">
         {% endif %}
         <div id="tracks" class="st-track-list">
+            {% set startTs = travel.startAt|date('U') %}
+            {% set endTs   = travel.endAt|date('U') %}
+            {% set tripDays = (((endTs - startTs) / 86400)|round(0,'ceil') + 1) %}
             {% for gpx in gpxs %}
             <div class="st-track-item" data-track-idx="{{ loop.index0 }}" data-track-id="{{ gpx.id }}" id="st-track-{{ gpx.id }}">
-                <span class="st-track-dot" style="background:{{ gpx.color }}"></span>
-                <span class="st-track-name" title="{{ gpx.title|default(gpx.filename) }}">{{ gpx.title|default(gpx.filename) }}</span>
-                <button type="button" class="st-track-view" data-track-idx="{{ loop.index0 }}" title="Zoom to track" style="background:none;border:none;cursor:pointer;color:#2980b9;padding:0 4px;display:inline-flex;align-items:center;">
-                    <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="7" r="4"/><path d="M10 10l4 4"/></svg>
-                </button>
-                <label class="st-track-toggle">
-                    <input type="checkbox" class="st-track-checkbox" checked data-track-idx="{{ loop.index0 }}"/>
-                    <span class="st-track-slider"></span>
-                </label>
+                <div class="st-track-row">
+                    {% if canEdit is defined and canEdit %}
+                    <input type="color" class="st-track-color st-track-color-input" value="{{ gpx.color }}" data-track-id="{{ gpx.id }}" data-track-idx="{{ loop.index0 }}" title="Change color">
+                    {% else %}
+                    <span class="st-track-dot" style="background:{{ gpx.color }}"></span>
+                    {% endif %}
+                    <span class="st-track-name-wrap">
+                        {% if canEdit is defined and canEdit %}
+                        <input type="text" class="st-track-name-input" value="{{ gpx.title|default(gpx.filename) }}" data-track-id="{{ gpx.id }}" placeholder="Track title" maxlength="255" title="Edit title">
+                        {% else %}
+                        <span class="st-track-name" title="{{ gpx.title|default(gpx.filename) }}">{{ gpx.title|default(gpx.filename) }}</span>
+                        {% endif %}
+                        <span class="st-track-distance" id="st-track-dist-{{ gpx.id }}" data-track-id="{{ gpx.id }}">{% if gpx.distance %}{{ (gpx.distance / 1000)|number_format(2) }} km{% else %}…{% endif %}</span>
+                    </span>
+                    <button type="button" class="st-track-view" data-track-idx="{{ loop.index0 }}" title="Zoom to track" style="background:none;border:none;cursor:pointer;color:#2980b9;padding:0 4px;display:inline-flex;align-items:center;">
+                        <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="7" r="4"/><path d="M10 10l4 4"/></svg>
+                    </button>
+                    <label class="st-track-toggle">
+                        <input type="checkbox" class="st-track-checkbox" checked data-track-idx="{{ loop.index0 }}"/>
+                        <span class="st-track-slider"></span>
+                    </label>
+                    {% if canEdit is defined and canEdit %}
+                    <button type="button" class="st-track-delete" data-track-id="{{ gpx.id }}" title="Delete track" style="background:none;border:none;cursor:pointer;color:#b0bec5;padding:0 4px;display:inline-flex;align-items:center;">
+                        <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3 4h10M6 4V2h4v2M5 4l1 10h4l1-10"/></svg>
+                    </button>
+                    {% endif %}
+                </div>
                 {% if canEdit is defined and canEdit %}
-                <button type="button" class="st-track-delete" data-track-id="{{ gpx.id }}" title="Delete track" style="background:none;border:none;cursor:pointer;color:#b0bec5;padding:0 4px;display:inline-flex;align-items:center;">
-                    <svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3 4h10M6 4V2h4v2M5 4l1 10h4l1-10"/></svg>
-                </button>
+                <div class="st-track-meta">
+                    <svg viewBox="0 0 16 16" width="11" height="11" fill="currentColor" opacity=".55"><path d="M11 1v1H5V1H3v1H1v13h14V2h-2V1h-2zm2 12H3V6h10v7z"/></svg>
+                    <select class="st-track-date" data-track-id="{{ gpx.id }}">
+                        <option value="">No day assigned</option>
+                        {% for i in 0..tripDays-1 %}
+                            {% set d = travel.startAt|date_modify('+' ~ i ~ ' days') %}
+                            {% set ds = d|date('Y-m-d') %}
+                            <option value="{{ ds }}"{% if gpx.visitDateString == ds %} selected{% endif %}>{{ d|date('D d M') }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                {% elseif gpx.visitDateString %}
+                <div class="st-track-meta">
+                    <svg viewBox="0 0 16 16" width="11" height="11" fill="currentColor" opacity=".55"><path d="M11 1v1H5V1H3v1H1v13h14V2h-2V1h-2zm2 12H3V6h10v7z"/></svg>
+                    <span>{{ gpx.visitDate|date('D d M Y') }}</span>
+                </div>
                 {% endif %}
             </div>
             {% else %}

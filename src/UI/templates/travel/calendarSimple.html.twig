@@ -336,6 +336,21 @@
                             {% endif %}
                         </div>
                     {% endfor %}
+                    {% for gpx in travel.gpx %}
+                        {% if gpx.visitDateString == thisDateStr %}
+                        <a class="cs-card cs-card--gpx" href="{{ path('show_travel', {slug: travel.slug}) }}#gpx-{{ gpx.id }}"
+                           style="border-color:{{ gpx.color }};background:{{ gpx.color }}1a;color:#1a2e4a;text-decoration:none;"
+                           data-gpx-id="{{ gpx.id }}" title="{{ gpx.title|default(gpx.filename) }}">
+                            <span class="cs-card__icon">
+                                <svg viewBox="0 0 16 16" width="11" height="11" fill="none" stroke="{{ gpx.color }}" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12L4 6l3 4 2-3 3 5 2-3"/></svg>
+                            </span>
+                            <span class="cs-card__text">
+                                <div class="cs-card__title">{{ gpx.title|default(gpx.filename) }}</div>
+                                <div class="cs-card__type" style="color:{{ gpx.color }};">GPX track{% if gpx.distance %} · {{ (gpx.distance / 1000)|number_format(2) }} km{% endif %}</div>
+                            </span>
+                        </a>
+                        {% endif %}
+                    {% endfor %}
                 </div>
             </div>
         {% endfor %}

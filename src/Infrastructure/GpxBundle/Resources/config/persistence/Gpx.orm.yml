@@ -32,6 +32,14 @@ App\Domain\Gpx\Model\Gpx:
             precision: 0
             scale: 0
             nullable: false
+        visitDate:
+            type: date
+            nullable: true
+            column: visit_date
+        distance:
+            type: integer
+            nullable: true
+            column: distance
         createdAt:
             type: datetime
             precision: 0
