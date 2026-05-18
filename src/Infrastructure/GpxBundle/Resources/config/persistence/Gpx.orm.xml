@@ -12,6 +12,8 @@
         <field name="description" type="string"   length="255" nullable="false"/>
         <field name="filename"    type="string"   length="255" nullable="false"/>
         <field name="color"       type="string"   length="255" nullable="false"/>
+        <field name="visitDate"   type="date"     column="visit_date" nullable="true"/>
+        <field name="distance"    type="integer"  column="distance" nullable="true"/>
         <field name="createdAt"   type="datetime" column="created_at" nullable="false"/>
         <field name="updatedAt"   type="datetime" column="updated_at" nullable="false"/>
         <many-to-one field="travel" target-entity="App\Domain\Travel\Model\Travel" inversed-by="gpx" fetch="LAZY">

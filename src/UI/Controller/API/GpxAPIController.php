@@ -87,7 +87,8 @@ class GpxAPIController extends AbstractController
 
         $color = trim((string) $request->request->get('color', ''));
         if ($color === '' || !preg_match('/^#[0-9a-fA-F]{6}$/', $color)) {
-            $palette = ['#e74c3c', '#2980b9', '#27ae60', '#8e44ad', '#f39c12', '#1abc9c', '#d35400', '#16a085'];
+            // High-contrast palette that stands out on most basemaps.
+            $palette = ['#ff0033', '#ff6f00', '#ffd400', '#7c00ff', '#ff00aa', '#00d4ff', '#00ff66', '#ff3d00'];
             $color = $palette[array_rand($palette)];
         }
 
@@ -97,6 +98,9 @@ class GpxAPIController extends AbstractController
         $gpx->setFilename($filename);
         $gpx->setColor($color);
         $gpx->setTravel($travel);
+        if ($stats !== null && isset($stats['distanceMeters'])) {
+            $gpx->setDistance((int) $stats['distanceMeters']);
+        }
 
         $this->em->persist($gpx);
         $this->em->flush();
@@ -107,8 +111,71 @@ class GpxAPIController extends AbstractController
             'title'    => $gpx->getTitle(),
             'filename' => $gpx->getFilename(),
             'color'    => $gpx->getColor(),
+            'distance' => $gpx->getDistance(),
             'simplification' => $stats,
         ], 201);
+    }
+
+    #[Route('/api/gpx/{gpxId}', name: 'updateGpxAPI', methods: ['PATCH'])]
+    public function update(Request $request, int $gpxId): JsonResponse
+    {
+        $user = $this->security->getUser();
+        if (!$user) {
+            return new JsonResponse(['error' => 'Unauthorized'], 401);
+        }
+
+        $gpx = $this->em->getRepository(Gpx::class)->find($gpxId);
+        if (!$gpx) {
+            return new JsonResponse(['error' => 'GPX not found'], 404);
+        }
+
+        if (!$this->canEdit($gpx->getTravel(), $user)) {
+            return new JsonResponse(['error' => 'Forbidden'], 403);
+        }
+
+        $data = json_decode($request->getContent(), true) ?: [];
+
+        if (array_key_exists('color', $data)) {
+            $color = trim((string) $data['color']);
+            if ($color !== '' && !preg_match('/^#[0-9a-fA-F]{6}$/', $color)) {
+                return new JsonResponse(['error' => 'Invalid color'], 400);
+            }
+            if ($color !== '') {
+                $gpx->setColor($color);
+            }
+        }
+
+        if (array_key_exists('title', $data)) {
+            $title = trim((string) $data['title']);
+            if ($title !== '') {
+                $gpx->setTitle($title);
+            }
+        }
+
+        if (array_key_exists('visitDate', $data)) {
+            $visitDate = $data['visitDate'];
+            if ($visitDate === null || $visitDate === '') {
+                $gpx->setVisitDate(null);
+            } else {
+                $dt = \DateTime::createFromFormat('Y-m-d', (string) $visitDate);
+                if (!$dt) {
+                    return new JsonResponse(['error' => 'Invalid date (expected Y-m-d)'], 400);
+                }
+                $dt->setTime(0, 0, 0);
+                $gpx->setVisitDate($dt);
+            }
+        }
+
+        $gpx->setUpdatedAt(new \DateTime());
+        $this->em->flush();
+
+        return new JsonResponse([
+            'success'   => true,
+            'id'        => $gpx->getId(),
+            'title'     => $gpx->getTitle(),
+            'color'     => $gpx->getColor(),
+            'visitDate' => $gpx->getVisitDateString(),
+        ]);
     }
 
     #[Route('/api/gpx/{gpxId}', name: 'deleteGpxAPI', methods: ['DELETE'])]

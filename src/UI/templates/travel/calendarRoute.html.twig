@@ -277,7 +277,19 @@
                                      </span>
                                  </div>
                              {% endfor %}
-                             {% if not hasLocs %}
+                             {% set hasGpx = false %}
+                             {% for gpx in travel.gpx %}
+                                 {% if gpx.visitDateString == thisDateStr %}
+                                     {% set hasGpx = true %}
+                                     <a class="cr-loc cr-loc--gpx" href="{{ path('show_travel', {slug: travel.slug}) }}#gpx-{{ gpx.id }}"
+                                        style="border-color:{{ gpx.color }};background:{{ gpx.color }}1a;color:#1a2e4a;text-decoration:none;"
+                                        title="{{ gpx.title|default(gpx.filename) }}">
+                                         <svg viewBox="0 0 16 16" width="11" height="11" fill="none" stroke="{{ gpx.color }}" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12L4 6l3 4 2-3 3 5 2-3"/></svg>
+                                         <span class="cr-loc__title">{{ gpx.title|default(gpx.filename) }}{% if gpx.distance %} · {{ (gpx.distance / 1000)|number_format(2) }} km{% endif %}</span>
+                                     </a>
+                                 {% endif %}
+                             {% endfor %}
+                             {% if not hasLocs and not hasGpx %}
                                  <span class="cr-day__empty">No locations</span>
                              {% endif %}
                          </div>

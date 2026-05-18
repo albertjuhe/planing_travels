@@ -21,6 +21,12 @@ class Gpx
     /** @var string */
     private $color;
 
+    /** @var \DateTime|null */
+    private $visitDate;
+
+    /** @var int|null distance in meters */
+    private $distance;
+
     /** @var \DateTime */
     protected $createdAt;
 
@@ -124,6 +130,31 @@ class Gpx
     public function setColor(string $color)
     {
         $this->color = $color;
+    }
+
+    public function getVisitDate(): ?\DateTime
+    {
+        return $this->visitDate;
+    }
+
+    public function getVisitDateString(): ?string
+    {
+        return $this->visitDate ? $this->visitDate->format('Y-m-d') : null;
+    }
+
+    public function setVisitDate(?\DateTime $visitDate): void
+    {
+        $this->visitDate = $visitDate;
+    }
+
+    public function getDistance(): ?int
+    {
+        return $this->distance;
+    }
+
+    public function setDistance(?int $distance): void
+    {
+        $this->distance = $distance;
     }
 
     /**

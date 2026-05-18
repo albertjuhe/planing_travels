@@ -3,11 +3,34 @@ var gpxLayers = window.gpxLayers || {};
 window.gpxLayers = gpxLayers;
 var gpxLayerById = window.gpxLayerById || {};
 window.gpxLayerById = gpxLayerById;
+window.gpxDistances = window.gpxDistances || {}; // id -> meters
+
+function gpxFormatDistance(meters) {
+    if (typeof meters !== 'number' || isNaN(meters)) { return ''; }
+    if (meters < 1000) { return Math.round(meters) + ' m'; }
+    return (meters / 1000).toFixed(2) + ' km';
+}
+
+function gpxUpdateTotalKm() {
+    var total = 0, count = 0;
+    Object.keys(window.gpxDistances).forEach(function (k) {
+        total += window.gpxDistances[k] || 0;
+        count++;
+    });
+    var el = document.getElementById('tracks-total-km');
+    if (!el) { return; }
+    if (count > 0) {
+        el.textContent = gpxFormatDistance(total) + ' total';
+        el.style.display = '';
+    }
+}
+
 {% for gpx in gpxs %}
 (function () {
     var idx = {{ loop.index0 }};
     var id  = {{ gpx.id }};
     var url = '{{ asset('uploads/gpx/') }}{{ gpx.filename }}';
+    var color = '{{ gpx.color }}';
     var track = new L.GPX(url, {
         async: true,
         marker_options: {
@@ -15,12 +38,46 @@ window.gpxLayerById = gpxLayerById;
             endIconUrl: '{{ asset('img/pin-icon-end.png') }}',
             shadowUrl: '{{ asset('img/pin-shadow.png') }}'
         },
-        polyline_options: { color: '{{ gpx.color }}' }
+        polyline_options: {
+            color: color,
+            weight: 5,
+            opacity: 0.95,
+            lineCap: 'round',
+            lineJoin: 'round'
+        }
     }).on('loaded', function (e) {
         var target = e.target;
+        try {
+            target.eachLayer(function (layer) {
+                if (layer instanceof L.Polyline && !layer._gpxHalo) {
+                    var latlngs = layer.getLatLngs();
+                    var halo = L.polyline(latlngs, {
+                        color: '#ffffff',
+                        weight: 9,
+                        opacity: 0.85,
+                        lineCap: 'round',
+                        lineJoin: 'round',
+                        interactive: false
+                    });
+                    halo.addTo(target);
+                    halo.bringToBack();
+                    layer.bringToFront();
+                    target._gpxHaloLayer = halo;
+                    layer._gpxMainLine = true;
+                    layer._gpxHalo = true;
+                }
+            });
+        } catch (err) {}
         map.fitBounds(target.getBounds());
         gpxLayers[idx] = target;
         gpxLayerById[id] = target;
+
+        var meters = 0;
+        try { meters = target.get_distance() || 0; } catch (err) {}
+        window.gpxDistances[id] = meters;
+        var distEl = document.getElementById('st-track-dist-' + id);
+        if (distEl) { distEl.textContent = gpxFormatDistance(meters); }
+        gpxUpdateTotalKm();
     }).addTo(map);
 })();
 {% endfor %}
