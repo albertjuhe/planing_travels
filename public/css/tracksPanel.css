@@ -1,0 +1,129 @@
+/* ─────────────────────────────────────────
+   Tracks Panel (GPX upload & controls)
+────────────────────────────────────────── */
+.st-track-upload {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin: 8px;
+    padding: 14px 16px;
+    border: 2px dashed #2980b9;
+    border-radius: 10px;
+    background: #f0f7fd;
+    color: #2980b9;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+    text-align: center;
+}
+.st-track-upload:hover { background: #e1efff; border-color: #1e6fa8; }
+.st-track-upload.is-dragover { background: #d4e9fa; border-color: #1e6fa8; }
+.st-track-upload__hint { font-size: 11px; color: #7f8c8d; font-weight: 500; margin-top: 2px; }
+
+.st-track-item { flex-wrap: wrap; }
+.st-track-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+}
+.st-track-name-wrap {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+}
+.st-track-name {
+    flex: 1;
+    font-size: 12px;
+    color: #2c3e50;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.st-track-name-input {
+    width: 100%;
+    font-size: 12px;
+    font-weight: 600;
+    color: #2c3e50;
+    padding: 2px 4px;
+    border: 1px solid transparent;
+    background: transparent;
+    border-radius: 4px;
+    outline: none;
+    transition: background 0.12s, border-color 0.12s;
+    box-sizing: border-box;
+}
+.st-track-name-input:hover { background: #f4f6f8; border-color: #eaecef; }
+.st-track-name-input:focus { background: #fff; border-color: #2980b9; box-shadow: 0 0 0 2px rgba(41,128,185,0.15); }
+.st-track-distance {
+    font-size: 10px;
+    font-weight: 600;
+    color: #7f8c8d;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    padding-left: 4px;
+}
+.st-track-meta {
+    flex-basis: 100%;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 14px 4px 24px;
+    font-size: 11px;
+    color: #7f8c8d;
+}
+.st-track-meta select.st-track-date {
+    font-size: 11px;
+    border: 1px solid #dde3ea;
+    border-radius: 5px;
+    padding: 2px 4px;
+    background: #fff;
+    color: #2c3e50;
+    max-width: 130px;
+}
+.st-track-meta select.st-track-date:focus { outline: none; border-color: #2980b9; }
+
+.st-track-color {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    box-shadow: 0 0 0 1px #d5dbe2, 0 1px 3px rgba(0,0,0,0.15);
+    cursor: pointer;
+    transition: transform 0.12s;
+    flex-shrink: 0;
+    padding: 0;
+    appearance: none;
+    -webkit-appearance: none;
+}
+.st-track-color::-webkit-color-swatch-wrapper { padding: 0; border-radius: 50%; }
+.st-track-color::-webkit-color-swatch { border: none; border-radius: 50%; }
+.st-track-color::-moz-color-swatch { border: none; border-radius: 50%; }
+.st-track-color:hover { transform: scale(1.15); }
+
+.st-track-view {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #2980b9;
+    padding: 0 4px;
+    display: inline-flex;
+    align-items: center;
+}
+.st-track-view:hover { color: #1e6fa8; }
+
+.st-track-delete {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #b0bec5;
+    padding: 0 4px;
+    display: inline-flex;
+    align-items: center;
+}
+.st-track-delete:hover { color: #e74c3c; }
+
+.st-track-hidden { display: none; }
