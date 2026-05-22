@@ -8,37 +8,99 @@
 
 {% block css %}
     {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/leaflet@1.7.1/leaflet.css') }}"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"/>
     <style>
 *, *::before, *::after { box-sizing: border-box; }
 
 .cs-page {
-    max-width: 960px;
-    margin: 0 auto;
-    padding: 24px 20px;
+    background: #f4f6f8;
+    min-height: calc(100vh - 64px);
+    padding-bottom: 60px;
+}
+.cs-page__inner {
+    max-width: none;
+    padding: 0 60px;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
-/* Header */
-.cs-header {
+/* Header (same as pa-header) */
+.pa-header {
+    background: linear-gradient(135deg, #1a2e4a 0%, #2980b9 100%);
+    padding: 36px 60px 32px;
+    margin-bottom: 24px;
+}
+.pa-header__inner {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 24px;
+    gap: 16px;
     flex-wrap: wrap;
-    gap: 12px;
 }
-.cs-header__left { display: flex; flex-direction: column; gap: 4px; }
-.cs-header__title { font-size: 22px; font-weight: 800; color: #1a2e4a; margin: 0; }
-.cs-header__sub { font-size: 13px; color: #7f8c8d; margin: 0; }
-.cs-back {
-    display: inline-flex; align-items: center; gap: 6px;
-    padding: 8px 16px; font-size: 13px; font-weight: 600;
-    border-radius: 8px; border: 1px solid #dde3ea;
-    background: #fff; color: #2c3e50; text-decoration: none;
-    transition: all 0.15s;
+.pa-header__left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
 }
-.cs-back:hover { background: #f4f6f8; text-decoration: none; color: #2c3e50; }
+.pa-header__icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: #f39c12;
+    color: #fff;
+    font-size: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 0 0 3px rgba(255,255,255,0.25);
+}
+.pa-header__titles { display: flex; flex-direction: column; gap: 4px; }
+.pa-header__back {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: rgba(255,255,255,0.6);
+    font-size: 12px;
+    text-decoration: none;
+    transition: color 0.15s;
+    margin-bottom: 2px;
+}
+.pa-header__back:hover { color: #fff; text-decoration: none; }
+.pa-header__title {
+    font-size: 26px;
+    font-weight: 700;
+    color: #fff;
+    margin: 0;
+    line-height: 1.2;
+}
+.pa-header__sub {
+    font-size: 14px;
+    color: rgba(255,255,255,0.75);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+.pa-header__sub strong { color: #fff; }
+.pa-header__meta-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+.pa-stat-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 20px;
+    padding: 5px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #fff;
+}
 
 /* Unscheduled */
 .cs-unscheduled {
@@ -199,6 +261,86 @@
 .cs-card[data-icon*="train"]     { border-color: #16a085; background: #e8f8f5; }
 .cs-card[data-icon*="bus"]       { border-color: #d35400; background: #fdf2e9; }
 .cs-card[data-icon*="coffee"]    { border-color: #795548; background: #efebe9; }
+
+/* Layout: calendar + map side by side */
+.cs-layout {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+}
+.cs-left { flex: 1; min-width: 0; }
+.cs-right { flex: 1; min-width: 0; position: sticky; top: 20px; }
+
+/* Map panel */
+.cs-map {
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07), 0 8px 24px rgba(0,0,0,0.06);
+    overflow: hidden;
+}
+.cs-map__head {
+    padding: 14px 18px;
+    background: linear-gradient(135deg, #1a2e4a 0%, #2574a9 100%);
+    color: #fff;
+    display: flex; align-items: center; justify-content: space-between;
+}
+.cs-map__title {
+    font-size: 14px; font-weight: 700;
+    display: flex; align-items: center; gap: 8px;
+}
+.cs-map__btns { display: flex; gap: 6px; }
+.cs-map-btn {
+    padding: 6px 14px; font-size: 12px; font-weight: 600;
+    border: 1px solid rgba(255,255,255,0.3); border-radius: 8px;
+    background: rgba(255,255,255,0.1); color: #fff;
+    cursor: pointer; transition: all 0.15s; white-space: nowrap;
+}
+.cs-map-btn:hover { background: rgba(255,255,255,0.2); }
+.cs-map-btn.is-active { background: #fff; color: #1a2e4a; border-color: #fff; }
+#cs-cal-map { height: 500px; }
+
+/* Legend */
+.cs-legend {
+    padding: 12px 18px; border-top: 1px solid #eaecef;
+    display: flex; flex-wrap: wrap; gap: 12px;
+    font-size: 12px; color: #636e72;
+}
+.cs-legend__item { display: flex; align-items: center; gap: 5px; }
+.cs-legend__dot {
+    width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
+}
+.cs-map-info {
+    padding: 8px 18px 12px; font-size: 12px; color: #7f8c8d;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .cs-layout { flex-direction: column; }
+    .cs-right { position: relative; top: 0; }
+}
+
+@media (max-width: 991px) {
+    .pa-header { padding: 28px 20px 24px; }
+    .cs-page__inner { padding: 0 20px; }
+    .pa-header__title { font-size: 22px; }
+    .pa-header__icon { width: 44px; height: 44px; font-size: 18px; }
+    .cs-day__head { width: 120px; padding: 8px 10px; }
+    #cs-cal-map { height: 400px; }
+}
+
+@media (max-width: 600px) {
+    .pa-header { padding: 24px 16px 20px; }
+    .cs-page__inner { padding: 0 16px; }
+    .pa-header__inner { flex-direction: column; align-items: flex-start; }
+    .pa-header__right { width: 100%; justify-content: flex-start; }
+    .pa-header__title { font-size: 20px; }
+    .pa-header__icon { width: 40px; height: 40px; font-size: 16px; }
+    .cs-day { flex-direction: column; align-items: flex-start; }
+    .cs-day__head { width: 100%; border-bottom: 1px solid #eaecef; }
+    .cs-day__body { width: 100%; padding: 8px 10px; }
+    #cs-cal-map { height: 300px; }
+    .cs-map__btns { flex-wrap: wrap; }
+}
     </style>
 {% endblock %}
 
@@ -209,20 +351,50 @@
 <div class="cs-page">
 
     {# Header #}
-    <div class="cs-header">
-        <div class="cs-header__left">
-            <h1 class="cs-header__title">{{ travel.title }} – Calendar</h1>
-            <p class="cs-header__sub">{{ travel.startAt|date("d M Y") }} – {{ travel.endAt|date("d M Y") }}</p>
+    <div class="pa-header">
+        <div class="pa-header__inner">
+            <div class="pa-header__left">
+                <div class="pa-header__icon">✈</div>
+                <div class="pa-header__titles">
+                    <a href="{{ path('homepage') }}" class="pa-header__back">
+                        <svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3L5 8l5 5"/></svg>
+                        Home
+                    </a>
+                    <h1 class="pa-header__title">{{ travel.title }}</h1>
+                    <p class="pa-header__sub">
+                        {% if travel.description %}
+                            <span>{{ travel.description }}</span>
+                        {% endif %}
+                        <span class="pa-header__meta-item">
+                            <svg viewBox="0 0 16 16" width="12" height="12" fill="currentColor"><path d="M11 1v1H5V1H3v1H1v13h14V2h-2V1h-2zm2 12H3V6h10v7z"/></svg>
+                            {{ travel.startAt|date("d M Y") }} – {{ travel.endAt|date("d M Y") }}
+                        </span>
+                        <span class="pa-header__meta-item">
+                            By <strong>{{ travel.user.firstName }} {{ travel.user.lastName }}</strong>
+                        </span>
+                    </p>
+                </div>
+            </div>
+            <div class="pa-header__right">
+                <span class="pa-stat-pill">
+                    <svg viewBox="0 0 16 16" width="13" height="13" fill="currentColor"><path d="M8 1l1.8 3.6L14 5.3l-3 2.9.7 4.1L8 10.4l-3.7 1.9.7-4.1-3-2.9 4.2-.7z"/></svg>
+                    {{ travel.stars }}
+                </span>
+                <span class="pa-stat-pill">
+                    <svg viewBox="0 0 16 16" width="13" height="13" fill="currentColor"><path d="M8 3C4.5 3 1.5 6 1 8c.5 2 3.5 5 7 5s6.5-3 7-5c-.5-2-3.5-5-7-5zm0 8a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm0-5a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/></svg>
+                    {{ travel.watch }}
+                </span>
+            </div>
         </div>
-        <a class="cs-back" href="{{ path('show_travel', {slug: travel.slug}) }}">
-            <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 2L4 8l6 6"/></svg>
-            Back to travel
-        </a>
     </div>
 
-    {% include 'travel/viewTabs.html.twig' with {'travel': travel, 'active': 'calendar'} %}
+    <div class="cs-page__inner">
+        {% include 'travel/viewTabs.html.twig' with {'travel': travel, 'active': 'calendar'} %}
 
-    {# Unscheduled locations #}
+        <div class="cs-layout">
+            <div class="cs-left">
+
+        {# Unscheduled locations #}
     <div class="cs-unscheduled">
         <div class="cs-unscheduled__head">
             <svg viewBox="0 0 16 16" width="13" height="13" fill="currentColor"><path d="M8 1a5 5 0 0 1 5 5c0 4-5 9-5 9S3 10 3 6a5 5 0 0 1 5-5zm0 3a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/></svg>
@@ -356,6 +528,28 @@
         {% endfor %}
     </div>
 
+            </div>
+            
+            <div class="cs-right">
+                <div class="cs-map">
+                    <div class="cs-map__head">
+                        <span class="cs-map__title">
+                            <svg viewBox="0 0 16 16" width="16" height="16" fill="currentColor"><path d="M8 1a5 5 0 0 1 5 5c0 4-5 9-5 9S3 10 3 6a5 5 0 0 1 5-5zm0 3a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/></svg>
+                            Locations Map
+                        </span>
+                        <div class="cs-map__btns">
+                            <button class="cs-map-btn is-active" id="cs-btn-all" type="button">All locations</button>
+                            <button class="cs-map-btn" id="cs-btn-day" type="button" disabled>Select a day</button>
+                        </div>
+                    </div>
+                    <div id="cs-cal-map"></div>
+                    <div class="cs-legend" id="cs-legend"></div>
+                    <div class="cs-map-info" id="cs-map-info">Click a day on the calendar to filter</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
 </div>
 
 {# Picker dropdown #}
@@ -371,6 +565,7 @@
 
 {% block javascript %}
     {{ parent() }}
+    <script src="{{ asset('js/leaflet@1.7.1/leaflet.js') }}"></script>
     {% set isOwner = app.user is not null and app.user.userId == travel.user.userId %}
     {% set canEdit = isOwner or (app.user is not null and travel.sharedusers|filter(u => u.userId == app.user.userId)|length > 0) %}
     <script>
@@ -378,6 +573,7 @@
         var VISIT_DATE_URL = '{{ path('updateLocationVisitDate', {'locationId': '__LOC__'}) }}';
         var VISIT_TIME_URL = '{{ path('updateVisitTime', {'locationId': '__LOC__'}) }}';
         var CAN_EDIT = {{ canEdit ? 'true' : 'false' }};
+        var COLORS = ['#e74c3c','#2980b9','#27ae60','#8e44ad','#f39c12','#1abc9c','#d35400','#c0392b','#2c3e50','#16a085'];
 
         var ALL_LOCATIONS = [
             {% for loc in travel.location %}
@@ -385,7 +581,14 @@
                 id: '{{ loc.id }}',
                 title: {{ loc.title|json_encode|raw }},
                 type: {{ (loc.typeLocation is not null ? loc.typeLocation.title : '')|json_encode|raw }},
-                icon: {{ (loc.typeLocation is not null ? loc.typeLocation.icon : '')|json_encode|raw }}
+                icon: {{ (loc.typeLocation is not null ? loc.typeLocation.icon : '')|json_encode|raw }},
+                lat: {{ loc.mark is not null and loc.mark.geolocation is not null ? loc.mark.geolocation.lat : 'null' }},
+                lng: {{ loc.mark is not null and loc.mark.geolocation is not null ? loc.mark.geolocation.lng : 'null' }},
+                visitDates: [
+                    {% for vd in loc.visitDates %}
+                    '{{ vd.visitDateString }}'{% if not loop.last %},{% endif %}
+                    {% endfor %}
+                ]
             }{% if not loop.last %},{% endif %}
             {% endfor %}
         ];
@@ -515,6 +718,271 @@
                 picker.classList.remove('is-open');
             });
         }
+
+        /* ── Map logic ── */
+        var calMap = L.map('cs-cal-map', {
+            center: [{{ travel.geolocation.lat }}, {{ travel.geolocation.lng }}],
+            zoom: 7,
+            attributionControl: false
+        });
+        L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+            maxZoom: 20,
+            subdomains: ['mt0','mt1','mt2','mt3']
+        }).addTo(calMap);
+
+        var markersLayer = L.layerGroup().addTo(calMap);
+        var infoEl = document.getElementById('cs-map-info');
+        var legendEl = document.getElementById('cs-legend');
+        var btnAll = document.getElementById('cs-btn-all');
+        var btnDay = document.getElementById('cs-btn-day');
+        var selectedDay = null;
+
+        function clearMap() {
+            markersLayer.clearLayers();
+            legendEl.innerHTML = '';
+        }
+
+        function getLocationsByDay() {
+            var byDay = {};
+            var unscheduled = [];
+            ALL_LOCATIONS.forEach(function (loc) {
+                if (loc.lat === null || loc.lng === null) return;
+                if (loc.visitDates.length === 0) {
+                    unscheduled.push(loc);
+                } else {
+                    loc.visitDates.forEach(function (date) {
+                        if (!byDay[date]) byDay[date] = [];
+                        byDay[date].push(loc);
+                    });
+                }
+            });
+            return { byDay: byDay, unscheduled: unscheduled };
+        }
+
+        function addMarker(loc, color, isUnscheduled) {
+            var ll = [loc.lat, loc.lng];
+            var options = {
+                radius: isUnscheduled ? 12 : 9,
+                fillColor: color,
+                color: isUnscheduled ? '#95a5a6' : '#fff',
+                weight: isUnscheduled ? 3 : 2.5,
+                fillOpacity: isUnscheduled ? 0.6 : 0.9,
+                dashArray: isUnscheduled ? '6, 4' : null
+            };
+            var m = L.circleMarker(ll, options);
+            
+            var popupContent = '<strong>' + loc.title + '</strong>' + 
+                (loc.type ? '<br><small>' + loc.type + '</small>' : '');
+            
+            if (isUnscheduled && CAN_EDIT) {
+                popupContent += '<br><br><button type="button" class="cs-assign-btn" data-location-id="' + loc.id + 
+                    '" style="padding:4px 12px;background:#2980b9;color:#fff;border:none;border-radius:4px;cursor:pointer;">' +
+                    '📅 Assign to day</button>';
+            } else if (loc.visitDates.length > 0) {
+                popupContent += '<br><small style="color:#7f8c8d;">📅 ' + loc.visitDates.join(', ') + '</small>';
+            }
+            
+            m.bindPopup(popupContent);
+            m.on('popupopen', function () {
+                var assignBtn = document.querySelector('.cs-assign-btn[data-location-id="' + loc.id + '"]');
+                if (assignBtn) {
+                    assignBtn.addEventListener('click', function (e) {
+                        e.stopPropagation();
+                        m.closePopup();
+                        openPickerForLocation(loc.id);
+                    });
+                }
+            });
+            
+            markersLayer.addLayer(m);
+            return ll;
+        }
+
+        function openPickerForLocation(locationId) {
+            var loc = ALL_LOCATIONS.find(function (l) { return l.id == locationId; });
+            if (!loc) return;
+            
+            var picker = document.getElementById('cs-picker');
+            if (!picker) return;
+            
+            picker.innerHTML = '';
+            var dates = [];
+            {% set startTs   = travel.startAt|date('U') %}
+            {% set endTs     = travel.endAt|date('U') %}
+            {% set tripDays  = (((endTs - startTs) / 86400)|round(0,'ceil') + 1) %}
+            {% for i in 0..tripDays-1 %}
+                {% set thisDate = travel.startAt|date_modify('+' ~ i ~ ' days') %}
+                dates.push('{{ thisDate|date('Y-m-d') }}');
+            {% endfor %}
+            
+            dates.forEach(function (date) {
+                var item = document.createElement('div');
+                item.className = 'cs-picker__item';
+                item.innerHTML = '<strong>' + date + '</strong><br><small style="color:#7f8c8d;">Click to assign ' + loc.title + '</small>';
+                item.addEventListener('click', function () {
+                    fetch(VISIT_DATE_URL.replace('__LOC__', locationId), {
+                        method: 'PATCH',
+                        headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+                        body: JSON.stringify({ action: 'add', date: date })
+                    }).then(function (r) {
+                        if (r.ok) { location.reload(); }
+                    }).catch(function () {});
+                });
+                picker.appendChild(item);
+            });
+            
+            picker.classList.add('is-open');
+            picker.style.left = '50%';
+            picker.style.top = '50%';
+            picker.style.transform = 'translate(-50%, -50%)';
+            
+            setTimeout(function () {
+                function closeOnClick(e) {
+                    if (!picker.contains(e.target)) {
+                        picker.classList.remove('is-open');
+                        picker.style.transform = 'none';
+                        document.removeEventListener('click', closeOnClick);
+                    }
+                }
+                document.addEventListener('click', closeOnClick);
+            }, 10);
+        }
+
+        function updateLegend(byDay, colors, unscheduledCount) {
+            var keys = Object.keys(byDay);
+            var html = '';
+            if (unscheduledCount > 0) {
+                html += '<span class="cs-legend__item"><span class="cs-legend__dot" style="background:#95a5a6;border:2px dashed #bdc3c7;"></span>' +
+                    ' Unscheduled (' + unscheduledCount + ')</span>';
+            }
+            html += keys.map(function (d, i) {
+                return '<span class="cs-legend__item"><span class="cs-legend__dot" style="background:' +
+                    colors[i % colors.length] + '"></span>' + d + ' (' + byDay[d].length + ')</span>';
+            }).join('');
+            legendEl.innerHTML = html;
+        }
+
+        function renderAllLocations() {
+            clearMap();
+            var data = getLocationsByDay();
+            var byDay = data.byDay;
+            var unscheduled = data.unscheduled;
+            var dates = Object.keys(byDay);
+            
+            var allBounds = [];
+            
+            unscheduled.forEach(function (loc) {
+                var ll = addMarker(loc, '#95a5a6', true);
+                allBounds.push(ll);
+            });
+            
+            dates.forEach(function (date, i) {
+                var color = COLORS[i % COLORS.length];
+                byDay[date].forEach(function (loc) {
+                    var ll = addMarker(loc, color, false);
+                    allBounds.push(ll);
+                });
+            });
+            
+            if (allBounds.length > 0) {
+                calMap.fitBounds(allBounds, { padding: [40, 40] });
+            }
+            
+            var totalWithCoords = ALL_LOCATIONS.filter(function (l) { return l.lat !== null; }).length;
+            infoEl.textContent = 
+                '📍 ' + unscheduled.length + ' unscheduled · ' +
+                dates.length + ' days · ' +
+                totalWithCoords + ' locations on map';
+            
+            updateLegend(byDay, COLORS, unscheduled.length);
+        }
+
+        function renderDayLocations(date) {
+            clearMap();
+            var data = getLocationsByDay();
+            var byDay = data.byDay;
+            var unscheduled = data.unscheduled;
+            
+            var allBounds = [];
+            
+            unscheduled.forEach(function (loc) {
+                var ll = addMarker(loc, '#95a5a6', true);
+                allBounds.push(ll);
+            });
+            
+            if (byDay[date] && byDay[date].length > 0) {
+                byDay[date].forEach(function (loc) {
+                    var ll = addMarker(loc, '#2980b9', false);
+                    allBounds.push(ll);
+                });
+            }
+            
+            if (allBounds.length > 0) {
+                calMap.fitBounds(allBounds, { padding: [50, 50] });
+            }
+            
+            var dayCount = byDay[date] ? byDay[date].length : 0;
+            infoEl.textContent = 
+                '📍 ' + date + ' · ' + dayCount + ' location' + (dayCount !== 1 ? 's' : '') +
+                ' · Still ' + unscheduled.length + ' unscheduled';
+            
+            var singleDay = {};
+            if (dayCount > 0) singleDay[date] = byDay[date];
+            updateLegend(singleDay, ['#2980b9'], unscheduled.length);
+        }
+
+        function setActiveBtn(btn) {
+            [btnAll, btnDay].forEach(function (b) { b.classList.remove('is-active'); });
+            btn.classList.add('is-active');
+        }
+
+        /* Day click */
+        document.querySelectorAll('.cs-day').forEach(function (dayEl) {
+            dayEl.addEventListener('click', function (e) {
+                if (e.target.closest('.cs-add-btn') || e.target.closest('.cs-card')) return;
+                document.querySelectorAll('.cs-day.cs-day--selected').forEach(function (d) {
+                    d.classList.remove('cs-day--selected');
+                });
+                dayEl.classList.add('cs-day--selected');
+                selectedDay = dayEl.dataset.date;
+                setActiveBtn(btnDay);
+                btnDay.textContent = selectedDay;
+                btnDay.disabled = false;
+                renderDayLocations(selectedDay);
+            });
+        });
+
+        btnAll.addEventListener('click', function () {
+            selectedDay = null;
+            setActiveBtn(btnAll);
+            btnDay.textContent = 'Select a day';
+            btnDay.disabled = true;
+            document.querySelectorAll('.cs-day.cs-day--selected').forEach(function (d) {
+                d.classList.remove('cs-day--selected');
+            });
+            renderAllLocations();
+        });
+
+        /* Click on unscheduled card in list */
+        document.querySelectorAll('#cs-unscheduled .cs-card').forEach(function (card) {
+            card.style.cursor = 'pointer';
+            card.addEventListener('click', function () {
+                var locId = card.dataset.locationId;
+                if (locId && CAN_EDIT) {
+                    openPickerForLocation(locId);
+                }
+            });
+        });
+
+        /* Initial render */
+        renderAllLocations();
+
+        /* Add selected day styles */
+        var style = document.createElement('style');
+        style.textContent = '.cs-day--selected { background: #eaf4fd !important; outline: 2px solid #2980b9; outline-offset: -2px; } ' +
+            '.cs-legend__dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; }';
+        document.head.appendChild(style);
+
     }());
     </script>
 {% endblock %}
