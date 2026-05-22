@@ -13,32 +13,93 @@
 *, *::before, *::after { box-sizing: border-box; }
 
 .bv-page {
-    max-width: 960px;
-    margin: 0 auto;
-    padding: 24px 20px;
+    background: #f4f6f8;
+    min-height: calc(100vh - 64px);
+    padding-bottom: 60px;
+}
+.bv-page__inner {
+    max-width: none;
+    padding: 0 60px;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
-/* Header */
-.bv-header {
+/* Header (same as pa-header) */
+.pa-header {
+    background: linear-gradient(135deg, #1a2e4a 0%, #2980b9 100%);
+    padding: 36px 60px 32px;
+    margin-bottom: 24px;
+}
+.pa-header__inner {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 24px;
+    gap: 16px;
     flex-wrap: wrap;
-    gap: 12px;
 }
-.bv-header__left { display: flex; flex-direction: column; gap: 4px; }
-.bv-header__title { font-size: 22px; font-weight: 800; color: #1a2e4a; margin: 0; }
-.bv-header__sub { font-size: 13px; color: #7f8c8d; margin: 0; }
-.bv-back {
-    display: inline-flex; align-items: center; gap: 6px;
-    padding: 8px 16px; font-size: 13px; font-weight: 600;
-    border-radius: 8px; border: 1px solid #dde3ea;
-    background: #fff; color: #2c3e50; text-decoration: none;
-    transition: all 0.15s;
+.pa-header__left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
 }
-.bv-back:hover { background: #f4f6f8; text-decoration: none; color: #2c3e50; }
+.pa-header__icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: #f39c12;
+    color: #fff;
+    font-size: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 0 0 3px rgba(255,255,255,0.25);
+}
+.pa-header__titles { display: flex; flex-direction: column; gap: 4px; }
+.pa-header__back {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: rgba(255,255,255,0.6);
+    font-size: 12px;
+    text-decoration: none;
+    transition: color 0.15s;
+    margin-bottom: 2px;
+}
+.pa-header__back:hover { color: #fff; text-decoration: none; }
+.pa-header__title {
+    font-size: 26px;
+    font-weight: 700;
+    color: #fff;
+    margin: 0;
+    line-height: 1.2;
+}
+.pa-header__sub {
+    font-size: 14px;
+    color: rgba(255,255,255,0.75);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+.pa-header__sub strong { color: #fff; }
+.pa-header__meta-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+.pa-stat-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 20px;
+    padding: 5px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #fff;
+}
 
 /* Summary bar */
 .bv-summary {
@@ -194,6 +255,26 @@
 .bv-modal__btn--submit { background: #2980b9; color: #fff; }
 .bv-modal__btn--submit:hover { background: #1e6fa8; }
 .bv-feedback { font-size: 12px; color: #dc2626; display: none; }
+
+/* Responsive */
+@media (max-width: 991px) {
+    .pa-header { padding: 28px 20px 24px; }
+    .bv-page__inner { padding: 0 20px; }
+    .pa-header__title { font-size: 22px; }
+    .pa-header__icon { width: 44px; height: 44px; font-size: 18px; }
+    .bv-summary { padding: 16px 20px; }
+}
+
+@media (max-width: 600px) {
+    .pa-header { padding: 24px 16px 20px; }
+    .bv-page__inner { padding: 0 16px; }
+    .pa-header__inner { flex-direction: column; align-items: flex-start; }
+    .pa-header__right { width: 100%; justify-content: flex-start; }
+    .pa-header__title { font-size: 20px; }
+    .pa-header__icon { width: 40px; height: 40px; font-size: 16px; }
+    .bv-layout { grid-template-columns: 1fr; }
+    .bv-summary { padding: 16px; gap: 16px; }
+}
     </style>
 {% endblock %}
 
@@ -204,20 +285,47 @@
 <div class="bv-page">
 
     {# Header #}
-    <div class="bv-header">
-        <div class="bv-header__left">
-            <h1 class="bv-header__title">{{ travel.title }} – Budget</h1>
-            <p class="bv-header__sub">{{ travel.startAt|date("d M Y") }} – {{ travel.endAt|date("d M Y") }}</p>
+    <div class="pa-header">
+        <div class="pa-header__inner">
+            <div class="pa-header__left">
+                <div class="pa-header__icon">✈</div>
+                <div class="pa-header__titles">
+                    <a href="{{ path('homepage') }}" class="pa-header__back">
+                        <svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3L5 8l5 5"/></svg>
+                        Home
+                    </a>
+                    <h1 class="pa-header__title">{{ travel.title }}</h1>
+                    <p class="pa-header__sub">
+                        {% if travel.description %}
+                            <span>{{ travel.description }}</span>
+                        {% endif %}
+                        <span class="pa-header__meta-item">
+                            <svg viewBox="0 0 16 16" width="12" height="12" fill="currentColor"><path d="M11 1v1H5V1H3v1H1v13h14V2h-2V1h-2zm2 12H3V6h10v7z"/></svg>
+                            {{ travel.startAt|date("d M Y") }} – {{ travel.endAt|date("d M Y") }}
+                        </span>
+                        <span class="pa-header__meta-item">
+                            By <strong>{{ travel.user.firstName }} {{ travel.user.lastName }}</strong>
+                        </span>
+                    </p>
+                </div>
+            </div>
+            <div class="pa-header__right">
+                <span class="pa-stat-pill">
+                    <svg viewBox="0 0 16 16" width="13" height="13" fill="currentColor"><path d="M8 1l1.8 3.6L14 5.3l-3 2.9.7 4.1L8 10.4l-3.7 1.9.7-4.1-3-2.9 4.2-.7z"/></svg>
+                    {{ travel.stars }}
+                </span>
+                <span class="pa-stat-pill">
+                    <svg viewBox="0 0 16 16" width="13" height="13" fill="currentColor"><path d="M8 3C4.5 3 1.5 6 1 8c.5 2 3.5 5 7 5s6.5-3 7-5c-.5-2-3.5-5-7-5zm0 8a3 3 0 1 1 0-6 3 3 0 0 1 0 6zm0-5a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/></svg>
+                    {{ travel.watch }}
+                </span>
+            </div>
         </div>
-        <a class="bv-back" href="{{ path('show_travel', {slug: travel.slug}) }}">
-            <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 2L4 8l6 6"/></svg>
-            Back to travel
-        </a>
     </div>
 
-    {% include 'travel/viewTabs.html.twig' with {'travel': travel, 'active': 'budget'} %}
+    <div class="bv-page__inner">
+        {% include 'travel/viewTabs.html.twig' with {'travel': travel, 'active': 'budget'} %}
 
-    {# Summary bar #}
+        {# Summary bar #}
     <div class="bv-summary">
         <div class="bv-summary__item">
             <span class="bv-summary__label">Budget</span>
@@ -332,6 +440,8 @@
         </div>
 
     </div>{# /bv-layout #}
+
+    </div>
 </div>{# /bv-page #}
 
 {# ── Set budget modal ── #}
