@@ -3,9 +3,18 @@
 var locationGallery = function (pGallery, isOwner) {
     this.pathGallery = pGallery;
     this.galleryZone = 'dz-ImageLocation';
-    this.notesZone = 'notes';
     this.isOwner = !!isOwner;
     this.currentLocationId = null;
+};
+
+locationGallery.prototype._getNotesZoneId = function () {
+    if (document.getElementById('notes-unified')) {
+        return 'notes-unified';
+    }
+    if (document.getElementById('notes')) {
+        return 'notes';
+    }
+    return null;
 };
 
 /* ── Gallery ── */
@@ -16,7 +25,10 @@ locationGallery.prototype.getLocationImages = function (location) {
     var $zone = $('#' + this.galleryZone);
 
     $zone.empty();
-    $("#notes").empty();
+    var notesId = this._getNotesZoneId();
+    if (notesId) {
+        $("#" + notesId).empty();
+    }
 
     if (_self.isOwner) {
         $zone.append(_self._buildUploadHtml());
@@ -47,13 +59,23 @@ locationGallery.prototype.getLocationImages = function (location) {
     })
     .then(function (r) { return r.ok ? r.json() : null; })
     .then(function (data) {
+        var targetNotesId = _self._getNotesZoneId();
+        if (!targetNotesId) { return; }
         if (!data || !data.notes || !data.notes.length) { return; }
         data.notes.forEach(function (n) {
             var html = locationGallery._renderNoteContent(n.content);
-            $('#' + _self.notesZone).append('<div class="note-item" style="margin-bottom:6px;">' + html + '</div>');
+            $('#' + targetNotesId).append('<div class="note-item" style="margin-bottom:6px;">' + html + '</div>');
         });
     })
     .catch(function () {});
+};
+
+/* ── Static: reload notes for current location (called after save/delete) ── */
+locationGallery.reloadCurrentNotes = function () {
+    if (!window.mPoint || !window.mPoint.plugin) { return; }
+    var gallery = window.mPoint.plugin.locationGallery;
+    if (!gallery || !gallery.currentLocationId) { return; }
+    gallery.getLocationImages(gallery.currentLocationId);
 };
 
 locationGallery.prototype._buildUploadHtml = function () {

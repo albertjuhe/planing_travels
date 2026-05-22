@@ -174,6 +174,9 @@ mapPoint.prototype.addPoint = function (locationPoint) {
     $('*[data-place="' + pid + '"][data-function="edit"]').bind({'click': this.editMark});
     $('#layer_' + pid + ' .point-view__drag').bind('click', function (e) {
         map.setView([locationPoint.latitude, locationPoint.longitude], 11);
+        if (window.stSidebarNavigation) {
+            window.stSidebarNavigation.showDetail(locationPoint);
+        }
     });
 
     /* Toggle dropdown */
@@ -206,9 +209,14 @@ mapPoint.prototype.info = function (e) {
     var l = el ? $.data(el, 'location') : null;
     if (!l) { return; }
 
-    $('#location').html(l.placeAddress);
-    $('#location_media').addClass('is-visible').show();
-    this.showGallery(l.id);
+    if (window.stSidebarNavigation) {
+        map.setView([l.latitude, l.longitude], 12);
+        window.stSidebarNavigation.showDetail(l);
+    } else {
+        $('#location').html(l.placeAddress);
+        $('#location_media').addClass('is-visible').show();
+        this.showGallery(l.id);
+    }
 };
 
 mapPoint.prototype.editMark = function (e) {
@@ -428,6 +436,9 @@ mapPoint._saveNote = function (locationId, content) {
             feedback.style.display = 'none';
             var modal = document.getElementById('notesModal');
             mapPoint._loadNotes(modal.getAttribute('data-location-id'));
+            if (typeof locationGallery !== 'undefined' && locationGallery.reloadCurrentNotes) {
+                locationGallery.reloadCurrentNotes();
+            }
         } else {
             feedback.textContent = (result.data && result.data.error) || 'Could not save note.';
             feedback.style.display = 'block';
@@ -452,6 +463,9 @@ mapPoint._deleteNote = function (noteId, locationId) {
             var list = document.getElementById('notes-list');
             if (list && !list.querySelector('.note-item')) {
                 list.innerHTML = '<div class="notes-empty">No notes yet. Add the first one below.</div>';
+            }
+            if (typeof locationGallery !== 'undefined' && locationGallery.reloadCurrentNotes) {
+                locationGallery.reloadCurrentNotes();
             }
         }
     });
