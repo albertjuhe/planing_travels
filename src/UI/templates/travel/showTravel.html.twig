@@ -1643,6 +1643,800 @@
     }
 }
 
+/* ─────────────────────────────────────────
+   UNIFIED LAYOUT - Sidebar Contextual
+   ───────────────────────────────────────── */
+
+body .st-page .container,
+html body .st-page > .container,
+.st-page > .container {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    max-width: none !important;
+    width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+
+/* Debug: red border to verify CSS is loaded */
+.st-unified-layout {
+    /* border: 3px solid #e74c3c !important; */
+}
+
+.st-unified-layout {
+    display: grid;
+    grid-template-columns: 1fr 480px;
+    gap: 0;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08), 0 8px 32px rgba(0,0,0,0.08);
+    overflow: hidden;
+    min-height: calc(100vh - 160px);
+    max-height: calc(100vh - 120px);
+    transition: grid-template-columns 0.3s ease;
+}
+
+.st-unified-layout.sidebar-collapsed {
+    grid-template-columns: 1fr 0px;
+}
+
+/* ── Mapa a altura completa ── */
+.st-map-full {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    height: 100%;
+    min-height: calc(100vh - 160px);
+    max-height: calc(100vh - 120px);
+}
+
+.st-map-full__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 16px;
+    background: linear-gradient(135deg, #1a2e4a 0%, #2574a9 100%);
+    color: #fff;
+    flex-shrink: 0;
+}
+
+.st-map-full__title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.st-map-full__actions {
+    display: flex;
+    gap: 8px;
+}
+
+.st-toggle-sidebar-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    font-size: 11px;
+    font-weight: 600;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.35);
+    background: rgba(255,255,255,0.15);
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.15s;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+}
+
+.st-toggle-sidebar-btn:hover { background: rgba(255,255,255,0.25); }
+
+.st-map-full__canvas {
+    flex: 1;
+    width: 100%;
+    display: block;
+    min-height: 0;
+}
+
+/* ── Sidebar Unificado ── */
+.st-sidebar-unified {
+    display: flex;
+    flex-direction: column;
+    border-left: 1px solid #e5e7eb;
+    background: #fff;
+    overflow: hidden;
+    transition: width 0.3s ease, opacity 0.3s ease;
+    width: 480px;
+    min-width: 0;
+    height: 100%;
+    min-height: calc(100vh - 160px);
+    max-height: calc(100vh - 120px);
+}
+
+.st-unified-layout.sidebar-collapsed .st-sidebar-unified {
+    opacity: 0;
+    width: 0;
+    border-left: none;
+}
+
+/* ── Vistas del Sidebar (Lista ↔ Detalle) ── */
+.st-sidebar-views {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+}
+
+.st-sidebar-view {
+    display: none;
+    flex-direction: column;
+    height: 100%;
+    animation: slideInRight 0.25s ease;
+}
+
+.st-sidebar-view.is-active {
+    display: flex;
+}
+
+@keyframes slideInRight {
+    from { opacity: 0; transform: translateX(8px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideInLeft {
+    from { opacity: 0; transform: translateX(-8px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+
+/* ── Vista: Lista de Ubicaciones ── */
+.st-locations-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    background: #fff;
+    border-bottom: 1px solid #f3f4f6;
+    flex-shrink: 0;
+}
+
+.st-locations-header__title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.st-locations-header__icon {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #2980b9 0%, #1a2e4a 100%);
+    border-radius: 8px;
+    color: #fff;
+}
+
+.st-locations-header__title strong {
+    font-size: 14px;
+    font-weight: 700;
+    color: #111827;
+    display: block;
+}
+
+.st-locations-header__title small {
+    font-size: 11px;
+    color: #9ca3af;
+    font-weight: 400;
+}
+
+.st-locations-header__actions {
+    display: flex;
+    gap: 6px;
+}
+
+.st-icon-btn {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s;
+    background: #f3f4f6;
+    color: #6b7280;
+}
+
+.st-icon-btn:hover {
+    background: #e5e7eb;
+    color: #374151;
+}
+
+.st-icon-btn--primary {
+    background: linear-gradient(135deg, #2980b9 0%, #1a2e4a 100%);
+    color: #fff;
+}
+
+.st-icon-btn--primary:hover {
+    box-shadow: 0 4px 12px rgba(41, 128, 185, 0.3);
+}
+
+.st-locations-search {
+    padding: 10px 16px;
+    position: relative;
+    background: #fff;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.st-locations-search svg {
+    position: absolute;
+    left: 28px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #9ca3af;
+    pointer-events: none;
+}
+
+.st-locations-search__input {
+    width: 100%;
+    padding: 9px 12px 9px 36px;
+    font-size: 13px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    background: #f9fafb;
+    outline: none;
+    transition: all 0.15s;
+    box-sizing: border-box;
+}
+
+.st-locations-search__input:focus {
+    background: #fff;
+    border-color: #2980b9;
+    box-shadow: 0 0 0 3px rgba(41, 128, 185, 0.1);
+}
+
+.st-locations-list {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 8px 12px;
+}
+
+.st-locations-list::-webkit-scrollbar { width: 5px; }
+.st-locations-list::-webkit-scrollbar-track { background: transparent; }
+.st-locations-list::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 3px; }
+.st-locations-list::-webkit-scrollbar-thumb:hover { background: #d1d5db; }
+
+.st-locations-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    text-align: center;
+    color: #9ca3af;
+}
+
+.st-locations-empty p {
+    margin: 12px 0 4px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #6b7280;
+}
+
+.st-locations-empty small {
+    font-size: 12px;
+}
+
+/* ── Vista: Detalle de Ubicación ── */
+.st-detail-header {
+    padding: 10px 12px;
+    background: #f8f9fa;
+    border-bottom: 1px solid #eaecef;
+    flex-shrink: 0;
+}
+
+.st-back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    background: #fff;
+    color: #374151;
+    cursor: pointer;
+    transition: all 0.15s;
+    border: 1px solid #e5e7eb;
+}
+
+.st-back-btn:hover {
+    background: #f3f4f6;
+    border-color: #d1d5db;
+}
+
+.st-detail-title {
+    padding: 14px 16px 6px;
+    font-size: 15px;
+    font-weight: 700;
+    color: #111827;
+}
+
+.st-detail-subtitle {
+    padding: 0 16px 14px;
+    font-size: 12px;
+    color: #6b7280;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.st-detail-section {
+    padding: 14px 16px;
+    border-bottom: 1px solid #f3f4f6;
+    overflow-y: auto;
+}
+
+.st-detail-section:last-child {
+    border-bottom: none;
+    flex: 1;
+}
+
+.st-detail-section__title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: #9ca3af;
+    margin-bottom: 10px;
+}
+
+.st-gallery-unified {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    min-height: 40px;
+}
+
+@media (max-width: 1200px) { .st-gallery-unified { grid-template-columns: repeat(2, 1fr); } }
+
+.st-gallery-unified .st-gallery__item {
+    aspect-ratio: 1;
+}
+
+.st-gallery-upload-unified {
+    grid-column: 1 / -1;
+    border: 2px dashed #dde3ea;
+    border-radius: 8px;
+    padding: 14px 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    background: #fafbfc;
+}
+
+.st-gallery-upload-unified:hover {
+    border-color: #2980b9;
+    background: #f0f7fd;
+}
+
+.st-notes-unified {
+    font-size: 13px;
+    color: #374151;
+    line-height: 1.6;
+}
+
+/* ── Bottom Tabs (Route / GPX) ── */
+.st-sidebar-bottom {
+    flex-shrink: 0;
+    border-top: 1px solid #e5e7eb;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+}
+
+.st-bottom-tabs-header {
+    display: flex;
+    align-items: stretch;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.st-bottom-tabs {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.st-bottom-toggle {
+    width: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f8f9fa;
+    border: none;
+    cursor: pointer;
+    transition: all 0.15s;
+    border-left: 1px solid #e5e7eb;
+    flex-shrink: 0;
+}
+
+.st-bottom-toggle:hover {
+    background: #f3f4f6;
+}
+
+.st-bottom-toggle__icon {
+    transition: transform 0.25s ease;
+}
+
+.st-sidebar-bottom.collapsed .st-bottom-toggle__icon {
+    transform: rotate(180deg);
+}
+
+.st-bottom-tab {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px 8px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #6b7280;
+    background: #f8f9fa;
+    border: none;
+    cursor: pointer;
+    transition: all 0.15s;
+    position: relative;
+}
+
+.st-bottom-tab:hover {
+    color: #374151;
+    background: #f3f4f6;
+}
+
+.st-bottom-tab.is-active {
+    color: #2980b9;
+    background: #fff;
+}
+
+.st-bottom-tab.is-active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: #2980b9;
+}
+
+.st-bottom-panels-wrapper {
+    max-height: 220px;
+    overflow: hidden;
+    transition: max-height 0.25s ease, opacity 0.2s ease;
+}
+
+.st-sidebar-bottom.collapsed .st-bottom-panels-wrapper {
+    max-height: 0;
+    opacity: 0;
+}
+
+.st-bottom-panels {
+    max-height: 220px;
+    overflow: hidden;
+}
+
+.st-bottom-panel {
+    display: none;
+    overflow-y: auto;
+}
+
+.st-bottom-panel.is-active {
+    display: block;
+}
+
+/* ── Route Compact ── */
+.st-route-compact {
+    display: flex;
+    flex-direction: column;
+}
+
+.st-route-compact__drop {
+    min-height: 80px;
+    max-height: 150px;
+    overflow-y: auto;
+    padding: 6px;
+    margin: 6px;
+    border-radius: 6px;
+    background: #fafbfc;
+    border: 1px dashed #dde3ea;
+}
+
+.st-route-compact__drop.drop-target--active {
+    background: #eaf4fd;
+    border-color: #2980b9;
+    outline: 2px solid rgba(41, 128, 185, 0.2);
+}
+
+.st-route-empty-unified {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 20px 12px;
+    color: #b0b8c1;
+    text-align: center;
+}
+
+.st-route-empty-unified p {
+    margin: 0;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.st-route-compact__actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 10px;
+    background: #f8f9fa;
+    border-top: 1px solid #eaecef;
+}
+
+.st-route-count-unified {
+    font-size: 11px;
+    font-weight: 600;
+    color: #6b7280;
+    background: #eef0f2;
+    padding: 2px 8px;
+    border-radius: 8px;
+}
+
+.st-route-compact__btns {
+    display: flex;
+    gap: 4px;
+}
+
+.st-mini-btn {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s;
+    background: #eef0f2;
+    color: #636e72;
+}
+
+.st-mini-btn:hover {
+    background: #dde3ea;
+    color: #2c3e50;
+}
+
+.st-mini-btn--primary {
+    background: #2980b9;
+    color: #fff;
+}
+
+.st-mini-btn--primary:hover {
+    background: #1e6fa8;
+}
+
+.st-mini-btn--danger {
+    background: #e74c3c;
+    color: #fff;
+}
+
+.st-mini-btn--danger:hover {
+    background: #c0392b;
+}
+
+/* ── GPX Compact ── */
+.st-gpx-compact {
+    display: flex;
+    flex-direction: column;
+    max-height: 220px;
+}
+
+.st-gpx-upload-compact {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin: 6px;
+    padding: 8px 12px;
+    border: 2px dashed #2980b9;
+    border-radius: 6px;
+    background: #f0f7fd;
+    color: #2980b9;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+.st-gpx-upload-compact:hover {
+    background: #e1efff;
+    border-color: #1e6fa8;
+}
+
+.st-gpx-upload-compact.is-dragover {
+    background: #d4e9fa;
+    border-color: #1e6fa8;
+}
+
+.st-track-list-compact {
+    overflow-y: auto;
+    padding: 4px 6px;
+    flex: 1;
+}
+
+.st-track-item-compact {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 4px;
+    border-radius: 6px;
+    transition: background 0.12s;
+    flex-wrap: wrap;
+}
+
+.st-track-item-compact:hover {
+    background: #f4f6f8;
+}
+
+.st-track-info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+}
+
+.st-track-info .st-track-name,
+.st-track-info .st-track-name-input {
+    font-size: 11px;
+}
+
+.st-track-info .st-track-distance {
+    font-size: 9px;
+    padding-left: 2px;
+}
+
+.st-track-meta-compact {
+    flex-basis: 100%;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px 4px 28px;
+    font-size: 10px;
+    color: #7f8c8d;
+}
+
+.st-track-date-compact {
+    font-size: 10px;
+    padding: 1px 4px;
+    border-radius: 4px;
+    max-width: 100px;
+}
+
+.st-track-empty-compact {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 16px 12px;
+    color: #b0b8c1;
+    text-align: center;
+}
+
+.st-track-empty-compact p {
+    margin: 0;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.st-gpx-compact__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 10px;
+    background: #f8f9fa;
+    border-top: 1px solid #eaecef;
+    flex-shrink: 0;
+}
+
+.st-gpx-total {
+    font-size: 11px;
+    font-weight: 600;
+    color: #6b7280;
+}
+
+.st-gpx-compact__footer .st-mini-btn {
+    width: auto;
+    padding: 4px 10px;
+    gap: 4px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+/* ── Responsive Unified Layout ── */
+@media (max-width: 1200px) {
+    .st-unified-layout {
+        grid-template-columns: 1fr 440px;
+    }
+    .st-sidebar-unified {
+        width: 440px;
+    }
+}
+
+@media (max-width: 1100px) {
+    .st-unified-layout {
+        grid-template-columns: 1fr 400px;
+    }
+    .st-sidebar-unified {
+        width: 400px;
+    }
+}
+
+@media (max-width: 991px) {
+    .st-unified-layout {
+        grid-template-columns: 1fr;
+        min-height: auto;
+        max-height: none;
+    }
+
+    .st-unified-layout.sidebar-collapsed {
+        grid-template-columns: 1fr;
+    }
+
+    .st-map-full {
+        min-height: 400px;
+        max-height: none;
+    }
+
+    .st-map-full__canvas {
+        min-height: 360px;
+    }
+
+    .st-sidebar-unified {
+        border-left: none;
+        border-top: 1px solid #eaecef;
+        height: auto;
+        width: 100% !important;
+        opacity: 1 !important;
+        max-height: none;
+    }
+
+    .st-toggle-sidebar-btn {
+        display: none;
+    }
+
+    .st-sidebar-views {
+        max-height: 420px;
+    }
+
+    .st-bottom-panels {
+        max-height: 200px;
+    }
+}
+
+@media (max-width: 600px) {
+    .st-map-full, .st-map-full__canvas {
+        min-height: 280px;
+    }
+}
+
     </style>
 {% endblock %}
 
@@ -1756,43 +2550,232 @@
 
         {# ── MAP panel ── #}
         <div class="st-view-panel is-active" id="st-panel-map">
-        <div class="st-layout">
+            <div class="st-unified-layout">
 
-            {# ── Mapa + Localizaciones (split view) ── #}
-            <div class="st-map-locations">
-                {# Mapa (lado izquierdo, grande) #}
-                <div class="st-map-area">
-                    <div class="st-panel__head">
-                        <span class="st-panel__head-left">
-                            <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><path d="M8 1a5 5 0 0 1 5 5c0 4-5 9-5 9S3 10 3 6a5 5 0 0 1 5-5zm0 3a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/></svg>
+                {# ── Mapa (lado izquierdo, altura completa) ── #}
+                <div class="st-map-full">
+                    <div class="st-map-full__head">
+                        <span class="st-map-full__title">
+                            <svg viewBox="0 0 16 16" width="16" height="16" fill="currentColor"><path d="M8 1a5 5 0 0 1 5 5c0 4-5 9-5 9S3 10 3 6a5 5 0 0 1 5-5zm0 3a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/></svg>
                             Map
                         </span>
-                        <button class="st-sidebar-toggle" id="st-sidebar-toggle" type="button" title="Toggle locations panel">
-                            <svg class="st-sidebar-toggle__icon" viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3l-5 5 5 5"/></svg>
-                            <span id="st-sidebar-toggle-label">Hide</span>
-                        </button>
+                        <div class="st-map-full__actions">
+                            <button class="st-toggle-sidebar-btn" id="st-toggle-sidebar" type="button" title="Toggle sidebar">
+                                <svg class="st-toggle-sidebar__icon" viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3l-5 5 5 5"/></svg>
+                                <span id="st-toggle-sidebar-label">Hide panel</span>
+                            </button>
+                        </div>
                     </div>
-                    <div id="map"></div>
+                    <div id="map" class="st-map-full__canvas"></div>
                 </div>
 
-                {# Localizaciones (lado derecho, siempre visible) #}
-                <div class="st-locations-sidebar">
-                    {% include 'travel/locationsPanel.html.twig' with {'isOwner': canEdit} %}
+                {# ── Sidebar Unificado (lado derecho, altura completa) ── #}
+                <div class="st-sidebar-unified" id="st-sidebar-unified">
+
+                    {# ── Vistas del sidebar (Lista ↔ Detalle) ── #}
+                    <div class="st-sidebar-views">
+
+                        {# Vista 1: Lista de Ubicaciones (default) #}
+                        <div class="st-sidebar-view is-active" id="st-view-locations">
+                            <div class="st-locations-header">
+                                <div class="st-locations-header__title">
+                                    <span class="st-locations-header__icon">
+                                        <svg viewBox="0 0 16 16" width="18" height="18" fill="currentColor"><path d="M8 1a5 5 0 0 1 5 5c0 4-5 9-5 9S3 10 3 6a5 5 0 0 1 5-5zm0 3a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/></svg>
+                                    </span>
+                                    <span>
+                                        <strong>Locations</strong>
+                                        <small id="loc-count-unified"></small>
+                                    </span>
+                                </div>
+                                <div class="st-locations-header__actions">
+                                    {% if canEdit %}
+                                    <button type="button" class="st-icon-btn st-icon-btn--primary" data-toggle="modal" data-target="#addpoint" title="Add location">
+                                        <svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3v10M3 8h10"/></svg>
+                                    </button>
+                                    {% endif %}
+                                    <button class="st-icon-btn" id="center-map-unified" title="Center map">
+                                        <svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="3"/><path d="M8 1v3M8 12v3M1 8h3M12 8h3"/></svg>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="st-locations-search">
+                                <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="7" r="4"/><path d="M10 10l3 3"/></svg>
+                                <input type="text" class="st-locations-search__input" id="loc-search-unified" placeholder="Search locations...">
+                            </div>
+                            <div class="st-locations-list" id="mapPoints">
+                                <div class="st-locations-empty" id="loc-empty-state-unified">
+                                    <svg viewBox="0 0 16 16" width="32" height="32" fill="currentColor" opacity="0.3"><path d="M8 1a5 5 0 0 1 5 5c0 4-5 9-5 9S3 10 3 6a5 5 0 0 1 5-5zm0 3a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/></svg>
+                                    <p>No locations yet</p>
+                                    <small>Add your first location to get started</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        {# Vista 2: Detalle de Ubicación (Gallery + Notes) - oculta por defecto #}
+                        <div class="st-sidebar-view" id="st-view-detail">
+                            <div class="st-detail-header">
+                                <button class="st-back-btn" id="st-back-to-list" type="button">
+                                    <svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3L5 8l5 5"/></svg>
+                                    <span>Back</span>
+                                </button>
+                            </div>
+                            <div class="st-detail-title" id="st-detail-location-name"></div>
+                            <div class="st-detail-subtitle" id="st-detail-location-address"></div>
+
+                            {# Galería #}
+                            <div class="st-detail-section">
+                                <div class="st-detail-section__title">
+                                    <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><path d="M0 3h16v10H0V3zm1 1v8h14V4H1zm4 2a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm-1 5l2-3 2 2 2-3 3 4H3z"/></svg>
+                                    Gallery
+                                </div>
+                                <div class="st-gallery-unified" id="dz-ImageLocation"></div>
+                            </div>
+
+                            {# Notas #}
+                            <div class="st-detail-section">
+                                <div class="st-detail-section__title">
+                                    <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><path d="M2 2h12v12H2V2zm1 1v10h10V3H3zm2 2h6v1H5V5zm0 3h6v1H5V8zm0 3h4v1H5v-1z"/></svg>
+                                    Notes
+                                </div>
+                                <div id="notes-unified" class="st-notes-unified"></div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    {# ── Tabs inferiores: Route / GPX Tracks ── #}
+                    <div class="st-sidebar-bottom" id="st-sidebar-bottom">
+                        <div class="st-bottom-tabs-header">
+                            <div class="st-bottom-tabs">
+                                <button class="st-bottom-tab is-active" data-bottom-tab="route" type="button">
+                                    <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor" opacity=".7"><path d="M2 14L6 2l4 8 2-4 2 8" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                    Route
+                                </button>
+                                <button class="st-bottom-tab" data-bottom-tab="gpx" type="button">
+                                    <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor" opacity=".7"><path d="M1 12L4 6l3 4 2-3 3 5 2-3" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                    GPX Tracks
+                                </button>
+                            </div>
+                            <button class="st-bottom-toggle" id="st-bottom-toggle" type="button" title="Collapse">
+                                <svg class="st-bottom-toggle__icon" viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 10l3-3 3 3"/></svg>
+                            </button>
+                        </div>
+
+                        <div class="st-bottom-panels-wrapper">
+                            <div class="st-bottom-panels">
+                            {# Panel: Route #}
+                            <div class="st-bottom-panel is-active" id="st-bottom-panel-route">
+                                <div class="st-route-compact">
+                                    <div class="st-route-compact__drop" id="routePoints">
+                                        <div class="st-route-empty-unified" id="route-empty-unified">
+                                            <svg viewBox="0 0 16 16" width="20" height="20" fill="currentColor" opacity=".2"><path d="M2 14L6 2l4 8 2-4 2 8" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                            <p>Drag locations here</p>
+                                        </div>
+                                    </div>
+                                    <div class="st-route-compact__actions">
+                                        <span class="st-route-count-unified" id="route-count-unified"></span>
+                                        <div class="st-route-compact__btns">
+                                            <button type="button" class="st-mini-btn st-mini-btn--primary" id="calculate-route-unified" title="Calculate">
+                                                <svg viewBox="0 0 16 16" width="12" height="12" fill="currentColor"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                            </button>
+                                            <button class="st-mini-btn" id="reset-unified" title="Reset">
+                                                <svg viewBox="0 0 16 16" width="12" height="12" fill="currentColor"><path d="M2 8a6 6 0 1 1 1.5 4M2 12V8h4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                            </button>
+                                            <button class="st-mini-btn st-mini-btn--danger" id="remove-route-unified" title="Remove">
+                                                <svg viewBox="0 0 16 16" width="12" height="12" fill="currentColor"><path d="M3 3l10 10M13 3L3 13" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+                                            </button>
+                                            <button class="st-mini-btn" id="itinerary-unified" title="Itinerary">
+                                                <svg viewBox="0 0 16 16" width="11" height="11" fill="currentColor"><path d="M2 4h12M2 8h8M2 12h10"/></svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {# Panel: GPX Tracks #}
+                            <div class="st-bottom-panel" id="st-bottom-panel-gpx">
+                                <div class="st-gpx-compact">
+                                    {% if canEdit %}
+                                    <label class="st-gpx-upload-compact" id="tracks-upload-btn" for="tracks-upload-input">
+                                        <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 10v4H2v-4M8 2v9M4 6l4-4 4 4"/></svg>
+                                        <span>Upload GPX</span>
+                                    </label>
+                                    <input type="file" id="tracks-upload-input" accept=".gpx,application/gpx+xml" style="display:none;">
+                                    {% endif %}
+
+                                    <div id="tracks" class="st-track-list-compact">
+                                        {% set startTs = travel.startAt|date('U') %}
+                                        {% set endTs   = travel.endAt|date('U') %}
+                                        {% set tripDays = (((endTs - startTs) / 86400)|round(0,'ceil') + 1) %}
+                                        {% for gpx in travel.gpx %}
+                                        <div class="st-track-item-compact" data-track-idx="{{ loop.index0 }}" data-track-id="{{ gpx.id }}" id="st-track-{{ gpx.id }}">
+                                            {% if canEdit %}
+                                            <input type="color" class="st-track-color st-track-color-input" value="{{ gpx.color }}" data-track-id="{{ gpx.id }}" data-track-idx="{{ loop.index0 }}" title="Change color">
+                                            {% else %}
+                                            <span class="st-track-dot" style="background:{{ gpx.color }}"></span>
+                                            {% endif %}
+                                            <span class="st-track-info">
+                                                {% if canEdit %}
+                                                <input type="text" class="st-track-name-input" value="{{ gpx.title|default(gpx.filename) }}" data-track-id="{{ gpx.id }}" placeholder="Track title" maxlength="255" title="Edit title">
+                                                {% else %}
+                                                <span class="st-track-name" title="{{ gpx.title|default(gpx.filename) }}">{{ gpx.title|default(gpx.filename) }}</span>
+                                                {% endif %}
+                                                <span class="st-track-distance" id="st-track-dist-{{ gpx.id }}" data-track-id="{{ gpx.id }}">{% if gpx.distance %}{{ (gpx.distance / 1000)|number_format(2) }} km{% else %}…{% endif %}</span>
+                                            </span>
+                                            <button type="button" class="st-mini-btn st-track-view-compact" data-track-idx="{{ loop.index0 }}" title="Zoom to track">
+                                                <svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="7" r="4"/><path d="M10 10l4 4"/></svg>
+                                            </button>
+                                            <label class="st-track-toggle">
+                                                <input type="checkbox" class="st-track-checkbox" checked data-track-idx="{{ loop.index0 }}"/>
+                                                <span class="st-track-slider"></span>
+                                            </label>
+                                            {% if canEdit %}
+                                            <button type="button" class="st-mini-btn st-mini-btn--danger st-track-delete" data-track-id="{{ gpx.id }}" title="Delete track">
+                                                <svg viewBox="0 0 16 16" width="11" height="11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3 4h10M6 4V2h4v2M5 4l1 10h4l1-10"/></svg>
+                                            </button>
+                                            {% endif %}
+                                        </div>
+                                        {% if canEdit and gpx.visitDateString %}
+                                        <div class="st-track-meta-compact">
+                                            <svg viewBox="0 0 16 16" width="11" height="11" fill="currentColor" opacity=".55"><path d="M11 1v1H5V1H3v1H1v13h14V2h-2V1h-2zm2 12H3V6h10v7z"/></svg>
+                                            <select class="st-track-date st-track-date-compact" data-track-id="{{ gpx.id }}">
+                                                <option value="">No day assigned</option>
+                                                {% for i in 0..tripDays-1 %}
+                                                    {% set d = travel.startAt|date_modify('+' ~ i ~ ' days') %}
+                                                    {% set ds = d|date('Y-m-d') %}
+                                                    <option value="{{ ds }}"{% if gpx.visitDateString == ds %} selected{% endif %}>{{ d|date('D d M') }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        {% elseif gpx.visitDateString %}
+                                        <div class="st-track-meta-compact">
+                                            <svg viewBox="0 0 16 16" width="11" height="11" fill="currentColor" opacity=".55"><path d="M11 1v1H5V1H3v1H1v13h14V2h-2V1h-2zm2 12H3V6h10v7z"/></svg>
+                                            <span>{{ gpx.visitDate|date('D d M Y') }}</span>
+                                        </div>
+                                        {% endif %}
+                                        {% else %}
+                                        <div class="st-track-empty-compact" id="st-track-empty">
+                                            <svg viewBox="0 0 16 16" width="18" height="18" fill="currentColor" opacity=".2"><path d="M1 12L4 6l3 4 2-3 3 5 2-3" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                            <p>No GPX tracks</p>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="st-gpx-compact__footer">
+                                        <span id="tracks-total-km-unified" class="st-gpx-total" style="display:none;"></span>
+                                        <button class="st-mini-btn" id="tracks-show-all-unified" type="button">
+                                            <svg viewBox="0 0 16 16" width="11" height="11" fill="currentColor"><path d="M8 1v14M1 8h14" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+                                            <span>Toggle all</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+
                 </div>
+
             </div>
-
-            {# ── Detalles adicionales (rutas, tracks, galería) ── #}
-            <div class="st-details-row">
-                <div class="st-sidebar">
-                    {% include 'travel/routePanel.html.twig' %}
-                    {% include 'travel/tracksPanel.html.twig' with {'gpxs': travel.gpx, 'canEdit': canEdit, 'travel': travel} %}
-                </div>
-
-                <div class="st-main">
-                    {% include 'travel/infoLocationPanel.html.twig' with {'travel': travel} %}
-                </div>
-            </div>
-
         </div>
 
         {% if canEdit %}
@@ -1805,6 +2788,13 @@
     </div>{# /container #}
 
 </div>{# /st-page #}
+
+{# Lightbox overlay #}
+<div class="st-lightbox" id="st-lightbox">
+    <button class="st-lightbox__close" id="st-lightbox-close" type="button">&times;</button>
+    <img class="st-lightbox__img" id="st-lightbox-img" src="" alt=""/>
+</div>
+
 {% if app.user and app.user.userId == travel.user.userId %}
 <div class="sh-overlay" id="sh-overlay" role="dialog" aria-modal="true" aria-labelledby="sh-modal-title">
     <div class="sh-modal">
@@ -1929,24 +2919,26 @@
 
         var centralMark = L.marker([{{ travel.geolocation.lat}},{{ travel.geolocation.lng }}], {icon: centerMarker}).addTo(map);
 
-        /* ── Locations sidebar collapse ── */
+        /* ── Locations sidebar collapse (Unified Layout) ── */
         (function () {
-            var wrapper = document.querySelector('.st-map-locations');
-            var btn     = document.getElementById('st-sidebar-toggle');
-            var label   = document.getElementById('st-sidebar-toggle-label');
+            var wrapper = document.querySelector('.st-unified-layout');
+            var btn     = document.getElementById('st-toggle-sidebar');
+            var label   = document.getElementById('st-toggle-sidebar-label');
 
-            btn.addEventListener('click', function () {
-                var collapsed = wrapper.classList.toggle('sidebar-collapsed');
-                label.textContent = collapsed ? 'Show' : 'Hide';
-                setTimeout(function () { map.invalidateSize(); }, 310);
-            });
+            if (btn && label) {
+                btn.addEventListener('click', function () {
+                    var collapsed = wrapper.classList.toggle('sidebar-collapsed');
+                    label.textContent = collapsed ? 'Show panel' : 'Hide panel';
+                    setTimeout(function () { map.invalidateSize(); }, 310);
+                });
+            }
         }());
 
-        /* ── Locations search & count ── */
+        /* ── Locations search & count (Unified Layout) ── */
         (function () {
-            var searchInput = document.getElementById('loc-search');
-            var countEl = document.getElementById('loc-count');
-            var emptyState = document.getElementById('loc-empty-state');
+            var searchInput = document.getElementById('loc-search-unified');
+            var countEl = document.getElementById('loc-count-unified');
+            var emptyState = document.getElementById('loc-empty-state-unified');
             var mapPointsEl = document.getElementById('mapPoints');
 
             function updateCount() {
@@ -1978,11 +2970,120 @@
             }
         }());
 
-        $('#center').click(function()          { map.setView([{{ travel.geolocation.lat}},{{ travel.geolocation.lng }}],8); });
-        $('#remove-route').click(function()    { mPoint.removeRoute(); });
-        $('#calculate-route').click(function() { mPoint.calculateRoute(); });
-        $('#reset').click(function()           { mPoint.resetRoute(); });
-        $('#itinerary').click(function()       { mPoint.panelItinerary(); });
+        /* ── Bottom Tabs: Route / GPX ── */
+        (function () {
+            var tabs = document.querySelectorAll('.st-bottom-tab');
+            var panels = document.querySelectorAll('.st-bottom-panel');
+
+            tabs.forEach(function (tab) {
+                tab.addEventListener('click', function () {
+                    tabs.forEach(function (t) { t.classList.remove('is-active'); });
+                    panels.forEach(function (p) { p.classList.remove('is-active'); });
+
+                    tab.classList.add('is-active');
+                    var targetTab = tab.dataset.bottomTab;
+                    var targetPanel = document.getElementById('st-bottom-panel-' + targetTab);
+                    if (targetPanel) { targetPanel.classList.add('is-active'); }
+                });
+            });
+        }());
+
+        /* ── Bottom section collapse toggle ── */
+        (function () {
+            var bottomSection = document.getElementById('st-sidebar-bottom');
+            var toggleBtn = document.getElementById('st-bottom-toggle');
+
+            if (bottomSection && toggleBtn) {
+                var collapsed = localStorage.getItem('st-bottom-collapsed') === 'true';
+                if (collapsed) {
+                    bottomSection.classList.add('collapsed');
+                }
+
+                toggleBtn.addEventListener('click', function () {
+                    var isCollapsed = bottomSection.classList.toggle('collapsed');
+                    localStorage.setItem('st-bottom-collapsed', isCollapsed ? 'true' : 'false');
+                    toggleBtn.setAttribute('title', isCollapsed ? 'Expand' : 'Collapse');
+                });
+            }
+        }());
+
+        /* ── Sidebar Views: List ↔ Detail navigation ── */
+        window.stSidebarNavigation = {
+            currentLocationData: null,
+
+            showDetail: function(locationData) {
+                this.currentLocationData = locationData;
+
+                var viewLocations = document.getElementById('st-view-locations');
+                var viewDetail = document.getElementById('st-view-detail');
+
+                if (viewLocations) { viewLocations.classList.remove('is-active'); }
+                if (viewDetail) {
+                    viewDetail.classList.add('is-active');
+                    viewDetail.style.animation = 'slideInRight 0.25s ease';
+                }
+
+                var titleEl = document.getElementById('st-detail-location-name');
+                var addressEl = document.getElementById('st-detail-location-address');
+
+                if (titleEl && locationData) {
+                    titleEl.textContent = locationData.address || locationData.placeAddress || 'Location';
+                }
+                if (addressEl && locationData) {
+                    addressEl.textContent = locationData.placeAddress || '';
+                }
+
+                if (locationData && locationData.id) {
+                    mPoint.showGallery(locationData.id);
+                }
+            },
+
+            showList: function() {
+                var viewLocations = document.getElementById('st-view-locations');
+                var viewDetail = document.getElementById('st-view-detail');
+
+                if (viewDetail) { viewDetail.classList.remove('is-active'); }
+                if (viewLocations) {
+                    viewLocations.classList.add('is-active');
+                    viewLocations.style.animation = 'slideInLeft 0.25s ease';
+                }
+            }
+        };
+
+        (function () {
+            var backBtn = document.getElementById('st-back-to-list');
+            if (backBtn) {
+                backBtn.addEventListener('click', function () {
+                    window.stSidebarNavigation.showList();
+                });
+            }
+        }());
+
+        /* ── Route buttons (Unified Layout) ── */
+        (function () {
+            function updateRouteCount() {
+                var routePoints = document.querySelectorAll('#routePoints .point-view');
+                var countEl = document.getElementById('route-count-unified');
+                if (countEl) {
+                    var count = routePoints.length;
+                    countEl.textContent = count + ' point' + (count !== 1 ? 's' : '');
+                    countEl.style.display = count > 0 ? '' : 'none';
+                }
+            }
+
+            var routeContainer = document.getElementById('routePoints');
+            if (routeContainer) {
+                var obs = new MutationObserver(updateRouteCount);
+                obs.observe(routeContainer, { childList: true, subtree: true });
+            }
+            updateRouteCount();
+        }());
+
+        $('#center-map-unified').click(function() { map.setView([{{ travel.geolocation.lat}},{{ travel.geolocation.lng }}],8); });
+        $('#remove-route-unified').click(function() { mPoint.removeRoute(); });
+        $('#calculate-route-unified').click(function() { mPoint.calculateRoute(); });
+        $('#reset-unified').click(function() { mPoint.resetRoute(); });
+        $('#itinerary-unified').click(function() { mPoint.panelItinerary(); });
 
         function initialize() {
             {% include 'travel/loadPointsMap.html.twig' with {'locations': travel.location} %}
@@ -1991,6 +3092,45 @@
             {% endif %}
         }
         initialize();
+
+        /* ── Force map invalidateSize and final fitBounds ── */
+        (function () {
+            console.log('=== NEW UNIFIED LAYOUT LOADED ===');
+            console.log('Sidebar width should be 480px');
+            console.log('Container max-width should be: none');
+
+            function finalizeMap() {
+                map.invalidateSize();
+
+                if (window.__travelAllMarkers && window.__travelLocCount > 0) {
+                    try {
+                        var group = window.__travelAllMarkers;
+                        if (centralMark) {
+                            group.addLayer(centralMark);
+                        }
+                        var bounds = group.getBounds();
+                        if (bounds.isValid()) {
+                            map.fitBounds(bounds.pad(0.10), { 
+                                maxZoom: 11,
+                                padding: [30, 30],
+                                animate: true
+                            });
+                            console.log('✅ fitBounds executed for', window.__travelLocCount, 'locations');
+                            console.log('Map bounds:', bounds.toBBoxString());
+                        }
+                    } catch(e) {
+                        console.log('❌ fitBounds error:', e);
+                    }
+                } else {
+                    console.log('⚠️ No locations to fitBounds - locCount:', window.__travelLocCount);
+                }
+            }
+
+            map.whenReady(finalizeMap);
+            setTimeout(finalizeMap, 100);
+            setTimeout(finalizeMap, 300);
+            setTimeout(finalizeMap, 800);
+        }());
 
         /* ── Track toggles ── */
         (function () {
@@ -2007,7 +3147,7 @@
                     }
                 });
             });
-            var showAllBtn = document.getElementById('tracks-show-all');
+            var showAllBtn = document.getElementById('tracks-show-all-unified');
             if (showAllBtn) {
                 showAllBtn.addEventListener('click', function () {
                     var allVisible = true;
@@ -2045,9 +3185,9 @@
             }
         }());
 
-        /* ── GPX track view (zoom) ── */
+        /* ── GPX track view (zoom) - unified + old compat ── */
         (function () {
-            document.querySelectorAll('.st-track-view').forEach(function (btn) {
+            document.querySelectorAll('.st-track-view, .st-track-view-compact').forEach(function (btn) {
                 btn.addEventListener('click', function () {
                     var idx = parseInt(btn.getAttribute('data-track-idx'), 10);
                     var layer = gpxLayers[idx];

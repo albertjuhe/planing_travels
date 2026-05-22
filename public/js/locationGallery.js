@@ -3,7 +3,7 @@
 var locationGallery = function (pGallery, isOwner) {
     this.pathGallery = pGallery;
     this.galleryZone = 'dz-ImageLocation';
-    this.notesZone = 'notes';
+    this.notesZone = document.getElementById('notes-unified') ? 'notes-unified' : 'notes';
     this.isOwner = !!isOwner;
     this.currentLocationId = null;
 };
@@ -16,7 +16,8 @@ locationGallery.prototype.getLocationImages = function (location) {
     var $zone = $('#' + this.galleryZone);
 
     $zone.empty();
-    $("#notes").empty();
+    var notesId = document.getElementById('notes-unified') ? 'notes-unified' : 'notes';
+    $("#" + notesId).empty();
 
     if (_self.isOwner) {
         $zone.append(_self._buildUploadHtml());

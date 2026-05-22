@@ -1,4 +1,6 @@
 var objLocation;
+var allMarkers = L.featureGroup();
+
 {% for location in locations %}
     var popup = "";
     var link = "{{ location.url}}";
@@ -12,10 +14,22 @@ var objLocation;
     {% if location.images | length > 0 %}
         popup += "<br/><img style='width:80%' src='{{ asset('uploads/gallery/') }}{{ location.images  | first}}'/>";
     {% endif %}
-    var currentMark = L.marker([{{ location.mark.geolocation.lat }},{{ location.mark.geolocation.lng }} ],{icon: {{  location.typeLocation.title }}Marker,title: "{{ location.title}}" }).bindPopup(popup).addTo(map);
+    var currentMark = L.marker([{{ location.mark.geolocation.lat }},{{ location.mark.geolocation.lng }} ],{icon: {{  location.typeLocation.title }}Marker,title: "{{ location.title}}" }).bindPopup(popup);
     currentMark.on('click', function() {
         map.setView([{{ location.mark.geolocation.lat }},{{ location.mark.geolocation.lng }}], 12);
+        if (window.stSidebarNavigation) {
+            var locData = {
+                id: '{{ location.id }}',
+                latitude: {{ location.mark.geolocation.lat }},
+                longitude: {{ location.mark.geolocation.lng }},
+                placeAddress: '{{ location.mark.title|e('js') }}',
+                address: '{{ location.title|e('js') }}'
+            };
+            window.stSidebarNavigation.showDetail(locData);
+        }
     });
+    currentMark.addTo(map);
+    allMarkers.addLayer(currentMark);
     objLocation = mPoint.createLocation('{{ location.id }}',{{ location.mark.geolocation.lat }},
     {{ location.mark.geolocation.lng }},
     '{{ location.mark.title }}',
@@ -25,3 +39,32 @@ var objLocation;
     '{{ location.url|e('js') }}','{{ location.typeLocation.id }}');
     mPoint.addPoint(objLocation);
 {% endfor %}
+
+var locCount = {{ locations|length }};
+window.__travelAllMarkers = allMarkers;
+window.__travelLocCount = locCount;
+
+if (locCount > 0) {
+    function doFitBounds() {
+        try {
+            var bounds = allMarkers.getBounds();
+            if (bounds.isValid()) {
+                map.fitBounds(bounds.pad(0.10), { 
+                    maxZoom: 11,
+                    padding: [20, 20]
+                });
+                console.log('Map fitBounds executed for', locCount, 'locations');
+            }
+        } catch(e) {
+            console.log('fitBounds error:', e);
+        }
+    }
+
+    map.whenReady(function() {
+        doFitBounds();
+    });
+
+    setTimeout(doFitBounds, 50);
+    setTimeout(doFitBounds, 200);
+    setTimeout(doFitBounds, 500);
+}
