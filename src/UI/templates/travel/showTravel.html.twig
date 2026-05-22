@@ -1650,8 +1650,8 @@
 body .st-page .container,
 html body .st-page > .container,
 .st-page > .container {
-    padding-left: 20px !important;
-    padding-right: 20px !important;
+    padding-left: 60px !important;
+    padding-right: 60px !important;
     max-width: none !important;
     width: 100% !important;
     margin-left: 0 !important;
@@ -1665,7 +1665,7 @@ html body .st-page > .container,
 
 .st-unified-layout {
     display: grid;
-    grid-template-columns: 1fr 480px;
+    grid-template-columns: 1fr 420px;
     gap: 0;
     background: #fff;
     border-radius: 12px;
@@ -1747,7 +1747,7 @@ html body .st-page > .container,
     background: #fff;
     overflow: hidden;
     transition: width 0.3s ease, opacity 0.3s ease;
-    width: 480px;
+    width: 420px;
     min-width: 0;
     height: 100%;
     min-height: calc(100vh - 160px);
@@ -1931,12 +1931,32 @@ html body .st-page > .container,
     font-size: 12px;
 }
 
-/* ── Vista: Detalle de Ubicación ── */
+/* ── Vista: Detalle de Ubicación (Gallery + Notes) ── */
+.st-sidebar-view.is-active {
+    display: flex;
+    min-height: 0;
+}
+
+.st-sidebar-view.is-active > * {
+    min-width: 0;
+}
+
 .st-detail-header {
     padding: 10px 12px;
     background: #f8f9fa;
     border-bottom: 1px solid #eaecef;
     flex-shrink: 0;
+}
+
+/* Detail view scrollable content */
+.st-sidebar-view#st-view-detail {
+    overflow: hidden;
+}
+
+.st-sidebar-view#st-view-detail > :not(.st-detail-header):not(.st-detail-title):not(.st-detail-subtitle) {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
 }
 
 .st-back-btn {
@@ -1997,17 +2017,73 @@ html body .st-page > .container,
     margin-bottom: 10px;
 }
 
+/* ── Gallery - FIX: images should NOT be cropped ── */
+/* Override old CSS with object-fit: cover */
+#st-panel-map .st-gallery__item img,
+#st-panel-map .st-gallery-unified .st-gallery__item img,
+.st-sidebar-unified .st-gallery__item img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain !important;  /* No crop - show full image */
+    display: block;
+    transition: transform 0.2s ease;
+}
+
+#st-panel-map .st-gallery__item:hover img,
+.st-sidebar-unified .st-gallery-unified .st-gallery__item:hover img {
+    transform: scale(1.02);
+}
+
 .st-gallery-unified {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 6px;
+    gap: 8px;
     min-height: 40px;
 }
 
 @media (max-width: 1200px) { .st-gallery-unified { grid-template-columns: repeat(2, 1fr); } }
 
 .st-gallery-unified .st-gallery__item {
-    aspect-ratio: 1;
+    aspect-ratio: 4 / 3;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #f8f9fa;  /* Lighter background for better image visibility */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ── Make detail view scrollable ── */
+#st-view-detail.st-sidebar-view.is-active {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-height: 0;
+}
+
+/* Scroll wrapper for gallery + notes */
+.st-detail-content-scroll {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.st-detail-content-scroll::-webkit-scrollbar {
+    width: 5px;
+}
+
+.st-detail-content-scroll::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.st-detail-content-scroll::-webkit-scrollbar-thumb {
+    background: #e5e7eb;
+    border-radius: 3px;
+}
+
+.st-detail-content-scroll::-webkit-scrollbar-thumb:hover {
+    background: #d1d5db;
 }
 
 .st-gallery-upload-unified {
@@ -2029,107 +2105,157 @@ html body .st-page > .container,
     background: #f0f7fd;
 }
 
+/* ── Improved Notes section ── */
 .st-notes-unified {
     font-size: 13px;
     color: #374151;
     line-height: 1.6;
+    min-height: 40px;
 }
 
-/* ── Bottom Tabs (Route / GPX) ── */
+.st-notes-unified .note-item {
+    background: #f8f9fa;
+    border-left: 3px solid #2980b9;
+    border-radius: 0 6px 6px 0;
+    padding: 10px 14px;
+    margin-bottom: 8px;
+}
+
+.st-notes-unified .note-item:last-child {
+    margin-bottom: 0;
+}
+
+.st-notes-unified .note-text {
+    margin: 0;
+    word-break: break-word;
+}
+
+.st-notes-unified .note-embed {
+    margin-bottom: 8px;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.st-notes-unified .note-embed iframe {
+    width: 100%;
+    height: 180px;
+    border: none;
+    display: block;
+}
+
+/* ── Bottom Tabs (Route / GPX) - Collapsible ── */
 .st-sidebar-bottom {
     flex-shrink: 0;
     border-top: 1px solid #e5e7eb;
     background: #fff;
     display: flex;
     flex-direction: column;
+    transition: all 0.25s ease;
+}
+
+/* COLLAPSED by default - only show the expand button */
+.st-sidebar-bottom.collapsed {
+    padding: 0;
 }
 
 .st-bottom-tabs-header {
     display: flex;
-    align-items: stretch;
-    border-bottom: 1px solid #e5e7eb;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 12px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #f0f2f5 100%);
+    border-bottom: 1px solid #e9ecef;
+    cursor: pointer;
 }
 
-.st-bottom-tabs {
-    flex: 1;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+.st-bottom-tabs-header:hover {
+    background: linear-gradient(135deg, #e9ecef 0%, #f0f2f5 100%);
 }
 
-.st-bottom-toggle {
-    width: 36px;
+/* Expand button - more visible */
+.st-bottom-expand-btn {
     display: flex;
     align-items: center;
-    justify-content: center;
-    background: #f8f9fa;
+    gap: 8px;
+    background: none;
     border: none;
     cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    color: #495057;
+    padding: 4px 8px;
+    border-radius: 6px;
     transition: all 0.15s;
-    border-left: 1px solid #e5e7eb;
-    flex-shrink: 0;
 }
 
-.st-bottom-toggle:hover {
-    background: #f3f4f6;
+.st-bottom-expand-btn:hover {
+    background: rgba(41, 128, 185, 0.1);
+    color: #2980b9;
 }
 
-.st-bottom-toggle__icon {
+.st-bottom-expand__icon {
     transition: transform 0.25s ease;
 }
 
-.st-sidebar-bottom.collapsed .st-bottom-toggle__icon {
+/* When expanded, icon points up */
+.st-sidebar-bottom:not(.collapsed) .st-bottom-expand__icon {
     transform: rotate(180deg);
+}
+
+/* Tabs inline - only visible when expanded */
+.st-bottom-tabs-inline {
+    display: none;
+    gap: 4px;
+}
+
+.st-sidebar-bottom:not(.collapsed) .st-bottom-tabs-inline {
+    display: flex;
 }
 
 .st-bottom-tab {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 6px;
-    padding: 10px 8px;
-    font-size: 12px;
+    gap: 4px;
+    padding: 6px 10px;
+    font-size: 11px;
     font-weight: 600;
     color: #6b7280;
-    background: #f8f9fa;
-    border: none;
+    background: transparent;
+    border: 1px solid transparent;
     cursor: pointer;
     transition: all 0.15s;
+    border-radius: 6px;
     position: relative;
 }
 
 .st-bottom-tab:hover {
     color: #374151;
-    background: #f3f4f6;
+    background: rgba(0,0,0,0.05);
 }
 
 .st-bottom-tab.is-active {
     color: #2980b9;
-    background: #fff;
+    background: rgba(41, 128, 185, 0.1);
+    border-color: rgba(41, 128, 185, 0.2);
 }
 
-.st-bottom-tab.is-active::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: #2980b9;
-}
-
+/* Panels wrapper */
 .st-bottom-panels-wrapper {
-    max-height: 220px;
-    overflow: hidden;
-    transition: max-height 0.25s ease, opacity 0.2s ease;
-}
-
-.st-sidebar-bottom.collapsed .st-bottom-panels-wrapper {
     max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, opacity 0.2s ease;
     opacity: 0;
 }
 
+/* When expanded */
+.st-sidebar-bottom:not(.collapsed) .st-bottom-panels-wrapper {
+    max-height: 240px;
+    opacity: 1;
+}
+
 .st-bottom-panels {
-    max-height: 220px;
+    max-height: 240px;
     overflow: hidden;
 }
 
@@ -2373,19 +2499,19 @@ html body .st-page > .container,
 /* ── Responsive Unified Layout ── */
 @media (max-width: 1200px) {
     .st-unified-layout {
-        grid-template-columns: 1fr 440px;
+        grid-template-columns: 1fr 400px;
     }
     .st-sidebar-unified {
-        width: 440px;
+        width: 400px;
     }
 }
 
 @media (max-width: 1100px) {
     .st-unified-layout {
-        grid-template-columns: 1fr 400px;
+        grid-template-columns: 1fr 360px;
     }
     .st-sidebar-unified {
-        width: 400px;
+        width: 360px;
     }
 }
 
@@ -2622,43 +2748,47 @@ html body .st-page > .container,
                             <div class="st-detail-title" id="st-detail-location-name"></div>
                             <div class="st-detail-subtitle" id="st-detail-location-address"></div>
 
-                            {# Galería #}
-                            <div class="st-detail-section">
-                                <div class="st-detail-section__title">
-                                    <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><path d="M0 3h16v10H0V3zm1 1v8h14V4H1zm4 2a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm-1 5l2-3 2 2 2-3 3 4H3z"/></svg>
-                                    Gallery
+                            {# Scroll wrapper for Gallery + Notes #}
+                            <div class="st-detail-content-scroll">
+                                {# Galería #}
+                                <div class="st-detail-section">
+                                    <div class="st-detail-section__title">
+                                        <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><path d="M0 3h16v10H0V3zm1 1v8h14V4H1zm4 2a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm-1 5l2-3 2 2 2-3 3 4H3z"/></svg>
+                                        Gallery
+                                    </div>
+                                    <div class="st-gallery-unified" id="dz-ImageLocation"></div>
                                 </div>
-                                <div class="st-gallery-unified" id="dz-ImageLocation"></div>
-                            </div>
 
-                            {# Notas #}
-                            <div class="st-detail-section">
-                                <div class="st-detail-section__title">
-                                    <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><path d="M2 2h12v12H2V2zm1 1v10h10V3H3zm2 2h6v1H5V5zm0 3h6v1H5V8zm0 3h4v1H5v-1z"/></svg>
-                                    Notes
+                                {# Notas #}
+                                <div class="st-detail-section">
+                                    <div class="st-detail-section__title">
+                                        <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor"><path d="M2 2h12v12H2V2zm1 1v10h10V3H3zm2 2h6v1H5V5zm0 3h6v1H5V8zm0 3h4v1H5v-1z"/></svg>
+                                        Notes
+                                    </div>
+                                    <div id="notes-unified" class="st-notes-unified"></div>
                                 </div>
-                                <div id="notes-unified" class="st-notes-unified"></div>
                             </div>
                         </div>
 
                     </div>
 
                     {# ── Tabs inferiores: Route / GPX Tracks ── #}
-                    <div class="st-sidebar-bottom" id="st-sidebar-bottom">
+                    <div class="st-sidebar-bottom collapsed" id="st-sidebar-bottom">
                         <div class="st-bottom-tabs-header">
-                            <div class="st-bottom-tabs">
+                            <button class="st-bottom-expand-btn" id="st-expand-bottom-btn" type="button">
+                                <svg class="st-bottom-expand__icon" viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 6l3 3 3-3"/></svg>
+                                <span>Route & GPX</span>
+                            </button>
+                            <div class="st-bottom-tabs-inline">
                                 <button class="st-bottom-tab is-active" data-bottom-tab="route" type="button">
-                                    <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor" opacity=".7"><path d="M2 14L6 2l4 8 2-4 2 8" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                    <svg viewBox="0 0 16 16" width="12" height="12" fill="currentColor" opacity=".7"><path d="M2 14L6 2l4 8 2-4 2 8" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
                                     Route
                                 </button>
                                 <button class="st-bottom-tab" data-bottom-tab="gpx" type="button">
-                                    <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor" opacity=".7"><path d="M1 12L4 6l3 4 2-3 3 5 2-3" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                                    GPX Tracks
+                                    <svg viewBox="0 0 16 16" width="12" height="12" fill="currentColor" opacity=".7"><path d="M1 12L4 6l3 4 2-3 3 5 2-3" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                    GPX
                                 </button>
                             </div>
-                            <button class="st-bottom-toggle" id="st-bottom-toggle" type="button" title="Collapse">
-                                <svg class="st-bottom-toggle__icon" viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 10l3-3 3 3"/></svg>
-                            </button>
                         </div>
 
                         <div class="st-bottom-panels-wrapper">
@@ -2988,21 +3118,44 @@ html body .st-page > .container,
             });
         }());
 
-        /* ── Bottom section collapse toggle ── */
+        /* ── Bottom section collapse toggle (Route & GPX) ── */
         (function () {
             var bottomSection = document.getElementById('st-sidebar-bottom');
-            var toggleBtn = document.getElementById('st-bottom-toggle');
+            var header = document.querySelector('.st-bottom-tabs-header');
+            var expandBtn = document.getElementById('st-expand-bottom-btn');
 
-            if (bottomSection && toggleBtn) {
-                var collapsed = localStorage.getItem('st-bottom-collapsed') === 'true';
-                if (collapsed) {
+            if (bottomSection && header) {
+                var wasExpanded = localStorage.getItem('st-bottom-expanded') === 'true';
+
+                if (wasExpanded) {
+                    bottomSection.classList.remove('collapsed');
+                } else {
                     bottomSection.classList.add('collapsed');
                 }
 
-                toggleBtn.addEventListener('click', function () {
+                function doToggle() {
                     var isCollapsed = bottomSection.classList.toggle('collapsed');
-                    localStorage.setItem('st-bottom-collapsed', isCollapsed ? 'true' : 'false');
-                    toggleBtn.setAttribute('title', isCollapsed ? 'Expand' : 'Collapse');
+                    localStorage.setItem('st-bottom-expanded', isCollapsed ? 'false' : 'true');
+
+                    setTimeout(function () {
+                        if (typeof map !== 'undefined') {
+                            map.invalidateSize();
+                        }
+                    }, 310);
+                }
+
+                if (expandBtn) {
+                    expandBtn.addEventListener('click', function (e) {
+                        e.stopPropagation();
+                        doToggle();
+                    });
+                }
+
+                header.addEventListener('click', function (e) {
+                    if (e.target.closest('.st-bottom-tab') || e.target.closest('.st-bottom-tabs-inline')) {
+                        return;
+                    }
+                    doToggle();
                 });
             }
         }());
