@@ -22,11 +22,14 @@ services:
       - ENABLE_XDEBUG=0
       - WEBSOCKET_SERVER_URL=http://websocket:5555
       - OPENWEATHER_API_KEY=${OPENWEATHER_API_KEY:-}
+      - OLLAMA_ENDPOINT=http://ollama:11434/api/chat
+      - OLLAMA_MODEL=${OLLAMA_MODEL:-llama3}
     entrypoint: ["/bin/sh", "-c", "git config --global --add safe.directory /var/www/html && exec apache2-foreground"]
     depends_on:
       - mysql
       #- elasticsearch
       - websocket
+      - ollama
     #command: sh /var/www/html/Docker/wait_to_start.sh
 
   websocket:
@@ -52,6 +55,22 @@ services:
       - 8080:8080
     depends_on:
       - mysql
+
+  # Ollama - AI models local (100% free)
+  # Pull model first: docker compose exec ollama ollama pull llama3
+  ollama:
+    image: ollama/ollama:latest
+    ports:
+      - "11434:11434"
+    volumes:
+      - ./Docker/ollama:/root/.ollama
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
 
   #elasticsearch:
   #  image: docker.elastic.co/elasticsearch/elasticsearch:8.7.1

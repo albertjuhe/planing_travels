@@ -175,3 +175,23 @@ services:
             $logger: '@logger'
         tags:
             - { name: messenger.message_handler, bus: query.bus }
+
+    # AI Itinerary Generator
+    App\Infrastructure\AIBundle\Provider\ItineraryProvider:
+        class: App\Infrastructure\AIBundle\Provider\ItineraryProvider
+        factory: ['App\Infrastructure\AIBundle\Provider\ItineraryProvider', 'createOllama']
+        arguments:
+            $httpClient: '@http_client'
+            $logger: '@logger'
+            $endpoint: '%env(string:default::OLLAMA_ENDPOINT)%'
+            $model: '%env(string:default::OLLAMA_MODEL)%'
+
+    # Uncomment and configure to use OpenAI instead:
+    # App\Infrastructure\AIBundle\Provider\ItineraryProvider:
+    #     class: App\Infrastructure\AIBundle\Provider\ItineraryProvider
+    #     factory: ['App\Infrastructure\AIBundle\Provider\ItineraryProvider', 'createOpenAI']
+    #     arguments:
+    #         $httpClient: '@http_client'
+    #         $logger: '@logger'
+    #         $apiKey: '%env(string:default::OPENAI_API_KEY)%'
+    #         $model: '%env(string:default::OPENAI_MODEL)%'
