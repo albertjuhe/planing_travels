@@ -47,12 +47,30 @@ new Autocomplete("address", {
 
         const { display_name } = object.properties;
         const { place_id } = object.properties;
+        const { osm_type, osm_id } = object.properties;
         const [lng, lat] = object.geometry.coordinates;
         $('#latPoint').val(lat);
         $('#lngPoint').val(lng);
-        $('#title').val(display_name);
         $('#placeId').val(place_id);
 
+        var title = display_name.split(',')[0].trim();
+        $('#title').val(title);
+
+        if (osm_type && osm_id) {
+            fetch('https://nominatim.openstreetmap.org/lookup?osm_ids=' + osm_type[0].toUpperCase() + osm_id + '&format=json&addressdetails=1&extratags=1')
+                .then(function (r) { return r.json(); })
+                .then(function (data) {
+                    if (data && data.length > 0) {
+                        if (data[0].name) {
+                            $('#title').val(data[0].name);
+                        }
+                        if (data[0].extratags && data[0].extratags.website) {
+                            $('#link').val(data[0].extratags.website);
+                        }
+                    }
+                })
+                .catch(function () {});
+        }
 
     },
 

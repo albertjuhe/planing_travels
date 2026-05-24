@@ -790,6 +790,31 @@
     object-fit: cover;
     display: block;
 }
+.st-gallery__delete {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 28px;
+    height: 28px;
+    border: none;
+    border-radius: 6px;
+    background: rgba(0,0,0,0.5);
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.15s, background 0.15s;
+    z-index: 2;
+    padding: 0;
+}
+.st-gallery__item:hover .st-gallery__delete {
+    opacity: 1;
+}
+.st-gallery__delete:hover {
+    background: rgba(220,38,38,0.85);
+}
 /* Upload zone */
 .st-gallery-upload {
     grid-column: 1 / -1;

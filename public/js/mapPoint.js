@@ -598,6 +598,9 @@ mapPoint.prototype.rest = function (typeRest, data, locationPoint) {
                     });
                     fileInput.value = '';
                 }
+                var addForm = document.getElementById('addpoint-form');
+                if (addForm) addForm.reset();
+                $('#addpoint').modal('hide');
             },
             error: function (data, testStatus, jqXHR) {
                 $('#infoForm').html('<p class="alert alert-danger">Error: Location not Added</p>');
