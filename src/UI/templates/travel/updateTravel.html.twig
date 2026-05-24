@@ -794,23 +794,22 @@
     });
 
     /* ── Flatpickr date pickers ── */
-    function readSelectsDate(fieldId) {
-        var y = document.getElementById(fieldId + '_year');
-        var m = document.getElementById(fieldId + '_month');
-        var d = document.getElementById(fieldId + '_day');
-        if (!y || !m || !d || !y.value || !m.value || !d.value) return null;
-        return new Date(parseInt(y.value), parseInt(m.value) - 1, parseInt(d.value));
+    function readDateField(fieldId) {
+        var el = document.getElementById(fieldId);
+        if (!el || !el.value) return null;
+        var parts = el.value.split('-');
+        if (parts.length !== 3) return null;
+        return new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
     }
 
-    function writeSelectsDate(fieldId, date) {
+    function writeDateField(fieldId, date) {
         if (!date) return;
-        var y = document.getElementById(fieldId + '_year');
-        var m = document.getElementById(fieldId + '_month');
-        var d = document.getElementById(fieldId + '_day');
-        if (!y || !m || !d) return;
-        y.value = date.getFullYear();
-        m.value = date.getMonth() + 1;
-        d.value = date.getDate();
+        var el = document.getElementById(fieldId);
+        if (!el) return;
+        var y = date.getFullYear();
+        var m = String(date.getMonth() + 1).padStart(2, '0');
+        var d = String(date.getDate()).padStart(2, '0');
+        el.value = y + '-' + m + '-' + d;
     }
 
     var startFieldId = '{{ travelForm.startAt.vars.id }}';
@@ -818,17 +817,17 @@
 
     flatpickr('#ut-start-picker', {
         dateFormat: 'd M Y',
-        defaultDate: readSelectsDate(startFieldId),
+        defaultDate: readDateField(startFieldId),
         onChange: function(dates) {
-            writeSelectsDate(startFieldId, dates[0]);
+            writeDateField(startFieldId, dates[0]);
         }
     });
 
     flatpickr('#ut-end-picker', {
         dateFormat: 'd M Y',
-        defaultDate: readSelectsDate(endFieldId),
+        defaultDate: readDateField(endFieldId),
         onChange: function(dates) {
-            writeSelectsDate(endFieldId, dates[0]);
+            writeDateField(endFieldId, dates[0]);
         }
     });
 
