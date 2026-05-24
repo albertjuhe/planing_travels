@@ -73,6 +73,18 @@ class WebSocketNotifier
         ]);
     }
 
+    public function notifyImageDeleted(string $travelId, string $locationId, int $imageId, string $byUserId, string $byUsername): void
+    {
+        $this->broadcast($travelId, [
+            'event'      => 'image_deleted',
+            'travelId'   => $travelId,
+            'locationId' => $locationId,
+            'imageId'    => $imageId,
+            'byUserId'   => $byUserId,
+            'byUsername'  => $byUsername,
+        ]);
+    }
+
     public function notifyImageUploaded(string $travelId, string $locationId, string $filename, string $byUserId, string $byUsername): void
     {
         $this->broadcast($travelId, [

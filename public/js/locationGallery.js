@@ -43,8 +43,9 @@ locationGallery.prototype.getLocationImages = function (location) {
         dataType: 'json',
         success: function (data) {
             $.each(data.images, function (index, value) {
-                var $item = _self._buildImageItem(value.filename);
-                $item.on('click', function () {
+                var $item = _self._buildImageItem(value.filename, value.id);
+                $item.on('click', function (e) {
+                    if ($(e.target).closest('.st-gallery__delete').length) return;
                     _self._openLightbox(_self.pathGallery + value.filename);
                 });
                 $zone.append($item);
@@ -90,12 +91,16 @@ locationGallery.prototype._buildUploadHtml = function () {
         '</div>';
 };
 
-locationGallery.prototype._buildImageItem = function (filename) {
-    return $(
-        '<div class="st-gallery__item">' +
-        '<img src="' + this.pathGallery + filename + '" loading="lazy"/>' +
-        '</div>'
-    );
+locationGallery.prototype._buildImageItem = function (filename, imageId) {
+    var html = '<div class="st-gallery__item">' +
+        '<img src="' + this.pathGallery + filename + '" loading="lazy"/>';
+    if (this.isOwner && imageId) {
+        html += '<button class="st-gallery__delete" data-image-id="' + imageId + '" title="Delete image">' +
+            '<svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 4h12M5 4V2.5A.5.5 0 0 1 5.5 2h5a.5.5 0 0 1 .5.5V4M4 4l1 10h6l1-10"/></svg>' +
+            '</button>';
+    }
+    html += '</div>';
+    return $(html);
 };
 
 locationGallery.prototype._openLightbox = function (src) {
@@ -132,8 +137,9 @@ locationGallery.prototype.uploadImage = function (locationId) {
         success: function (data) {
             if (feedback) { feedback.style.color = '#27ae60'; feedback.textContent = 'Uploaded!'; }
             fileInput.value = '';
-            var $item = _self._buildImageItem(data.filename);
-            $item.on('click', function () {
+            var $item = _self._buildImageItem(data.filename, data.id);
+            $item.on('click', function (e) {
+                if ($(e.target).closest('.st-gallery__delete').length) return;
                 _self._openLightbox(_self.pathGallery + data.filename);
             });
             $('#' + _self.galleryZone).append($item);
@@ -146,6 +152,33 @@ locationGallery.prototype.uploadImage = function (locationId) {
         }
     });
 };
+
+/* ── Delete ── */
+
+locationGallery.prototype.deleteImage = function (imageId) {
+    var _self = this;
+    if (!confirm('Delete this image?')) return;
+
+    $.ajax({
+        type: 'DELETE',
+        url: '../../api/location/' + this.currentLocationId + '/image/' + imageId,
+        success: function () {
+            $('.st-gallery__delete[data-image-id="' + imageId + '"]').closest('.st-gallery__item').remove();
+        },
+        error: function () {
+            alert('Could not delete image.');
+        }
+    });
+};
+
+$(document).on('click', '.st-gallery__delete', function (e) {
+    e.stopPropagation();
+    var imageId = $(this).data('image-id');
+    var gallery = window.mPoint ? window.mPoint.plugin.locationGallery : null;
+    if (gallery) {
+        gallery.deleteImage(imageId);
+    }
+});
 
 /* ── Lightbox ── */
 

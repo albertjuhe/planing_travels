@@ -15,7 +15,7 @@
             <div class="modal-body" style="padding:20px;">
                 <div id="infoForm" style="margin-bottom:12px;"></div>
 
-                <form>
+                <form id="addpoint-form">
                     <fieldset style="border:none;padding:0;margin:0;display:flex;flex-direction:column;gap:14px;">
 
                         <div style="display:flex;flex-direction:column;gap:5px;">
@@ -154,3 +154,11 @@
         </div>
     </div>
 </div>
+
+<script>
+$('#addpoint').on('hidden.bs.modal', function () {
+    var form = document.getElementById('addpoint-form');
+    if (form) form.reset();
+    $('#infoForm').empty();
+});
+</script>
