@@ -262,6 +262,61 @@
 .cs-card[data-icon*="bus"]       { border-color: #d35400; background: #fdf2e9; }
 .cs-card[data-icon*="coffee"]    { border-color: #795548; background: #efebe9; }
 
+/* Lodgings — visually distinct base camp.
+   Detected by the TypeLocation title (data-type) so we never confuse a City (fa-building)
+   with a Hotel (fa-building). */
+.cs-card--lodging,
+.cs-card[data-type="Hotel"],
+.cs-card[data-type="House"],
+.cs-card[data-type="Hostel"],
+.cs-card[data-type="Apartment"] {
+    border-left-width: 5px !important;
+    border-color: #6c3483 !important;
+    background: linear-gradient(135deg, #f5eef8 0%, #ead7f3 100%) !important;
+    box-shadow: 0 1px 3px rgba(108, 52, 131, 0.15);
+}
+.cs-card--lodging .cs-card__icon,
+.cs-card[data-type="Hotel"] .cs-card__icon,
+.cs-card[data-type="House"] .cs-card__icon,
+.cs-card[data-type="Hostel"] .cs-card__icon,
+.cs-card[data-type="Apartment"] .cs-card__icon {
+    color: #6c3483;
+    opacity: 1;
+    font-size: 13px;
+}
+.cs-card--lodging .cs-card__title,
+.cs-card[data-type="Hotel"] .cs-card__title,
+.cs-card[data-type="House"] .cs-card__title,
+.cs-card[data-type="Hostel"] .cs-card__title,
+.cs-card[data-type="Apartment"] .cs-card__title {
+    color: #4a235a;
+}
+.cs-card--lodging::after,
+.cs-card[data-type="Hotel"]::after,
+.cs-card[data-type="House"]::after,
+.cs-card[data-type="Hostel"]::after,
+.cs-card[data-type="Apartment"]::after {
+    content: 'BASE';
+    position: absolute;
+    top: 3px;
+    right: 24px;
+    background: #6c3483;
+    color: #fff;
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    padding: 2px 6px;
+    border-radius: 3px;
+    line-height: 1;
+}
+.cs-unscheduled .cs-card--lodging::after,
+.cs-unscheduled .cs-card[data-type="Hotel"]::after,
+.cs-unscheduled .cs-card[data-type="House"]::after,
+.cs-unscheduled .cs-card[data-type="Hostel"]::after,
+.cs-unscheduled .cs-card[data-type="Apartment"]::after {
+    right: 8px;
+}
+
 /* Layout: calendar + map side by side */
 .cs-layout {
     display: flex;
@@ -385,8 +440,12 @@
                     {{ travel.watch }}
                 </span>
                 {% if canEdit %}
-                <button id="cs-btn-ai-plan" type="button" class="pa-stat-pill" style="cursor:pointer;border:1px solid rgba(255,255,255,0.4);background:rgba(243,156,18,0.25);">
-                    🧙 Auto-plan with AI
+                <button id="cs-btn-ai-plan" type="button" title="Generate an optimised itinerary using AI"
+                        style="display:inline-flex;align-items:center;gap:7px;padding:6px 14px;font-size:13px;font-weight:600;color:#1a2e4a;background:linear-gradient(135deg,#ffd86b 0%,#f39c12 100%);border:none;border-radius:20px;cursor:pointer;box-shadow:0 2px 6px rgba(243,156,18,0.35);transition:transform 0.12s,box-shadow 0.12s;"
+                        onmouseover="this.style.transform='translateY(-1px)';this.style.boxShadow='0 4px 10px rgba(243,156,18,0.5)';"
+                        onmouseout="this.style.transform='none';this.style.boxShadow='0 2px 6px rgba(243,156,18,0.35)';">
+                    <svg viewBox="0 0 16 16" width="13" height="13" fill="currentColor" aria-hidden="true"><path d="M9.5 2.5l.7 1.6 1.6.7-1.6.7-.7 1.6-.7-1.6-1.6-.7 1.6-.7zM3.2 9.4L1.8 8l1-1 1.4 1.4 6-6 1 1-6.6 6.6L3.2 9.4zm9.6 1l.5 1.1 1.1.5-1.1.5-.5 1.1-.5-1.1-1.1-.5 1.1-.5z"/></svg>
+                    Auto-plan with AI
                 </button>
                 {% endif %}
             </div>
@@ -571,7 +630,12 @@
 <div id="cs-ai-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:4000;align-items:center;justify-content:center;">
     <div id="cs-ai-modal" style="background:#fff;border-radius:16px;box-shadow:0 24px 64px rgba(0,0,0,0.25);width:min(480px,94vw);padding:32px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;position:relative;">
         <button id="cs-ai-close" type="button" style="position:absolute;top:14px;right:16px;background:none;border:none;font-size:20px;color:#7f8c8d;cursor:pointer;line-height:1;" title="Close">&times;</button>
-        <div style="font-size:26px;margin-bottom:6px;">🧙 AI Itinerary Planner</div>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:6px;">
+            <span style="display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#ffd86b 0%,#f39c12 100%);box-shadow:0 2px 6px rgba(243,156,18,0.35);color:#1a2e4a;">
+                <svg viewBox="0 0 16 16" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M9.5 2.5l.7 1.6 1.6.7-1.6.7-.7 1.6-.7-1.6-1.6-.7 1.6-.7zM3.2 9.4L1.8 8l1-1 1.4 1.4 6-6 1 1-6.6 6.6L3.2 9.4zm9.6 1l.5 1.1 1.1.5-1.1.5-.5 1.1-.5-1.1-1.1-.5 1.1-.5z"/></svg>
+            </span>
+            <span style="font-size:20px;font-weight:700;color:#1a2e4a;">AI Itinerary Planner</span>
+        </div>
         <p style="font-size:14px;color:#555;margin:0 0 20px;">Choose how the AI should distribute your locations across the trip days.</p>
 
         <div id="cs-ai-mode-select" style="display:flex;flex-direction:column;gap:10px;margin-bottom:24px;">
@@ -595,11 +659,30 @@
             ⚠️ <strong>This will overwrite your current calendar!</strong> Your existing day assignments will be cleared.
         </div>
 
+        <div style="margin-bottom:18px;">
+            <label for="cs-ai-notes" style="display:block;font-size:12px;font-weight:600;color:#2c3e50;margin-bottom:6px;">
+                Additional preferences <span style="color:#7f8c8d;font-weight:400;">(optional)</span>
+            </label>
+            <textarea id="cs-ai-notes" rows="3" maxlength="1000"
+                      placeholder="e.g. Avoid driving more than 2h per day. Sleep two nights in Berat. Save Tirana for the last day. Prefer beaches in the afternoon."
+                      style="width:100%;box-sizing:border-box;padding:10px 12px;border:1px solid #dde3ea;border-radius:8px;font-size:13px;font-family:inherit;color:#2c3e50;background:#fff;resize:vertical;min-height:64px;line-height:1.4;outline:none;transition:border-color 0.15s;"
+                      onfocus="this.style.borderColor='#f39c12';" onblur="this.style.borderColor='#dde3ea';"></textarea>
+            <div style="display:flex;justify-content:space-between;font-size:11px;color:#95a5a6;margin-top:4px;">
+                <span>The AI will follow these as extra rules when planning.</span>
+                <span><span id="cs-ai-notes-count">0</span>/1000</span>
+            </div>
+        </div>
+
         <div id="cs-ai-error" style="display:none;background:#fdecea;border:1px solid #f5c6cb;border-radius:8px;padding:10px 14px;font-size:12px;color:#721c24;margin-bottom:16px;"></div>
 
         <div style="display:flex;gap:10px;justify-content:flex-end;">
             <button id="cs-ai-cancel" type="button" style="padding:9px 20px;background:#f4f6f8;border:1px solid #dde3ea;border-radius:8px;font-size:13px;color:#2c3e50;cursor:pointer;">Cancel</button>
-            <button id="cs-ai-submit" type="button" style="padding:9px 20px;background:#2980b9;border:none;border-radius:8px;font-size:13px;font-weight:600;color:#fff;cursor:pointer;transition:background 0.15s;">✨ Generate itinerary</button>
+            <button id="cs-ai-submit" type="button" style="display:inline-flex;align-items:center;gap:7px;padding:9px 20px;background:linear-gradient(135deg,#ffd86b 0%,#f39c12 100%);border:none;border-radius:8px;font-size:13px;font-weight:600;color:#1a2e4a;cursor:pointer;box-shadow:0 2px 6px rgba(243,156,18,0.35);transition:transform 0.12s,box-shadow 0.12s;"
+                    onmouseover="this.style.transform='translateY(-1px)';this.style.boxShadow='0 4px 10px rgba(243,156,18,0.5)';"
+                    onmouseout="this.style.transform='none';this.style.boxShadow='0 2px 6px rgba(243,156,18,0.35)';">
+                <svg viewBox="0 0 16 16" width="13" height="13" fill="currentColor" aria-hidden="true"><path d="M9.5 2.5l.7 1.6 1.6.7-1.6.7-.7 1.6-.7-1.6-1.6-.7 1.6-.7zM3.2 9.4L1.8 8l1-1 1.4 1.4 6-6 1 1-6.6 6.6L3.2 9.4zm9.6 1l.5 1.1 1.1.5-1.1.5-.5 1.1-.5-1.1-1.1-.5 1.1-.5z"/></svg>
+                Generate itinerary
+            </button>
         </div>
     </div>
 </div>
@@ -1035,9 +1118,18 @@
         var aiSubmit   = document.getElementById('cs-ai-submit');
         var aiWarning  = document.getElementById('cs-ai-warning');
         var aiError    = document.getElementById('cs-ai-error');
+        var aiNotes    = document.getElementById('cs-ai-notes');
+        var aiNotesCount = document.getElementById('cs-ai-notes-count');
         var AI_URL     = '{{ path('generate_itinerary', {travelId: travel.id}) }}';
 
         if (btnAiPlan && aiOverlay) {
+            /* Live char counter for the notes textarea */
+            if (aiNotes && aiNotesCount) {
+                aiNotes.addEventListener('input', function () {
+                    aiNotesCount.textContent = aiNotes.value.length;
+                });
+            }
+
             /* Show warning when "all" mode is selected */
             function updateAiWarning() {
                 var mode = document.querySelector('input[name="cs-ai-mode"]:checked');
@@ -1064,12 +1156,14 @@
             var checkedRadio = document.querySelector('input[name="cs-ai-mode"]:checked');
             if (checkedRadio) { checkedRadio.closest('label').style.borderColor = '#2980b9'; }
 
+            var SUBMIT_LABEL_HTML = '<svg viewBox="0 0 16 16" width="13" height="13" fill="currentColor" style="vertical-align:-2px;margin-right:6px;"><path d="M9.5 2.5l.7 1.6 1.6.7-1.6.7-.7 1.6-.7-1.6-1.6-.7 1.6-.7zM3.2 9.4L1.8 8l1-1 1.4 1.4 6-6 1 1-6.6 6.6L3.2 9.4zm9.6 1l.5 1.1 1.1.5-1.1.5-.5 1.1-.5-1.1-1.1-.5 1.1-.5z"/></svg>Generate itinerary';
+
             function openAiModal() {
                 if (aiError) { aiError.style.display = 'none'; aiError.textContent = ''; }
                 updateAiWarning();
                 aiOverlay.style.display = 'flex';
                 aiSubmit.disabled = false;
-                aiSubmit.textContent = '\u2728 Generate itinerary';
+                aiSubmit.innerHTML = SUBMIT_LABEL_HTML;
             }
 
             function closeAiModal() {
@@ -1088,7 +1182,7 @@
                 var dots = 0;
                 aiDotsTimer = setInterval(function () {
                     dots = (dots + 1) % 4;
-                    aiSubmit.textContent = '\ud83e\udd16 AI is planning your route' + '.'.repeat(dots);
+                    aiSubmit.textContent = 'AI is planning your route' + '.'.repeat(dots);
                 }, 400);
             }
             function stopLoadingDots() {
@@ -1099,6 +1193,7 @@
                 aiSubmit.addEventListener('click', function () {
                     var modeInput = document.querySelector('input[name="cs-ai-mode"]:checked');
                     var mode = modeInput ? modeInput.value : 'all';
+                    var notes = aiNotes ? aiNotes.value : '';
 
                     aiSubmit.disabled = true;
                     if (aiError) { aiError.style.display = 'none'; aiError.textContent = ''; }
@@ -1107,47 +1202,72 @@
                     var controller = new AbortController();
                     var timeout = setTimeout(function () { controller.abort(); }, 60000);
 
+                    function showError(msg) {
+                        if (aiError) { aiError.textContent = msg; aiError.style.display = 'block'; }
+                        aiSubmit.disabled = false;
+                        aiSubmit.innerHTML = SUBMIT_LABEL_HTML;
+                    }
+
                     fetch(AI_URL, {
                         method: 'POST',
-                        headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
-                        body: JSON.stringify({ mode: mode }),
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json',
+                            'X-Requested-With': 'XMLHttpRequest'
+                        },
+                        credentials: 'same-origin',
+                        body: JSON.stringify({ mode: mode, notes: notes }),
                         signal: controller.signal
                     })
                     .then(function (r) {
                         clearTimeout(timeout);
                         stopLoadingDots();
-                        if (r.ok) {
-                            closeAiModal();
-                            window.location.reload();
-                            return;
-                        }
-                        return r.json().then(function (data) {
-                            var msg;
-                            if (r.status === 422) {
-                                msg = (data.error || 'No dates set.') + ' Please edit the travel and add start/end dates.';
-                            } else if (r.status === 429) {
-                                msg = 'Too many requests. Please wait a few minutes before generating again.';
-                            } else if (r.status === 502) {
-                                msg = 'The AI assistant is currently unavailable. Please try again in a moment.';
-                            } else if (r.status === 403) {
-                                msg = 'You do not have permission to edit this travel.';
-                            } else {
-                                msg = data.error || 'An unexpected error occurred. Please try again.';
+
+                        return r.text().then(function (rawText) {
+                            var data = null;
+                            try { data = rawText ? JSON.parse(rawText) : null; } catch (e) { data = null; }
+
+                            if (r.ok) {
+                                closeAiModal();
+                                window.location.reload();
+                                return;
                             }
-                            if (aiError) { aiError.textContent = msg; aiError.style.display = 'block'; }
-                            aiSubmit.disabled = false;
-                            aiSubmit.textContent = '\u2728 Generate itinerary';
+
+                            var msg;
+                            if (r.status === 401) {
+                                msg = 'You need to log in again to use this feature.';
+                            } else if (r.status === 403) {
+                                msg = (data && data.error) || 'You do not have permission to edit this travel.';
+                            } else if (r.status === 404) {
+                                msg = (data && data.error) || 'Travel not found.';
+                            } else if (r.status === 422) {
+                                msg = ((data && data.error) || 'No dates set.') + ' Please edit the travel and add start/end dates.';
+                            } else if (r.status === 429) {
+                                msg = (data && data.error) || 'Too many requests. Please wait a few minutes before generating again.';
+                            } else if (r.status === 502) {
+                                msg = (data && data.error) || 'The AI assistant is currently unavailable. Please try again in a moment.';
+                            } else if (data && data.error) {
+                                msg = data.error;
+                            } else if (rawText) {
+                                /* Server returned non-JSON (likely Symfony HTML error page). Surface a useful snippet. */
+                                var snippet = rawText.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 220);
+                                msg = 'Server error (HTTP ' + r.status + '). ' + (snippet || 'Check the server logs.');
+                            } else {
+                                msg = 'Server error (HTTP ' + r.status + '). Check the server logs.';
+                            }
+                            showError(msg);
                         });
                     })
                     .catch(function (err) {
                         clearTimeout(timeout);
                         stopLoadingDots();
-                        var msg = err.name === 'AbortError'
-                            ? 'Request timed out after 60 seconds. Please try again.'
-                            : 'Network error. Please check your connection and try again.';
-                        if (aiError) { aiError.textContent = msg; aiError.style.display = 'block'; }
-                        aiSubmit.disabled = false;
-                        aiSubmit.textContent = '\u2728 Generate itinerary';
+                        var msg;
+                        if (err && err.name === 'AbortError') {
+                            msg = 'Request timed out after 60 seconds. Please try again.';
+                        } else {
+                            msg = 'Network error: ' + (err && err.message ? err.message : 'unknown') + '. Check your connection.';
+                        }
+                        showError(msg);
                     });
                 });
             }

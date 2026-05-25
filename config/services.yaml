@@ -1,6 +1,7 @@
 parameters:
     locale: 'en'
     travel_photos_directory: '%kernel.project_dir%/public/uploads/travel_photos'
+    openai_default_model: 'gpt-4o-mini'
 
 services:
     _defaults:
@@ -181,7 +182,7 @@ services:
         arguments:
             $httpClient: '@http_client'
             $apiKey: '%env(string:default::OPENAI_API_KEY)%'
-            $model: '%env(string:default:gpt-4o-mini:OPENAI_MODEL)%'
+            $model: '%env(string:default:openai_default_model:OPENAI_MODEL)%'
             $logger: '@logger'
 
     App\Domain\Itinerary\Repository\ItineraryOptimizer:

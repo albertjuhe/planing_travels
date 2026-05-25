@@ -53,7 +53,8 @@ class GenerateItineraryServiceTest extends TestCase
 
     public function testTravelNotFoundThrowsException(): void
     {
-        $this->travelRepository->method('find')->willReturn(null);
+        $this->travelRepository->method('ofIdOrFail')
+            ->willThrowException(new TravelDoesntExists());
         $this->expectException(TravelDoesntExists::class);
 
         $command = new GenerateItineraryCommand('non-existent-id', 'user-1', 'all', 'en');
@@ -66,7 +67,7 @@ class GenerateItineraryServiceTest extends TestCase
         $travel->setStartAt(new \DateTime('2026-06-01'));
         $travel->setEndAt(new \DateTime('2026-06-05'));
 
-        $this->travelRepository->method('find')->willReturn($travel);
+        $this->travelRepository->method('ofIdOrFail')->willReturn($travel);
         $this->expectException(InvalidTravelUser::class);
 
         $command = new GenerateItineraryCommand(
@@ -84,7 +85,7 @@ class GenerateItineraryServiceTest extends TestCase
         $travel = TravelMother::random();
         $travel->setUser($user);
 
-        $this->travelRepository->method('find')->willReturn($travel);
+        $this->travelRepository->method('ofIdOrFail')->willReturn($travel);
         $this->expectException(TravelHasNoDates::class);
 
         $command = new GenerateItineraryCommand(
@@ -104,7 +105,7 @@ class GenerateItineraryServiceTest extends TestCase
         $travel->setStartAt(new \DateTime('2026-06-01'));
         $travel->setEndAt(new \DateTime('2026-06-03'));
 
-        $this->travelRepository->method('find')->willReturn($travel);
+        $this->travelRepository->method('ofIdOrFail')->willReturn($travel);
         $this->optimizer->expects($this->never())->method('optimize');
         $this->em->expects($this->never())->method('flush');
 
@@ -135,11 +136,11 @@ class GenerateItineraryServiceTest extends TestCase
         $travel->getLocation()->add($loc1);
         $travel->getLocation()->add($loc2);
 
-        $this->travelRepository->method('find')->willReturn($travel);
+        $this->travelRepository->method('ofIdOrFail')->willReturn($travel);
 
         $plan = [1 => ['loc-1'], 2 => ['loc-2']];
         $this->optimizer->method('optimize')->willReturn($plan);
-        $this->em->expects($this->once())->method('flush');
+        $this->em->expects($this->exactly(2))->method('flush');
 
         $command = new GenerateItineraryCommand(
             $travel->getId()->id(),
@@ -173,7 +174,7 @@ class GenerateItineraryServiceTest extends TestCase
         $travel->getLocation()->add($scheduledLoc);
         $travel->getLocation()->add($unscheduledLoc);
 
-        $this->travelRepository->method('find')->willReturn($travel);
+        $this->travelRepository->method('ofIdOrFail')->willReturn($travel);
 
         $this->optimizer->expects($this->once())
             ->method('optimize')
@@ -207,7 +208,7 @@ class GenerateItineraryServiceTest extends TestCase
         $loc = $this->makeLocation($travel, 'real-id', 'Sarandë');
         $travel->getLocation()->add($loc);
 
-        $this->travelRepository->method('find')->willReturn($travel);
+        $this->travelRepository->method('ofIdOrFail')->willReturn($travel);
         $this->optimizer->method('optimize')->willReturn([1 => ['real-id', 'fake-id-invented-by-ai']]);
 
         $command = new GenerateItineraryCommand(
@@ -235,7 +236,7 @@ class GenerateItineraryServiceTest extends TestCase
         $travel->getLocation()->add($loc1);
         $travel->getLocation()->add($loc2);
 
-        $this->travelRepository->method('find')->willReturn($travel);
+        $this->travelRepository->method('ofIdOrFail')->willReturn($travel);
         $this->optimizer->method('optimize')->willReturn([1 => ['id-first', 'id-second']]);
 
         $command = new GenerateItineraryCommand(

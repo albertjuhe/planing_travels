@@ -10,6 +10,7 @@ use App\Domain\Itinerary\Repository\ItineraryOptimizer;
 use App\Domain\Location\Model\Location;
 use App\Domain\Travel\Exceptions\InvalidTravelUser;
 use App\Domain\Travel\Exceptions\TravelDoesntExists;
+use App\Domain\Travel\Model\Travel;
 use App\Domain\Travel\Repository\TravelRepository;
 use App\Infrastructure\WebSocket\WebSocketNotifier;
 use Doctrine\ORM\EntityManagerInterface;
@@ -29,9 +30,12 @@ class GenerateItineraryService implements UsesCasesService
      */
     public function __invoke(GenerateItineraryCommand $command): array
     {
-        $travel = $this->travelRepository->find($command->travelId);
-        if ($travel === null) {
-            throw new TravelDoesntExists();
+        try {
+            $travel = $this->travelRepository->ofIdOrFail($command->travelId);
+        } catch (TravelDoesntExists $e) {
+            throw $e;
+        } catch (\Throwable $e) {
+            throw new TravelDoesntExists('Travel not found: ' . $e->getMessage());
         }
 
         $this->assertUserCanEdit($travel, $command->userId);
@@ -49,9 +53,18 @@ class GenerateItineraryService implements UsesCasesService
 
         if ($command->mode === 'all') {
             $locationsToOptimize = $allLocations;
+            $needsOrphanFlush = false;
             foreach ($locationsToOptimize as $loc) {
+                if ($loc->hasAnyVisitDate()) {
+                    $needsOrphanFlush = true;
+                }
                 $loc->clearVisitDates();
                 $loc->setVisitAt(null);
+            }
+            // Flush orphan removals BEFORE inserting new visit dates to avoid
+            // UNIQUE(location_id, visit_date) constraint violation.
+            if ($needsOrphanFlush) {
+                $this->em->flush();
             }
         } else {
             $locationsToOptimize = array_values(array_filter(
@@ -72,6 +85,7 @@ class GenerateItineraryService implements UsesCasesService
             $startAt,
             $travel->getTitle() ?? '',
             $command->locale,
+            $command->additionalNotes,
         );
 
         $locationById = [];
@@ -81,6 +95,7 @@ class GenerateItineraryService implements UsesCasesService
 
         $daysAffected = 0;
         $locationsAssigned = 0;
+        $modifiedLocations = [];
 
         foreach ($plan as $dayNumber => $locationIds) {
             $targetDate = clone $startAt;
@@ -96,13 +111,7 @@ class GenerateItineraryService implements UsesCasesService
                 $visitDate->setPosition($position);
                 $loc->setVisitAt($targetDate);
 
-                $this->webSocketNotifier->notifyVisitDatesChanged(
-                    $travel->getId()->id(),
-                    $loc->getId()->id(),
-                    $loc->getVisitDateStrings(),
-                    $command->userId,
-                    'AI Planner',
-                );
+                $modifiedLocations[$locationId] = $loc;
 
                 ++$position;
                 ++$locationsAssigned;
@@ -114,6 +123,21 @@ class GenerateItineraryService implements UsesCasesService
         }
 
         $this->em->flush();
+
+        // Notify WebSocket clients AFTER flush so they see consistent data.
+        foreach ($modifiedLocations as $loc) {
+            try {
+                $this->webSocketNotifier->notifyVisitDatesChanged(
+                    $travel->getId()->id(),
+                    $loc->getId()->id(),
+                    $loc->getVisitDateStrings(),
+                    $command->userId,
+                    'AI Planner',
+                );
+            } catch (\Throwable) {
+                // WebSocket failures must never break the use case.
+            }
+        }
 
         return ['daysAffected' => $daysAffected, 'locationsAssigned' => $locationsAssigned];
     }
@@ -141,11 +165,16 @@ class GenerateItineraryService implements UsesCasesService
             }
 
             $typeName = null;
+            $typeIcon = null;
             try {
                 $typeLocation = $loc->getTypeLocation();
-                $typeName = $typeLocation !== null ? $typeLocation->getTitle() : null;
+                $typeName = $typeLocation?->getTitle();
+                $typeIcon = $typeLocation?->getIcon();
             } catch (\Throwable) {
             }
+
+            $isLodging = $this->isLodgingType($typeName, $typeIcon)
+                || $this->isLodgingByTitle((string) $loc->getTitle());
 
             $inputs[] = new ItineraryLocationInput(
                 id: $loc->getId()->id(),
@@ -154,25 +183,56 @@ class GenerateItineraryService implements UsesCasesService
                 typeName: $typeName,
                 lat: $lat,
                 lng: $lng,
+                isLodging: $isLodging,
             );
         }
 
         return $inputs;
     }
 
-    private function assertUserCanEdit(\App\Domain\Travel\Model\Travel $travel, string $userId): void
+    private function assertUserCanEdit(Travel $travel, string $userId): void
     {
-        $ownerId = $travel->getUser()->getId()->id();
+        $ownerId = (string) $travel->getUser()->getId()->id();
         if ($ownerId === $userId) {
             return;
         }
 
         foreach ($travel->getSharedusers() as $sharedUser) {
-            if ($sharedUser->getId()->id() === $userId) {
+            if ((string) $sharedUser->getId()->id() === $userId) {
                 return;
             }
         }
 
         throw new InvalidTravelUser();
+    }
+
+    private function isLodgingType(?string $typeTitle, ?string $icon): bool
+    {
+        // The TypeLocation title is the source of truth (explicit user choice).
+        $title = strtolower(trim((string) $typeTitle));
+        if (in_array($title, ['hotel', 'house', 'hostel', 'hostal', 'apartment', 'apartamento', 'b&b', 'bnb', 'lodging', 'accommodation'], true)) {
+            return true;
+        }
+
+        // Icon fallback: ONLY fa-bed is exclusive to lodging.
+        // We deliberately do NOT match fa-building because the seeded "City" type also uses it,
+        // so cities would be wrongly classified as lodgings.
+        $iconLower = strtolower((string) $icon);
+        if (str_contains($iconLower, 'fa-bed')) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private function isLodgingByTitle(string $title): bool
+    {
+        $needle = strtolower($title);
+        foreach (['hotel', 'hostel', 'hostal', 'airbnb', 'b&b', 'bed and breakfast', 'guesthouse', 'guest house', 'apartment', 'apartamento', 'apartament', 'pension', 'pensión', 'lodge'] as $keyword) {
+            if (str_contains($needle, $keyword)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

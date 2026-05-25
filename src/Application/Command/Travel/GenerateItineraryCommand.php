@@ -11,6 +11,7 @@ final class GenerateItineraryCommand implements Command
         public readonly string $userId,
         public readonly string $mode,
         public readonly string $locale,
+        public readonly string $additionalNotes = '',
     ) {
     }
 }

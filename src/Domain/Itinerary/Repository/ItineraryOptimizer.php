@@ -24,5 +24,6 @@ interface ItineraryOptimizer
         ?\DateTime $startDate,
         string $destinationName,
         string $locale,
+        string $additionalNotes = '',
     ): array;
 }

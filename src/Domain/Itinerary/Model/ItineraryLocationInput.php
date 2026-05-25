@@ -11,6 +11,7 @@ final class ItineraryLocationInput
         public readonly ?string $typeName,
         public readonly ?float $lat,
         public readonly ?float $lng,
+        public readonly bool $isLodging = false,
     ) {
     }
 }
