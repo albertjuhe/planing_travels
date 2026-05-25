@@ -1,6 +1,7 @@
 parameters:
     locale: 'en'
     travel_photos_directory: '%kernel.project_dir%/public/uploads/travel_photos'
+    openai_default_model: 'gpt-4o-mini'
 
 services:
     _defaults:
@@ -175,3 +176,23 @@ services:
             $logger: '@logger'
         tags:
             - { name: messenger.message_handler, bus: query.bus }
+
+    # AI Itinerary (OpenAI)
+    App\Infrastructure\AIBundle\Provider\OpenAIItineraryOptimizer:
+        arguments:
+            $httpClient: '@http_client'
+            $apiKey: '%env(string:default::OPENAI_API_KEY)%'
+            $model: '%env(string:default:openai_default_model:OPENAI_MODEL)%'
+            $logger: '@logger'
+
+    App\Domain\Itinerary\Repository\ItineraryOptimizer:
+        alias: App\Infrastructure\AIBundle\Provider\OpenAIItineraryOptimizer
+
+    App\Application\UseCases\Travel\GenerateItineraryService:
+        arguments:
+            $travelRepository: '@doctrine.travel.repository'
+            $optimizer: '@App\Domain\Itinerary\Repository\ItineraryOptimizer'
+            $em: '@doctrine.orm.entity_manager'
+            $webSocketNotifier: '@App\Infrastructure\WebSocket\WebSocketNotifier'
+        tags:
+            - { name: messenger.message_handler, bus: command.bus }

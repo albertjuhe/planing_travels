@@ -10,3 +10,9 @@ framework:
     cache: ~
 
     http_client: ~
+
+    rate_limiter:
+        itinerary_generation:
+            policy: 'sliding_window'
+            limit: 5
+            interval: '1 hour'

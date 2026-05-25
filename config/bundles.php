@@ -25,4 +25,5 @@ return [
     Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle::class => ['dev' => true, 'test' => true],
     App\Infrastructure\TravelCloneBundle\TravelCloneBundle::class => ['all' => true],
     App\Infrastructure\WeatherBundle\WeatherBundle::class => ['all' => true],
+    App\Infrastructure\AIBundle\AIBundle::class => ['all' => true],
 ];
