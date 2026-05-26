@@ -188,6 +188,16 @@ services:
     App\Domain\Itinerary\Repository\ItineraryOptimizer:
         alias: App\Infrastructure\AIBundle\Provider\OpenAIItineraryOptimizer
 
+    App\Infrastructure\AIBundle\Provider\OpenAILocationSuggester:
+        arguments:
+            $httpClient: '@http_client'
+            $apiKey: '%env(string:default::OPENAI_API_KEY)%'
+            $model: '%env(string:default:openai_default_model:OPENAI_MODEL)%'
+            $logger: '@logger'
+
+    App\Domain\Itinerary\Repository\LocationSuggester:
+        alias: App\Infrastructure\AIBundle\Provider\OpenAILocationSuggester
+
     App\Application\UseCases\Travel\GenerateItineraryService:
         arguments:
             $travelRepository: '@doctrine.travel.repository'

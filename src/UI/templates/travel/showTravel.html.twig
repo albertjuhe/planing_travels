@@ -2744,6 +2744,13 @@ html body .st-page > .container,
                                     <button type="button" class="st-icon-btn st-icon-btn--primary" data-toggle="modal" data-target="#addpoint" title="Add location">
                                         <svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3v10M3 8h10"/></svg>
                                     </button>
+                                    <button type="button" id="st-btn-suggest-locs" title="Suggest locations with AI"
+                                            style="display:inline-flex;align-items:center;gap:5px;padding:6px 12px;font-size:12px;font-weight:600;color:#1a2e4a;background:linear-gradient(135deg,#ffd86b 0%,#f39c12 100%);border:none;border-radius:8px;cursor:pointer;box-shadow:0 2px 5px rgba(243,156,18,0.35);transition:transform 0.12s,box-shadow 0.12s;white-space:nowrap;"
+                                            onmouseover="this.style.transform='translateY(-1px)';this.style.boxShadow='0 4px 10px rgba(243,156,18,0.5)';"
+                                            onmouseout="this.style.transform='none';this.style.boxShadow='0 2px 5px rgba(243,156,18,0.35)';">
+                                        <svg viewBox="0 0 16 16" width="12" height="12" fill="currentColor"><path d="M9.5 2.5l.7 1.6 1.6.7-1.6.7-.7 1.6-.7-1.6-1.6-.7 1.6-.7zM3.2 9.4L1.8 8l1-1 1.4 1.4 6-6 1 1-6.6 6.6L3.2 9.4zm9.6 1l.5 1.1 1.1.5-1.1.5-.5 1.1-.5-1.1-1.1-.5 1.1-.5z"/></svg>
+                                        AI Suggest
+                                    </button>
                                     {% endif %}
                                     <button class="st-icon-btn" id="center-map-unified" title="Center map">
                                         <svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="3"/><path d="M8 1v3M8 12v3M1 8h3M12 8h3"/></svg>
@@ -2950,6 +2957,70 @@ html body .st-page > .container,
     <button class="st-lightbox__close" id="st-lightbox-close" type="button">&times;</button>
     <img class="st-lightbox__img" id="st-lightbox-img" src="" alt=""/>
 </div>
+
+{% if canEdit %}
+{# ── AI Location Suggester modal ── #}
+<div id="sloc-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:5000;align-items:flex-start;justify-content:center;padding:20px 12px;overflow-y:auto;">
+    <div id="sloc-modal" style="background:#fff;border-radius:16px;box-shadow:0 24px 64px rgba(0,0,0,0.25);width:min(640px,96vw);margin:auto;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;overflow:hidden;">
+        {# Header #}
+        <div style="background:linear-gradient(135deg,#1a2e4a 0%,#2980b9 100%);padding:20px 24px;display:flex;align-items:center;justify-content:space-between;">
+            <div style="display:flex;align-items:center;gap:12px;">
+                <span style="display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#ffd86b 0%,#f39c12 100%);color:#1a2e4a;">
+                    <svg viewBox="0 0 16 16" width="16" height="16" fill="currentColor"><path d="M9.5 2.5l.7 1.6 1.6.7-1.6.7-.7 1.6-.7-1.6-1.6-.7 1.6-.7zM3.2 9.4L1.8 8l1-1 1.4 1.4 6-6 1 1-6.6 6.6L3.2 9.4zm9.6 1l.5 1.1 1.1.5-1.1.5-.5 1.1-.5-1.1-1.1-.5 1.1-.5z"/></svg>
+                </span>
+                <div>
+                    <div style="font-size:16px;font-weight:700;color:#fff;">AI Location Suggestions</div>
+                    <div style="font-size:12px;color:rgba(255,255,255,0.7);">{{ travel.title }} &middot; {{ (((travel.endAt|date('U') - travel.startAt|date('U')) / 86400)|round(0,'ceil') + 1) }} days</div>
+                </div>
+            </div>
+            <button id="sloc-close" type="button" style="background:none;border:none;color:rgba(255,255,255,0.7);font-size:24px;cursor:pointer;line-height:1;padding:0;">&times;</button>
+        </div>
+
+        {# Preferences input #}
+        <div id="sloc-form" style="padding:20px 24px;border-bottom:1px solid #eaecef;">
+            <label style="display:block;font-size:12px;font-weight:600;color:#2c3e50;margin-bottom:6px;">Preferences <span style="color:#95a5a6;font-weight:400;">(optional)</span></label>
+            <textarea id="sloc-preferences" rows="2" maxlength="500"
+                      placeholder="e.g. Focus on medieval towns. Include vineyards. Avoid tourist traps."
+                      style="width:100%;box-sizing:border-box;padding:9px 12px;border:1px solid #dde3ea;border-radius:8px;font-size:13px;font-family:inherit;color:#2c3e50;resize:none;outline:none;transition:border-color 0.15s;"
+                      onfocus="this.style.borderColor='#f39c12';" onblur="this.style.borderColor='#dde3ea';"></textarea>
+            <div style="display:flex;justify-content:flex-end;font-size:11px;color:#95a5a6;margin-top:3px;">
+                <span><span id="sloc-pref-count">0</span>/500</span>
+            </div>
+            <button id="sloc-generate" type="button"
+                    style="margin-top:12px;display:inline-flex;align-items:center;gap:7px;padding:9px 20px;background:linear-gradient(135deg,#ffd86b 0%,#f39c12 100%);border:none;border-radius:8px;font-size:13px;font-weight:600;color:#1a2e4a;cursor:pointer;box-shadow:0 2px 6px rgba(243,156,18,0.35);">
+                <svg viewBox="0 0 16 16" width="13" height="13" fill="currentColor"><path d="M9.5 2.5l.7 1.6 1.6.7-1.6.7-.7 1.6-.7-1.6-1.6-.7 1.6-.7zM3.2 9.4L1.8 8l1-1 1.4 1.4 6-6 1 1-6.6 6.6L3.2 9.4zm9.6 1l.5 1.1 1.1.5-1.1.5-.5 1.1-.5-1.1-1.1-.5 1.1-.5z"/></svg>
+                Get suggestions
+            </button>
+        </div>
+
+        {# Results area #}
+        <div id="sloc-loading" style="display:none;padding:32px 24px;text-align:center;color:#7f8c8d;font-size:14px;">
+            <div style="margin-bottom:10px;font-size:28px;">🤖</div>
+            <div id="sloc-loading-text">AI is thinking about your trip…</div>
+        </div>
+
+        <div id="sloc-error" style="display:none;margin:16px 24px;background:#fdecea;border:1px solid #f5c6cb;border-radius:8px;padding:10px 14px;font-size:13px;color:#721c24;"></div>
+
+        <div id="sloc-results" style="display:none;">
+            <div style="padding:14px 24px 8px;display:flex;align-items:center;justify-content:space-between;">
+                <div style="font-size:13px;font-weight:600;color:#2c3e50;">Select locations to add:</div>
+                <div style="display:flex;gap:8px;">
+                    <button id="sloc-select-all" type="button" style="font-size:11px;color:#2980b9;background:none;border:none;cursor:pointer;padding:2px 6px;">Select all</button>
+                    <button id="sloc-select-none" type="button" style="font-size:11px;color:#7f8c8d;background:none;border:none;cursor:pointer;padding:2px 6px;">Clear</button>
+                </div>
+            </div>
+            <div id="sloc-cards" style="padding:0 16px 16px;display:flex;flex-direction:column;gap:6px;max-height:360px;overflow-y:auto;"></div>
+            <div style="padding:12px 24px;border-top:1px solid #eaecef;display:flex;align-items:center;justify-content:space-between;gap:12px;">
+                <div style="font-size:12px;color:#7f8c8d;"><span id="sloc-selected-count">0</span> selected</div>
+                <div style="display:flex;gap:8px;">
+                    <button id="sloc-cancel" type="button" style="padding:8px 18px;background:#f4f6f8;border:1px solid #dde3ea;border-radius:8px;font-size:13px;color:#2c3e50;cursor:pointer;">Cancel</button>
+                    <button id="sloc-add" type="button" style="padding:8px 18px;background:#2980b9;border:none;border-radius:8px;font-size:13px;font-weight:600;color:#fff;cursor:pointer;" disabled>Add selected</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
 
 {% if app.user and app.user.userId == travel.user.userId %}
 <div class="sh-overlay" id="sh-overlay" role="dialog" aria-modal="true" aria-labelledby="sh-modal-title">
@@ -3747,7 +3818,196 @@ html body .st-page > .container,
             });
         });
 
+    </script>
 
+    {% if canEdit %}
+    <script>
+    (function () {
+        var SUGGEST_URL  = '{{ path('suggest_locations', {travelId: travel.id}) }}';
+        var ADD_LOC_URL  = '{{ path('newAPILocation', {userId: app.user ? app.user.id : 0}) }}';
+        var TRAVEL_ID    = '{{ travel.id }}';
+
+        var btnSuggest   = document.getElementById('st-btn-suggest-locs');
+        var overlay      = document.getElementById('sloc-overlay');
+        var closeBtn     = document.getElementById('sloc-close');
+        var cancelBtn    = document.getElementById('sloc-cancel');
+        var generateBtn  = document.getElementById('sloc-generate');
+        var addBtn       = document.getElementById('sloc-add');
+        var prefInput    = document.getElementById('sloc-preferences');
+        var prefCount    = document.getElementById('sloc-pref-count');
+        var loadingEl    = document.getElementById('sloc-loading');
+        var loadingText  = document.getElementById('sloc-loading-text');
+        var errorEl      = document.getElementById('sloc-error');
+        var resultsEl    = document.getElementById('sloc-results');
+        var cardsEl      = document.getElementById('sloc-cards');
+        var selectedCountEl = document.getElementById('sloc-selected-count');
+        var selectAllBtn    = document.getElementById('sloc-select-all');
+        var selectNoneBtn   = document.getElementById('sloc-select-none');
+
+        if (!btnSuggest || !overlay) { return; }
+
+        var suggestions = [];
+        var dotsTimer   = null;
+
+        function openModal() {
+            overlay.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+            resetToForm();
+        }
+        function closeModal() {
+            overlay.style.display = 'none';
+            document.body.style.overflow = '';
+            clearInterval(dotsTimer);
+        }
+        btnSuggest.addEventListener('click', openModal);
+        closeBtn.addEventListener('click', closeModal);
+        cancelBtn.addEventListener('click', closeModal);
+        overlay.addEventListener('click', function (e) { if (e.target === overlay) { closeModal(); } });
+
+        prefInput.addEventListener('input', function () {
+            prefCount.textContent = prefInput.value.length;
+        });
+
+        function resetToForm() {
+            suggestions = [];
+            loadingEl.style.display = 'none';
+            errorEl.style.display = 'none';
+            resultsEl.style.display = 'none';
+            cardsEl.innerHTML = '';
+            generateBtn.disabled = false;
+            generateBtn.innerHTML = '\u2728 Get suggestions';
+        }
+        function showError(msg) {
+            loadingEl.style.display = 'none';
+            errorEl.textContent = msg;
+            errorEl.style.display = 'block';
+            generateBtn.disabled = false;
+            generateBtn.textContent = 'Try again';
+        }
+        function startDots() {
+            var dots = 0;
+            dotsTimer = setInterval(function () {
+                dots = (dots + 1) % 4;
+                loadingText.textContent = 'AI is thinking about your trip' + '.'.repeat(dots);
+            }, 400);
+        }
+
+        var TYPE_EMOJI = {
+            Hotel:'\ud83c\udfe8', House:'\ud83c\udfe0', Museum:'\ud83c\udfdb',
+            Beach:'\ud83c\udfd6', Park:'\ud83c\udf33', Restaurant:'\ud83c\udf7d', Lunch:'\ud83c\udf7d',
+            Coffee:'\u2615', Monument:'\ud83c\udfdb', Viewpoint:'\ud83d\uddfa', City:'\ud83c\udfd9',
+            Bar:'\ud83c\udf7b', Shop:'\ud83d\udecd', Camping:'\u26fa', Airport:'\u2708',
+            Train:'\ud83d\ude82', Bus:'\ud83d\ude8c', Cinema:'\ud83c\udfa5', Hospital:'\ud83c\udfe5',
+        };
+        function typeEmoji(t) { return TYPE_EMOJI[t] || '\ud83d\udccd'; }
+        function escHtml(str) {
+            return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+        }
+        function updateSelectedCount() {
+            var n = cardsEl.querySelectorAll('input[type=checkbox]:checked').length;
+            selectedCountEl.textContent = n;
+            addBtn.disabled = n === 0;
+        }
+
+        function renderCards(data) {
+            cardsEl.innerHTML = '';
+            updateSelectedCount();
+            data.forEach(function (s, i) {
+                var card = document.createElement('label');
+                card.style.cssText = 'display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border:1.5px solid #dde3ea;border-radius:10px;cursor:pointer;transition:border-color 0.12s,background 0.12s;';
+                card.htmlFor = 'sloc-cb-' + i;
+                var cb = document.createElement('input');
+                cb.type = 'checkbox'; cb.id = 'sloc-cb-' + i;
+                cb.style.cssText = 'margin-top:3px;flex-shrink:0;width:15px;height:15px;accent-color:#2980b9;cursor:pointer;';
+                cb.dataset.idx = i;
+                cb.addEventListener('change', function () {
+                    card.style.borderColor = cb.checked ? '#2980b9' : '#dde3ea';
+                    card.style.background  = cb.checked ? '#f0f7ff' : '';
+                    updateSelectedCount();
+                });
+                var info = document.createElement('div');
+                info.style.cssText = 'flex:1;min-width:0;';
+                info.innerHTML =
+                    '<div style="display:flex;align-items:center;gap:6px;margin-bottom:2px;">' +
+                    '<span style="font-size:16px;">' + typeEmoji(s.typeName) + '</span>' +
+                    '<span style="font-size:13px;font-weight:600;color:#1a2e4a;">' + escHtml(s.name) + '</span>' +
+                    '<span style="font-size:10px;color:#fff;background:#2980b9;border-radius:4px;padding:1px 6px;margin-left:auto;flex-shrink:0;">' + escHtml(s.typeName) + '</span>' +
+                    '</div>' +
+                    (s.address ? '<div style="font-size:11px;color:#7f8c8d;margin-bottom:3px;">' + escHtml(s.address) + '</div>' : '') +
+                    '<div style="font-size:12px;color:#555;line-height:1.4;">' + escHtml(s.description) + '</div>';
+                card.appendChild(cb); card.appendChild(info); cardsEl.appendChild(card);
+            });
+        }
+
+        selectAllBtn.addEventListener('click', function () {
+            cardsEl.querySelectorAll('input[type=checkbox]').forEach(function (cb) { if (!cb.checked) { cb.click(); } });
+        });
+        selectNoneBtn.addEventListener('click', function () {
+            cardsEl.querySelectorAll('input[type=checkbox]:checked').forEach(function (cb) { cb.click(); });
+        });
+
+        generateBtn.addEventListener('click', function () {
+            errorEl.style.display = 'none';
+            resultsEl.style.display = 'none';
+            loadingEl.style.display = 'block';
+            generateBtn.disabled = true;
+            startDots();
+            var controller = new AbortController();
+            var timeout = setTimeout(function () { controller.abort(); }, 90000);
+            fetch(SUGGEST_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+                credentials: 'same-origin',
+                body: JSON.stringify({ preferences: prefInput.value }),
+                signal: controller.signal,
+            })
+            .then(function (r) {
+                clearTimeout(timeout); clearInterval(dotsTimer);
+                return r.text().then(function (raw) {
+                    var data = null;
+                    try { data = JSON.parse(raw); } catch (e) {}
+                    if (!r.ok) { showError((data && data.error) || ('Server error ' + r.status)); return; }
+                    if (!data || !data.suggestions || !data.suggestions.length) { showError('No suggestions returned. Try adding more preferences.'); return; }
+                    suggestions = data.suggestions;
+                    loadingEl.style.display = 'none';
+                    renderCards(suggestions);
+                    resultsEl.style.display = 'block';
+                });
+            })
+            .catch(function (err) {
+                clearTimeout(timeout); clearInterval(dotsTimer);
+                showError(err.name === 'AbortError' ? 'Request timed out. Try again.' : 'Network error: ' + err.message);
+            });
+        });
+
+        addBtn.addEventListener('click', function () {
+            var checked = Array.from(cardsEl.querySelectorAll('input[type=checkbox]:checked'));
+            if (!checked.length) { return; }
+            addBtn.disabled = true;
+            addBtn.textContent = 'Adding\u2026';
+            var toAdd = checked.map(function (cb) { return suggestions[parseInt(cb.dataset.idx, 10)]; });
+            var idx = 0;
+            function addNext() {
+                if (idx >= toAdd.length) { closeModal(); window.location.reload(); return; }
+                var s = toAdd[idx++];
+                var placeId = 'ai-' + Date.now() + '-' + Math.random().toString(36).slice(2, 7);
+                var payload = {
+                    travel: TRAVEL_ID, placeAddress: s.name, address: s.address || s.name,
+                    comment: s.description, link: '', latitude: s.lat || 0, longitude: s.lng || 0,
+                    place_id: placeId, IdType: s.typeName,
+                };
+                fetch(ADD_LOC_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+                    credentials: 'same-origin',
+                    body: JSON.stringify(payload),
+                }).then(function () { addNext(); }).catch(function () { addNext(); });
+            }
+            addNext();
+        });
+    }());
+    </script>
+    {% endif %}
 
 {% endblock %}
 
