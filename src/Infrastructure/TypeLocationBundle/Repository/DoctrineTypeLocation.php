@@ -32,11 +32,14 @@ class DoctrineTypeLocation extends ServiceEntityRepository implements TypeLocati
 
     public function idOrFail(string $locationType): TypeLocation
     {
-        $locationType = $this->find($locationType);
-        if (!$locationType instanceof TypeLocation) {
+        $type = $this->find($locationType);
+        if (!$type instanceof TypeLocation) {
+            $type = $this->findOneBy(['title' => $locationType]);
+        }
+        if (!$type instanceof TypeLocation) {
             throw new TypeLocationDoesntExists();
         }
 
-        return $locationType;
+        return $type;
     }
 }
