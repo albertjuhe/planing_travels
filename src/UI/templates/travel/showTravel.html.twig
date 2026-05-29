@@ -4001,10 +4001,38 @@ html body .st-page > .container,
                     headers: { 'Content-Type': 'application/json', 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
                     credentials: 'same-origin',
                     body: JSON.stringify(payload),
-                }).then(function () { addNext(); }).catch(function () { addNext(); });
+                }).then(function (r) {
+                    return r.json().then(function (data) {
+                        if (data.id && s.lat && s.lng) {
+                            fetchPhotoForLocation(data.id, s.name);
+                        }
+                        addNext();
+                    });
+                }).catch(function () { addNext(); });
             }
             addNext();
         });
+
+        function fetchPhotoForLocation(locationId, placeName) {
+            var div = document.createElement('div');
+            var service = new google.maps.places.PlacesService(div);
+            service.textSearch({ query: placeName }, function (results, status) {
+                if (status !== google.maps.places.PlacesServiceStatus.OK || !results || !results.length) return;
+                var place = results[0];
+                if (!place.photos || !place.photos.length) return;
+                var photoUrl = place.photos[0].getUrl({ maxWidth: 800, maxHeight: 600 });
+                fetch(photoUrl)
+                    .then(function (res) { return res.blob(); })
+                    .then(function (blob) {
+                        var fd = new FormData();
+                        fd.append('file', blob, 'photo.jpg');
+                        return fetch('/api/location/' + locationId + '/image', {
+                            method: 'POST', credentials: 'same-origin', body: fd,
+                        });
+                    })
+                    .catch(function () {});
+            });
+        }
     }());
     </script>
     {% endif %}

@@ -6,6 +6,7 @@ use App\Application\Command\Location\AddLocationCommand;
 use App\Domain\Mark\Model\Mark;
 use App\Domain\Travel\ValueObject\GeoLocation;
 use App\Domain\Location\Model\Location;
+use App\Domain\TypeLocation\Repository\TypeLocationRepository;
 use App\UI\Controller\http\CommandController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,15 +17,14 @@ use Symfony\Bundle\SecurityBundle\Security;
 
 class AddNewLocationAPIController extends CommandController
 {
-    /**
-     * @var Security
-     */
-    private $security;
+    private Security $security;
+    private TypeLocationRepository $typeLocationRepository;
 
-    public function __construct(MessageBusInterface $commandBus, Security $security)
+    public function __construct(MessageBusInterface $commandBus, Security $security, TypeLocationRepository $typeLocationRepository)
     {
         parent::__construct($commandBus);
         $this->security = $security;
+        $this->typeLocationRepository = $typeLocationRepository;
     }
 
     #[Route('/api/user/{userId}/location', name: 'newAPILocation', methods: ['POST'])]
@@ -45,7 +45,13 @@ class AddNewLocationAPIController extends CommandController
 
         $location->setMark($mark);
 
-        $addLocationCommand = new AddLocationCommand($data['travel'], $location, $userId, $mark, $data['IdType']);
+        $idType = $data['IdType'];
+        if (!is_numeric($idType)) {
+            $typeLocation = $this->typeLocationRepository->idOrFail($idType);
+            $idType = $typeLocation->getId();
+        }
+
+        $addLocationCommand = new AddLocationCommand($data['travel'], $location, $userId, $mark, (int) $idType);
         $this->commandBus->dispatch($addLocationCommand);
 
         return new JsonResponse(['id' => $location->getId()->id()], Response::HTTP_CREATED);
