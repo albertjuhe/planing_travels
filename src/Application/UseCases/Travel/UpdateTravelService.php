@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: albert.juhe
- * Date: 03/10/2018
- * Time: 07:17.
- */
 
 namespace App\Application\UseCases\Travel;
 
@@ -19,33 +13,14 @@ use App\Application\Command\Travel\UpdateTravelCommand;
 
 class UpdateTravelService implements UsesCasesService
 {
-    /**
-     * @var TravelRepository;
-     */
-    private $travelRepository;
-
-    /**
-     * AddTravelService constructor.
-     *
-     * @param TravelRepository $travelRepository
-     */
-    public function __construct(TravelRepository $travelRepository)
-    {
-        $this->travelRepository = $travelRepository;
+    public function __construct(
+        private readonly TravelRepository $travelRepository,
+    ) {
     }
 
-    /**
-     * Modify a travel.
-     *
-     * @param UpdateTravelCommand $command
-     *
-     * @throws InvalidTravelUser
-     */
     public function __invoke(UpdateTravelCommand $command)
     {
-        /** @var Travel */
         $travel = $command->travel();
-        /** @var User */
         $user = $command->user();
 
         $isOwner = $travel->getUser()->getId()->equalsTo($user->getId());
@@ -60,7 +35,10 @@ class UpdateTravelService implements UsesCasesService
         if (!$isOwner && !$isSharedUser) {
             throw new InvalidTravelUser();
         }
+
+        $travel->record(new TravelWasUpdated($travel->toArray()));
+        DomainEventPublisher::instance()->publish(...$travel->pullDomainEvents());
+
         $this->travelRepository->save($travel);
-        DomainEventPublisher::instance()->publish(new TravelWasUpdated($travel->toArray()));
     }
 }

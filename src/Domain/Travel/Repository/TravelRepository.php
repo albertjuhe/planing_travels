@@ -25,7 +25,9 @@ interface TravelRepository
      *
      * @return mixed
      */
-    public function save(Travel $travel);
+    public function save(Travel $travel): void;
+
+    public function flush(): void;
 
     /**
      * @param int $id

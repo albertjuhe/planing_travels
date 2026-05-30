@@ -111,54 +111,6 @@ class GeoLocation
         return $this->lng1;
     }
 
-    /**
-     * @param float $lat
-     */
-    public function setLat(float $lat): void
-    {
-        $this->lat = $lat;
-    }
-
-    /**
-     * @param float $lng
-     */
-    public function setLng(float $lng): void
-    {
-        $this->lng = $lng;
-    }
-
-    /**
-     * @param float $lat0
-     */
-    public function setLat0(float $lat0): void
-    {
-        $this->lat0 = $lat0;
-    }
-
-    /**
-     * @param float $lng0
-     */
-    public function setLng0(float $lng0): void
-    {
-        $this->lng0 = $lng0;
-    }
-
-    /**
-     * @param float $lat1
-     */
-    public function setLat1(float $lat1): void
-    {
-        $this->lat1 = $lat1;
-    }
-
-    /**
-     * @param float $lng1
-     */
-    public function setLng1(float $lng1): void
-    {
-        $this->lng1 = $lng1;
-    }
-
     public function toArray(): array
     {
         return [

@@ -9,7 +9,6 @@ use App\Domain\Travel\ValueObject\TravelId;
 use App\Domain\User\Model\User;
 use App\Domain\Travel\ValueObject\GeoLocation;
 use App\Domain\Travel\Events\TravelWasPublished;
-use App\Application\DataTransformers\Travel\TravelPublishDataTransformer;
 use Doctrine\Common\Collections\ArrayCollection;
 
 class Travel extends AggregateRoot
@@ -413,7 +412,11 @@ class Travel extends AggregateRoot
 
         $this->record(
             new TravelWasPublished(
-                (new TravelPublishDataTransformer($this))->read(),
+                [
+                    'id' => $this->id->id(),
+                    'publishedAt' => $this->publishedAt,
+                    'status' => $this->status,
+                ],
                 $this->getUser()->getId()->id()
             )
         );

@@ -4,10 +4,14 @@ namespace App\Application\UseCases\Location;
 
 use App\Application\Command\Location\AddLocationCommand;
 use App\Application\UseCases\UsesCasesService;
+use App\Domain\Location\Model\Location;
 use App\Domain\Location\Repository\LocationRepository;
+use App\Domain\Mark\Model\Mark;
 use App\Domain\Mark\Repository\MarkRepository;
 use App\Domain\Travel\Exceptions\InvalidTravelUser;
+use App\Domain\Travel\Model\Travel;
 use App\Domain\Travel\Repository\TravelRepository;
+use App\Domain\Travel\ValueObject\GeoLocation;
 use App\Domain\TypeLocation\Repository\TypeLocationRepository;
 use App\Domain\User\Repository\UserRepository;
 use App\Domain\User\ValueObject\UserId;
@@ -16,67 +20,24 @@ use Symfony\Component\String\Slugger\AsciiSlugger;
 
 class AddLocationService implements UsesCasesService
 {
-    /**
-     * @var TravelRepository;
-     */
-    private $travelRepository;
-    /**
-     * @var UserRepository
-     */
-    private $userRepository;
-    /**
-     * @var MarkRepository
-     */
-    private $markRepository;
-    /**
-     * @var LocationRepository
-     */
-    private $locationRepository;
-
-    /**
-     * @var TypeLocationRepository
-     */
-    private $typeLocationRepository;
-
-    /**
-     * @var WebSocketNotifier
-     */
-    private $webSocketNotifier;
-
     public function __construct(
-        TravelRepository $travelRepository,
-        UserRepository $userRepository,
-        MarkRepository $markRepository,
-        LocationRepository $locationRepository,
-        TypeLocationRepository $typeLocationRepository,
-        WebSocketNotifier $webSocketNotifier
+        private readonly TravelRepository $travelRepository,
+        private readonly UserRepository $userRepository,
+        private readonly MarkRepository $markRepository,
+        private readonly LocationRepository $locationRepository,
+        private readonly TypeLocationRepository $typeLocationRepository,
+        private readonly WebSocketNotifier $webSocketNotifier,
     ) {
-        $this->travelRepository = $travelRepository;
-        $this->userRepository = $userRepository;
-        $this->markRepository = $markRepository;
-        $this->locationRepository = $locationRepository;
-        $this->typeLocationRepository = $typeLocationRepository;
-        $this->webSocketNotifier = $webSocketNotifier;
     }
 
-    /**
-     * @throws InvalidTravelUser
-     */
-    public function __invoke(AddLocationCommand $addLocationCommand): void
+    public function __invoke(AddLocationCommand $command): string
     {
-        $travelId = $addLocationCommand->getTravelId();
-        $location = $addLocationCommand->getLocation();
-        $userId = $addLocationCommand->getUser();
-        $mark = $addLocationCommand->getMark();
-        $locationType = $addLocationCommand->getLocationType();
-
-        $user = $this->userRepository->ofIdOrFail(new UserId($userId));
-
+        $user = $this->userRepository->ofIdOrFail(new UserId($command->getUserId()));
         if (is_null($user)) {
             throw new InvalidTravelUser('User does not exists');
         }
 
-        $travel = $this->travelRepository->ofIdOrFail($travelId);
+        $travel = $this->travelRepository->ofIdOrFail($command->getTravelId());
 
         $isOwner = $travel->getUser()->getId()->equalsTo($user->getId());
         $isSharedUser = $travel->getSharedusers()->exists(
@@ -88,34 +49,55 @@ class AddLocationService implements UsesCasesService
         if (!$isOwner && !$isSharedUser) {
             throw new InvalidTravelUser('This user is not allowed to modify the travel');
         }
-        $locationType = $this->typeLocationRepository->idOrFail($locationType);
 
-        //find the mark if not exists create it
+        $locationType = $this->typeLocationRepository->idOrFail($command->getLocationType());
+
+        $location = Location::fromTitleAndUrlAndDescription(
+            $command->getTitle(),
+            $command->getLink(),
+            $command->getDescription(),
+        );
+
+        $location = $this->setSlug($location);
+
+        $geolocation = new GeoLocation($command->getLatitude(), $command->getLongitude(), 0, 0, 0, 0);
+        $mark = Mark::fromGeolocationAndId($geolocation, $command->getPlaceId());
+        $mark->setTitle($command->getAddress());
         $mark = $this->markRepository->ofIdOrSave($mark);
 
         $location->setTravel($travel);
         $location->setMark($mark);
         $location->setTypeLocation($locationType);
 
-        if (!$location->getSlug()) {
-            $slugger = new AsciiSlugger();
-            $slug = strtolower((string) $slugger->slug($location->getTitle()));
-            $location->setSlug($slug ?: 'location-' . uniqid());
-        }
-
         $this->locationRepository->save($location);
 
+        $locationId = $location->getId()->id();
+        $command->setLocationId($locationId);
+
         $this->webSocketNotifier->notifyLocationAdded(
-            $travelId,
+            $command->getTravelId(),
             [
                 'id'            => $location->getId()->id(),
                 'title'         => $location->getTitle(),
                 'latitude'      => $location->getMark()->getGeoLocation()->lat(),
                 'longitude'     => $location->getMark()->getGeoLocation()->lng(),
                 'slug'          => $location->getSlug(),
-                'addedByUserId' => $userId,
+                'addedByUserId' => $command->getUserId(),
                 'addedByUsername' => $user->getUsername(),
             ]
         );
+
+        return $locationId;
+    }
+
+    private function setSlug(Location $location): Location
+    {
+        if (!$location->getSlug()) {
+            $slugger = new AsciiSlugger();
+            $slug = strtolower((string) $slugger->slug($location->getTitle()));
+            $location->setSlug($slug ?: 'location-' . uniqid());
+        }
+
+        return $location;
     }
 }

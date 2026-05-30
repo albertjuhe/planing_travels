@@ -3,87 +3,82 @@
 namespace App\Application\Command\Location;
 
 use App\Application\Command\Command;
-use App\Domain\Location\Model\Location;
-use App\Domain\Mark\Model\Mark;
 
 class AddLocationCommand implements Command
 {
-    /**
-     * @var int
-     */
-    private $travelId;
-
-    /**
-     * @var Location
-     */
-    private $location;
-
-    /**
-     * @var int
-     */
-    private $user;
-
-    /**
-     * @var int
-     */
-    private $locationType;
-
-    /**
-     * @var Mark
-     */
-    private $mark;
+    private ?string $locationId = null;
 
     public function __construct(
-        string $travelId,
-        Location $location,
-        int $user,
-        Mark $mark,
-        int $locationType
+        private readonly string $travelId,
+        private readonly int $userId,
+        private readonly string $title,
+        private readonly string $address,
+        private readonly string $description,
+        private readonly string $link,
+        private readonly float $latitude,
+        private readonly float $longitude,
+        private readonly string $placeId,
+        private readonly int $locationType,
     ) {
-        $this->travelId = $travelId;
-        $this->location = $location;
-        $this->user = $user;
-        $this->mark = $mark;
-        $this->locationType = $locationType;
     }
 
-    /**
-     * @return int
-     */
     public function getTravelId(): string
     {
         return $this->travelId;
     }
 
-    /**
-     * @return Location
-     */
-    public function getLocation(): Location
+    public function getUserId(): int
     {
-        return $this->location;
+        return $this->userId;
     }
 
-    /**
-     * @return int
-     */
-    public function getUser(): int
+    public function getTitle(): string
     {
-        return $this->user;
+        return $this->title;
     }
 
-    /**
-     * @return Mark
-     */
-    public function getMark(): Mark
+    public function getAddress(): string
     {
-        return $this->mark;
+        return $this->address;
     }
 
-    /**
-     * @return int
-     */
+    public function getDescription(): string
+    {
+        return $this->description;
+    }
+
+    public function getLink(): string
+    {
+        return $this->link;
+    }
+
+    public function getLatitude(): float
+    {
+        return $this->latitude;
+    }
+
+    public function getLongitude(): float
+    {
+        return $this->longitude;
+    }
+
+    public function getPlaceId(): string
+    {
+        return $this->placeId;
+    }
+
     public function getLocationType(): int
     {
         return $this->locationType;
+    }
+
+    public function setLocationId(string $locationId): void
+    {
+        $this->locationId = $locationId;
+    }
+
+    public function getLocationId(): ?string
+    {
+        return $this->locationId;
     }
 }

@@ -2,18 +2,12 @@
 
 namespace App\Infrastructure\Application\Service;
 
+use Symfony\Component\HttpFoundation\JsonResponse;
+
 class Response
 {
-    /**
-     * Response in JSON format.
-     *
-     * @param $success
-     * @param $data
-     * @param $message
-     */
-    public static function json($success, $data, $message = '')
+    public static function json($success, $data, $message = ''): JsonResponse
     {
-        header('Content-Type: application/json');
         $response = ['success' => $success];
         if ($success) {
             $response['data'] = $data;
@@ -24,6 +18,6 @@ class Response
             $response = ['message' => $message];
         }
 
-        echo json_encode($response);
+        return new JsonResponse($response);
     }
 }

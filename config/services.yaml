@@ -77,7 +77,7 @@ services:
             - { name: messenger.message_handler, bus: query.bus }
 
     App\Application\UseCases\Travel\ShowTravelService:
-        arguments: ['@doctrine.travel.repository', '@doctrine.orm.entity_manager']
+        arguments: ['@doctrine.travel.repository']
         tags:
             - { name: messenger.message_handler, bus: query.bus }
 
@@ -202,7 +202,6 @@ services:
         arguments:
             $travelRepository: '@doctrine.travel.repository'
             $optimizer: '@App\Domain\Itinerary\Repository\ItineraryOptimizer'
-            $em: '@doctrine.orm.entity_manager'
             $webSocketNotifier: '@App\Infrastructure\WebSocket\WebSocketNotifier'
         tags:
             - { name: messenger.message_handler, bus: command.bus }
