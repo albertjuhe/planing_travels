@@ -13,31 +13,15 @@ use Symfony\Component\String\Slugger\AsciiSlugger;
 
 class AddTravelService implements UsesCasesService
 {
-    /** @var TravelRepository; */
-    private $travelRepository;
-    /** @var UserRepository */
-    private $userRepository;
-
     public function __construct(
-        TravelRepository $travelRepository,
-        UserRepository $userRepository
+        private readonly TravelRepository $travelRepository,
+        private readonly UserRepository $userRepository,
     ) {
-        $this->travelRepository = $travelRepository;
-        $this->userRepository = $userRepository;
     }
 
-    /**
-     * @param AddTravelCommand $command
-     *
-     * @return Travel
-     *
-     * @throws \Exception
-     */
     public function __invoke(AddTravelCommand $command)
     {
-        /** @var Travel $travel */
         $travel = $command->getTravel();
-        /** @var User $user */
         $user = $command->getUser();
 
         $this->userRepository->ofIdOrFail($user->getId());
@@ -50,7 +34,9 @@ class AddTravelService implements UsesCasesService
             $travel->setSlug($slug ?: 'travel-' . uniqid());
         }
 
-        DomainEventPublisher::instance()->publish(new TravelWasAdded($travel->toArray()));
+        $travel->record(new TravelWasAdded($travel->toArray()));
+        DomainEventPublisher::instance()->publish(...$travel->pullDomainEvents());
+
         $this->travelRepository->save($travel);
 
         return $travel;

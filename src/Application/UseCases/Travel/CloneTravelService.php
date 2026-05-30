@@ -16,21 +16,11 @@ use App\Domain\User\Repository\UserRepository;
 
 class CloneTravelService implements UsesCasesService
 {
-    /** @var TravelRepository */
-    private $travelRepository;
-    /** @var UserRepository */
-    private $userRepository;
-    /** @var TravelCloneRepository */
-    private $travelCloneRepository;
-
     public function __construct(
-        TravelRepository $travelRepository,
-        UserRepository $userRepository,
-        TravelCloneRepository $travelCloneRepository
+        private readonly TravelRepository $travelRepository,
+        private readonly UserRepository $userRepository,
+        private readonly TravelCloneRepository $travelCloneRepository,
     ) {
-        $this->travelRepository = $travelRepository;
-        $this->userRepository = $userRepository;
-        $this->travelCloneRepository = $travelCloneRepository;
     }
 
     public function __invoke(CloneTravelCommand $command): Travel
@@ -59,13 +49,14 @@ class CloneTravelService implements UsesCasesService
 
         $this->travelCloneRepository->save($travelClone);
 
-        DomainEventPublisher::instance()->publish(
+        $clonedTravel->record(
             new TravelWasCloned(
                 $originalTravel->toArray(),
                 $clonedTravel->toArray(),
                 $user->getId()->id()
             )
         );
+        DomainEventPublisher::instance()->publish(...$clonedTravel->pullDomainEvents());
 
         return $clonedTravel;
     }

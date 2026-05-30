@@ -3,9 +3,7 @@
 namespace App\Domain\Location\Model;
 
 use App\Domain\Common\Model\AggregateRoot;
-use App\Domain\Event\DomainEventPublisher;
 use App\Domain\Images\Model\Images;
-use App\Domain\Location\Events\LocationWasAdded;
 use App\Domain\Location\ValueObject\LocationId;
 use App\Domain\Mark\Model\Mark;
 use App\Domain\Travel\Model\Travel;
@@ -66,20 +64,6 @@ class Location extends AggregateRoot
         $this->visitDates = new ArrayCollection();
         $this->updatedAt = new \DateTime();
         $this->createdAt = new \DateTime();
-        $this->publishEvent();
-    }
-
-    private function publishEvent(): void
-    {
-        DomainEventPublisher::instance()->publish(
-            new LocationWasAdded(
-                [
-                    'id' => $this->getId()->id(),
-                    'createdAt' => $this->createdAt,
-                    'updatedAt' => $this->updatedAt,
-                ]
-            )
-        );
     }
 
     public static function fromCompleteAddress(
@@ -105,12 +89,12 @@ class Location extends AggregateRoot
         return $location;
     }
 
-    public static function fromArray(array $data): Location
+    public static function fromTitleAndUrlAndDescription(string $title, string $url, string $description): Location
     {
         $location = new Location();
-        $location->setDescription($data['comment']);
-        $location->setUrl($data['link']);
-        $location->setTitle($data['placeAddress']);
+        $location->setDescription($description);
+        $location->setUrl($url);
+        $location->setTitle($title);
 
         return $location;
     }

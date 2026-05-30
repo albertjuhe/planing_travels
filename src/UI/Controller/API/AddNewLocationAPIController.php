@@ -3,9 +3,6 @@
 namespace App\UI\Controller\API;
 
 use App\Application\Command\Location\AddLocationCommand;
-use App\Domain\Mark\Model\Mark;
-use App\Domain\Travel\ValueObject\GeoLocation;
-use App\Domain\Location\Model\Location;
 use App\Domain\TypeLocation\Repository\TypeLocationRepository;
 use App\UI\Controller\http\CommandController;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,18 +14,16 @@ use Symfony\Bundle\SecurityBundle\Security;
 
 class AddNewLocationAPIController extends CommandController
 {
-    private Security $security;
-    private TypeLocationRepository $typeLocationRepository;
-
-    public function __construct(MessageBusInterface $commandBus, Security $security, TypeLocationRepository $typeLocationRepository)
-    {
+    public function __construct(
+        MessageBusInterface $commandBus,
+        private readonly Security $security,
+        private readonly TypeLocationRepository $typeLocationRepository,
+    ) {
         parent::__construct($commandBus);
-        $this->security = $security;
-        $this->typeLocationRepository = $typeLocationRepository;
     }
 
     #[Route('/api/user/{userId}/location', name: 'newAPILocation', methods: ['POST'])]
-    public function newLocation(Request $request, $userId)
+    public function newLocation(Request $request, $userId): JsonResponse
     {
         $user = $this->security->getUser();
         if (empty($user) || $userId != $user->getId()->id()) {
@@ -36,14 +31,6 @@ class AddNewLocationAPIController extends CommandController
         }
 
         $data = json_decode($request->getContent(), true);
-        $location = Location::fromArray($data);
-
-        $geolocation = new GeoLocation($data['latitude'], $data['longitude'], 0, 0, 0, 0);
-        $mark = Mark::fromGeolocationAndId($geolocation, $data['place_id']);
-        $mark->setJson($request->getContent());
-        $mark->setTitle($data['address']);
-
-        $location->setMark($mark);
 
         $idType = $data['IdType'];
         if (!is_numeric($idType)) {
@@ -51,9 +38,21 @@ class AddNewLocationAPIController extends CommandController
             $idType = $typeLocation->getId();
         }
 
-        $addLocationCommand = new AddLocationCommand($data['travel'], $location, $userId, $mark, (int) $idType);
-        $this->commandBus->dispatch($addLocationCommand);
+        $command = new AddLocationCommand(
+            travelId: $data['travel'],
+            userId: (int) $userId,
+            title: $data['placeAddress'],
+            address: $data['address'] ?? $data['placeAddress'],
+            description: $data['comment'] ?? '',
+            link: $data['link'] ?? '',
+            latitude: (float) ($data['latitude'] ?? 0),
+            longitude: (float) ($data['longitude'] ?? 0),
+            placeId: $data['place_id'],
+            locationType: (int) $idType,
+        );
 
-        return new JsonResponse(['id' => $location->getId()->id()], Response::HTTP_CREATED);
+        $this->commandBus->dispatch($command);
+
+        return new JsonResponse(['id' => $command->getLocationId()], Response::HTTP_CREATED);
     }
 }

@@ -15,35 +15,16 @@ use App\Infrastructure\WebSocket\WebSocketNotifier;
 
 class DeleteLocationService implements UsesCasesService
 {
-    /**
-     * @var UserRepository
-     */
-    private $userRepository;
-
-    /**
-     * @var LocationRepository
-     */
-    private $locationRepository;
-
-    /**
-     * @var WebSocketNotifier
-     */
-    private $webSocketNotifier;
-
     public function __construct(
-        UserRepository $userRepository,
-        LocationRepository $locationRepository,
-        WebSocketNotifier $webSocketNotifier
+        private readonly UserRepository $userRepository,
+        private readonly LocationRepository $locationRepository,
+        private readonly WebSocketNotifier $webSocketNotifier,
     ) {
-        $this->userRepository = $userRepository;
-        $this->locationRepository = $locationRepository;
-        $this->webSocketNotifier = $webSocketNotifier;
     }
 
     public function __invoke(DeleteLocationCommand $deleteLocationCommand)
     {
         $locationId = $deleteLocationCommand->getLocationId();
-        /** @var UserId $userId */
         $userId = $deleteLocationCommand->getUserId();
         $travelId = $deleteLocationCommand->getTravelId();
 

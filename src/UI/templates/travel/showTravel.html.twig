@@ -3928,14 +3928,45 @@ html body .st-page > .container,
                 var info = document.createElement('div');
                 info.style.cssText = 'flex:1;min-width:0;';
                 info.innerHTML =
+                    '<div style="width:100%;height:120px;border-radius:6px;overflow:hidden;margin-bottom:6px;background:#f0f2f5;position:relative;" data-photo-idx="' + i + '">' +
+                    '<div class="sloc-ph" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:32px;color:#b0b8c1;">' + typeEmoji(s.typeName) + '</div>' +
+                    '<img style="width:100%;height:100%;object-fit:cover;display:none;" alt="' + escHtml(s.name) + '"/>' +
+                    '</div>' +
                     '<div style="display:flex;align-items:center;gap:6px;margin-bottom:2px;">' +
                     '<span style="font-size:16px;">' + typeEmoji(s.typeName) + '</span>' +
                     '<span style="font-size:13px;font-weight:600;color:#1a2e4a;">' + escHtml(s.name) + '</span>' +
                     '<span style="font-size:10px;color:#fff;background:#2980b9;border-radius:4px;padding:1px 6px;margin-left:auto;flex-shrink:0;">' + escHtml(s.typeName) + '</span>' +
                     '</div>' +
                     (s.address ? '<div style="font-size:11px;color:#7f8c8d;margin-bottom:3px;">' + escHtml(s.address) + '</div>' : '') +
-                    '<div style="font-size:12px;color:#555;line-height:1.4;">' + escHtml(s.description) + '</div>';
+                    '<div style="font-size:12px;color:#555;line-height:1.4;margin-bottom:4px;">' + escHtml(s.description) + '</div>' +
+                    '<a href="https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(s.name + (s.address ? ', ' + s.address : '')) + '" target="_blank" rel="noopener" style="font-size:11px;color:#2980b9;text-decoration:none;" onclick="event.stopPropagation();">\ud83d\udccd View on Google Maps</a>';
                 card.appendChild(cb); card.appendChild(info); cardsEl.appendChild(card);
+            });
+            loadSuggestionPhotos(data);
+        }
+
+        function loadSuggestionPhotos(data) {
+            if (typeof google === 'undefined' || !google.maps || !google.maps.places) return;
+            var div = document.createElement('div');
+            var service = new google.maps.places.PlacesService(div);
+            data.forEach(function (s, i) {
+                var query = s.name + (s.address ? ', ' + s.address : '');
+                service.textSearch({ query: query }, function (results, status) {
+                    if (status !== google.maps.places.PlacesServiceStatus.OK || !results || !results.length) return;
+                    var place = results[0];
+                    if (!place.photos || !place.photos.length) return;
+                    var photoUrl = place.photos[0].getUrl({ maxWidth: 400, maxHeight: 300 });
+                    var container = cardsEl.querySelector('[data-photo-idx="' + i + '"]');
+                    if (!container) return;
+                    var img = container.querySelector('img');
+                    var placeholder = container.querySelector('.sloc-ph');
+                    img.onload = function () {
+                        placeholder.style.display = 'none';
+                        img.style.display = 'block';
+                    };
+                    img.onerror = function () {};
+                    img.src = photoUrl;
+                });
             });
         }
 

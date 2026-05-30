@@ -7,15 +7,14 @@ use App\Domain\User\Model\UserId;
 
 class UserRegistered implements DomainEvent
 {
-    /**
-     * @var UserId
-     */
+    /** @var UserId */
     private $userId;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $userEmail;
+
+    /** @var \DateTime */
+    private $occurredOn;
 
     public function __construct(UserId $userId, string $userEmail)
     {
@@ -36,6 +35,6 @@ class UserRegistered implements DomainEvent
 
     public function userEmail()
     {
-        $this->userEmail;
+        return $this->userEmail;
     }
 }

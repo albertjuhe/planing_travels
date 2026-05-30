@@ -84,6 +84,11 @@ class DoctrineTravelRepository extends ServiceEntityRepository implements Travel
         $this->getEntityManager()->persist($travel);
     }
 
+    public function flush(): void
+    {
+        $this->getEntityManager()->flush();
+    }
+
     public function getAllTravelsByUser(int $userId, int $offset = 0, int $limit = 20): array
     {
         // Get IDs first to avoid JOIN pagination issues

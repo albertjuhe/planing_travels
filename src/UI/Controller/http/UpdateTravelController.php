@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use App\Infrastructure\TravelBundle\Repository\DoctrineTravelRepository;
+use App\Domain\Travel\Repository\TravelRepository;
 use App\Domain\User\Exceptions\UserDoesntExists;
 use App\Infrastructure\TravelBundle\Form\UpdateTravelType;
 use App\Application\Command\Travel\UpdateTravelCommand;
@@ -17,11 +17,11 @@ use Symfony\Component\Messenger\MessageBusInterface;
 
 class UpdateTravelController extends CommandController
 {
-    /** @var DoctrineTravelRepository */
+    /** @var TravelRepository */
     private $travelRepository;
 
     public function __construct(
-        DoctrineTravelRepository $travelRepository,
+        TravelRepository $travelRepository,
         MessageBusInterface $commandBus
     ) {
         parent::__construct($commandBus);

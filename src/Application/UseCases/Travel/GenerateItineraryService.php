@@ -13,14 +13,12 @@ use App\Domain\Travel\Exceptions\TravelDoesntExists;
 use App\Domain\Travel\Model\Travel;
 use App\Domain\Travel\Repository\TravelRepository;
 use App\Infrastructure\WebSocket\WebSocketNotifier;
-use Doctrine\ORM\EntityManagerInterface;
 
 class GenerateItineraryService implements UsesCasesService
 {
     public function __construct(
         private readonly TravelRepository $travelRepository,
         private readonly ItineraryOptimizer $optimizer,
-        private readonly EntityManagerInterface $em,
         private readonly WebSocketNotifier $webSocketNotifier,
     ) {
     }
@@ -61,10 +59,8 @@ class GenerateItineraryService implements UsesCasesService
                 $loc->clearVisitDates();
                 $loc->setVisitAt(null);
             }
-            // Flush orphan removals BEFORE inserting new visit dates to avoid
-            // UNIQUE(location_id, visit_date) constraint violation.
             if ($needsOrphanFlush) {
-                $this->em->flush();
+                $this->travelRepository->flush();
             }
         } else {
             $locationsToOptimize = array_values(array_filter(
@@ -122,9 +118,8 @@ class GenerateItineraryService implements UsesCasesService
             }
         }
 
-        $this->em->flush();
+        $this->travelRepository->flush();
 
-        // Notify WebSocket clients AFTER flush so they see consistent data.
         foreach ($modifiedLocations as $loc) {
             try {
                 $this->webSocketNotifier->notifyVisitDatesChanged(
@@ -135,7 +130,6 @@ class GenerateItineraryService implements UsesCasesService
                     'AI Planner',
                 );
             } catch (\Throwable) {
-                // WebSocket failures must never break the use case.
             }
         }
 
@@ -208,15 +202,11 @@ class GenerateItineraryService implements UsesCasesService
 
     private function isLodgingType(?string $typeTitle, ?string $icon): bool
     {
-        // The TypeLocation title is the source of truth (explicit user choice).
         $title = strtolower(trim((string) $typeTitle));
         if (in_array($title, ['hotel', 'house', 'hostel', 'hostal', 'apartment', 'apartamento', 'b&b', 'bnb', 'lodging', 'accommodation'], true)) {
             return true;
         }
 
-        // Icon fallback: ONLY fa-bed is exclusive to lodging.
-        // We deliberately do NOT match fa-building because the seeded "City" type also uses it,
-        // so cities would be wrongly classified as lodgings.
         $iconLower = strtolower((string) $icon);
         if (str_contains($iconLower, 'fa-bed')) {
             return true;
