@@ -103,6 +103,11 @@ class InMemoryTravelRepository implements TravelRepository
         ));
     }
 
+    public function existsBySlug(string $slug): bool
+    {
+        return $this->findTravelBySlug($slug) !== null;
+    }
+
     public function getSharedTravelsByUser(int $userId): array
     {
         return array_values(array_filter(

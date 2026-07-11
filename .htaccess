@@ -1,3 +1,8 @@
+# Block access to sensitive files
+<FilesMatch "^\.env(\..*)?$|composer\.json$|composer\.lock$">
+    Require all denied
+</FilesMatch>
+
 <IfModule mod_rewrite.c>
     RewriteEngine On
 

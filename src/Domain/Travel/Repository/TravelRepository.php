@@ -55,4 +55,6 @@ interface TravelRepository
     public function getAllTravelsByUser(int $userId);
 
     public function getSharedTravelsByUser(int $userId): array;
+
+    public function existsBySlug(string $slug): bool;
 }

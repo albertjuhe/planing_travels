@@ -117,6 +117,16 @@ class DoctrineTravelRepository extends ServiceEntityRepository implements Travel
             ->getResult();
     }
 
+    public function existsBySlug(string $slug): bool
+    {
+        return $this->createQueryBuilder('t')
+            ->select('COUNT(t.id)')
+            ->where('t.slug = :slug')
+            ->setParameter('slug', $slug)
+            ->getQuery()
+            ->getSingleScalarResult() > 0;
+    }
+
     public function getSharedTravelsByUser(int $userId, int $offset = 0, int $limit = 20): array
     {
         // Get IDs first to avoid JOIN pagination issues
