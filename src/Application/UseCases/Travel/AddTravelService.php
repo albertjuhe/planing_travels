@@ -46,8 +46,14 @@ class AddTravelService implements UsesCasesService
 
         if (!$travel->getSlug()) {
             $slugger = new AsciiSlugger();
-            $slug = strtolower((string) $slugger->slug($travel->getTitle() ?? 'travel'));
-            $travel->setSlug($slug ?: 'travel-' . uniqid());
+            $baseSlug = strtolower((string) $slugger->slug($travel->getTitle() ?? 'travel')) ?: 'travel';
+            $slug = $baseSlug;
+            $suffix = 1;
+            while ($this->travelRepository->existsBySlug($slug)) {
+                ++$suffix;
+                $slug = $baseSlug . '-' . $suffix;
+            }
+            $travel->setSlug($slug);
         }
 
         DomainEventPublisher::instance()->publish(new TravelWasAdded($travel->toArray()));
